@@ -117,11 +117,7 @@ typedef struct {
     bool to_purge; // if true, free this pd_conn_t during the next sendConnectionsDump
     bool info_from_lru;
     bool blacklisted_internal;
-    bool blacklisted_ip;
-    bool blacklisted_domain;
-    bool whitelisted_app;
     bool to_block;
-    bool netd_block_missed;
     bool proxied;
     bool decryption_ignored;
     bool port_mapping_applied;
@@ -262,29 +258,6 @@ typedef struct pcapdroid {
 
     struct {
         bool enabled;
-        blacklist_t *bl; // blacklist
-        blacklist_t *whitelist;
-        pthread_t reload_worker;
-        bool reload_in_progress;
-        volatile bool reload_done;
-        blacklist_t *new_bl;
-        blacklist_t *new_wl;
-        bl_status_arr_t *status_arr;
-        bl_info_t *bls_info;
-        int num_bls;
-    } malware_detection;
-
-    struct {
-        bool enabled;
-        blacklist_t *bl;     // blocklist
-        blacklist_t *new_bl;
-        bool wl_enabled;
-        blacklist_t *wl;     // whitelist
-        blacklist_t *new_wl;
-    } firewall;
-
-    struct {
-        bool enabled;
         blacklist_t *list;
         blacklist_t *new_list;
     } tls_decryption;
@@ -330,9 +303,6 @@ typedef struct {
     jmethodID statsInit;
     jmethodID statsSetData;
     jmethodID getLibprogPath;
-    jmethodID notifyBlacklistsLoaded;
-    jmethodID blacklistStatusInit;
-    jmethodID getBlacklistsInfo;
     jmethodID listSize;
     jmethodID listGet;
     jmethodID arraylistNew;
@@ -345,8 +315,6 @@ typedef struct {
     jclass conn;
     jclass conn_update;
     jclass stats;
-    jclass blacklist_status;
-    jclass blacklist_descriptor;
     jclass matchlist_descriptor;
     jclass list;
     jclass arraylist;
@@ -354,8 +322,6 @@ typedef struct {
 } jni_classes_t;
 
 typedef struct {
-    jfieldID bldescr_fname;
-    jfieldID bldescr_type;
     jfieldID ld_apps;
     jfieldID ld_hosts;
     jfieldID ld_ips;
@@ -363,7 +329,6 @@ typedef struct {
 } jni_fields_t;
 
 typedef struct {
-    jobject bltype_ip;
     jobject chunktype_raw;
     jobject chunktype_http;
 } jni_enum_t;
@@ -381,7 +346,6 @@ extern bool running;
 extern uint32_t new_dns_server;
 extern bool block_private_dns;
 extern bool dump_capture_stats_now;
-extern bool reload_blacklists_now;
 extern bool has_seen_dump_extensions;
 extern int bl_num_checked_connections;
 extern int fw_num_checked_connections;

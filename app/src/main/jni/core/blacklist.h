@@ -74,7 +74,6 @@ int blacklist_add_ip(blacklist_t *bl, const ndpi_ip_addr_t *addr, uint8_t ipver)
 int blacklist_add_ipstr(blacklist_t *bl, const char *ip);
 int blacklist_add_uid(blacklist_t *bl, int uid);
 int blacklist_add_country(blacklist_t *bl, const char country_code[3]);
-int blacklist_load_file(blacklist_t *bl, const char *path, blacklist_type btype, blacklist_stats_t *bstats);
 #ifdef ANDROID
 int blacklist_load_list_descriptor(blacklist_t *bl, JNIEnv *env, jobject ld);
 #endif

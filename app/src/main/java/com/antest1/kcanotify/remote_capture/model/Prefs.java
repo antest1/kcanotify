@@ -56,16 +56,11 @@ public class Prefs {
     public static final String PAYLOAD_MODE_FULL = "full";
     public static final String DEFAULT_PAYLOAD_MODE = PAYLOAD_MODE_MINIMAL;
 
-    // used to initialize the whitelist with some safe defaults
-    public static final int FIREWALL_WHITELIST_INIT_VER = 1;
-
     public static final String PREF_COLLECTOR_IP_KEY = "collector_ip_address";
     public static final String PREF_COLLECTOR_PORT_KEY = "collector_port";
     public static final String PREF_SOCKS5_PROXY_IP_KEY = "socks5_proxy_ip_address";
     public static final String PREF_SOCKS5_PROXY_PORT_KEY = "socks5_proxy_port";
     public static final String PREF_CAPTURE_INTERFACE = "capture_interface";
-    public static final String PREF_MALWARE_DETECTION = "malware_detection";
-    public static final String PREF_FIREWALL = "firewall";
     public static final String PREF_TLS_DECRYPTION_KEY = "tls_decryption";
     public static final String PREF_APP_FILTER = "app_filter";
     public static final String PREF_HTTP_SERVER_PORT = "http_server_port";
@@ -74,13 +69,7 @@ public class Prefs {
     public static final String PREF_APP_LANGUAGE = "app_language";
     public static final String PREF_ROOT_CAPTURE = "root_capture";
     public static final String PREF_VISUALIZATION_MASK = "vis_mask";
-    public static final String PREF_MALWARE_WHITELIST = "malware_whitelist";
     public static final String PREF_DUMP_EXTENSIONS = "dump_extensions";
-    public static final String PREF_BLOCKLIST = "bl";
-    public static final String PREF_FIREWALL_WHITELIST_MODE = "firewall_wl_mode";
-    public static final String PREF_FIREWALL_WHITELIST_INIT_VER = "firewall_wl_init";
-    public static final String PREF_FIREWALL_WHITELIST = "firewall_whitelist";
-    public static final String PREF_DECRYPTION_LIST = "decryption_list";
     public static final String PREF_START_AT_BOOT = "start_at_boot";
     public static final String PREF_SNAPLEN = "snaplen";
     public static final String PREF_MAX_PKTS_PER_FLOW = "max_pkts_per_flow";
@@ -99,7 +88,6 @@ public class Prefs {
     public static final String PREF_VPN_EXCEPTIONS = "vpn_exceptions";
     public static final String PREF_PORT_MAPPING = "port_mapping";
     public static final String PREF_PORT_MAPPING_ENABLED = "port_mapping_enabled";
-    public static final String PREF_BLOCK_NEW_APPS = "block_new_apps";
     public static final String PREF_PAYLOAD_NOTICE_ACK = "payload_notice";
     public static final String PREF_REMOTE_COLLECTOR_ACK = "remote_collector_notice";
     public static final String PREF_MITMPROXY_OPTS = "mitmproxy_opts";
@@ -180,10 +168,6 @@ public class Prefs {
         p.edit().putBoolean(PREF_LOCKDOWN_VPN_NOTICE_SHOWN, true).apply();
     }
 
-    public static void setFirewallWhitelistInitialized(SharedPreferences p) {
-        p.edit().putInt(PREF_FIREWALL_WHITELIST_INIT_VER, FIREWALL_WHITELIST_INIT_VER).apply();
-    }
-
     public static void setPortMappingEnabled(SharedPreferences p, boolean enabled) {
         p.edit().putBoolean(PREF_PORT_MAPPING_ENABLED, enabled).apply();
     }
@@ -213,9 +197,6 @@ public class Prefs {
     public static boolean getFullPayloadMode(SharedPreferences p) { return(p.getBoolean(PREF_FULL_PAYLOAD, false)); }
     public static boolean isPrivateDnsBlockingEnabled(SharedPreferences p) { return(p.getBoolean(PREF_AUTO_BLOCK_PRIVATE_DNS, true)); }
     public static boolean lockdownVpnNoticeShown(SharedPreferences p)      { return(p.getBoolean(PREF_LOCKDOWN_VPN_NOTICE_SHOWN, false)); }
-    public static boolean blockNewApps(SharedPreferences p)       { return(p.getBoolean(PREF_BLOCK_NEW_APPS, false)); }
-    public static boolean isFirewallWhitelistMode(SharedPreferences p)     { return(p.getBoolean(PREF_FIREWALL_WHITELIST_MODE, false)); }
-    public static boolean isFirewallWhitelistInitialized(SharedPreferences p) { return(p.getInt(PREF_FIREWALL_WHITELIST_INIT_VER, 0) == FIREWALL_WHITELIST_INIT_VER); }
     public static String getMitmproxyOpts(SharedPreferences p)    { return(p.getString(PREF_MITMPROXY_OPTS, "")); }
     public static boolean isPortMappingEnabled(SharedPreferences p) { return(p.getBoolean(PREF_PORT_MAPPING_ENABLED, true)); }
     public static boolean useSystemDns(SharedPreferences p)     { return(p.getBoolean(PREF_USE_SYSTEM_DNS, true)); }
@@ -262,7 +243,6 @@ public class Prefs {
                 "\nSocks5: " + getSocks5Enabled(p) +
                 "\nBlockPrivateDns: " + isPrivateDnsBlockingEnabled(p) +
                 "\nCaptureInterface: " + getCaptureInterface(p) +
-                "\nBlockNewApps: " + blockNewApps(p) +
                 "\nTargetApps: " + getAppFilter(p) +
                 "\nIpMode: " + getIPMode(p) +
                 "\nDumpExtensions: " + isPcapdroidMetadataEnabled(p) +

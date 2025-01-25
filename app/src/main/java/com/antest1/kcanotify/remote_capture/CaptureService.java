@@ -38,7 +38,6 @@ import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
-import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Handler;
@@ -62,7 +61,6 @@ import com.antest1.kcanotify.KcaApplication;
 import com.antest1.kcanotify.KcaUtils;
 import com.antest1.kcanotify.R;
 import com.antest1.kcanotify.remote_capture.model.AppDescriptor;
-import com.antest1.kcanotify.remote_capture.model.BlacklistDescriptor;
 import com.antest1.kcanotify.remote_capture.model.CaptureSettings;
 import com.antest1.kcanotify.remote_capture.model.ConnectionDescriptor;
 import com.antest1.kcanotify.remote_capture.model.ConnectionUpdate;
@@ -102,7 +100,6 @@ public class CaptureService extends VpnService implements Runnable {
     private CaptureSettings mSettings;
     private Handler mHandler;
     private Thread mCaptureThread;
-    private Thread mBlacklistsUpdateThread;
     private Thread mConnUpdateThread;
     private Thread mDumperThread;
     private MitmReceiver mMitmReceiver;
@@ -115,14 +112,9 @@ public class CaptureService extends VpnService implements Runnable {
     private int last_connections;
     private int[] mAppFilterUids;
     private ConnectionsRegister conn_reg;
-    private Uri mPcapUri;
-    private String mPcapFname;
     private long mMonitoredNetwork;
     private ConnectivityManager.NetworkCallback mNetworkCallback;
     private AppsResolver mNativeAppsResolver; // can only be accessed by native code to avoid concurrency issues
-    private boolean mMalwareDetectionEnabled;
-    private boolean mBlacklistsUpdateRequested;
-    private boolean mFirewallEnabled;
     private boolean mBlockPrivateDns;
     private boolean mDnsEncrypted;
     private boolean mStrictDnsNoticeShown;
@@ -316,7 +308,6 @@ public class CaptureService extends VpnService implements Runnable {
         conn_reg = new ConnectionsRegister(this, CONNECTIONS_LOG_SIZE);
         mDumpQueue = null;
         mPendingUpdates.clear();
-        mPcapFname = null;
         HAS_ERROR = false;
 
 
@@ -467,8 +458,6 @@ public class CaptureService extends VpnService implements Runnable {
 
         if(mCaptureThread != null)
             mCaptureThread.interrupt();
-        if(mBlacklistsUpdateThread != null)
-            mBlacklistsUpdateThread.interrupt();
 
         if(mNewAppsInstallReceiver != null) {
             unregisterReceiver(mNewAppsInstallReceiver);
@@ -703,18 +692,6 @@ public class CaptureService extends VpnService implements Runnable {
         return((INSTANCE != null) ? INSTANCE.mSettings.app_filter : null);
     }
 
-    public static Uri getPcapUri() {
-        return ((INSTANCE != null) ? INSTANCE.mPcapUri : null);
-    }
-
-    public static String getPcapFname() {
-        return ((INSTANCE != null) ? INSTANCE.mPcapFname : null);
-    }
-
-    public static boolean isUserDefinedPcapUri() {
-        return (INSTANCE == null || !INSTANCE.mSettings.pcap_uri.isEmpty());
-    }
-
     public static long getBytes() {
         return((INSTANCE != null) ? INSTANCE.last_bytes : 0);
     }
@@ -794,7 +771,6 @@ public class CaptureService extends VpnService implements Runnable {
 
     public static void requestBlacklistsUpdate() {
         if(INSTANCE != null) {
-            INSTANCE.mBlacklistsUpdateRequested = true;
 
             // Wake the update thread to run the blacklist thread
             INSTANCE.mPendingUpdates.offer(new Pair<>(new ConnectionDescriptor[0], new ConnectionUpdate[0]));
@@ -976,10 +952,6 @@ public class CaptureService extends VpnService implements Runnable {
 
     public int isTlsDecryptionEnabled() { return mSettings.tls_decryption ? 1 : 0; }
 
-    public int malwareDetectionEnabled() { return(mMalwareDetectionEnabled ? 1 : 0); }
-
-    public int firewallEnabled() { return(mFirewallEnabled ? 1 : 0); }
-
     public int dumpExtensionsEnabled() { return(mSettings.dump_extensions ? 1 : 0); }
 
     public int isPcapngEnabled() { return(mSettings.pcapng_format ? 1 : 0); }
@@ -1117,17 +1089,6 @@ public class CaptureService extends VpnService implements Runnable {
     }
 
     // dummy
-    public void notifyBlacklistsLoaded(Blacklists.NativeBlacklistStatus[] loaded_blacklists) {
-        // this is invoked from the packet capture thread. Use the handler to save time.
-    }
-
-    // dummy
-    public BlacklistDescriptor[] getBlacklistsInfo() {
-        BlacklistDescriptor[] blsinfo = new BlacklistDescriptor[0];
-        return blsinfo;
-    }
-
-    // dummy
     public String getCountryCode(String host) {
         return "";
     }
@@ -1216,16 +1177,9 @@ public class CaptureService extends VpnService implements Runnable {
     private static native void setPrivateDnsBlocked(boolean to_block);
     private static native void setDnsServer(String server);
     private static native void addPortMapping(int ipproto, int orig_port, int redirect_port, String redirect_ip);
-    private static native void reloadBlacklists();
-    private static native boolean reloadBlocklist(MatchList.ListDescriptor blocklist);
-    private static native boolean reloadFirewallWhitelist(MatchList.ListDescriptor whitelist);
-    private static native boolean reloadMalwareWhitelist(MatchList.ListDescriptor whitelist);
     private static native boolean reloadDecryptionList(MatchList.ListDescriptor whitelist);
     public static native void askStatsDump();
     public static native byte[] getPcapHeader();
-    public static native void nativeSetFirewallEnabled(boolean enabled);
-    public static native int getNumCheckedMalwareConnections();
-    public static native int getNumCheckedFirewallConnections();
     public static native int rootCmd(String prog, String args);
     public static native void setPayloadMode(int mode);
     public static native List<String> getL7Protocols();

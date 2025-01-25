@@ -120,7 +120,6 @@ static void sendPcapDump(struct pcapdroid *pd, const int8_t *buf, int dump_size)
         return;
 
     (*env)->SetByteArrayRegion(env, barray, 0, dump_size, buf);
-    (*env)->CallVoidMethod(env, pd->capture_service, mids.dumpPcapData, barray);
     jniCheckException(env);
 
     (*env)->DeleteLocalRef(env, barray);
@@ -170,10 +169,7 @@ static jobject getConnUpdate(pcapdroid_t *pd, const conn_and_tuple_t *conn) {
                                (data->tcp_flags[0] << 8) | data->tcp_flags[1],
                                (data->port_mapping_applied << 13) |
                                     (data->decryption_ignored << 12) |
-                                    (data->netd_block_missed << 11) |
                                     (blocked << 10) |
-                                    (data->blacklisted_domain << 9) |
-                                    (data->blacklisted_ip << 8) |
                                     (data->status & 0xFF) /* 8 bits */);
     }
     if(data->update_type & CONN_UPDATE_INFO) {
@@ -340,91 +336,6 @@ cleanup:
 
 /* ******************************************************* */
 
-// Load information about the blacklists to use (into pd->malware_detection.bls_info)
-static int loadBlacklistsInfo(pcapdroid_t *pd) {
-    int rv = 0;
-    JNIEnv *env = pd->env;
-    jobjectArray *arr = (*env)->CallObjectMethod(env, pd->capture_service, mids.getBlacklistsInfo);
-    pd->malware_detection.bls_info = NULL;
-    pd->malware_detection.num_bls = 0;
-
-    if((jniCheckException(pd->env) != 0) || (arr == NULL))
-        return -1;
-
-    pd->malware_detection.num_bls = (*env)->GetArrayLength(env, arr);
-    if(pd->malware_detection.num_bls == 0)
-        goto cleanup;
-
-    pd->malware_detection.bls_info = (bl_info_t*) pd_calloc(pd->malware_detection.num_bls, sizeof(bl_info_t));
-    if(pd->malware_detection.bls_info == NULL) {
-        pd->malware_detection.num_bls = 0;
-        rv = -1;
-        goto cleanup;
-    }
-
-    for(int i = 0; i < pd->malware_detection.num_bls; i++) {
-        jobject *bl_descr = (*env)->GetObjectArrayElement(env, arr, i);
-        if(bl_descr != NULL) {
-            bl_info_t *blinfo = &pd->malware_detection.bls_info[i];
-
-            jstring fname_obj = (*env)->GetObjectField(env, bl_descr, fields.bldescr_fname);
-            const char *fname = (*env)->GetStringUTFChars(env, fname_obj, 0);
-            blinfo->fname = pd_strdup(fname);
-            (*env)->ReleaseStringUTFChars(env, fname_obj, fname);
-            (*pd->env)->DeleteLocalRef(pd->env, fname_obj);
-
-            jobject bl_type = (*env)->GetObjectField(env, bl_descr, fields.bldescr_type);
-            blinfo->type = (*env)->IsSameObject(env, bl_type, enums.bltype_ip) ? IP_BLACKLIST : DOMAIN_BLACKLIST;
-            (*pd->env)->DeleteLocalRef(pd->env, bl_type);
-
-            //log_d("[+] Blacklist: %s (%s)", blinfo->fname, (blinfo->type == IP_BLACKLIST) ? "IP" : "domain");
-            (*pd->env)->DeleteLocalRef(pd->env, bl_descr);
-        }
-    }
-
-cleanup:
-    (*pd->env)->DeleteLocalRef(pd->env, arr);
-    return rv;
-}
-
-/* ******************************************************* */
-
-static void notifyBlacklistsLoaded(pcapdroid_t *pd, bl_status_arr_t *status_arr) {
-    JNIEnv *env = pd->env;
-    jobject status_obj = (*env)->NewObjectArray(env, status_arr->cur_items, cls.blacklist_status, NULL);
-
-    if((status_obj == NULL) || jniCheckException(env)) {
-        log_e("NewObjectArray() failed");
-        return;
-    }
-
-    for(int i=0; i<status_arr->cur_items; i++) {
-        bl_status_t *st = &status_arr->items[i];
-        jstring fname = (*env)->NewStringUTF(env, st->fname);
-        if((fname == NULL) || jniCheckException(env))
-            break;
-
-        jobject stats = (*env)->NewObject(env, cls.blacklist_status, mids.blacklistStatusInit,
-                                              fname, st->num_rules);
-        (*env)->DeleteLocalRef(env, fname);
-
-        if((stats == NULL) || jniCheckException(env))
-            break;
-
-        (*env)->SetObjectArrayElement(env, status_obj, i, stats);
-        (*env)->DeleteLocalRef(env, stats);
-
-        if(jniCheckException(env)) {
-            break;
-        }
-    }
-
-    (*env)->CallVoidMethod(env, pd->capture_service, mids.notifyBlacklistsLoaded, status_obj);
-    (*env)->DeleteLocalRef(env, status_obj);
-}
-
-/* ******************************************************* */
-
 static bool dumpPayloadChunk(struct pcapdroid *pd, const pkt_context_t *pctx, int dump_size) {
     JNIEnv *env = pd->env;
     bool rv = false;
@@ -513,8 +424,6 @@ static void init_jni(JNIEnv *env) {
     cls.conn = jniFindClass(env, "com/antest1/kcanotify/remote_capture/model/ConnectionDescriptor");
     cls.conn_update = jniFindClass(env, "com/antest1/kcanotify/remote_capture/model/ConnectionUpdate");
     cls.stats = jniFindClass(env, "com/antest1/kcanotify/remote_capture/model/CaptureStats");
-    cls.blacklist_status = jniFindClass(env, "com/antest1/kcanotify/remote_capture/Blacklists$NativeBlacklistStatus");
-    cls.blacklist_descriptor = jniFindClass(env, "com/antest1/kcanotify/remote_capture/model/BlacklistDescriptor");
     cls.matchlist_descriptor = jniFindClass(env, "com/antest1/kcanotify/remote_capture/model/MatchList$ListDescriptor");
     cls.list = jniFindClass(env, "java/util/List");
     cls.arraylist = jniFindClass(env, "java/util/ArrayList");
@@ -533,8 +442,6 @@ static void init_jni(JNIEnv *env) {
     mids.sendStatsDump = jniGetMethodID(env, cls.vpn_service, "sendStatsDump", "(Lcom/antest1/kcanotify/remote_capture/model/CaptureStats;)V");
     mids.sendServiceStatus = jniGetMethodID(env, cls.vpn_service, "sendServiceStatus", "(Ljava/lang/String;)V");
     mids.getLibprogPath = jniGetMethodID(env, cls.vpn_service, "getLibprogPath", "(Ljava/lang/String;)Ljava/lang/String;");
-    mids.notifyBlacklistsLoaded = jniGetMethodID(env, cls.vpn_service, "notifyBlacklistsLoaded", "([Lcom/antest1/kcanotify/remote_capture/Blacklists$NativeBlacklistStatus;)V");
-    mids.getBlacklistsInfo = jniGetMethodID(env, cls.vpn_service, "getBlacklistsInfo", "()[Lcom/antest1/kcanotify/remote_capture/model/BlacklistDescriptor;");
     mids.connInit = jniGetMethodID(env, cls.conn, "<init>", "(IIILjava/lang/String;Ljava/lang/String;Ljava/lang/String;IIIIIZJ)V");
     mids.connProcessUpdate = jniGetMethodID(env, cls.conn, "processUpdate", "(Lcom/antest1/kcanotify/remote_capture/model/ConnectionUpdate;)V");
     mids.connUpdateInit = jniGetMethodID(env, cls.conn_update, "<init>", "(I)V");
@@ -543,7 +450,6 @@ static void init_jni(JNIEnv *env) {
     mids.connUpdateSetPayload = jniGetMethodID(env, cls.conn_update, "setPayload", "(Ljava/util/ArrayList;Z)V");
     mids.statsInit = jniGetMethodID(env, cls.stats, "<init>", "()V");
     mids.statsSetData = jniGetMethodID(env, cls.stats, "setData", "(Ljava/lang/String;JJJJJIIIIIIIII)V");
-    mids.blacklistStatusInit = jniGetMethodID(env, cls.blacklist_status, "<init>", "(Ljava/lang/String;I)V");
     mids.listSize = jniGetMethodID(env, cls.list, "size", "()I");
     mids.listGet = jniGetMethodID(env, cls.list, "get", "(I)Ljava/lang/Object;");
     mids.arraylistNew = jniGetMethodID(env, cls.arraylist, "<init>", "()V");
@@ -551,15 +457,12 @@ static void init_jni(JNIEnv *env) {
     mids.payloadChunkInit = jniGetMethodID(env, cls.payload_chunk, "<init>", "([BLcom/antest1/kcanotify/remote_capture/model/PayloadChunk$ChunkType;ZJ)V");
 
     /* Fields */
-    fields.bldescr_fname = jniFieldID(env, cls.blacklist_descriptor, "fname", "Ljava/lang/String;");
-    fields.bldescr_type = jniFieldID(env, cls.blacklist_descriptor, "type", "Lcom/antest1/kcanotify/remote_capture/model/BlacklistDescriptor$Type;");
     fields.ld_apps = jniFieldID(env, cls.matchlist_descriptor, "apps", "Ljava/util/List;");
     fields.ld_hosts = jniFieldID(env, cls.matchlist_descriptor, "hosts", "Ljava/util/List;");
     fields.ld_ips = jniFieldID(env, cls.matchlist_descriptor, "ips", "Ljava/util/List;");
     fields.ld_countries = jniFieldID(env, cls.matchlist_descriptor, "countries", "Ljava/util/List;");
 
     /* Enums */
-    enums.bltype_ip = jniEnumVal(env, "com/antest1/kcanotify/remote_capture/model/BlacklistDescriptor$Type", "IP_BLACKLIST");
     enums.chunktype_raw = jniEnumVal(env, "com/antest1/kcanotify/remote_capture/model/PayloadChunk$ChunkType", "RAW");
     enums.chunktype_http = jniEnumVal(env, "com/antest1/kcanotify/remote_capture/model/PayloadChunk$ChunkType", "HTTP");
 }
@@ -583,13 +486,11 @@ Java_com_antest1_kcanotify_remote_1capture_CaptureService_runPacketLoop(JNIEnv *
             .capture_service = vpn,
             .cb = {
                     .get_libprog_path = getLibprogPath,
-                    .load_blacklists_info = loadBlacklistsInfo,
                     .send_stats_dump = sendStatsDump,
                     .send_connections_dump = sendConnectionsDump,
                     .send_pcap_dump = sendPcapDump,
                     .stop_pcap_dump = stopPcapDump,
                     .notify_service_status = notifyServiceStatus,
-                    .notify_blacklists_loaded = notifyBlacklistsLoaded,
                     .dump_payload_chunk = dumpPayloadChunk,
             },
             .mitm_addon_uid = getIntPref(env, vpn, "getMitmAddonUid"),
@@ -608,12 +509,6 @@ Java_com_antest1_kcanotify_remote_1capture_CaptureService_runPacketLoop(JNIEnv *
                     .enabled = (bool) getIntPref(env, vpn, "getSocks5Enabled"),
                     .proxy_ip = getIPPref(env, vpn, "getSocks5ProxyAddress", &pd.socks5.proxy_ipver),
                     .proxy_port = htons(getIntPref(env, vpn, "getSocks5ProxyPort")),
-            },
-            .malware_detection = {
-                    .enabled = (bool) getIntPref(env, vpn, "malwareDetectionEnabled"),
-            },
-            .firewall = {
-                    .enabled = (bool) getIntPref(env, vpn, "firewallEnabled"),
             },
             .tls_decryption = {
                     .enabled = (bool) getIntPref(env, vpn, "isTlsDecryptionEnabled"),
@@ -755,27 +650,6 @@ Java_com_antest1_kcanotify_remote_1capture_CaptureService_getPcapHeader(JNIEnv *
 /* ******************************************************* */
 
 JNIEXPORT void JNICALL
-Java_com_antest1_kcanotify_remote_1capture_CaptureService_reloadBlacklists(JNIEnv *env, jclass clazz) {
-    reload_blacklists_now = true;
-}
-
-/* ******************************************************* */
-
-JNIEXPORT jint JNICALL
-Java_com_antest1_kcanotify_remote_1capture_CaptureService_getNumCheckedMalwareConnections(JNIEnv *env, jclass clazz) {
-    return bl_num_checked_connections;
-}
-
-/* ******************************************************* */
-
-JNIEXPORT jint JNICALL
-Java_com_antest1_kcanotify_remote_1capture_CaptureService_getNumCheckedFirewallConnections(JNIEnv *env, jclass clazz) {
-    return fw_num_checked_connections;
-}
-
-/* ******************************************************* */
-
-JNIEXPORT void JNICALL
 Java_com_antest1_kcanotify_remote_1capture_CaptureService_setPrivateDnsBlocked(JNIEnv *env, jclass clazz, jboolean to_block) {
     block_private_dns = to_block;
 }
@@ -800,136 +674,6 @@ Java_com_antest1_kcanotify_remote_1capture_CaptureService_addPortMapping(JNIEnv 
         log_e("addPortMapping failed");
         return;
     }
-}
-
-/* ******************************************************* */
-
-JNIEXPORT jboolean JNICALL
-Java_com_antest1_kcanotify_remote_1capture_CaptureService_reloadBlocklist(JNIEnv *env, jclass clazz,
-        jobject ld) {
-    pcapdroid_t *pd = global_pd;
-    if(!pd) {
-        log_e("NULL pd instance");
-        return false;
-    }
-
-    if(!pd->vpn_capture) {
-        log_e("firewall in root mode not implemented");
-        return false;
-    }
-
-    if(pd->firewall.new_bl != NULL) {
-        log_e("previous blocklist not loaded yet");
-        return false;
-    }
-
-    blacklist_t *bl = blacklist_init();
-    if(!bl) {
-        log_e("blacklist_init failed");
-        return false;
-    }
-
-    if(blacklist_load_list_descriptor(bl, env, ld) < 0) {
-        log_f("Could not load firewall rules. Check the log for more details");
-        blacklist_destroy(bl);
-        return false;
-    }
-
-    blacklists_stats_t stats;
-    blacklist_get_stats(bl, &stats);
-    log_d("reloadBlocklist: %d apps, %d domains, %d IPs", stats.num_apps, stats.num_domains, stats.num_ips);
-
-    pd->firewall.new_bl = bl;
-    return true;
-}
-
-/* ******************************************************* */
-
-JNIEXPORT jboolean JNICALL
-Java_com_antest1_kcanotify_remote_1capture_CaptureService_reloadFirewallWhitelist(JNIEnv *env, jclass clazz,
-         jobject whitelist) {
-    pcapdroid_t *pd = global_pd;
-    if(!pd) {
-        log_e("NULL pd instance");
-        return false;
-    }
-
-    if(!pd->vpn_capture) {
-        log_e("firewall in root mode not implemented");
-        return false;
-    }
-
-    if(pd->firewall.new_wl != NULL) {
-        log_e("previous firewall whitelist not loaded yet");
-        return false;
-    }
-
-    if(whitelist == NULL) {
-        pd->firewall.wl_enabled = false;
-        log_d("firewall whitelist is disabled");
-        return true;
-    }
-
-    blacklist_t *wl = blacklist_init();
-    if(!wl) {
-        log_e("blacklist_init failed");
-        return false;
-    }
-
-    if(blacklist_load_list_descriptor(wl, env, whitelist) < 0) {
-        log_f("Could not load firewall whitelist rules. Check the log for more details");
-        blacklist_destroy(wl);
-        return false;
-    }
-
-    blacklists_stats_t stats;
-    blacklist_get_stats(wl, &stats);
-    log_d("reloadFirewallWhitelist: %d apps, %d domains, %d IPs", stats.num_apps, stats.num_domains, stats.num_ips);
-
-    pd->firewall.new_wl = wl;
-    pd->firewall.wl_enabled = true;
-    return true;
-}
-
-/* ******************************************************* */
-
-JNIEXPORT jboolean JNICALL
-Java_com_antest1_kcanotify_remote_1capture_CaptureService_reloadMalwareWhitelist(JNIEnv *env, jclass clazz,
-        jobject whitelist) {
-    pcapdroid_t *pd = global_pd;
-    if(!pd) {
-        log_e("NULL pd instance");
-        return false;
-    }
-
-    if(!pd->malware_detection.enabled) {
-        log_e("malware detection not enabled");
-        return false;
-    }
-
-    if(pd->malware_detection.new_wl != NULL) {
-        log_e("previous malware whitelist not loaded yet");
-        return false;
-    }
-
-    blacklist_t *wl = blacklist_init();
-    if(!wl) {
-        log_e("blacklist_init failed");
-        return false;
-    }
-
-    if(blacklist_load_list_descriptor(wl, env, whitelist) < 0) {
-        log_f("Could not load malware whitelist rules. Check the log for more details");
-        blacklist_destroy(wl);
-        return false;
-    }
-
-    blacklists_stats_t stats;
-    blacklist_get_stats(wl, &stats);
-    log_d("reloadMalwareWhitelist: %d apps, %d domains, %d IPs", stats.num_apps, stats.num_domains, stats.num_ips);
-
-    pd->malware_detection.new_wl = wl;
-    return true;
 }
 
 /* ******************************************************* */
@@ -971,19 +715,6 @@ Java_com_antest1_kcanotify_remote_1capture_CaptureService_reloadDecryptionList(J
 
     pd->tls_decryption.new_list = list;
     return true;
-}
-
-/* ******************************************************* */
-
-JNIEXPORT void JNICALL
-Java_com_antest1_kcanotify_remote_1capture_CaptureService_nativeSetFirewallEnabled(JNIEnv *env, jclass clazz, jboolean enabled) {
-    pcapdroid_t *pd = global_pd;
-    if(!pd) {
-        log_e("NULL pd instance");
-        return;
-    }
-
-    pd->firewall.enabled = enabled;
 }
 
 /* ******************************************************* */

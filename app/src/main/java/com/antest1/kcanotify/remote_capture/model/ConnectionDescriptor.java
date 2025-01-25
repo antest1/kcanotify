@@ -107,12 +107,9 @@ public class ConnectionDescriptor {
     private final boolean mitm_decrypt; // true if the connection is under mitm for TLS decryption
     public int status;
     private int tcp_flags;
-    private boolean blacklisted_ip;
-    private boolean blacklisted_host;
     public boolean is_blocked;
     private boolean port_mapping_applied;
     private boolean decryption_ignored;
-    public boolean netd_block_missed;
     private boolean payload_truncated;
     private boolean encrypted_l7;     // application layer is encrypted (e.g. TLS)
     public boolean encrypted_payload; // actual payload is encrypted (e.g. telegram - see Utils.hasEncryptedPayload)
@@ -156,10 +153,7 @@ public class ConnectionDescriptor {
             status = (update.status & 0x00FF);
             port_mapping_applied = (update.status & 0x2000) != 0;
             decryption_ignored = (update.status & 0x1000) != 0;
-            netd_block_missed = (update.status & 0x0800) != 0;
             is_blocked = (update.status & 0x0400) != 0;
-            blacklisted_host = (update.status & 0x0200) != 0;
-            blacklisted_ip = (update.status & 0x0100) != 0;
             last_seen = update.last_seen;
             tcp_flags = update.tcp_flags; // NOTE: only for root capture
 
@@ -294,12 +288,6 @@ public class ConnectionDescriptor {
 
     public int getRcvdTcpFlags() {
         return (tcp_flags & 0xFF);
-    }
-
-    public boolean isBlacklistedIp() { return blacklisted_ip; }
-    public boolean isBlacklistedHost() { return blacklisted_host; }
-    public boolean isBlacklisted() {
-        return isBlacklistedIp() || isBlacklistedHost();
     }
 
     public void setPayloadTruncatedByAddon() {
