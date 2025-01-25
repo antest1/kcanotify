@@ -59,13 +59,6 @@ typedef struct {
     u_int64_t last_update_ms;
 } capture_stats_t;
 
-// NOTE: sync with Prefs.PayloadMode
-typedef enum {
-    PAYLOAD_MODE_NONE = 0,
-    PAYLOAD_MODE_MINIMAL,
-    PAYLOAD_MODE_FULL
-} payload_mode_t;
-
 // NOTE: sync with Prefs.BlockQuicMode
 typedef enum {
     BLOCK_QUIC_MODE_NEVER = 0,
@@ -188,11 +181,6 @@ typedef struct pcapdroid {
     int cachedir_len;
     int filesdir_len;
 
-    // config
-    jint mitm_addon_uid;
-    bool vpn_capture;
-    payload_mode_t payload_mode;
-
     // stats
     u_int num_dropped_pkts;
     long num_discarded_fragments;
@@ -271,7 +259,6 @@ typedef struct {
     jmethodID getApplicationByUid;
     jmethodID getPackageNameByUid;
     jmethodID loadUidMapping;
-    jmethodID getCountryCode;
     jmethodID protect;
     jmethodID updateConnections;
     jmethodID connInit;
@@ -365,7 +352,6 @@ struct in6_addr getIPv6Pref(JNIEnv *env, jobject vpn_inst, const char *key);
 void getApplicationByUid(pcapdroid_t *pd, jint uid, char *buf, int bufsize);
 void getPackageNameByUid(pcapdroid_t *pd, jint uid, char *buf, int bufsize);
 void loadUidMapping(pcapdroid_t *pd, jint uid, const char *package_name, const char *app_name);
-bool getCountryCode(pcapdroid_t *pd, const char *host, char out[3]);
 
 #endif // ANDROID
 

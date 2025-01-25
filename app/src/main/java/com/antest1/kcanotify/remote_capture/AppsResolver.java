@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.ArrayMap;
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.antest1.kcanotify.remote_capture.model.AppDescriptor;
@@ -131,26 +132,7 @@ public class AppsResolver {
                 packageName = pkg;
         }
 
-        // In case of root capture, we may be capturing traffic of different users/work profiles.
-        // To get the correct label and icon, try to resolve the app as the specific user of the connection.
-        if(!mFallbackToGlobalResolution && CaptureService.isCapturingAsRoot()) {
-            try {
-                if(getPackageInfoAsUser == null)
-                    getPackageInfoAsUser = PackageManager.class.getDeclaredMethod("getPackageInfoAsUser", String.class, int.class, int.class);
-
-                PackageInfo pinfo = (PackageInfo) getPackageInfoAsUser.invoke(mPm, packageName, pm_flags, Utils.getUserId(uid));
-                if(pinfo != null)
-                    app = new AppDescriptor(mPm, pinfo);
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                Log.w(TAG, "getPackageInfoAsUser call fails, falling back to standard resolution");
-                e.printStackTrace();
-                mFallbackToGlobalResolution = true;
-            }
-        }
-
-        if(app == null)
-            app = resolveInstalledApp(mPm, packageName, pm_flags);
-
+        app = resolveInstalledApp(mPm, packageName, pm_flags);
         if(app != null)
             mApps.put(uid, app);
 

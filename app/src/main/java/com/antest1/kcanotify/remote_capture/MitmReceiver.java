@@ -22,6 +22,7 @@ package com.antest1.kcanotify.remote_capture;
 import android.content.Context;
 import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
+import android.util.Log;
 import android.util.LruCache;
 import android.util.SparseArray;
 import android.widget.Toast;
@@ -141,7 +142,7 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
         mConfig.sslInsecure = true;
 
         // root capture uses transparent mode (redirection via iptables)
-        mConfig.transparentMode = settings.root_capture;
+        mConfig.transparentMode = false;
 
         //noinspection ResultOfMethodCallIgnored
         getKeylogFilePath(mContext).delete();
@@ -403,11 +404,20 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
             String msg = new String(message, StandardCharsets.US_ASCII);
 
             // format: 1:message
-            if (msg.length() < 3)
-                return;
+            if (msg.length() < 3) return;
 
             int lvl = Integer.parseInt(msg.substring(0, 1));
-            Log.level(Log.MITMADDON_LOGGER, lvl, msg.substring(2));
+            switch (lvl) {
+                case android.util.Log.INFO:
+                    Log.i(TAG, msg.substring(2));
+                    break;
+                case android.util.Log.WARN:
+                    Log.w(TAG, msg.substring(2));
+                    break;
+                case android.util.Log.ERROR:
+                    Log.e(TAG, msg.substring(2));
+                    break;
+            }
         } catch (NumberFormatException ignored) {}
     }
 

@@ -8,15 +8,9 @@ import android.os.Bundle;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class CaptureSettings implements Serializable {
-    public Set<String> app_filter;
-    public String collector_address;
-    public int collector_port;
-    public int http_server_port;
     public boolean socks5_enabled;
     public boolean tls_decryption;
     public String socks5_proxy_address;
@@ -24,59 +18,24 @@ public class CaptureSettings implements Serializable {
     public String socks5_username;
     public String socks5_password;
     public Prefs.IpMode ip_mode;
-    public String input_pcap_path;
-    public boolean root_capture;
-    public boolean full_payload;
     public Prefs.BlockQuicMode block_quic_mode;
     public boolean auto_block_private_dns;
-    public boolean pcapng_format;
     public String capture_interface;
     public int snaplen = 0;
-    public int max_pkts_per_flow = 0;
-    public int max_dump_size = 0;
     public String mitmproxy_opts;
 
     public CaptureSettings(Context ctx, SharedPreferences prefs) {
-        app_filter = Prefs.getAppFilter(prefs);
-        collector_address = Prefs.getCollectorIp(prefs);
-        collector_port = Prefs.getCollectorPort(prefs);
-        http_server_port = Prefs.getHttpServerPort(prefs);
         socks5_enabled = Prefs.getSocks5Enabled(prefs);
         socks5_proxy_address = Prefs.getSocks5ProxyHost(prefs);
         socks5_proxy_port = Prefs.getSocks5ProxyPort(prefs);
         socks5_username = Prefs.isSocks5AuthEnabled(prefs) ? Prefs.getSocks5Username(prefs) : "";
         socks5_password = Prefs.isSocks5AuthEnabled(prefs) ? Prefs.getSocks5Password(prefs) : "";
         ip_mode = Prefs.getIPMode(prefs);
-        root_capture = Prefs.isRootCaptureEnabled(prefs);
         capture_interface = Prefs.getCaptureInterface(prefs);
         tls_decryption = Prefs.getTlsDecryptionEnabled(prefs);
-        full_payload = Prefs.getFullPayloadMode(prefs);
         block_quic_mode = Prefs.getBlockQuicMode(prefs);
         auto_block_private_dns = Prefs.isPrivateDnsBlockingEnabled(prefs);
         mitmproxy_opts = Prefs.getMitmproxyOpts(prefs);
-    }
-
-    public CaptureSettings(Context ctx, Intent intent) {
-        app_filter = new HashSet<>(getStringList(intent, Prefs.PREF_APP_FILTER));
-        collector_address = getString(intent, Prefs.PREF_COLLECTOR_IP_KEY, "127.0.0.1");
-        collector_port = getInt(intent, Prefs.PREF_COLLECTOR_PORT_KEY, 1234);
-        http_server_port = getInt(intent, Prefs.PREF_HTTP_SERVER_PORT, 8080);
-        socks5_enabled = getBool(intent, Prefs.PREF_SOCKS5_ENABLED_KEY, false);
-        socks5_proxy_address = getString(intent, Prefs.PREF_SOCKS5_PROXY_IP_KEY, "0.0.0.0");
-        socks5_proxy_port = getInt(intent, Prefs.PREF_SOCKS5_PROXY_PORT_KEY, 8080);
-        socks5_username = getString(intent, Prefs.PREF_SOCKS5_USERNAME_KEY, "");
-        socks5_password = getString(intent, Prefs.PREF_SOCKS5_PASSWORD_KEY, "");
-        ip_mode = Prefs.getIPMode(getString(intent, Prefs.PREF_IP_MODE, Prefs.IP_MODE_DEFAULT));
-        root_capture = getBool(intent, Prefs.PREF_ROOT_CAPTURE, false);
-        capture_interface = getString(intent, Prefs.PREF_CAPTURE_INTERFACE, "@inet");
-        snaplen = getInt(intent, Prefs.PREF_SNAPLEN, 0);
-        max_pkts_per_flow = getInt(intent, Prefs.PREF_MAX_PKTS_PER_FLOW, 0);
-        max_dump_size = getInt(intent, Prefs.PREF_MAX_DUMP_SIZE, 0);
-        tls_decryption = getBool(intent, Prefs.PREF_TLS_DECRYPTION_KEY, false);
-        full_payload = false;
-        block_quic_mode = Prefs.getBlockQuicMode(getString(intent, "block_quic", Prefs.BLOCK_QUIC_MODE_DEFAULT));
-        auto_block_private_dns = getBool(intent, Prefs.PREF_AUTO_BLOCK_PRIVATE_DNS, true);
-        mitmproxy_opts = getString(intent, Prefs.PREF_MITMPROXY_OPTS, "");
     }
 
     private static String getString(Intent intent, String key, String def_value) {
@@ -123,7 +82,4 @@ public class CaptureSettings implements Serializable {
         return rv;
     }
 
-    public boolean readFromPcap() {
-        return input_pcap_path != null;
-    }
 }

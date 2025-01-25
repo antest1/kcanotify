@@ -620,10 +620,9 @@ public class MainActivity extends AppCompatActivity {
         ((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    private void doStartCaptureService(String input_pcap_path) {
+    private void doStartCaptureService() {
         // appStateStarting();
         CaptureSettings settings = new CaptureSettings(this, prefs);
-        settings.input_pcap_path = input_pcap_path;
         mCapHelper.startCapture(settings);
     }
 
@@ -656,7 +655,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        doStartCaptureService(null);
+        doStartCaptureService();
         return true;
     }
 

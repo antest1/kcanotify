@@ -136,7 +136,7 @@ static jobject getConnUpdate(pcapdroid_t *pd, const conn_and_tuple_t *conn) {
     }
 
     if(data->update_type & CONN_UPDATE_STATS) {
-        bool blocked = data->to_block && pd->vpn_capture; // currently can only block connections in non-root mode
+        bool blocked = data->to_block; // currently can only block connections in non-root mode
 
         (*env)->CallVoidMethod(env, update, mids.connUpdateSetStats, data->last_seen,
                                data->payload_length, data->sent_bytes, data->rcvd_bytes, data->sent_pkts, data->rcvd_pkts, data->blocked_pkts,
@@ -205,8 +205,8 @@ static int dumpNewConnection(pcapdroid_t *pd, const conn_and_tuple_t *conn, jobj
     jobject src_string = (*env)->NewStringUTF(env, srcip);
     jobject dst_string = (*env)->NewStringUTF(env, dstip);
     jobject country_code = (*env)->NewStringUTF(env, data->country_code);
-    u_int ifidx = (pd->vpn_capture ? 0 : data->pcap.ifidx);
-    u_int local_port = (pd->vpn_capture ? data->vpn.local_port : conn_info->src_port);
+    u_int ifidx = 0;
+    u_int local_port = data->vpn.local_port;
     bool mitm_decrypt = (pd->tls_decryption.enabled && data->proxied);
     jobject conn_descriptor = (*env)->NewObject(env, cls.conn, mids.connInit, data->incr_id,
                                                 conn_info->ipver, conn_info->ipproto,
@@ -408,7 +408,6 @@ static void init_jni(JNIEnv *env) {
     mids.getApplicationByUid = jniGetMethodID(env, cls.vpn_service, "getApplicationByUid", "(I)Ljava/lang/String;"),
     mids.getPackageNameByUid = jniGetMethodID(env, cls.vpn_service, "getPackageNameByUid", "(I)Ljava/lang/String;"),
     mids.loadUidMapping = jniGetMethodID(env, cls.vpn_service, "loadUidMapping", "(ILjava/lang/String;Ljava/lang/String;)V"),
-    mids.getCountryCode = jniGetMethodID(env, cls.vpn_service, "getCountryCode", "(Ljava/lang/String;)Ljava/lang/String;"),
     mids.protect = jniGetMethodID(env, cls.vpn_service, "protect", "(I)Z");
     mids.updateConnections = jniGetMethodID(env, cls.vpn_service, "updateConnections", "([Lcom/antest1/kcanotify/remote_capture/model/ConnectionDescriptor;[Lcom/antest1/kcanotify/remote_capture/model/ConnectionUpdate;)V");
     mids.sendStatsDump = jniGetMethodID(env, cls.vpn_service, "sendStatsDump", "(Lcom/antest1/kcanotify/remote_capture/model/CaptureStats;)V");
@@ -463,9 +462,6 @@ Java_com_antest1_kcanotify_remote_1capture_CaptureService_runPacketLoop(JNIEnv *
                     .notify_service_status = notifyServiceStatus,
                     .dump_payload_chunk = dumpPayloadChunk,
             },
-            .mitm_addon_uid = getIntPref(env, vpn, "getMitmAddonUid"),
-            .vpn_capture = (bool) getIntPref(env, vpn, "isVpnCapture"),
-            .payload_mode = (payload_mode_t) getIntPref(env, vpn, "getPayloadMode"),
             .socks5 = {
                     .enabled = (bool) getIntPref(env, vpn, "getSocks5Enabled"),
                     .proxy_ip = getIPPref(env, vpn, "getSocks5ProxyAddress", &pd.socks5.proxy_ipver),
@@ -479,8 +475,7 @@ Java_com_antest1_kcanotify_remote_1capture_CaptureService_runPacketLoop(JNIEnv *
     if(pd.socks5.enabled)
         getSocks5ProxyAuth(&pd);
 
-    if(pd.vpn_capture)
-        pd.vpn.tunfd = tunfd;
+    pd.vpn.tunfd = tunfd;
 
     getStringPref(&pd, "getWorkingDir", pd.cachedir, sizeof(pd.cachedir));
     strcat(pd.cachedir, "/");
@@ -652,19 +647,6 @@ Java_com_antest1_kcanotify_remote_1capture_CaptureService_rootCmd(JNIEnv *env, j
     (*env)->ReleaseStringUTFChars(env, args, args_s);
 
     return rv;
-}
-
-/* ******************************************************* */
-
-JNIEXPORT void JNICALL
-Java_com_antest1_kcanotify_remote_1capture_CaptureService_setPayloadMode(JNIEnv *env, jclass clazz, jint mode) {
-    pcapdroid_t *pd = global_pd;
-    if(!pd) {
-        log_e("NULL pd instance");
-        return;
-    }
-
-    pd->payload_mode = mode;
 }
 
 /* ******************************************************* */
@@ -960,33 +942,6 @@ void loadUidMapping(pcapdroid_t *pd, jint uid, const char *package_name, const c
 
     (*env)->DeleteLocalRef(env, package_str);
     (*env)->DeleteLocalRef(env, app_str);
-}
-
-/* ******************************************************* */
-
-bool getCountryCode(pcapdroid_t *pd, const char *host, char out[3]) {
-    bool rv = false;
-    JNIEnv *env = pd->env;
-    jstring host_str = (*env)->NewStringUTF(env, host);
-
-    jstring obj = (*env)->CallObjectMethod(env, pd->capture_service, mids.getCountryCode, host_str);
-    jniCheckException(env);
-
-    if (obj) {
-        const char *value = (*env)->GetStringUTFChars(env, obj, 0);
-
-        if (value && strlen(value) == 2) {
-            out[0] = value[0];
-            out[1] = value[1];
-            out[2] = '\0';
-            rv = true;
-        }
-
-        (*env)->ReleaseStringUTFChars(env, obj, value);
-    }
-
-    (*env)->DeleteLocalRef(env, host_str);
-    return rv;
 }
 
 /* ******************************************************* */

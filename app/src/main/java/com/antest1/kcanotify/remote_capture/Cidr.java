@@ -25,6 +25,8 @@
 
 package com.antest1.kcanotify.remote_capture;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 

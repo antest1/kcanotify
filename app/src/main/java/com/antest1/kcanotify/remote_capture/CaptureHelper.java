@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.net.VpnService;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.antest1.kcanotify.remote_capture.interfaces.CaptureStartListener;

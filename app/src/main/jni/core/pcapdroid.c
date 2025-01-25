@@ -329,10 +329,6 @@ pd_conn_t* pd_new_connection(pcapdroid_t *pd, const zdtun_5tuple_t *tuple, int u
     remote_ip[0] = '\0';
     inet_ntop(family, &dst_ip, remote_ip, sizeof(remote_ip));
 
-#ifdef ANDROID
-    getCountryCode(pd, remote_ip, data->country_code);
-#endif
-
     // Try to resolve host name via the LRU cache
     data->info = ip_lru_find(pd->ip_to_host, &dst_ip);
 
@@ -441,8 +437,7 @@ static void process_ndpi_data(pcapdroid_t *pd, const zdtun_5tuple_t *tuple, pd_c
         data->update_type |= CONN_UPDATE_INFO;
     }
 
-    if(pd->vpn_capture)
-        vpn_process_ndpi(pd, tuple, data);
+    vpn_process_ndpi(pd, tuple, data);
 }
 
 /* ******************************************************* */
@@ -476,27 +471,19 @@ static void process_payload(pcapdroid_t *pd, pkt_context_t *pctx) {
     bool truncated = data->payload_truncated;
     bool updated = false;
 
-    if((pd->payload_mode == PAYLOAD_MODE_NONE) ||
-       (pd->cb.dump_payload_chunk == NULL) ||
+    if((pd->cb.dump_payload_chunk == NULL) ||
        (pkt->l7_len <= 0) ||
        (pd->tls_decryption.enabled && data->proxied)) // NOTE: when performing TLS decryption, TCP connections data is handled by the MitmReceiver
         return;
 
-    if((pd->payload_mode != PAYLOAD_MODE_MINIMAL) || !data->has_payload[pctx->is_tx]) {
-        int to_dump = pkt->l7_len;
+    int to_dump = pkt->l7_len;
 
-        if((pd->payload_mode == PAYLOAD_MODE_MINIMAL) && (pkt->l7_len > MINIMAL_PAYLOAD_MAX_DIRECTION_SIZE)) {
-            to_dump = MINIMAL_PAYLOAD_MAX_DIRECTION_SIZE;
-            truncated = true;
-        }
-
-        if(pd->cb.dump_payload_chunk(pd, pctx, to_dump)) {
-            data->has_payload[pctx->is_tx] = true;
-            updated = true;
-        } else
-            truncated = true;
-    } else
+    if(pd->cb.dump_payload_chunk(pd, pctx, to_dump)) {
+        data->has_payload[pctx->is_tx] = true;
+        updated = true;
+    } else {
         truncated = true;
+    }
 
     if((updated && data->payload_chunks) || (truncated != data->payload_truncated)) {
         data->payload_truncated |= truncated;
@@ -697,18 +684,6 @@ static int zdtun_iter_adapter(zdtun_t *zdt, const zdtun_conn_t *conn_info, void 
     return idata->cb(idata->pd, tuple, conn);
 }
 
-static void iter_active_connections(pcapdroid_t *pd, conn_cb cb) {
-    if(!pd->vpn_capture)
-        pcap_iter_connections(pd, cb);
-    else {
-        struct iter_conn_data idata = {
-                .pd = pd,
-                .cb = cb,
-        };
-        zdtun_iter_connections(pd->zdt, zdtun_iter_adapter, &idata);
-    }
-}
-
 /* ******************************************************* */
 
 /* Perfom periodic tasks. This should be called after processing a packet or after some time has
@@ -717,8 +692,7 @@ void pd_housekeeping(pcapdroid_t *pd) {
     if((pd->capture_stats.new_stats && ((pd->now_ms - pd->capture_stats.last_update_ms) >= CAPTURE_STATS_UPDATE_FREQUENCY_MS))) {
         //log_d("Send stats");
 
-        if(pd->vpn_capture)
-            zdtun_get_stats(pd->zdt, &pd->stats);
+        zdtun_get_stats(pd->zdt, &pd->stats);
 
         if(pd->cb.send_stats_dump)
             pd->cb.send_stats_dump(pd);

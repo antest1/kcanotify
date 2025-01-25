@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.security.KeyChain;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -38,7 +39,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.antest1.kcanotify.R;
-import com.antest1.kcanotify.remote_capture.Log;
 import com.antest1.kcanotify.remote_capture.Utils;
 import com.antest1.kcanotify.remote_capture.interfaces.MitmListener;
 import com.antest1.kcanotify.remote_capture.MitmAddon;

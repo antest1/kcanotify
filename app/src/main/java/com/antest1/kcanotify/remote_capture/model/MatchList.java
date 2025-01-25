@@ -26,14 +26,13 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.text.style.StyleSpan;
 import android.util.ArrayMap;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.collection.ArraySet;
-import androidx.preference.PreferenceManager;
 
 import com.antest1.kcanotify.remote_capture.AppsResolver;
 import com.antest1.kcanotify.remote_capture.Cidr;
-import com.antest1.kcanotify.remote_capture.Log;
 import com.antest1.kcanotify.remote_capture.Utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

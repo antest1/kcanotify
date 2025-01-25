@@ -19,20 +19,12 @@
 
 package com.antest1.kcanotify.remote_capture.model;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.antest1.kcanotify.remote_capture.AppsResolver;
-import com.antest1.kcanotify.remote_capture.CaptureService;
-import com.antest1.kcanotify.remote_capture.HTTPReassembly;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
 
 /* Holds the information about a single connection.
  * Equivalent of zdtun_conn_t from zdtun and pd_conn_t from pcapdroid.c .
@@ -117,10 +109,6 @@ public class ConnectionDescriptor {
     public String js_injected_scripts;
     public String country;
 
-    /* Internal */
-    public boolean alerted;
-    public boolean block_accounted;
-
     // NOTE: invoked from JNI
     public ConnectionDescriptor(int _incr_id, int _ipver, int _ipproto, String _src_ip, String _dst_ip, String _country,
                                 int _src_port, int _dst_port, int _local_port, int _uid, int _ifidx,
@@ -175,60 +163,13 @@ public class ConnectionDescriptor {
             // Payload for decryptable connections should be received via the MitmReceiver
             assert(decryption_ignored || isNotDecryptable());
 
-            // Some pending updates with payload may still be received after low memory has been
-            // triggered and payload disabled
-            if(!CaptureService.isLowMemory()) {
-                synchronized (this) {
-                    if(update.payload_chunks != null)
-                        payload_chunks.addAll(update.payload_chunks);
-                    payload_truncated = update.payload_truncated;
-                }
+            synchronized (this) {
+                if(update.payload_chunks != null)
+                    payload_chunks.addAll(update.payload_chunks);
+                payload_truncated = update.payload_truncated;
             }
+
         }
-    }
-
-    public InetAddress getDstAddr() {
-        try {
-            return InetAddress.getByName(dst_ip);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public Status getStatus() {
-        if(status >= CONN_STATUS_CLOSED) {
-            switch(status) {
-                case CONN_STATUS_CLOSED:
-                case CONN_STATUS_RESET:
-                    return Status.STATUS_CLOSED;
-                case CONN_STATUS_UNREACHABLE:
-                    return Status.STATUS_UNREACHABLE;
-                default:
-                    return Status.STATUS_ERROR;
-            }
-        }
-        return Status.STATUS_ACTIVE;
-    }
-
-    public static String getStatusLabel(Status status, Context ctx) {
-        return status.toString();
-        /*
-        int resid;
-
-        switch(status) {
-            case STATUS_ACTIVE: resid = R.string.conn_status_active; break;
-            case STATUS_CLOSED: resid = R.string.conn_status_closed; break;
-            case STATUS_UNREACHABLE: resid = R.string.conn_status_unreachable; break;
-            default: resid = R.string.error;
-        }
-
-        return(ctx.getString(resid));
-         */
-    }
-
-    public String getStatusLabel(Context ctx) {
-        return getStatusLabel(getStatus(), ctx);
     }
 
     public boolean matches(AppsResolver res, String filter) {
@@ -243,51 +184,6 @@ public class ConnectionDescriptor {
                 Integer.toString(src_port).equals(filter) ||
                 ((app != null) && (app.matches(filter, true)))
         );
-    }
-
-    public DecryptionStatus getDecryptionStatus() {
-        if(isCleartext())
-            return DecryptionStatus.CLEARTEXT;
-        else if(decryption_error != null)
-            return DecryptionStatus.ERROR;
-        else if(isNotDecryptable())
-            return DecryptionStatus.NOT_DECRYPTABLE;
-        else if(decryption_ignored)
-            return DecryptionStatus.ENCRYPTED;
-        else if(isDecrypted())
-            return DecryptionStatus.DECRYPTED;
-        else
-            return DecryptionStatus.WAITING_DATA;
-    }
-
-    public static String getDecryptionStatusLabel(DecryptionStatus status, Context ctx) {
-        return status.toString();
-        /*
-        int resid;
-
-        switch (status) {
-            case CLEARTEXT: resid = R.string.not_encrypted; break;
-            case NOT_DECRYPTABLE: resid = R.string.not_decryptable; break;
-            case DECRYPTED: resid = R.string.decrypted; break;
-            case ENCRYPTED: resid = R.string.status_encrypted; break;
-            case WAITING_DATA: resid = R.string.waiting_application_data; break;
-            default: resid = R.string.error;
-        }
-
-        return(ctx.getString(resid));
-         */
-    }
-
-    public String getDecryptionStatusLabel(Context ctx) {
-        return getDecryptionStatusLabel(getDecryptionStatus(), ctx);
-    }
-
-    public int getSentTcpFlags() {
-        return (tcp_flags >> 8);
-    }
-
-    public int getRcvdTcpFlags() {
-        return (tcp_flags & 0xFF);
     }
 
     public void setPayloadTruncatedByAddon() {
@@ -318,49 +214,6 @@ public class ConnectionDescriptor {
 
     public synchronized void dropPayload() {
         payload_chunks.clear();
-    }
-
-    private synchronized boolean hasHttp(boolean is_sent) {
-        for(PayloadChunk chunk: payload_chunks) {
-            if(chunk.is_sent == is_sent)
-                return (chunk.type == PayloadChunk.ChunkType.HTTP);
-        }
-
-        return false;
-    }
-    public boolean hasHttpRequest() { return hasHttp(true); }
-    public boolean hasHttpResponse() { return hasHttp(false); }
-
-    private synchronized String getHttp(boolean is_sent) {
-        if(getNumPayloadChunks() == 0)
-            return "";
-
-        // Need to wrap the String to set it from the lambda
-        final AtomicReference<String> rv = new AtomicReference<>();
-
-        HTTPReassembly reassembly = new HTTPReassembly(CaptureService.getCurPayloadMode() == Prefs.PayloadMode.FULL, chunk ->
-                rv.set(new String(chunk.payload, StandardCharsets.UTF_8)));
-
-        // Possibly reassemble/decode the request
-        for(PayloadChunk chunk: payload_chunks) {
-            if(chunk.is_sent == is_sent)
-                reassembly.handleChunk(chunk);
-
-            // Stop at the first reassembly/chunk
-            if(rv.get() != null)
-                break;
-        }
-
-        return rv.get();
-    }
-    public String getHttpRequest() { return getHttp(true); }
-    public String getHttpResponse() { return getHttp(false); }
-
-    public boolean hasSeenStart() {
-        if((ipproto != 6 /* TCP */) || !CaptureService.isCapturingAsRoot())
-            return true;
-
-        return (getSentTcpFlags() & 0x2) != 0; // SYN
     }
 
     @Override

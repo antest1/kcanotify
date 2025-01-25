@@ -23,7 +23,6 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 public class KcaApplication extends MultiDexApplication {
     public static Locale defaultLocale;
     private static WeakReference<KcaApplication> mInstance;
-    private Context mLocalizedContext;
     private MatchList mDecryptionList;
 
     @Override
@@ -37,7 +36,6 @@ public class KcaApplication extends MultiDexApplication {
         super.onCreate();
 
         mInstance = new WeakReference<>(this);
-        mLocalizedContext = createConfigurationContext(Utils.getLocalizedConfig(this));
 
         String language, country;
         defaultLocale = Locale.getDefault();
@@ -70,7 +68,7 @@ public class KcaApplication extends MultiDexApplication {
             SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
             String list = getDecryptionListFromFile(getApplicationContext());
             pref.edit().putString(PREF_DECRYPTION_LIST, list).commit();
-            mDecryptionList = new MatchList(mLocalizedContext, PREF_DECRYPTION_LIST);
+            mDecryptionList = new MatchList(getApplicationContext(), PREF_DECRYPTION_LIST);
         }
         return mDecryptionList;
     }

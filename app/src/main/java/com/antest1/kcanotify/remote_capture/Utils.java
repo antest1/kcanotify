@@ -68,6 +68,7 @@ import android.text.SpannedString;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.Display;
 import android.view.MenuItem;
@@ -333,33 +334,6 @@ public class Utils {
     public static String formatInteger(Context context, int val) {
         Locale locale = getPrimaryLocale(context);
         return String.format(locale, "%d", val);
-    }
-
-    public static Configuration getLocalizedConfig(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        Configuration config = context.getResources().getConfiguration();
-
-        // On Android 33+, app language is configured from the system settings
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (Prefs.useEnglishLanguage(prefs)) {
-                Log.i(TAG, "Migrate from in-app language picker to system picker");
-                prefs.edit().remove(Prefs.PREF_APP_LANGUAGE).apply();
-
-                context.getSystemService(LocaleManager.class)
-                        .setApplicationLocales(new LocaleList(Locale.forLanguageTag("en-US")));
-            }
-
-            return config;
-        }
-
-        if(!Prefs.useEnglishLanguage(prefs))
-            return config;
-
-        Locale locale = new Locale("en");
-        Locale.setDefault(locale);
-        config.setLocale(locale);
-
-        return config;
     }
 
     public static String proto2str(int proto) {
