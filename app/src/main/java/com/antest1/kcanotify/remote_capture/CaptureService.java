@@ -77,6 +77,8 @@ import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -121,6 +123,7 @@ public class CaptureService extends VpnService implements Runnable {
     private String mSocks5Address;
     private int mSocks5Port;
     private String mSocks5Auth;
+    private List<Cidr> mSocks5BypassAddresses;
     private static final MutableLiveData<CaptureStats> lastStats = new MutableLiveData<>();
     private static final MutableLiveData<ServiceStatus> serviceStatus = new MutableLiveData<>();
     private Utils.PrivateDnsMode mPrivateDnsMode;
@@ -229,8 +232,6 @@ public class CaptureService extends VpnService implements Runnable {
         mIsAlwaysOnVPN |= isAlwaysOnVpnDetected();
         Log.d(TAG, "alwaysOn? " + mIsAlwaysOnVPN);
 
-        mSettings.tls_decryption = KcaUtils.getBooleanPreferences(getApplicationContext(), PREF_USE_TLS_DECRYPTION);
-
         // Retrieve DNS server
         String fallbackDnsV4 = Prefs.getDnsServerV4(mPrefs);
         dns_server = fallbackDnsV4;
@@ -305,6 +306,17 @@ public class CaptureService extends VpnService implements Runnable {
                     mSocks5Auth = mSettings.socks5_username + ":" + mSettings.socks5_password;
                 else
                     mSocks5Auth = null;
+
+                if (!mSettings.socks5_bypass_addr.isEmpty()) {
+                    mSocks5BypassAddresses = new ArrayList<>();
+                    for (String addr: mSettings.socks5_bypass_addr) {
+                        try {
+                            mSocks5BypassAddresses.add(new Cidr(addr));
+                        } catch (UnknownHostException e) {
+                            Log.d(TAG, "mSocks5BypassAddresses: " + KcaUtils.getStringFromException(e));
+                        }
+                    }
+                }
             }
         }
 
@@ -318,7 +330,7 @@ public class CaptureService extends VpnService implements Runnable {
 
         Log.i(TAG, "Using DNS server " + dns_server);
 
-        // VPN
+        // VPN Settings
         /* In order to see the DNS packets into the VPN we must set an internal address as the DNS
          * server. */
         Builder builder = new Builder()
@@ -345,6 +357,35 @@ public class CaptureService extends VpnService implements Runnable {
                 builder.addDnsServer(InetAddress.getByName(Prefs.getDnsServerV6(mPrefs)));
             } catch (UnknownHostException | IllegalArgumentException e) {
                 Log.w(TAG, "Could not set IPv6 DNS server");
+            }
+        }
+
+        // socks5 bypass address setting (from NetGuard)
+        if (mSocks5BypassAddresses != null && !mSocks5BypassAddresses.isEmpty()) {
+            try {
+                mSocks5BypassAddresses.add(new Cidr("224.0.0.0/3"));
+                Collections.sort(mSocks5BypassAddresses);
+
+                InetAddress start = InetAddress.getByName("0.0.0.0");
+                for (Cidr exclude : mSocks5BypassAddresses) {
+                    Log.i(TAG, "Exclude " + exclude.getNetworkAddress() + "..." + exclude.getBroadcastAddress());
+                    for (Cidr include : IPUtil.toCidr(start, IPUtil.minus1(exclude.getStart())))
+                        try {
+                            builder.addRoute(include.getAddressPart(), include.getPrefixLength());
+                        } catch (Throwable ex) {
+                            Log.e(TAG, ex + "\n" + Log.getStackTraceString(ex));
+                        }
+                    start = IPUtil.plus1(exclude.getEnd());
+                }
+                for (Cidr include : IPUtil.toCidr("224.0.0.0", "255.255.255.255")) {
+                    try {
+                        builder.addRoute(include.getAddressPart(), include.getPrefixLength());
+                    } catch (Throwable ex) {
+                        Log.e(TAG, ex + "\n" + Log.getStackTraceString(ex));
+                    }
+                }
+            } catch (UnknownHostException ex) {
+                Log.e(TAG, ex + "\n" + Log.getStackTraceString(ex));
             }
         }
 

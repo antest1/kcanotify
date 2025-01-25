@@ -1,22 +1,31 @@
 package com.antest1.kcanotify.remote_capture.model;
 
+import static com.antest1.kcanotify.KcaConstants.PREF_USE_TLS_DECRYPTION;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.antest1.kcanotify.KcaUtils;
+import com.antest1.kcanotify.remote_capture.Cidr;
+
 import java.io.Serializable;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class CaptureSettings implements Serializable {
     public boolean socks5_enabled;
+    public boolean socks5_allapps;
     public boolean tls_decryption;
     public String socks5_proxy_address;
     public int socks5_proxy_port;
     public String socks5_username;
     public String socks5_password;
+    public List<String> socks5_bypass_addr;
     public Prefs.IpMode ip_mode;
     public Prefs.BlockQuicMode block_quic_mode;
     public boolean auto_block_private_dns;
@@ -25,14 +34,25 @@ public class CaptureSettings implements Serializable {
     public String mitmproxy_opts;
 
     public CaptureSettings(Context ctx, SharedPreferences prefs) {
-        socks5_enabled = Prefs.getSocks5Enabled(prefs);
-        socks5_proxy_address = Prefs.getSocks5ProxyHost(prefs);
-        socks5_proxy_port = Prefs.getSocks5ProxyPort(prefs);
-        socks5_username = Prefs.isSocks5AuthEnabled(prefs) ? Prefs.getSocks5Username(prefs) : "";
-        socks5_password = Prefs.isSocks5AuthEnabled(prefs) ? Prefs.getSocks5Password(prefs) : "";
+        // use existing socks5 preferences
+        SharedPreferences shared_prefs = ctx.getSharedPreferences("pref", Context.MODE_PRIVATE);
+        socks5_enabled = shared_prefs.getBoolean("socks5_enable", false);
+        socks5_allapps = shared_prefs.getBoolean("socks5_allapps", false);
+        socks5_proxy_address = shared_prefs.getString("socks5_address", "0.0.0.0");
+        socks5_proxy_port = Integer.parseInt(shared_prefs.getString("socks5_port", "8080"));
+        socks5_username = shared_prefs.getString("socks5_name", "");
+        socks5_password = shared_prefs.getString("socks5_pass", "");
+        tls_decryption = KcaUtils.getBooleanPreferences(ctx, PREF_USE_TLS_DECRYPTION);
+        socks5_bypass_addr = new ArrayList<>();
+
+        String bypass_list = shared_prefs.getString("bypass_address", "");
+        if (!bypass_list.isEmpty()) {
+            socks5_bypass_addr = Arrays.asList(bypass_list.split(","));
+        }
+
+        // TODO: move prefs to pref_settings.xml
         ip_mode = Prefs.getIPMode(prefs);
         capture_interface = Prefs.getCaptureInterface(prefs);
-        tls_decryption = Prefs.getTlsDecryptionEnabled(prefs);
         block_quic_mode = Prefs.getBlockQuicMode(prefs);
         auto_block_private_dns = Prefs.isPrivateDnsBlockingEnabled(prefs);
         mitmproxy_opts = Prefs.getMitmproxyOpts(prefs);

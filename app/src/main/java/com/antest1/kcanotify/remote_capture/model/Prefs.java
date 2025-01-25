@@ -20,13 +20,9 @@
 package com.antest1.kcanotify.remote_capture.model;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
-
-import com.antest1.kcanotify.remote_capture.MitmAddon;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -48,7 +44,6 @@ public class Prefs {
     public static final String PREF_TLS_DECRYPTION_KEY = "tls_decryption";
     public static final String PREF_IP_MODE = "ip_mode";
     public static final String PREF_SOCKS5_ENABLED_KEY = "socks5_enabled";
-    public static final String PREF_SOCKS5_AUTH_ENABLED_KEY = "socks5_auth_enabled";
     public static final String PREF_SOCKS5_USERNAME_KEY = "socks5_username";
     public static final String PREF_SOCKS5_PASSWORD_KEY = "socks5_password";
     public static final String PREF_TLS_DECRYPTION_SETUP_DONE = "tls_decryption_setup_ok";
@@ -107,7 +102,6 @@ public class Prefs {
     public static boolean getSocks5Enabled(SharedPreferences p)     { return(p.getBoolean(PREF_SOCKS5_ENABLED_KEY, false)); }
     public static String getSocks5ProxyHost(SharedPreferences p)    { return(p.getString(PREF_SOCKS5_PROXY_IP_KEY, "0.0.0.0")); }
     public static int getSocks5ProxyPort(SharedPreferences p)       { return(Integer.parseInt(p.getString(Prefs.PREF_SOCKS5_PROXY_PORT_KEY, "8080"))); }
-    public static boolean isSocks5AuthEnabled(SharedPreferences p)  { return(p.getBoolean(PREF_SOCKS5_AUTH_ENABLED_KEY, false)); }
     public static String getSocks5Username(SharedPreferences p)     { return(p.getString(PREF_SOCKS5_USERNAME_KEY, "")); }
     public static String getSocks5Password(SharedPreferences p)     { return(p.getString(PREF_SOCKS5_PASSWORD_KEY, "")); }
     public static IpMode getIPMode(SharedPreferences p)          { return(getIPMode(p.getString(PREF_IP_MODE, IP_MODE_DEFAULT))); }
@@ -149,17 +143,4 @@ public class Prefs {
         return rv;
     }
 
-    public static String asString(Context ctx) {
-        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(ctx);
-
-        // NOTE: possibly sensitive info like the collector IP address not shown
-        return "TLSDecryption: " + getTlsDecryptionEnabled(p) +
-                "\nTLSSetupOk: " + isTLSDecryptionSetupDone(p) +
-                "\nCAInstallSkipped: " + MitmAddon.isCAInstallationSkipped(ctx) +
-                "\nBlockQuic: " + getBlockQuicMode(p) +
-                "\nSocks5: " + getSocks5Enabled(p) +
-                "\nBlockPrivateDns: " + isPrivateDnsBlockingEnabled(p) +
-                "\nCaptureInterface: " + getCaptureInterface(p) +
-                "\nIpMode: " + getIPMode(p);
-    }
 }

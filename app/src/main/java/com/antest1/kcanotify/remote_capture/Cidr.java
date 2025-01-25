@@ -41,7 +41,7 @@ import java.util.List;
  * A class that enables to get an IP range from CIDR specification. It supports
  * both IPv4 and IPv6.
  */
-public class Cidr {
+public class Cidr implements Comparable<Cidr> {
     private static final String TAG = "CIDR";
     private final InetAddress inetAddress;
     private final String stringCidr;
@@ -59,6 +59,7 @@ public class Cidr {
             int index = cidr.indexOf("/");
             String addressPart = cidr.substring(0, index);
             String networkPart = cidr.substring(index + 1);
+            Log.d(TAG, "input: " + stringCidr + " (" + addressPart + ", " + networkPart + ")");
 
             inetAddress = InetAddress.getByName(addressPart);
             prefixLength = Integer.parseInt(networkPart);
@@ -158,6 +159,29 @@ public class Cidr {
         Cidr other = (Cidr) obj;
         return other.startAddress.equals(startAddress) &&
                 other.endAddress.equals(endAddress);
+    }
+
+    public InetAddress getStart() {
+        return startAddress;
+    }
+
+    public InetAddress getEnd() {
+        return endAddress;
+    }
+
+    public String getAddressPart() {
+        return inetAddress.getHostAddress();
+    }
+
+    public int getPrefixLength() {
+        return prefixLength;
+    }
+
+    @Override
+    public int compareTo(@NonNull Cidr other) {
+        Long lcidr = IPUtil.inet2long(this.inetAddress);
+        Long lother = IPUtil.inet2long(other.inetAddress);
+        return lcidr.compareTo(lother);
     }
 
     @NonNull
