@@ -114,7 +114,6 @@ public class CaptureService extends VpnService implements Runnable {
     private long last_bytes;
     private int last_connections;
     private int[] mAppFilterUids;
-    private com.antest1.kcanotify.remote_capture.interfaces.PcapDumper mDumper;
     private ConnectionsRegister conn_reg;
     private Uri mPcapUri;
     private String mPcapFname;
@@ -315,7 +314,6 @@ public class CaptureService extends VpnService implements Runnable {
         last_connections = 0;
         mLowMemory = false;
         conn_reg = new ConnectionsRegister(this, CONNECTIONS_LOG_SIZE);
-        mDumper = null;
         mDumpQueue = null;
         mPendingUpdates.clear();
         mPcapFname = null;
@@ -439,11 +437,6 @@ public class CaptureService extends VpnService implements Runnable {
 
         mConnUpdateThread = new Thread(this::connUpdateWork, "UpdateListener");
         mConnUpdateThread.start();
-
-        if(mDumper != null) {
-            mDumperThread = new Thread(this::dumpWork, "DumperThread");
-            mDumperThread.start();
-        }
 
         // Start the native capture thread
         mQueueFull = false;
@@ -619,7 +612,6 @@ public class CaptureService extends VpnService implements Runnable {
             }
         }
         mDumperThread = null;
-        mDumper = null;
 
         if(mMitmReceiver != null) {
             try {
@@ -894,36 +886,6 @@ public class CaptureService extends VpnService implements Runnable {
         }
     }
 
-    private void dumpWork() {
-        while(true) {
-            byte[] data;
-            try {
-                data = mDumpQueue.take();
-            } catch (InterruptedException e) {
-                continue;
-            }
-
-            if(data.length == 0) // termination request
-                break;
-
-            try {
-                mDumper.dumpData(data);
-            } catch (IOException e) {
-                // Stop the capture
-                e.printStackTrace();
-                reportError(e.getLocalizedMessage());
-                mHandler.post(CaptureService::stopPacketLoop);
-                break;
-            }
-        }
-
-        try {
-            mDumper.stopDumper();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void checkAvailableHeap() {
         // This does not account per-app jvm limits
         long availableHeap = Utils.getAvailableHeap();
@@ -1046,8 +1008,6 @@ public class CaptureService extends VpnService implements Runnable {
     public int pcapDumpEnabled() {
         return((mSettings.dump_mode != Prefs.DumpMode.NONE) ? 1 : 0);
     }
-
-    public String getPcapDumperBpf() { return((mDumper != null) ? mDumper.getBpf() : ""); }
 
     @Override
     public boolean protect(int socket) {
@@ -1172,21 +1132,8 @@ public class CaptureService extends VpnService implements Runnable {
         return "";
     }
 
-
-    /* Exports a PCAP data chunk */
     public void dumpPcapData(byte[] data) {
-        if((mDumper != null) && (data.length > 0)) {
-            while(true) {
-                try {
-                    // wait until the queue has space to insert the data. If the queue is full, we
-                    // will experience slow-downs/drops but this is expected
-                    mDumpQueue.put(data);
-                    break;
-                } catch (InterruptedException e) {
-                    // retry
-                }
-            }
-        }
+
     }
 
     public void stopPcapDump() {

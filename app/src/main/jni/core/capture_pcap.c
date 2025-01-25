@@ -679,7 +679,6 @@ int run_pcap(pcapdroid_t *pd) {
 
     pd->pcap.app_filter_uids_size = getIntArrayPref(pd->env, pd->capture_service, "getAppFilterUids", &pd->pcap.app_filter_uids);
     pd->pcap.as_root = !pd->pcap_file_capture;
-    pd->pcap.bpf = getStringPref(pd, "getPcapDumperBpf", bpf, sizeof(bpf));
     pd->pcap.capture_interface = getStringPref(pd, "getCaptureInterface", capture_interface, sizeof(capture_interface));
 #endif
 

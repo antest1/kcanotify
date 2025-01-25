@@ -23,15 +23,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.util.ArrayMap;
 import android.util.SparseArray;
 
-import com.antest1.kcanotify.remote_capture.interfaces.DrawableLoader;
 import com.antest1.kcanotify.remote_capture.model.AppDescriptor;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -45,29 +42,11 @@ public class AppsResolver {
     private final Context mContext;
     private Method getPackageInfoAsUser;
     private boolean mFallbackToGlobalResolution;
-    private Drawable mVirtualAppIcon;
 
     public AppsResolver(Context context) {
         mApps = new SparseArray<>();
         mContext = context;
         mPm = context.getPackageManager();
-
-        initVirtualApps();
-    }
-
-    private void initVirtualApps() {
-        // Use loaders to only load the bitmap in memory if requested via AppDescriptor.getIcon()
-        final DrawableLoader virtualIconLoader = () -> {
-            // cache this to avoid copies
-            if(mVirtualAppIcon == null)
-                mVirtualAppIcon = ContextCompat.getDrawable(mContext, android.R.drawable.sym_def_app_icon);
-            return mVirtualAppIcon;
-        };
-        final DrawableLoader unknownIconLoader = () -> ContextCompat.getDrawable(mContext, android.R.drawable.ic_menu_help);
-
-        // https://android.googlesource.com/platform/system/core/+/master/libcutils/include/private/android_filesystem_config.h
-        // NOTE: these virtual apps cannot be used as a permanent filter (via addAllowedApplication)
-        // as they miss a valid package name
     }
 
     public synchronized static void clearMappedApps() {
@@ -78,7 +57,7 @@ public class AppsResolver {
     // Map the uid to the given package_name and app_name
     // This is need for apps which are not installed in this device
     public synchronized static void addMappedApp(int uid, String packageName, String appName) {
-        AppDescriptor dsc = new AppDescriptor(appName, null, packageName, uid, false);
+        AppDescriptor dsc = new AppDescriptor(appName, packageName, uid, false);
         mMappedUids.put(uid, dsc);
         mMappedPackages.put(packageName, dsc);
     }
@@ -216,6 +195,5 @@ public class AppsResolver {
 
     public void clear() {
         mApps.clear();
-        initVirtualApps();
     }
 }

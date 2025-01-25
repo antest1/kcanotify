@@ -91,7 +91,6 @@ import androidx.preference.PreferenceManager;
 
 import com.antest1.kcanotify.R;
 import com.antest1.kcanotify.BuildConfig;
-import com.antest1.kcanotify.remote_capture.interfaces.TextAdapter;
 import com.antest1.kcanotify.remote_capture.model.AppDescriptor;
 import com.antest1.kcanotify.remote_capture.model.ConnectionDescriptor;
 import com.antest1.kcanotify.remote_capture.model.Prefs;
@@ -740,19 +739,6 @@ public class Utils {
                     builder.append("\n");
                 }
             }
-        }
-
-        return builder.toString();
-    }
-
-    public static String adapter2Text(TextAdapter adapter) {
-        StringBuilder builder = new StringBuilder();
-
-        for(int i=0; i< adapter.getCount(); i++) {
-            String text = adapter.getItemText(i);
-
-            builder.append(text);
-            builder.append("\n");
         }
 
         return builder.toString();
