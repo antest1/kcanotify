@@ -499,6 +499,7 @@ public final class KcaConstants {
     public static final String PREF_NOTI_TEST_SHOW = "notify_test_show";
 
     public static final String PREF_USE_TLS_DECRYPTION = "use_tls_decryption";
+    public static final String PREF_MITM_SETUP_WIZARD = "mitm_setup_wizard";
     public static final String PREF_DECRYPTION_LIST = "decryption_list";
     public static final String PREF_VPNSERVICE_USAGE_AGREE = "vpnservice_usage_agree";
 

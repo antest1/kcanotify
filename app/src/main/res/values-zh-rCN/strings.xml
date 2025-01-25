@@ -190,7 +190,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="current_fairy_changed_in_next">※妖精会于战斗剧透/任务浏览结束后更换</string>
     <string name="action_fairy_rev">水平翻转</string>
     <string name="action_fairy_init">删除重置</string>
-    <string name="setting_menu_kand_title_adv_network">高级网络设置</string>
+    <string name="setting_menu_kand_title_adv_network">SOCKS5代理设置</string>
     <string name="setting_menu_kand_warn_adv_network">警告：错误的设定可能会让VPN失效。请在你清楚确定每个选项的作用时才更改设定！更改设定后你需要重新启用VPN套用变更</string>
     <string name="setting_menu_kand_title_socks5_enable">启用SOCKS5代理</string>
     <string name="setting_menu_kand_title_socks5_allapps">所有应用皆使用代理</string>

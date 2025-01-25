@@ -9,7 +9,6 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -34,6 +33,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
@@ -41,6 +41,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
+import com.antest1.kcanotify.remote_capture.CaptureService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -61,7 +62,6 @@ import static com.antest1.kcanotify.KcaUtils.createBuilder;
 import static com.antest1.kcanotify.KcaUtils.getContentUri;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
-import static com.antest1.kcanotify.KcaUtils.setPreferences;
 import static com.antest1.kcanotify.KcaUtils.setSoundSetting;
 import static com.antest1.kcanotify.KcaViewButtonService.FAIRY_FORECHECK_OFF;
 import static com.antest1.kcanotify.KcaViewButtonService.FAIRY_FORECHECK_ON;
@@ -162,6 +162,9 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         isActivitySet = true;
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar()
+                .setTitle(getStringWithLocale(R.string.action_settings));
 
         Map<String, ?> allEntries = sharedPref.getAll();
 
@@ -469,10 +472,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         if (PREF_SNIFFER_MODE.equals(key)) {
             String val = (String) newValue;
             if (Integer.parseInt(val) == SNIFFER_PASSIVE) {
-                if (prefs.getBoolean(PREF_VPN_ENABLED, false)) {
-                    // KcaVpnService.stop(VPN_STOP_REASON, getActivity());
-                    prefs.edit().putBoolean(PREF_VPN_ENABLED, false).commit();
-                }
+                if (CaptureService.isServiceActive()) CaptureService.stopService();
                 setActiveSnifferSettingEnabled(false);
             } else if (Integer.parseInt(val) == SNIFFER_ACTIVE) {
                 setActiveSnifferSettingEnabled(true);
@@ -481,8 +481,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
         if (PREF_FAIRY_AUTOHIDE.equals(key)) {
             boolean isTrue = (Boolean) newValue;
-            if (isTrue && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-                    !hasUsageStatPermission(getContext())) {
+            if (isTrue && !hasUsageStatPermission(getContext())) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                 alertDialog.setTitle(getStringWithLocale(R.string.sa_usagestat_dialog_title))
                     .setMessage(getStringWithLocale(R.string.sa_usagestat_dialog_desc))
@@ -526,6 +525,12 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             }
             KcaMoraleInfo.setMinMorale(value);
         }
+
+        if (PREF_USE_TLS_DECRYPTION.equals(key)) {
+            boolean val = ((Boolean) newValue);
+            setSocks5SettingEnabled(!val);
+        }
+
         return true;
     }
 
@@ -563,10 +568,29 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         pref.setEnabled(enabled);
     }
 
+    private void setSocks5SettingEnabled(boolean enabled) {
+        Preference pref = findPreference(PREF_SCREEN_ADV_NETWORK);
+        pref.setEnabled(enabled);
+        if (enabled) {
+            pref.setSummary("");
+        } else {
+            pref.setSummary(getStringWithLocale(R.string.setting_menu_kand_desc_socks5_tls_incompatible));
+        }
+    }
+
     private void setActiveSnifferSettingEnabled(boolean enabled) {
-        findPreference(PREF_SCREEN_SNIFFER_ALLOW).setEnabled(enabled);
-        findPreference(PREF_ALLOW_EXTFILTER).setEnabled(enabled);
-        findPreference(PREF_SCREEN_ADV_NETWORK).setEnabled(enabled);
+        boolean tls_disabled = !sharedPref.getBoolean(PREF_USE_TLS_DECRYPTION, false);
+        String[] keys = {
+                PREF_SCREEN_SNIFFER_ALLOW, PREF_ALLOW_EXTFILTER,
+                PREF_USE_TLS_DECRYPTION, PREF_MITM_SETUP_WIZARD, PREF_SCREEN_ADV_NETWORK};
+        setSocks5SettingEnabled(tls_disabled);
+        for (String key: keys) {
+            if (PREF_SCREEN_ADV_NETWORK.equals(key)) {
+                findPreference(key).setEnabled(enabled && tls_disabled);
+            } else {
+                findPreference(key).setEnabled(enabled);
+            }
+        }
     }
 
     private void setSettingDisabledWhenServiceRunning() {

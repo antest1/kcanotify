@@ -237,7 +237,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_fairy_rev">Reverse</string>
     <string name="action_fairy_init">Reset</string>
     <string name="current_fairy_changed_in_next">※ Fairy will be changed after current BattleView/QuestView ends.</string>
-    <string name="setting_menu_kand_title_adv_network">Advanced Network Settings</string>
+    <string name="setting_menu_kand_title_adv_network">SOCKS5 Proxy Settings</string>
     <string name="setting_menu_kand_warn_adv_network">Warning: Setting these incorrectly may make VPN Service unusable. Don\'t change these options unless you know what you are doing! You need to restart VPN Service to make these options effective.</string>
     <string name="setting_menu_kand_title_socks5_enable">Enable SOCKS5 Proxy</string>
     <string name="setting_menu_kand_title_socks5_allapps">Use proxy for all applications</string>
@@ -865,6 +865,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
 
     <!-- strings from PCAPdroid (TODO: translate text) -->
+    <string name="setting_menu_kand_desc_socks5_tls_incompatible" translatable="false">cannot use when capturing HTTPS traffic</string>
+
     <string name="app_intro_next_button" translatable="false">Next</string>
     <string name="app_intro_skip_button" translatable="false">Skip</string>
     <string name="app_intro_back_button" translatable="false">Back</string>
