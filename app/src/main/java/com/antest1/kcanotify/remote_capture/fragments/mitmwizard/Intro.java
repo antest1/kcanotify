@@ -29,13 +29,12 @@ import com.antest1.kcanotify.R;
 import com.antest1.kcanotify.remote_capture.Utils;
 
 public class Intro extends StepFragment {
-    private static final String TLS_DECRYPTION_DOCS_URL = "https://emanuele-f.github.io/PCAPdroid/tls_decryption";
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mStepIcon.setVisibility(View.GONE);
-        Utils.setTextUrls(mStepLabel, R.string.mitm_setup_wizard_intro, TLS_DECRYPTION_DOCS_URL);
+        Utils.setTextUrls(mStepLabel, R.string.mitm_setup_wizard_intro);
 
         nextStep(R.id.navto_install_addon);
     }

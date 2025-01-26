@@ -788,4 +788,44 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="nat8">瑞典</string>
     <string name="nat9">澳洲</string>
     <string name="nat10">荷蘭</string>
+
+
+    <!-- strings from PCAPdroid -->
+    <string name="setting_menu_kand_desc_socks5_tls_incompatible">捕捉HTTPS流量時無法使用</string>
+
+    <string name="app_intro_next_button">Next</string>
+    <string name="app_intro_skip_button">Skip</string>
+    <string name="app_intro_back_button">Back</string>
+    <string name="app_intro_done_button">完成</string>
+
+    <string name="error">錯誤</string>
+    <string name="warning">警告</string>
+    <string name="install_action">安裝</string>
+    <string name="export_action">匯出</string>
+    <string name="update_action">更新</string>
+    <string name="cancel_action">取消</string>
+
+    <string name="no_activity_file_selection">未找到處理檔案選擇的應用程式</string>
+    <string name="no_intent_handler_found">未找到執行此操作的應用程式</string>
+
+    <string name="tls_decryption">捕獲HTTPS流量</string>
+    <string name="tls_decryption_summary">透過執行 mitm 解密 HTTPS（SSL/TLS）流量。使用此功能前，請先執行下方的「Mitm設定精靈」。 </string>
+    <string name="mitm_setup_wizard">Mitm設定精靈</string>
+    <string name="mitm_setup_wizard_intro">此精靈將引導您完成 HTTPS 流量擷取所需的「kcanotify mitm 外掛程式」和認證機構的安裝。 </string>
+    <string name="mitm_setup_wizard_done">Kcanotify現在已經準備好解密HTTPS流量！ </string>
+    <string name="install_the_mitm_addon">安裝 <a href='%1$s'>kcanotify mitm 外掛程式</a></string>
+    <string name="mitm_addon_autostart_workaround">mitm 外掛程式連線失敗。作為解決方法,您可以嘗試打開 mitm 插件應用程序，然後返回 Kcanotify 而不關閉它。您想現在打開它嗎？ </string>
+    <string name="mitm_skip_notice">憑證似乎未安裝。如果繼續，解密可能會失敗</string>
+    <string name="export_ca_certificate">匯出「Kcanotify CA」證書，然後開啟 Android 「加密與憑證」設定並選擇將其安裝為「CA 憑證」</string>
+    <string name="install_ca_certificate">安裝「Kcanotify CA」證書，選擇「VPN 和應用程式」。 </string>
+    <string name="checking_the_certificate">檢查憑證…</string>
+    <string name="ca_cert_export_failed">匯出CA憑證時出錯\n\n如果您的裝置實施了自動啟動或類似軟體來限制後台服務執行，請務必將<a href='%1$ s'>Kcanotify 列入白名單</a></string>
+    <string name="cert_exported_now_installed">憑證已匯出，現在從Android設定中安裝它</string>
+    <string name="cert_installed_correctly">CA憑證已安裝</string>
+    <string name="cert_reinstall_required">CA憑證未安裝，請執行 mitm 安裝精靈</string>
+    <string name="mitm_addon_bad_version">kcanotify mitm 外掛程式版本已過時。請安裝版本(%1$s)並重試</string>
+    <string name="update_available">新版可用</string>
+    <string name="mitm_addon_update_available">有新的 mitm 外掛程式更新可用。 </string>
+    <string name="mitm_addon_new_version">必須更新 kcanotify mitm 外掛程式</string>
+    <string name="mitm_doze_notice">電池最佳化可能會幹擾 mitm 外掛程式</string>
 </resources>
