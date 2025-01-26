@@ -10,10 +10,10 @@ This application does not modify any incoming/outcoming packet when communicate 
 
 Requirement
 -------
-- Android 4.1 (JellyBean) or later
-- [Kancolle Android](https://en.kancollewiki.net/Kancolle_Android_Version) or [GotoBrowser](http://luckyjervis.com/GotoBrowser/) must be installed
+- Android 7 (Nougat) or later
+- [Kancolle Android](https://en.kancollewiki.net/Kancolle_Android_Version) or [GotoBrowser](https://luckyjervis.com/GotoBrowser/) must be installed
 - Supporting Android VPN service (when using official app)
-- Warning: Kcanotify may not work for specific devices (vendor-dependent issue) and old devices (Android 4.x).
+- Warning: Kcanotify may not work for specific devices (vendor-dependent issue).
 
 Download
 -------
@@ -53,13 +53,12 @@ Translations to other languages are welcomed. (please contact to developer to em
 
 Attribution
 -------
-- This project uses the modified source code of [NetGuard](https://github.com/M66B/NetGuard/) for capturing the traffic of Kancolle application. The license for NetGuard is [GNU General Public License version 3](http://www.gnu.org/licenses/gpl.txt), therefore Kcanotify also has this license.
+- This project uses the modified source code of [PCAPdroid](https://github.com/emanuele-f/PCAPdroid/) and [NetGuard](https://github.com/M66B/NetGuard/) for capturing the traffic of Kancolle application.
+  - The license for PCAPdroid and NetGuard is [GNU General Public License version 3](http://www.gnu.org/licenses/gpl.txt), therefore Kcanotify also has this license.
 - Icon and banner images are provided by [SPICA](https://www.pixiv.net/member.php?id=9209813).
 - The fairy and equipment images are from the kancolle resources. I will take action immediately when there is a request from the copyright holder for correction.
-- Translation data for ships, equipments and quest are mainly from [kc3-translations](https://github.com/KC3Kai/kc3-translations).
+- Translation data for ships, equipments and quest are mainly from [kc3-translations](https://github.com/KC3Kai/kc3-translations) and [kcwiki舰娘百科](https://zh.kcwiki.org).
   - License for kc3-translations: The MIT License [Text](https://github.com/KC3Kai/kc3-translations/blob/master/LICENSE)
-- The data of the map node data and experience are from [KC3Kai](https://github.com/KC3Kai/KC3Kai)'s resources. 
-  - License for KC3Kai: The MIT License [Text](https://github.com/KC3Kai/KC3Kai/blob/master/LICENSE)
 - The code for line of seek(索敵) & fighter power(制空権) calculation are written with reference to [艦隊シミュレーター＆デッキビルダー](http://kancolle-calc.net/deckbuilder.html)
 - Akashi's arsenal improvement data is written with reference to [KC3Kai](https://github.com/KC3Kai/KC3Kai), [WhoCallsTheFleet](https://github.com/TeamFleet/WhoCallsTheFleet-DB) and [明石の改修工廠早見表](http://akashi-list.me).
 - Reference sites: [艦これ 攻略 Wiki*](http://wikiwiki.jp/kancolle/), [Kancolle Wikia](http://kancolle.wikia.com), [kcwiki舰娘百科](https://zh.kcwiki.org)
