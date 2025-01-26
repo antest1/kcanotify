@@ -5,10 +5,10 @@ apply plugin: 'com.google.firebase.crashlytics'
 android {
     defaultConfig {
         applicationId "com.antest1.kcanotify"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 33
         versionCode 211005
-        versionName "2.25"
+        versionName "2.11r5"
 
         multiDexEnabled true
         externalNativeBuild {
@@ -17,16 +17,6 @@ android {
                 arguments "-DANDROID_PLATFORM=android-21"
                 // https://developer.android.com/ndk/guides/cmake.html
             }
-        }
-
-        ndk {
-            // https://developer.android.com/ndk/guides/abis.html#sa
-            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
-        }
-
-        lintOptions {
-            checkReleaseBuilds false
-            abortOnError false
         }
 
         buildConfigField "long", "BUILD_TIME", System.currentTimeMillis() + "L"
