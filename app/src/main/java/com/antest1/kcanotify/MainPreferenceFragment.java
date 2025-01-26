@@ -63,8 +63,8 @@ import static com.antest1.kcanotify.KcaUtils.getContentUri;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setSoundSetting;
-import static com.antest1.kcanotify.KcaViewButtonService.FAIRY_FORECHECK_OFF;
-import static com.antest1.kcanotify.KcaViewButtonService.FAIRY_FORECHECK_ON;
+import static com.antest1.kcanotify.KcaForegroundCheckService.FAIRY_FORECHECK_OFF;
+import static com.antest1.kcanotify.KcaForegroundCheckService.FAIRY_FORECHECK_ON;
 import static com.antest1.kcanotify.SettingActivity.REQUEST_ALERT_RINGTONE;
 import static com.antest1.kcanotify.SettingActivity.REQUEST_BATOPTIM_PERMISSION;
 import static com.antest1.kcanotify.SettingActivity.REQUEST_OVERLAY_PERMISSION;
@@ -493,8 +493,8 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                     .setIcon(R.mipmap.ic_launcher);
                 if (!getActivity().isFinishing()) alertDialog.show();
                 return false;
-            } else {
-                Intent intent = new Intent(getActivity(), KcaViewButtonService.class);
+            } else if (KcaService.getServiceStatus()) {
+                Intent intent = new Intent(getActivity(), KcaForegroundCheckService.class);
                 intent.setAction(isTrue ? FAIRY_FORECHECK_ON : FAIRY_FORECHECK_OFF);
                 getActivity().startService(intent);
             }

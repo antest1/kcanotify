@@ -283,6 +283,8 @@
             android:name=".KcaExpeditionCheckViewService" />
         <service
             android:name=".KcaCustomToastService" />
+        <service
+            android:name=".KcaForegroundCheckService" />
         <!--
         <service
             android:name=".KcaVpnService"
