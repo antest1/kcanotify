@@ -394,7 +394,7 @@
     <string name="questview_reward">보상</string>
     <string name="questview_memo_format" formatted="false">%s ➣보상: %s</string>
 
-    <string name="action_tools">도구모음</string>
+    <string name="action_tools">도구 모음</string>
     <string name="action_save_msg">처리중</string>
 
     <string name="action_akashi">개수공창표</string>

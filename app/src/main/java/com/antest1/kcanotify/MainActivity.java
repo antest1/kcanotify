@@ -85,8 +85,9 @@ import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 import static com.antest1.kcanotify.LocaleUtils.getResourceLocaleCode;
 
 public class MainActivity extends AppCompatActivity {
-    private final static String TAG = "KCAV";
+    private final static String TAG = "MainActivity";
     public static boolean[] warnType = new boolean[8];
+    public static final String ACTION_OPEN_TOOL = "open_tool";
     private static final int REQUEST_VPN = 1;
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
     public static final int REQUEST_EXTERNAL_PERMISSION = 3;
@@ -110,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
     TextView textMaintenance;
     Button textMainUpdate, textSpecial, textSpecial2;
     BottomAppBar bottomAppBar;
+    FrameLayout bottomSheet;
+    BottomSheetBehavior<FrameLayout> bottomSheetBehavior;
 
     ActivityResultLauncher<Intent> vpnPrepareLauncher, exactAlarmPrepareLauncher;
 
@@ -123,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
     private CaptureHelper mCapHelper;
     private boolean mWasStarted = false;
     private boolean mStartPressed = false;
+    private boolean mToolOpened = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,8 +231,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FrameLayout bottomSheet = findViewById(R.id.bottomSheet);
-        BottomSheetBehavior<FrameLayout> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheet = findViewById(R.id.bottomSheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         bottomAppBar = findViewById(R.id.bottomAppBar);
@@ -402,6 +406,7 @@ public class MainActivity extends AppCompatActivity {
 
         setVpnBtn();
         setCheckBtn();
+        handleOpenToolIntent(getIntent());
 
         fairyButton = bottomAppBar.getMenu().getItem(0);
         boolean is_random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
@@ -443,6 +448,13 @@ public class MainActivity extends AppCompatActivity {
         sendUserAnalytics(getApplicationContext(), END_APP, null);
         dbHelper.close();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        mToolOpened = false;
+        handleOpenToolIntent(intent);
     }
 
     public void setWarning() {
@@ -668,6 +680,14 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    private void handleOpenToolIntent(Intent intent) {
+        boolean result = ACTION_OPEN_TOOL.equals(intent.getAction())
+                && (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0;
+        if (result && !mToolOpened) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
+            mToolOpened = true;
+        }
+    }
 
     private class BackPressCloseHandler {
         private static final int INTERVAL = 1500;

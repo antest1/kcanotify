@@ -456,7 +456,8 @@ public class KcaFleetViewService extends Service {
             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Tools"), null);
             if (fleetView != null) fleetView.setVisibility(GONE);
             if (itemView != null) itemView.setVisibility(GONE);
-            Intent toolIntent = new Intent(KcaFleetViewService.this, ToolsActivity.class);
+            Intent toolIntent = new Intent(KcaFleetViewService.this, MainActivity.class);
+            toolIntent.setAction(MainActivity.ACTION_OPEN_TOOL);
             toolIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(toolIntent);
         });
