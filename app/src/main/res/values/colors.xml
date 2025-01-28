@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#313447</color>
     <color name="colorPrimaryDark">#2B2B30</color>
+    <color name="colorPrimaryTransparentDark">#CD2B2B30</color>
     <color name="colorAccent">#03A9F4</color>
     <color name="colorActivityBack">#ffffff</color>
     <color name="colorActivityText">#888888</color>
@@ -11,7 +12,7 @@
     <color name="colorBtn">#d6d6d6</color>
     <color name="colorBtnText">#000000</color>
     <color name="colorBtnTextAccent">#ffffff</color>
-    <color name="colorFleetInfoBtn">#313447</color>
+    <color name="colorFleetInfoBtn">#7376A4</color>
 
     <color name="colorGameStartBtn">#CD1F19</color>
     <color name="colorFairyShowBtn">#2B5B26</color>
@@ -61,6 +62,7 @@
     <color name="colorHeavyDmgStateWarn">#ff5252</color>
 
     <color name="colorHeavyDmgStatePanel">#7e2424</color>
+    <color name="colorHeavyDmgStateTransparentPanel">#cd7e2424</color>
     <color name="colorWarningPanel">#ae6000</color>
 
     <color name="colorElite">#d50000</color>
@@ -99,7 +101,7 @@
     <color name="colorQuestCategory3">#6bc613</color>
     <color name="colorQuestCategory4">#60c1d4</color>
     <color name="colorQuestCategory5">#c7b623</color>
-    <color name="colorQuestCategory6">#6d4c41</color>
+    <color name="colorQuestCategory6">#955E47</color>
     <color name="colorQuestCategory7">#af85e8</color>
     <color name="colorQuestCategory8">#d50000</color>
     <color name="colorQuestCategory9">#d50000</color>
@@ -146,8 +148,9 @@
     <color name="colorFleetInfoNoShip">#aaaaaa</color>
 
     <color name="colorFleetInfoHeavyDamagedBtn">#d50000</color>
-    <color name="colorFleetInfoNotGoodStatusBtn">#ae7a00</color>
-    <color name="colorFleetInfoExpeditionBtn">#5c6bc0</color>
+    <color name="colorFleetInfoNotGoodStatusBtn">#BAA085</color>
+    <color name="colorFleetInfoExpeditionBtn">#75A3B1</color>
+    <color name="colorFleetInfoNormalBtn">#8E8E8E</color>
 
     <color name="colorFleetSwitchBtn">#9e9d24</color>
     <color name="colorFleetAirStatBtn">#303f9f</color>

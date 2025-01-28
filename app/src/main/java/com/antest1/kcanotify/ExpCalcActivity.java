@@ -118,18 +118,15 @@ public class ExpCalcActivity extends AppCompatActivity {
         cal_hide_bar = findViewById(R.id.cal_hide_bar);
         cal_hide_bar.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.grey), PorterDuff.Mode.SRC_ATOP);
-        cal_hide_bar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (cal_visible) {
-                    cal_hide_bar.setImageResource(R.mipmap.ic_arrow_down);
-                    cal_area.setVisibility(View.GONE);
-                } else {
-                    cal_hide_bar.setImageResource(R.mipmap.ic_arrow_up);
-                    cal_area.setVisibility(View.VISIBLE);
-                }
-                cal_visible = !cal_visible;
+        cal_hide_bar.setOnClickListener(v -> {
+            if (cal_visible) {
+                cal_hide_bar.setImageResource(R.mipmap.ic_arrow_down);
+                cal_area.setVisibility(View.GONE);
+            } else {
+                cal_hide_bar.setImageResource(R.mipmap.ic_arrow_up);
+                cal_area.setVisibility(View.VISIBLE);
             }
+            cal_visible = !cal_visible;
         });
 
         map_base_exp = findViewById(R.id.map_base_exp);
@@ -143,23 +140,20 @@ public class ExpCalcActivity extends AppCompatActivity {
 
         listview = findViewById(R.id.ship_leveling_list);
         add_button = findViewById(R.id.add_exp_track);
-        add_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (current_ship_data != null) {
-                    JsonObject data = KcaUtils.getJsonObjectCopy(current_ship_data);
-                    data.addProperty("current_lv", String.valueOf(value_current_lv.getSelectedItem()));
-                    data.addProperty("target_lv", String.valueOf(value_target_lv.getSelectedItem()));
-                    data.addProperty("map", String.valueOf(value_map.getSelectedItem()));
-                    data.addProperty("rank", String.valueOf(value_rank.getSelectedItem()));
-                    data.addProperty("is_flagship", chkbox_flagship.isChecked());
-                    data.addProperty("is_mvp", chkbox_mvp.isChecked());
-                    data.addProperty("current_exp", value_current_exp.getText().toString());
-                    data.addProperty("target_exp", value_target_exp.getText().toString());
-                    data.addProperty("counter", value_counter.getText().toString());
-                    data.addProperty("mapexp", getMapExp());
-                    makeFilterItem(data);
-                }
+        add_button.setOnClickListener(v -> {
+            if (current_ship_data != null) {
+                JsonObject data = KcaUtils.getJsonObjectCopy(current_ship_data);
+                data.addProperty("current_lv", String.valueOf(value_current_lv.getSelectedItem()));
+                data.addProperty("target_lv", String.valueOf(value_target_lv.getSelectedItem()));
+                data.addProperty("map", String.valueOf(value_map.getSelectedItem()));
+                data.addProperty("rank", String.valueOf(value_rank.getSelectedItem()));
+                data.addProperty("is_flagship", chkbox_flagship.isChecked());
+                data.addProperty("is_mvp", chkbox_mvp.isChecked());
+                data.addProperty("current_exp", value_current_exp.getText().toString());
+                data.addProperty("target_exp", value_target_exp.getText().toString());
+                data.addProperty("counter", value_counter.getText().toString());
+                data.addProperty("mapexp", getMapExp());
+                makeFilterItem(data);
             }
         });
 
@@ -186,7 +180,7 @@ public class ExpCalcActivity extends AppCompatActivity {
         int m = 0;
         for (Map.Entry<String, JsonElement> data : exp_sortie_data.entrySet()) {
             sortie_map[m] = data.getKey();
-            m += 1;
+            m++;
         }
 
         value_base_exp.setText("1");
@@ -194,37 +188,33 @@ public class ExpCalcActivity extends AppCompatActivity {
         map_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sortie_map);
         map_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         value_map.setAdapter(map_adapter);
-        value_map.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                        //value_base_exp.setText(exp_sortie_data.get(sortie_map[position]).getAsString());
-                        current_state.addProperty("map", position);
-                        //setScreen();
-                    }
+        value_map.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                current_state.addProperty("map", position);
+            }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {}
-                }
-        );
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
         String[] rank_list = {"S", "A", "B", "C", "D"};
         rank_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, rank_list);
         rank_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         value_rank.setAdapter(rank_adapter);
-        value_rank.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                        rank_val = position;
-                        current_state.addProperty("rank", position);
-                        setScreen();
-                    }
+        value_rank.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                rank_val = position;
+                current_state.addProperty("rank", position);
+                setScreen();
+            }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {}
-                }
-        );
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
         String[] level_list = new String[LEVEL_MAX];
         for (int i = 0; i < LEVEL_MAX; i++) {
@@ -233,45 +223,43 @@ public class ExpCalcActivity extends AppCompatActivity {
         current_lv_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, level_list);
         current_lv_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         value_current_lv.setAdapter(current_lv_adapter);
-        value_current_lv.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                        if (!shipselect_current_flag && userIsInteracting && exp_ship_data != null) {
-                            String value = String.valueOf(position + 1);
-                            JsonArray exp_data = exp_ship_data.getAsJsonArray(value);
-                            current_exp = exp_data.get(1).getAsInt();
-                            current_state.addProperty("current_lv", position);
-                            setScreen();
-                        }
-                        shipselect_current_flag = false;
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {}
+        value_current_lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                if (!shipselect_current_flag && userIsInteracting && exp_ship_data != null) {
+                    String value = String.valueOf(position + 1);
+                    JsonArray exp_data = exp_ship_data.getAsJsonArray(value);
+                    current_exp = exp_data.get(1).getAsInt();
+                    current_state.addProperty("current_lv", position);
+                    setScreen();
                 }
-        );
+                shipselect_current_flag = false;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
         target_lv_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, level_list);
         target_lv_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         value_target_lv.setAdapter(target_lv_adapter);
-        value_target_lv.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                        if (exp_ship_data != null) {
-                            String value = String.valueOf(position + 1);
-                            JsonArray exp_data = exp_ship_data.getAsJsonArray(value);
-                            target_exp = exp_data.get(1).getAsInt();
-                            current_state.addProperty("target_lv", position);
-                            setScreen();
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {}
+        value_target_lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                if (exp_ship_data != null) {
+                    String value = String.valueOf(position + 1);
+                    JsonArray exp_data = exp_ship_data.getAsJsonArray(value);
+                    target_exp = exp_data.get(1).getAsInt();
+                    current_state.addProperty("target_lv", position);
+                    setScreen();
                 }
-        );
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
         JsonArray ship_data = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
         if (ship_data == null) ship_data = new JsonArray();
@@ -296,60 +284,54 @@ public class ExpCalcActivity extends AppCompatActivity {
         ship_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, ship_label_list);
         ship_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         value_ship.setAdapter(ship_adapter);
-        value_ship.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                        current_ship_data = shipItemList.get(position);
-                        int lv = current_ship_data.get("api_lv").getAsInt();
-                        int ship_id = current_ship_data.get("api_ship_id").getAsInt();
-                        JsonObject kc_ship_data = KcaApiData.getKcShipDataById(ship_id, "afterlv");
-                        int ship_afterlv;
-                        if (kc_ship_data != null) {
-                            ship_afterlv = kc_ship_data.get("afterlv").getAsInt();
-                        } else {
-                            ship_afterlv = 0;
-                        }
-
-                        shipselect_current_flag = true;
-                        if (!load_flag) {
-                            if (current_lv_adapter != null) {
-                                value_current_lv.setSelection(lv - 1);
-                            }
-                            if (target_lv_adapter != null) {
-                                if (ship_afterlv <= 0 || lv >= ship_afterlv) value_target_lv.setSelection(Math.min(lv, LEVEL_MAX - 1));
-                                else value_target_lv.setSelection(ship_afterlv - 1);
-                            }
-                        } else {
-                            load_flag = false;
-                        }
-
-                        current_exp = current_ship_data.getAsJsonArray("api_exp").get(0).getAsInt();
-                        current_state.addProperty("ship", position);
-                        setScreen();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {}
-                }
-        );
-
-        chkbox_flagship.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        value_ship.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                is_flagship = b;
-                current_state.addProperty("flagship", b);
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                current_ship_data = shipItemList.get(position);
+                int lv = current_ship_data.get("api_lv").getAsInt();
+                int ship_id = current_ship_data.get("api_ship_id").getAsInt();
+                JsonObject kc_ship_data = KcaApiData.getKcShipDataById(ship_id, "afterlv");
+                int ship_afterlv;
+                if (kc_ship_data != null) {
+                    ship_afterlv = kc_ship_data.get("afterlv").getAsInt();
+                } else {
+                    ship_afterlv = 0;
+                }
+
+                shipselect_current_flag = true;
+                if (!load_flag) {
+                    if (current_lv_adapter != null) {
+                        value_current_lv.setSelection(lv - 1);
+                    }
+                    if (target_lv_adapter != null) {
+                        if (ship_afterlv <= 0 || lv >= ship_afterlv)
+                            value_target_lv.setSelection(Math.min(lv, LEVEL_MAX - 1));
+                        else value_target_lv.setSelection(ship_afterlv - 1);
+                    }
+                } else {
+                    load_flag = false;
+                }
+
+                current_exp = current_ship_data.getAsJsonArray("api_exp").get(0).getAsInt();
+                current_state.addProperty("ship", position);
                 setScreen();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
 
-        chkbox_mvp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                is_mvp = b;
-                current_state.addProperty("mvp", b);
-                setScreen();
-            }
+        chkbox_flagship.setOnCheckedChangeListener((compoundButton, b) -> {
+            is_flagship = b;
+            current_state.addProperty("flagship", b);
+            setScreen();
+        });
+
+        chkbox_mvp.setOnCheckedChangeListener((compoundButton, b) -> {
+            is_mvp = b;
+            current_state.addProperty("mvp", b);
+            setScreen();
         });
 
         value_base_exp.addTextChangedListener(new TextWatcher() {
@@ -426,7 +408,7 @@ public class ExpCalcActivity extends AppCompatActivity {
         String base_text = value_base_exp.getText().toString();
         if (base_text.length() > 9) base_text = base_text.substring(0, 9);
         int mapexp = 1;
-        if (base_text.length() > 0) mapexp = Integer.parseInt(base_text);
+        if (!base_text.isEmpty()) mapexp = Integer.parseInt(base_text);
         if (mapexp == 0) mapexp = 1;
 
         if (is_mvp) mapexp *= 2;
@@ -513,9 +495,7 @@ public class ExpCalcActivity extends AppCompatActivity {
         ImageView remove_btn = v.findViewById(R.id.ship_remove);
         remove_btn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.colorBtnText), PorterDuff.Mode.SRC_ATOP);
-        remove_btn.setOnClickListener(view -> {
-            removeViewByTag(target);
-        });
+        remove_btn.setOnClickListener(view -> removeViewByTag(target));
         listview.addView(v);
     }
 

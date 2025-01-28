@@ -24,8 +24,7 @@
             android:id="@+id/questviewpanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:alpha="0.8"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/overlay_background"
             android:orientation="vertical"
             android:padding="@dimen/view_padding">
 
@@ -121,9 +120,9 @@
 
                 <ImageView
                     android:id="@+id/quest_exit"
-                    android:layout_width="@dimen/questview_button_top"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="top"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
                     android:src="@mipmap/ic_cancel"

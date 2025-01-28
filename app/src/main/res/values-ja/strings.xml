@@ -81,7 +81,7 @@
     <string name="ma_svc_toggleoff">Service Off</string>
     <string name="ma_toast_kancolle_not_installed">艦これがインストールされていません。</string>
     <string name="ma_toast_gotobrowser_not_installed">GotoBrowserがインストールされていません。</string>
-    <string name="ma_toast_overay_diabled">戦闘予報などに必要な画面オーバーレイ権限が設定されていません。設定→画面オーバーレイ設定で権限を取得することができます。</string>
+    <string name="ma_toast_overay_diabled">戦闘予報などに必要な画面オーバーレイ権限が設定されていません。</string>
     <string name="ma_hasupdate" formatted="false">アップデートがあります。 (%s)</string>
     <string name="ma_hasdataupdate" formatted="false">新しいゲームデータがあります。 (%s)</string>
     <string name="ma_nextmaintenance" formatted="false">次回メンテナンス:\n%s</string>

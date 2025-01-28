@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
@@ -62,16 +63,12 @@ public class KcaResCheckItemAdpater extends BaseAdapter {
             holder.reschk_name.setText(item.get("name").getAsString());
             holder.reschk_desc.setText(item.get("desc").getAsString());
             holder.reschk_ver.setText(item.get("version_str").getAsString());
-            holder.reschk_download.setText("Download");
-            holder.reschk_download.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Message msg = handler.obtainMessage();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(RESCHK_KEY, item.toString());
-                    msg.setData(bundle);
-                    handler.sendMessage(msg);
-                }
+            holder.reschk_download.setOnClickListener(v1 -> {
+                Message msg = handler.obtainMessage();
+                Bundle bundle = new Bundle();
+                bundle.putString(RESCHK_KEY, item.toString());
+                msg.setData(bundle);
+                handler.sendMessage(msg);
             });
             if (item.get("highlight").getAsBoolean()) {
                 holder.reschk_ver.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPanelWarning));
@@ -85,7 +82,8 @@ public class KcaResCheckItemAdpater extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView reschk_name, reschk_desc, reschk_ver, reschk_download;
+        TextView reschk_name, reschk_desc, reschk_ver;
+        Button reschk_download;
     }
 
     public void setListItem(List<JsonObject> data) {

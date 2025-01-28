@@ -352,6 +352,8 @@ public class KcaService extends Service {
                 stopService(new Intent(this, KcaViewButtonService.class));
                 stopService(new Intent(this, KcaExpeditionCheckViewService.class));
                 stopService(new Intent(this, KcaCustomToastService.class));
+                stopService(new Intent(this, KcaFleetCheckPopupService.class));
+                stopService(new Intent(this, KcaDockingPopupService.class));
                 stopService(new Intent(this, KcaForegroundCheckService.class));
                 setServiceDown();
                 KcaAlarmService.clearAlarmCount();
@@ -677,8 +679,7 @@ public class KcaService extends Service {
                 api_start2_init = false;
                 KcaFleetViewService.setReadyFlag(false);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                        && !Settings.canDrawOverlays(getApplicationContext())) {
+                if (!Settings.canDrawOverlays(getApplicationContext())) {
                     // Can not draw overlays: pass
                 } else {
                     startService(new Intent(this, KcaViewButtonService.class));
@@ -948,8 +949,7 @@ public class KcaService extends Service {
                         break;
                     }
                 }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                        && !Settings.canDrawOverlays(getApplicationContext())) {
+                if (!Settings.canDrawOverlays(getApplicationContext())) {
                     // Can not draw overlays: pass
                 } else if (jsonDataObj.has("api_data")) {
                     JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
@@ -1131,7 +1131,7 @@ public class KcaService extends Service {
                             }
                         }
 
-                        if (message.length() > 0) {
+                        if (!message.isEmpty()) {
                             boolean hcondition = (isHeavyDamagedFlag && isHDVibrateEnabled());
                             boolean ncondition = (isNotSuppliedFlag && isNSVibrateEnabled());
                             if (hcondition || ncondition) {
@@ -1156,10 +1156,7 @@ public class KcaService extends Service {
                 }
 
                 if (url.startsWith(API_GET_MEMBER_MAPINFO) || url.startsWith(API_GET_MEMBER_PRACTICE)) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                            && !Settings.canDrawOverlays(getApplicationContext())) {
-                        // Can not draw overlays: pass
-                    } else {
+                    if (Settings.canDrawOverlays(getApplicationContext())) {
                         Intent qintent = new Intent(this, KcaBattleViewService.class);
                         startService(qintent);
                     }
@@ -1239,15 +1236,10 @@ public class KcaService extends Service {
                             KcaBattle.setDeckPortData(api_data);
                             KcaBattle.setStartHeavyDamageExist(checkvalue);
 
-                            if (isBattleViewEnabled()) {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                                        && !Settings.canDrawOverlays(getApplicationContext())) {
-                                    // Can not draw overlays: pass
-                                } else {
-                                    startService(new Intent(this, KcaViewButtonService.class)
-                                            .setAction(KcaViewButtonService.ACTIVATE_BATTLEVIEW_ACTION));
-                                    startService(new Intent(this, KcaBattleViewService.class));
-                                }
+                            if (isBattleViewEnabled() &&Settings.canDrawOverlays(getApplicationContext())) {
+                                startService(new Intent(this, KcaViewButtonService.class)
+                                        .setAction(KcaViewButtonService.ACTIVATE_BATTLEVIEW_ACTION));
+                                startService(new Intent(this, KcaBattleViewService.class));
                             }
                         }
                         KcaBattle.processData(dbHelper, url, battleApiData);
@@ -1304,8 +1296,8 @@ public class KcaService extends Service {
                 if (url.startsWith(API_REQ_NYUKYO_SPEEDCHAGNE)) {
                     int ndock_id = -1;
                     String[] requestData = request.split("&");
-                    for (int i = 0; i < requestData.length; i++) {
-                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                    for (String requestDatum : requestData) {
+                        String decodedData = URLDecoder.decode(requestDatum, "utf-8");
                         if (decodedData.startsWith("api_ndock_id")) {
                             ndock_id = Integer.valueOf(decodedData.replace("api_ndock_id=", "")) - 1;
                             break;
@@ -2153,7 +2145,7 @@ public class KcaService extends Service {
         private final WeakReference<KcaService> mService;
 
         kcaNotificationHandler(KcaService service) {
-            mService = new WeakReference<KcaService>(service);
+            mService = new WeakReference<>(service);
         }
 
         @Override
@@ -2178,7 +2170,7 @@ public class KcaService extends Service {
 
         JsonObject jsonDataObj = null;
         try {
-            if (data != null && data.length() > 0) {
+            if (data != null && !data.isEmpty()) {
                 jsonDataObj = gson.fromJson(data, JsonObject.class);
             }
 
@@ -2679,13 +2671,7 @@ public class KcaService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
             alarmManager.set(android.app.AlarmManager.RTC_WAKEUP, time, alarmIntent);
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, alarmIntent);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                alarmManager.setExact(android.app.AlarmManager.RTC_WAKEUP, time, alarmIntent);
-            } else {
-                alarmManager.set(android.app.AlarmManager.RTC_WAKEUP, time, alarmIntent);
-            }
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, alarmIntent);
         }
         Log.e("KCA", "Alarm set to: " + time + " " + code);
     }

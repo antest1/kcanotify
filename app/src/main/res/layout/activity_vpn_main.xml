@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.antest1.kcanotify.MainActivity">
-
     <LinearLayout
         android:id="@+id/layout_base"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
+        android:paddingBottom="80dp"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
@@ -25,140 +26,67 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:titleTextColor="@color/colorToolbarText" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/background"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/controls"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:alpha="0.9"
-                android:background="@color/white"
-                android:elevation="2dp"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                app:layout_constraintTop_toTopOf="parent"
                 android:orientation="vertical"
-                android:padding="6dp">
+                android:paddingTop="6dp"
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
 
-                <LinearLayout
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggleGroup"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/activity_main_btn_size_top"
-                    android:layout_marginBottom="6dp"
-                    android:weightSum="1.0">
+                    android:layout_height="wrap_content"
+                    android:weightSum="2">
 
-                    <ToggleButton
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/vpnbtn"
+                        style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginEnd="3dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_weight=".5"
-                        android:background="@drawable/togglebtn"
+                        android:layout_weight="1"
                         android:stateListAnimator="@null"
-                        android:text="VPN BTN"
-                        android:textColor="@drawable/togglebtn_text"
-                        android:textOff="@string/ma_vpn_toggleoff"
-                        android:textOn="@string/ma_vpn_toggleon"
+                        android:text="@string/ma_vpn_toggleoff"
                         android:textSize="@dimen/activity_main_btn_textsize" />
 
-                    <ToggleButton
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/svcbtn"
+                        style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_weight=".5"
-                        android:background="@drawable/togglebtn"
+                        android:layout_weight="1"
                         android:stateListAnimator="@null"
-                        android:text="SERVICE BTN"
-                        android:textColor="@drawable/togglebtn_text"
-                        android:textOff="@string/ma_svc_toggleoff"
-                        android:textOn="@string/ma_svc_toggleon"
+                        android:text="@string/ma_svc_toggleoff"
                         android:textSize="@dimen/activity_main_btn_textsize" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/activity_main_btn_size_botton"
-                    android:weightSum="1.0">
-
-                    <Button
-                        android:id="@+id/kcbtn"
-
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="6dp"
-                        android:layout_weight="0.64"
-                        android:background="@color/colorGameStartBtn"
-                        android:padding="@dimen/activity_main_btn_fairy_padding"
-                        android:stateListAnimator="@null"
-                        android:text="GAME START"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/activity_main_btn_textsize" />
-
-                    <ImageButton
-                        android:id="@+id/kcafairybtn"
-
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="6dp"
-                        android:layout_weight="0.18"
-                        android:background="@color/colorFairyShowBtn"
-                        android:gravity="center"
-                        android:padding="@dimen/activity_main_btn_fairy_padding"
-                        android:scaleType="fitCenter"
-                        android:src="@mipmap/noti_icon_0"
-                        android:stateListAnimator="@null">
-
-
-                    </ImageButton>
-
-                    <ImageButton
-                        android:id="@+id/kcatoolbtn"
-
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.18"
-                        android:background="@color/colorToolsBtn"
-                        android:gravity="center"
-                        android:padding="@dimen/activity_main_btn_tools_padding"
-                        android:scaleType="fitCenter"
-                        android:src="@mipmap/ic_dashboard"
-                        android:stateListAnimator="@null">
-
-
-                    </ImageButton>
-
-
-                </LinearLayout>
-
+                </com.google.android.material.button.MaterialButtonToggleGroup>
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/controls"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin">
-
+                android:layout_marginEnd="@dimen/activity_horizontal_margin">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/textSpecial2"
+                    android:layout_above="@id/chipGroup"
                     android:gravity="right"
                     android:orientation="horizontal">
 
@@ -174,60 +102,16 @@
                         app:srcCompat="@mipmap/_background" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textMainWarn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginRight="6dp"
-                    android:background="@color/colorPanelWarning"
-                    android:maxLines="8"
-                    android:minHeight="84dp"
-                    android:padding="4dp"
-                    android:scrollbars="vertical"
-                    android:text="화면 오버레이가 설정되지 않았습니다."
-                    android:textAlignment="viewStart"
-                    android:textColor="@color/white"
-                    android:textSize="14dp" />
-
-                <TextView
-                    android:id="@+id/textMainUpdate"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_alignWithParentIfMissing="true"
-                    android:layout_above="@id/textMainWarn"
-                    android:layout_alignParentBottom="false"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginRight="6dp"
-                    android:background="@color/colorMainBtn"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:minLines="4"
-                    android:padding="4dp"
-                    android:text="@string/setting_menu_kand_title_game_data_down"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="14dp"
-                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/textMaintenance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignWithParentIfMissing="true"
-                    android:layout_above="@id/textMainUpdate"
-                    android:layout_alignParentBottom="false"
+                    android:layout_above="@id/chipGroup"
                     android:layout_marginStart="6dp"
-                    android:layout_marginLeft="6dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="6dp"
-                    android:layout_marginRight="6dp"
                     android:background="@color/colorDataUpdate"
                     android:gravity="center_vertical|center_horizontal"
                     android:minLines="2"
@@ -238,65 +122,124 @@
                     android:textSize="14dp"
                     android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/textSpecial"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_alignWithParentIfMissing="true"
-                    android:layout_above="@id/textMaintenance"
-                    android:layout_alignParentBottom="false"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginRight="6dp"
-                    android:background="@color/colorSpecial"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:minLines="4"
-                    android:padding="4dp"
-                    android:text="Special Text"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorSpecialText"
-                    android:textSize="14dp"
-                    android:visibility="visible" />
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    app:chipSpacingVertical="-8dp">
 
-                <TextView
-                    android:id="@+id/textSpecial2"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_alignWithParentIfMissing="true"
-                    android:layout_above="@id/textSpecial"
-                    android:layout_alignParentBottom="false"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginRight="6dp"
-                    android:background="@color/colorUpdate"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:minLines="4"
-                    android:padding="4dp"
-                    android:text="@string/notification_message"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorUpdateText"
-                    android:textSize="14dp"
-                    android:visibility="visible" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/textSpecial2"
+                        style="@style/Widget.Material3.Chip.Assist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/notification_message"
+                        android:textColor="@color/colorUpdateText"
+                        app:chipBackgroundColor="@color/colorUpdate"
+                        app:chipIcon="@android:drawable/ic_dialog_info"
+                        app:chipIconTint="@color/colorUpdateText" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/textSpecial"
+                        style="@style/Widget.Material3.Chip.Assist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/special_message"
+                        android:textColor="@color/colorSpecialText"
+                        app:chipBackgroundColor="@color/colorSpecial"
+                        app:chipIcon="@android:drawable/ic_menu_gallery"
+                        app:chipIconTint="@color/colorSpecialText" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/textMainUpdate"
+                        style="@style/Widget.Material3.Chip.Assist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_menu_kand_title_game_data_down"
+                        android:textColor="@color/white"
+                        app:chipBackgroundColor="@color/colorMainBtn"
+                        app:chipIcon="@android:drawable/stat_sys_download"
+                        app:chipIconTint="@color/white" />
+
+                </com.google.android.material.chip.ChipGroup>
+
 
                 <TextView
                     android:id="@+id/textDescription"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_above="@id/textSpecial2"
+                    android:layout_above="@id/chipGroup"
                     android:text="TextView"
                     android:textColor="@color/colorActivityText"
                     android:textSize="@dimen/activity_text_size" />
 
             </RelativeLayout>
 
-        </LinearLayout>
-
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        style="@style/Widget.Material3.BottomAppBar"
+        app:menu="@menu/bottom_app_bar"
+        />
+
+    <FrameLayout
+        android:id="@+id/bottomSheet"
+        style="@style/Widget.Material3.BottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+
+        app:behavior_expandedOffset="80dp"
+        app:behavior_fitToContents="false"
+        app:behavior_halfExpandedRatio="0.6"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        tools:visibility="visible">
+
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:id="@+id/drag_handle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragment_container_view"
+                android:name="com.antest1.kcanotify.ToolsFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:layout_marginBottom="16dp" />
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/anchor_dummy"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:layout_marginTop="-16dp"
+            android:focusable="false"
+            android:text=""
+            android:visibility="invisible" />
+
+    </FrameLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/kcbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="16dp"
+        android:text="GAME START"
+        app:icon="@android:drawable/ic_media_play"
+        app:layout_anchor="@id/anchor_dummy"
+        app:layout_anchorGravity="end" />
 
     <ImageView
         android:id="@+id/special_image"
@@ -307,6 +250,7 @@
         android:padding="20dp"
         android:src="@mipmap/special_image"
         android:visibility="gone"
+        tools:visibility="gone"
         app:srcCompat="@mipmap/special_image" />
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

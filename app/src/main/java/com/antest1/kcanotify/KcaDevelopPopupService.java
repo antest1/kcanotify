@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
@@ -79,8 +78,7 @@ public class KcaDevelopPopupService extends Service {
     public void onCreate() {
         super.onCreate();
         active = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else {
@@ -107,8 +105,8 @@ public class KcaDevelopPopupService extends Service {
             popupWidth = mView.getMeasuredWidth();
             popupHeight = mView.getMeasuredHeight();
 
-            ed_ship = (TextView) mView.findViewById(R.id.ed_ship);
-            ed_time = (TextView) mView.findViewById(R.id.ed_time);
+            ed_ship = mView.findViewById(R.id.ed_ship);
+            ed_time = mView.findViewById(R.id.ed_time);
 
             // Button (Fairy) Settings
             mParams = new WindowManager.LayoutParams(
@@ -136,8 +134,7 @@ public class KcaDevelopPopupService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("KCA-CPS", "onStartCommand");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else if (intent != null) {
@@ -213,7 +210,6 @@ public class KcaDevelopPopupService extends Service {
 
     private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
         private static final int MAX_CLICK_DURATION = 200;
-        private static final int LONG_CLICK_DURATION = 800;
 
         private long startClickTime;
 
@@ -270,7 +266,7 @@ public class KcaDevelopPopupService extends Service {
         display.getSize(size);
         screenWidth = size.x;
         screenHeight = size.y;
-        Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+        Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
         if (mParams != null) {
             if (mParams.x < 0) mParams.x = 0;

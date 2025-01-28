@@ -2,14 +2,14 @@ package com.antest1.kcanotify;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.material.chip.Chip;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 
@@ -20,16 +20,14 @@ import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 
 
 public class ExpeditionTableActivity extends AppCompatActivity {
-    static final int SHIPINFO_GET_SORT_KEY = 1;
-    static final int SHIPINFO_GET_FILTER_RESULT = 2;
 
     Toolbar toolbar;
     static Gson gson = new Gson();
     ListView listview;
 
-    TextView greatscbtn;
+    Chip greatscbtn;
     boolean is_great_success;
-    View daihatsubtn;
+    Chip daihatsubtn;
     int daihatsu_count = 0;
     JsonArray expeditionData = new JsonArray();
     int world_idx = 0;
@@ -70,28 +68,21 @@ public class ExpeditionTableActivity extends AppCompatActivity {
 
         greatscbtn = findViewById(R.id.btn_success_type);
         setGsButtonStyle(greatscbtn);
-        greatscbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TextView tv = (TextView) view;
-                is_great_success = !is_great_success;
-                setGsButtonStyle(tv);
-                adapter.setGreatSuccess(is_great_success);
-                adapter.notifyDataSetChanged();
-            }
+        greatscbtn.setOnClickListener(view -> {
+            Chip chip = (Chip) view;
+            is_great_success = !is_great_success;
+            setGsButtonStyle(chip);
+            adapter.setGreatSuccess(is_great_success);
+            adapter.notifyDataSetChanged();
         });
 
         daihatsubtn = findViewById(R.id.btn_daihatsu);
-        ((TextView) daihatsubtn.findViewById(R.id.btn_daihatsu_value)).setText(getDaihatsuCountString(0));
-        daihatsubtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TextView val = view.findViewById(R.id.btn_daihatsu_value);
-                daihatsu_count = (daihatsu_count + 1) % 5;
-                val.setText(getDaihatsuCountString(daihatsu_count));
-                adapter.setDaihatsuCount(daihatsu_count);
-                adapter.notifyDataSetChanged();
-            }
+        daihatsubtn.setText(getDaihatsuCountString(0));
+        daihatsubtn.setOnClickListener(view -> {
+            daihatsu_count = (daihatsu_count + 1) % 5;
+            ((Chip)view).setText(getDaihatsuCountString(daihatsu_count));
+            adapter.setDaihatsuCount(daihatsu_count);
+            adapter.notifyDataSetChanged();
         });
 
         expeditionData = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "expedition.json", dbHelper);
@@ -129,18 +120,14 @@ public class ExpeditionTableActivity extends AppCompatActivity {
     }
 
     private String getDaihatsuCountString(int val) {
-        return "x".concat(String.valueOf(val));
+        return "×".concat(String.valueOf(val));
     }
 
-    private void setGsButtonStyle(TextView tv) {
+    private void setGsButtonStyle(Chip tv) {
         if (is_great_success) {
             tv.setText(getStringWithLocale(R.string.expdtable_btn_s2));
-            tv.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
-            tv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
         } else {
             tv.setText(getStringWithLocale(R.string.expdtable_btn_s1));
-            tv.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnText));
-            tv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtn));
         }
     }
 

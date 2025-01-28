@@ -23,9 +23,13 @@
         android:id="@+id/updatecheck_pref"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:paddingTop="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
 
 
         <LinearLayout
@@ -71,22 +75,22 @@
 
             </LinearLayout>
 
-            <CheckBox
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/reschk_checkatstart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="check update when start application"
+                android:text="@string/download_setting_checkatstart"
                 android:textSize="14sp" />
 
-            <CheckBox
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/reschk_reset"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:buttonTint="@color/colorPanelWarning"
                 android:checked="false"
-                android:text="reset all resource files"
+                android:text="@string/download_reset"
                 android:textColor="@color/colorPanelWarning"
                 android:textSize="14sp" />
 
@@ -118,22 +122,13 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="16sp" />
 
-                <TextView
+                <Button
                     android:id="@+id/gamedata_updatecheck"
+                    style="?attr/materialIconButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:autoText="false"
-                    android:background="@color/colorAccent"
-                    android:paddingBottom="2dp"
-                    android:paddingEnd="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingStart="8dp"
-                    android:paddingTop="2dp"
-                    android:text="@string/action_check"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    app:icon="@android:drawable/stat_notify_sync"
+                    android:layout_marginEnd="4dp"/>
 
             </LinearLayout>
 
@@ -149,7 +144,6 @@
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="16dp" />
-
             <ListView
                 android:id="@+id/gamedata_list"
                 android:layout_width="match_parent"
@@ -183,43 +177,26 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/resources_updatecheck"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
-                    android:autoText="false"
-                    android:background="@color/colorAccent"
-                    android:paddingBottom="2dp"
-                    android:paddingEnd="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingStart="8dp"
-                    android:paddingTop="2dp"
-                    android:text="@string/action_check"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-
-                <TextView
+                <Button
                     android:id="@+id/resources_downloadall"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
-                    android:autoText="false"
-                    android:background="@color/colorPrimary"
-                    android:paddingBottom="2dp"
-                    android:paddingEnd="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingStart="8dp"
-                    android:paddingTop="2dp"
+                    android:layout_marginEnd="4dp"
                     android:text="@string/action_downloadall"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textColor="@color/colorAccent"
+                    app:iconTint="@color/colorAccent"
+                    app:icon="@android:drawable/stat_sys_download"
+                    app:strokeColor="@color/colorAccent" />
+
+                <Button
+                    android:id="@+id/resources_updatecheck"
+                    style="?attr/materialIconButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@android:drawable/stat_notify_sync"
+                    android:layout_marginEnd="4dp"/>
+
 
             </LinearLayout>
 
@@ -234,13 +211,17 @@
                 android:text="Loading..."
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="16dp" />
+                android:textSize="16dp"/>
 
             <ListView
                 android:id="@+id/resources_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:paddingBottom="8dp"
+                android:clipToPadding="false"
+            />
         </LinearLayout>
 
     </LinearLayout>

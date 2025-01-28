@@ -34,7 +34,9 @@
 
             <Button
                 android:id="@+id/error_load"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="0dp"
+                android:layout_margin="5dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:stateListAnimator="@null"
@@ -42,7 +44,9 @@
 
             <Button
                 android:id="@+id/error_clear"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="0dp"
+                android:layout_margin="5dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:stateListAnimator="@null"
@@ -50,7 +54,9 @@
 
             <Button
                 android:id="@+id/error_export"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="0dp"
+                android:layout_margin="5dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:stateListAnimator="@null"

@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:alpha="0.8">
 
-    <LinearLayout
+    android:background="@drawable/overlay_background_solid"
+    android:elevation="8dp"
+    android:padding="@dimen/popup_padding"
+    android:orientation="vertical">
+
+<LinearLayout
         android:layout_width="@dimen/popup_t4_width"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:orientation="vertical"
-        android:padding="@dimen/popup_padding">
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/view_menu"
@@ -38,9 +40,9 @@
 
                 <ImageView
                     android:id="@+id/view_cancel"
-                    android:layout_width="@dimen/popup_text_large"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="top"
                     android:src="@mipmap/ic_cancel" />
             </LinearLayout>
 

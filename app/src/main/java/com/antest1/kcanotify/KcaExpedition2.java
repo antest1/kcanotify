@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static android.text.TextUtils.concat;
 import static com.antest1.kcanotify.KcaAlarmService.ALARM_DELAY;
 import static com.antest1.kcanotify.KcaUtils.getTimeStr;
 

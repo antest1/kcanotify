@@ -218,19 +218,11 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         if (!isActivitySet) return false;
 
         if (PREF_OVERLAY_SETTING.equals(key)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                showObtainingPermissionOverlayWindow();
-            } else {
-                showToast(getActivity(), getStringWithLocale(R.string.sa_under_m), Toast.LENGTH_SHORT);
-            }
+            showObtainingPermissionOverlayWindow();
         }
 
         if (PREF_BATOPTIM_SETTING.equals(key)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                showObtainingPermissionBatteryOptimization();
-            } else {
-                showToast(getActivity(), getStringWithLocale(R.string.sa_under_m), Toast.LENGTH_SHORT);
-            }
+            showObtainingPermissionBatteryOptimization();
         }
 
         if (PREF_SCREEN_ADV_NETWORK.equals(key)) {
@@ -246,7 +238,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, DEFAULT_NOTIFICATION_URI);
             String existingValue = sharedPref.getString(key, null);
             if (existingValue != null) {
-                if (existingValue.length() == 0) {
+                if (existingValue.isEmpty()) {
                     // Select "Silent"
                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
                 } else {
@@ -279,11 +271,9 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         return KcaUtils.getStringWithLocale(getActivity().getApplicationContext(), getActivity().getBaseContext(), id);
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     public void showObtainingPermissionOverlayWindow() {
         String package_name = getContext().getPackageName();
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + package_name));
-
         if (intent.resolveActivity(getContext().getPackageManager()) == null) {
             intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + package_name));
             showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_appearontop), Toast.LENGTH_LONG);
@@ -305,7 +295,6 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         startActivityResult.launch(intent);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static boolean hasUsageStatPermission(Context context) {
         AppOpsManager appOps = (AppOpsManager)
                 context.getSystemService(Context.APP_OPS_SERVICE);
@@ -314,14 +303,12 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         return mode == AppOpsManager.MODE_ALLOWED;
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void showObtainingUsageStatPermission() {
         Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
         currentActivity = REQUEST_USAGESTAT_PERMISSION;
         startActivityResult.launch(intent);
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     private void showOverlayPermissionResult() {
         if (checkActivityValid()) {
             int delay = Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 1000;
@@ -338,7 +325,6 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     private void showBatteryOptimizationPermissionResult() {
         if (checkActivityValid()) {
             int delay = Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 1000;
@@ -418,7 +404,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                 default:
                     break;
             }
-            if (kca_url.length() > 0) {
+            if (!kca_url.isEmpty()) {
                 bundle.putString("url", kca_url);
                 bundle.putString("data", gson.toJson(dmpData));
                 Message sMsg = sHandler.obtainMessage();
@@ -502,7 +488,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
         if (PREF_ALARM_DELAY.equals(key)) {
             String valueString = ((String) newValue);
-            if (valueString.length() == 0 || !TextUtils.isDigitsOnly(valueString)) return false;
+            if (valueString.isEmpty() || !TextUtils.isDigitsOnly(valueString)) return false;
             int value = Integer.parseInt(valueString);
             KcaAlarmService.setAlarmDelay(value);
             if (sHandler != null) {

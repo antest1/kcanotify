@@ -37,22 +37,20 @@ public class KcaDockingPopupListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final int pos = position;
         final Context context = parent.getContext();
 
-        View v = convertView;
-        if (v == null) {
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.listview_dock, parent, false);
+            convertView = inflater.inflate(R.layout.listview_dock, parent, false);
             ViewHolder holder = new ViewHolder();
-            holder.shipname = (TextView) v.findViewById(R.id.dock_ship);
-            holder.repairtime = (TextView) v.findViewById(R.id.dock_time);
-            v.setTag(holder);
+            holder.shipname = convertView.findViewById(R.id.dock_ship);
+            holder.repairtime = convertView.findViewById(R.id.dock_time);
+            convertView.setTag(holder);
         }
 
         final JsonObject item = itemList.get(position).getAsJsonObject();
 
-        ViewHolder holder = (ViewHolder) v.getTag();
+        ViewHolder holder = (ViewHolder) convertView.getTag();
         holder.shipname.setText(item.get("name").getAsString());
         holder.repairtime.setText(item.get("time").getAsString());
         int state = item.get("state").getAsInt();
@@ -77,7 +75,7 @@ public class KcaDockingPopupListAdapter extends BaseAdapter {
                 break;
         }
 
-        return v;
+        return convertView;
     }
 
     static class ViewHolder {

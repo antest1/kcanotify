@@ -259,7 +259,8 @@
             </intent-filter>
         </service>
         <service
-            android:name=".KcaBattleViewService" />
+            android:name=".KcaBattleViewService"
+            android:configChanges="layoutDirection" />
         <service
             android:name=".KcaFleetViewService"
             android:configChanges="locale|layoutDirection" />
