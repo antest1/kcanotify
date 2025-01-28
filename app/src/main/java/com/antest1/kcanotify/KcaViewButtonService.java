@@ -496,8 +496,8 @@ public class KcaViewButtonService extends Service {
                     long dt = Calendar.getInstance().getTimeInMillis() - lastT[(curr + 1) % 3];
                     float finalXUncap = layoutParams.x + dx / dt * 400;
                     float finalYUncap = layoutParams.y + dy / dt * 400;
-                    float finalX = max(buttonView.getPaddingLeft(), Math.min(finalXUncap, screenWidth - buttonView.getWidth() - buttonView.getPaddingRight()));
-                    float finalY = max(buttonView.getPaddingTop(), Math.min(finalYUncap, screenHeight - buttonView.getHeight() - buttonView.getPaddingBottom()));
+                    float finalX = max(buttonView.getPaddingLeft(), Math.min(finalXUncap, screenWidth - buttonView.getWidth() / 2.0f - buttonView.getPaddingRight()));
+                    float finalY = max(buttonView.getPaddingTop(), Math.min(finalYUncap, screenHeight - buttonView.getHeight() / 2.0f - buttonView.getPaddingBottom()));
 
                     buttonView.animateTo(layoutParams.x, layoutParams.y,
                             (int) finalX, (int) finalY,
