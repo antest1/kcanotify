@@ -802,6 +802,8 @@ public class KcaFleetViewService extends Service {
         boolean is_combined = idx == FLEET_COMBINED_ID;
         boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         JsonArray deckportdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+        int deck_count = deckportdata.size();
+
         if (!isReady) {
             fleetCalcInfoText = "";
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNoShip));
@@ -812,7 +814,8 @@ public class KcaFleetViewService extends Service {
             return;
         }
 
-        if (idx != FLEET_COMBINED_ID && idx >= deckportdata.size()) {
+        boolean not_opened_flag = idx == FLEET_COMBINED_ID ? deck_count < 2 : idx >= deck_count;
+        if (not_opened_flag) {
             fleetCalcInfoText = "Not Opened";
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNoShip));
             fleetInfoLine.setText(fleetCalcInfoText);
@@ -882,16 +885,13 @@ public class KcaFleetViewService extends Service {
 
         int sum_level = 0;
         if (isCombined) {
-
             sum_level += setFleetInfo(deckInfoCalc.getDeckList(deckportdata, 0), 0);
             sum_level += setFleetInfo(deckInfoCalc.getDeckList(deckportdata, 1), 1);
         } else {
-
             int[] ship_id_list = deckInfoCalc.getDeckList(deckportdata, idx);
             if (ship_id_list.length > 6) { // if need to show combined fleet (maybe 遊撃艦隊)
                 fleetView.findViewById(R.id.fleet_list_combined).setVisibility(VISIBLE);
             }
-
             sum_level += setFleetInfo(ship_id_list, 0);
         }
 

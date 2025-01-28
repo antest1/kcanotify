@@ -162,12 +162,14 @@ public class KcaDeckInfo {
         }
 
         int deckid = Integer.parseInt(decklist[0]);
-        JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
-        JsonObject seekData = getEachSeekValue(deckShipIdList, deckid, Cn, exclude_flag);
-        pureTotalSeek += seekData.get("pure").getAsDouble();
-        totalEquipSeek += seekData.get("equip").getAsDouble();
-        totalShipSeek += seekData.get("ship").getAsDouble();
-        noShipCount += seekData.get("nscount").getAsInt();
+        if (deckid < deckPortData.size()) {
+            JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
+            JsonObject seekData = getEachSeekValue(deckShipIdList, deckid, Cn, exclude_flag);
+            pureTotalSeek += seekData.get("pure").getAsDouble();
+            totalEquipSeek += seekData.get("equip").getAsDouble();
+            totalShipSeek += seekData.get("ship").getAsDouble();
+            noShipCount += seekData.get("nscount").getAsInt();
+        } // skip for non-existing deck
 
         if (Cn == SEEK_PURE) {
             return pureTotalSeek;
