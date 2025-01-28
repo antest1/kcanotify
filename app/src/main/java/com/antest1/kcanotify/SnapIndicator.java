@@ -1,7 +1,9 @@
 package com.antest1.kcanotify;
 
+import static com.antest1.kcanotify.KcaUtils.getWindowLayoutParamsFlags;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
+import android.content.Context;
 import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -10,27 +12,28 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 public class SnapIndicator {
-
+    private Context context;
     private final View snapIndicatorLayout;
     private final WindowManager.LayoutParams snapLayoutParams;
     private final WindowManager windowManager;
 
-    public SnapIndicator(WindowManager windowManager, LayoutInflater inflater) {
+    public SnapIndicator(Context context, WindowManager windowManager, LayoutInflater inflater) {
+        this.context = context;
         this.windowManager = windowManager;
         snapLayoutParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 getWindowLayoutType(),
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-                        | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
-
+                getParamsFlag(),
                 PixelFormat.TRANSLUCENT);
         snapLayoutParams.gravity = Gravity.TOP;
         snapIndicatorLayout = inflater.inflate(R.layout.view_snap_indicator, null);
     }
 
+    private int getParamsFlag() {
+        int flag = getWindowLayoutParamsFlags(context.getResources().getConfiguration());
+        return flag | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+    }
 
     public void remove() {
         if (snapIndicatorLayout.getParent() != null)

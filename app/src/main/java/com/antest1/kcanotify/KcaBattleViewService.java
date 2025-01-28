@@ -70,6 +70,7 @@ import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.getWindowLayoutParamsFlags;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
@@ -1393,7 +1394,7 @@ public class KcaBattleViewService extends Service {
                 windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
                 mInflater = LayoutInflater.from(contextWithLocale);
                 battleViewLayout = (DraggableOverlayLayout) mInflater.inflate(R.layout.view_sortie_battle, null);
-                snapIndicator = new SnapIndicator(windowManager, mInflater);
+                snapIndicator = new SnapIndicator(this, windowManager, mInflater);
 
                 KcaUtils.resizeFullWidthView(getApplicationContext(), battleViewLayout);
                 battleViewLayout.setVisibility(View.GONE);
@@ -1421,7 +1422,7 @@ public class KcaBattleViewService extends Service {
                         WindowManager.LayoutParams.MATCH_PARENT,
                         WindowManager.LayoutParams.WRAP_CONTENT,
                         getWindowLayoutType(),
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                        getWindowLayoutParamsFlags(getResources().getConfiguration()),
                         PixelFormat.TRANSLUCENT);
                 layoutParams.gravity = Gravity.TOP;
                 // Hide at bottom before the fleetView is first rendered
@@ -1795,9 +1796,7 @@ public class KcaBattleViewService extends Service {
         @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            if (getBooleanPreferences(getApplicationContext(), PREF_FIX_VIEW_LOC)) {
-                return false;
-            }
+            boolean isViewLocked = getBooleanPreferences(getApplicationContext(), PREF_FIX_VIEW_LOC);
             int maxY = screenHeight - battleViewLayout.getHeight();
             float finalX, finalY;
             switch (event.getAction()) {
@@ -1811,53 +1810,59 @@ public class KcaBattleViewService extends Service {
                     startViewX = layoutParams.x;
                     startViewY = layoutParams.y;
                     Log.e("KCA", KcaUtils.format("mView: %d %d", startViewX, startViewY));
-                    snapIndicator.show(layoutParams.y, maxY, fleetViewHeight);
-                    battleViewLayout.cancelAnimations();
+                    if (!isViewLocked) {
+                        snapIndicator.show(layoutParams.y, maxY, fleetViewHeight);
+                        battleViewLayout.cancelAnimations();
+                    }
                     break;
                 case MotionEvent.ACTION_UP:
-                    float dx = event.getRawX() - lastX[(curr + 1) % 3];
-                    float dy = event.getRawY() - lastY[(curr + 1) % 3];
-                    long dt = Calendar.getInstance().getTimeInMillis() - lastT[(curr + 1) % 3];
-                    float finalXUncap = layoutParams.x + dx / dt * 400;
-                    float finalYUncap = layoutParams.y + dy / dt * 400;
-                    finalX = 0f;
-                    // Snap to either top, center, or bottom
-                    if (finalYUncap < maxY / 4f) {
-                        finalY = 0;
-                        view_status = -1;
-                    } else if (finalYUncap < maxY / 4f * 3f) {
-                        finalY = maxY / 2f;
-                        view_status = 0;
-                    } else {
-                        finalY = maxY;
-                        view_status = 1;
+                    if (!isViewLocked) {
+                        float dx = event.getRawX() - lastX[(curr + 1) % 3];
+                        float dy = event.getRawY() - lastY[(curr + 1) % 3];
+                        long dt = Calendar.getInstance().getTimeInMillis() - lastT[(curr + 1) % 3];
+                        float finalXUncap = layoutParams.x + dx / dt * 400;
+                        float finalYUncap = layoutParams.y + dy / dt * 400;
+                        finalX = 0f;
+                        // Snap to either top, center, or bottom
+                        if (finalYUncap < maxY / 4f) {
+                            finalY = 0;
+                            view_status = -1;
+                        } else if (finalYUncap < maxY / 4f * 3f) {
+                            finalY = maxY / 2f;
+                            view_status = 0;
+                        } else {
+                            finalY = maxY;
+                            view_status = 1;
+                        }
+                        battleViewLayout.animateTo(layoutParams.x, layoutParams.y,
+                                0, (int) finalY,
+                                finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
+                                500, windowManager, layoutParams);
+                        snapIndicator.remove();
                     }
-                    battleViewLayout.animateTo(layoutParams.x, layoutParams.y,
-                            0, (int) finalY,
-                            finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
-                            500, windowManager, layoutParams);
-                    snapIndicator.remove();
 
                     // Save new preference to DB
                     setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    int x = (int) (event.getRawX() - startRawX);
-                    int y = (int) (event.getRawY() - startRawY);
-                    Log.e("KCA", KcaUtils.format("Coord: %d %d", x, y));
+                    if (!isViewLocked) {
+                        int x = (int) (event.getRawX() - startRawX);
+                        int y = (int) (event.getRawY() - startRawY);
+                        Log.e("KCA", KcaUtils.format("Coord: %d %d", x, y));
 
-                    lastX[curr] = event.getRawX();
-                    lastY[curr] = event.getRawY();
-                    lastT[curr] = Calendar.getInstance().getTimeInMillis();
-                    curr = (curr + 1) % 3;
-                    finalX = startViewX + x;
-                    finalY = startViewY + y;
+                        lastX[curr] = event.getRawX();
+                        lastY[curr] = event.getRawY();
+                        lastT[curr] = Calendar.getInstance().getTimeInMillis();
+                        curr = (curr + 1) % 3;
+                        finalX = startViewX + x;
+                        finalY = startViewY + y;
 
-                    layoutParams.x = (int) finalX;
-                    layoutParams.y = (int) finalY;
+                        layoutParams.x = (int) finalX;
+                        layoutParams.y = (int) finalY;
 
-                    windowManager.updateViewLayout(battleViewLayout, layoutParams);
-                    snapIndicator.update(finalY, maxY);
+                        windowManager.updateViewLayout(battleViewLayout, layoutParams);
+                        snapIndicator.update(finalY, maxY);
+                    }
                     break;
                 case MotionEvent.ACTION_CANCEL:
                     battleViewLayout.cancelAnimations();
@@ -2197,7 +2202,8 @@ public class KcaBattleViewService extends Service {
             } else {
                 layoutParams.y = maxY;
             }
-            snapIndicator.remove();
+            layoutParams.flags = getWindowLayoutParamsFlags(newConfig);
+            snapIndicator = new SnapIndicator(getApplicationContext(), windowManager, mInflater);
             windowManager.updateViewLayout(battleViewLayout, layoutParams);
         }
     }

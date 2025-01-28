@@ -79,6 +79,7 @@ import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.getWindowLayoutParamsFlags;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
@@ -377,11 +378,11 @@ public class KcaFleetViewService extends Service {
         fleetView.setVisibility(GONE);
         KcaUtils.resizeFullWidthView(getApplicationContext(), fleetView);
 
-        snapIndicator = new SnapIndicator(windowManager, mInflater);
+        snapIndicator = new SnapIndicator(this, windowManager, mInflater);
 
-        fleetView.findViewById(R.id.fleetviewpanel).setOnTouchListener(draggableLayoutTouchListener);
+        fleetView.findViewById(R.id.fleetview_head).setOnTouchListener(draggableLayoutTouchListener);
 
-        fleetView.findViewById(R.id.fleetviewpanel).setOnClickListener(v -> {
+        fleetView.findViewById(R.id.fleetview_head).setOnClickListener(v -> {
             if (abs(layoutParams.x - startViewX) < 20 && abs(layoutParams.y - startViewY) < 20) {
                 JsonObject statProperties = new JsonObject();
                 statProperties.addProperty("manual", true);
@@ -503,7 +504,7 @@ public class KcaFleetViewService extends Service {
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 getWindowLayoutType(),
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                getWindowLayoutParamsFlags(getResources().getConfiguration()),
                 PixelFormat.TRANSLUCENT);
         layoutParams.gravity = Gravity.TOP;
 
@@ -525,11 +526,12 @@ public class KcaFleetViewService extends Service {
         fleetCnChangeBtn = fleetView.findViewById(R.id.fleetview_cn_change);
         fleetAkashiTimerBtn = fleetView.findViewById(R.id.fleetview_akashi_timer);
         fleetSwitchBtn = fleetView.findViewById(R.id.fleetview_fleetswitch);
-        fleetSwitchBtn.setVisibility(View.GONE);
-
         fleetMenu = fleetView.findViewById(R.id.fleetview_menu);
         fleetMenuArrowUp = fleetView.findViewById(R.id.fleetview_menu_up);
         fleetMenuArrowDown = fleetView.findViewById(R.id.fleetview_menu_down);
+
+        fleetAkashiTimerBtn.setVisibility(View.GONE);
+        fleetSwitchBtn.setVisibility(View.GONE);
         fleetMenu.setOnTouchListener((view, motionEvent) -> {
             ViewTreeObserver observer = fleetMenu.getViewTreeObserver();
             observer.addOnScrollChangedListener(fleetMenuScrollChangeListener);
@@ -616,10 +618,7 @@ public class KcaFleetViewService extends Service {
         @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            if (getBooleanPreferences(getApplicationContext(), PREF_FIX_VIEW_LOC)) {
-                return false;
-            }
-
+            boolean isViewLocked = getBooleanPreferences(getApplicationContext(), PREF_FIX_VIEW_LOC);
             int maxY = screenHeight - fleetView.getHeight();
             float finalX, finalY;
             switch (event.getAction()) {
@@ -633,53 +632,59 @@ public class KcaFleetViewService extends Service {
                     startViewX = layoutParams.x;
                     startViewY = layoutParams.y;
                     Log.e("KCA", KcaUtils.format("mView: %d %d", startViewX, startViewY));
-                    snapIndicator.show(layoutParams.y, maxY, fleetViewHeight);
-                    fleetView.cancelAnimations();
+                    if (!isViewLocked) {
+                        snapIndicator.show(layoutParams.y, maxY, fleetViewHeight);
+                        fleetView.cancelAnimations();
+                    }
                     break;
                 case MotionEvent.ACTION_UP:
-                    float dx = event.getRawX() - lastX[(curr + 1) % 3];
-                    float dy = event.getRawY() - lastY[(curr + 1) % 3];
-                    long dt = Calendar.getInstance().getTimeInMillis() - lastT[(curr + 1) % 3];
-                    float finalXUncap = layoutParams.x + dx / dt * 400;
-                    float finalYUncap = layoutParams.y + dy / dt * 400;
-                    finalX = 0f;
-                    // Snap to either top, center, or bottom
-                    if (finalYUncap < maxY / 4f) {
-                        finalY = 0;
-                        view_status = -1;
-                    } else if (finalYUncap < maxY / 4f * 3f) {
-                        finalY = maxY / 2f;
-                        view_status = 0;
-                    } else {
-                        finalY = maxY;
-                        view_status = 1;
+                    if (!isViewLocked) {
+                        float dx = event.getRawX() - lastX[(curr + 1) % 3];
+                        float dy = event.getRawY() - lastY[(curr + 1) % 3];
+                        long dt = Calendar.getInstance().getTimeInMillis() - lastT[(curr + 1) % 3];
+                        float finalXUncap = layoutParams.x + dx / dt * 400;
+                        float finalYUncap = layoutParams.y + dy / dt * 400;
+                        finalX = 0f;
+                        // Snap to either top, center, or bottom
+                        if (finalYUncap < maxY / 4f) {
+                            finalY = 0;
+                            view_status = -1;
+                        } else if (finalYUncap < maxY / 4f * 3f) {
+                            finalY = maxY / 2f;
+                            view_status = 0;
+                        } else {
+                            finalY = maxY;
+                            view_status = 1;
+                        }
+                        fleetView.animateTo(layoutParams.x, layoutParams.y,
+                                0, (int) finalY,
+                                finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
+                                500, windowManager, layoutParams);
+                        snapIndicator.remove();
                     }
-                    fleetView.animateTo(layoutParams.x, layoutParams.y,
-                            0, (int) finalY,
-                            finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
-                            500, windowManager, layoutParams);
-                    snapIndicator.remove();
 
                     // Save new preference to DB
                     setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    int x = (int) (event.getRawX() - startRawX);
-                    int y = (int) (event.getRawY() - startRawY);
-                    Log.e("KCA", KcaUtils.format("Coord: %d %d", x, y));
+                    if (!isViewLocked) {
+                        int x = (int) (event.getRawX() - startRawX);
+                        int y = (int) (event.getRawY() - startRawY);
+                        Log.e("KCA", KcaUtils.format("Coord: %d %d", x, y));
 
-                    lastX[curr] = event.getRawX();
-                    lastY[curr] = event.getRawY();
-                    lastT[curr] = Calendar.getInstance().getTimeInMillis();
-                    curr = (curr + 1) % 3;
-                    finalX = startViewX + x;
-                    finalY = startViewY + y;
+                        lastX[curr] = event.getRawX();
+                        lastY[curr] = event.getRawY();
+                        lastT[curr] = Calendar.getInstance().getTimeInMillis();
+                        curr = (curr + 1) % 3;
+                        finalX = startViewX + x;
+                        finalY = startViewY + y;
 
-                    layoutParams.x = (int) finalX;
-                    layoutParams.y = (int) finalY;
+                        layoutParams.x = (int) finalX;
+                        layoutParams.y = (int) finalY;
 
-                    windowManager.updateViewLayout(fleetView, layoutParams);
-                    snapIndicator.update(finalY, maxY);
+                        windowManager.updateViewLayout(fleetView, layoutParams);
+                        snapIndicator.update(finalY, maxY);
+                    }
                     break;
                 case MotionEvent.ACTION_CANCEL:
                     fleetView.cancelAnimations();
@@ -1285,6 +1290,7 @@ public class KcaFleetViewService extends Service {
             if (windowManager != null) {
                 if (fleetView.getParent() != null) windowManager.removeViewImmediate(fleetView);
                 initView();
+                layoutParams.flags = getWindowLayoutParamsFlags(newConfig);
                 windowManager.addView(fleetView, layoutParams);
 
                 if (setView()) {
