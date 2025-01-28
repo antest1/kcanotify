@@ -24,7 +24,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 
 import static android.widget.Toast.makeText;
@@ -51,7 +50,6 @@ public class ShipInfoActivity extends AppCompatActivity {
     static final int SHIPINFO_SET_QUERY = 3;
 
     Toolbar toolbar;
-    static Gson gson = new Gson();
     ListView listview;
     TextView totalcountview, totalexpview;
 
@@ -67,8 +65,8 @@ public class ShipInfoActivity extends AppCompatActivity {
     boolean is_popup_on;
     boolean is_search_on;
     View export_popup, export_exit;
-    TextView export_clipboard_1, export_openpage_1;
-    TextView export_clipboard_2, export_openpage_2;
+    Button export_clipboard_1, export_openpage_1;
+    Button export_clipboard_2, export_openpage_2;
 
 
     private String getStringWithLocale(int id) {
@@ -161,9 +159,9 @@ public class ShipInfoActivity extends AppCompatActivity {
         String ship_status = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SHIPSTAT);
         String ship_nat = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SHIPNAT);
         setButtonStyle(filterButton, filtcond.length() > 1
-                || special_equip.trim().length() > 0
-                || ship_status.trim().length() > 0
-                || ship_nat.trim().length() > 0);
+                || !special_equip.trim().isEmpty()
+                || !ship_status.trim().isEmpty()
+                || !ship_nat.trim().isEmpty());
         adapter.setSpecialEquipment(getSpecialEquipmentInfo());
         adapter.setNationality(getNationalityData());
         adapter.setListViewItemList(data, deckdata, sortkey, filtcond, special_equip, ship_status, ship_nat);
@@ -257,9 +255,9 @@ public class ShipInfoActivity extends AppCompatActivity {
             adapter.setListViewItemList(shipdata, deckdata, sortkey, filtcond, special_equip, ship_status, ship_nat);
             if (requestCode == SHIPINFO_GET_FILTER_RESULT) {
                 setButtonStyle(filterButton, filtcond.length() > 1
-                        || special_equip.trim().length() > 0
-                        || ship_status.trim().length() > 0
-                        || ship_nat.trim().length() > 0);
+                        || !special_equip.trim().isEmpty()
+                        || !ship_status.trim().isEmpty()
+                        || !ship_nat.trim().isEmpty());
             }
         }
         adapter.notifyDataSetChanged();

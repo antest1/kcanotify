@@ -5,7 +5,8 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.Build;
@@ -16,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,6 +30,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.material.chip.Chip;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -49,6 +52,8 @@ public class KcaQuestViewService extends Service {
     public static final String SHOW_QUESTVIEW_ACTION = "show_questview";
     public static final String SHOW_QUESTVIEW_ACTION_NEW = "show_questview_new";
     public static final String CLOSE_QUESTVIEW_ACTION = "close_questview";
+
+    private static final int PAGE_SIZE = 5;
 
     Context contextWithLocale;
     LayoutInflater mInflater;
@@ -155,8 +160,7 @@ public class KcaQuestViewService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else {
@@ -165,8 +169,8 @@ public class KcaQuestViewService extends Service {
                 helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
                 questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
                 contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+                contextWithLocale = new ContextThemeWrapper(contextWithLocale, R.style.AppTheme);
                 broadcaster = LocalBroadcastManager.getInstance(this);
-                //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 mInflater = LayoutInflater.from(contextWithLocale);
                 mView = mInflater.inflate(R.layout.view_quest_list_v2, null);
                 KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
@@ -273,8 +277,7 @@ public class KcaQuestViewService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         JsonObject statProperties = new JsonObject();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else if (!KcaService.getServiceStatus()) {
@@ -371,7 +374,7 @@ public class KcaQuestViewService extends Service {
                             for (int i = 0; i < pageIndexList.length; i++) {
                                 if (id == questView.findViewById(pageIndexList[i]).getId()) {
                                     int current_page = Integer.parseInt(((TextView) v).getText().toString());
-                                    int pos = (current_page - 1) * 5;
+                                    int pos = (current_page - 1) * PAGE_SIZE;
                                     scrollListView(pos);
                                     setTopBottomNavigation(current_page, total_size);
                                 }
@@ -380,8 +383,8 @@ public class KcaQuestViewService extends Service {
                                 scrollListView(0);
                                 setTopBottomNavigation(1, total_size);
                             } else if (id == questView.findViewById(R.id.quest_page_bottom).getId()) {
-                                int total_page = (total_size - 1) / 5 + 1;
-                                int last_idx = Math.max(total_size - 5, 0);
+                                int total_page = (total_size - 1) / PAGE_SIZE + 1;
+                                int last_idx = Math.max(total_size - PAGE_SIZE, 0);
                                 setTopBottomNavigation(total_page, total_size);
                                 scrollListView(last_idx);
                             }
@@ -390,12 +393,13 @@ public class KcaQuestViewService extends Service {
                             for (int i = 0; i < 5; i++) {
                                 if (id == KcaUtils.getId("quest_class_" + (i+1), R.id.class)) {
                                     for (int j = 0; j < 5; j++) {
-                                        questView.findViewById(KcaUtils.getId("quest_class_" + (j+1), R.id.class))
-                                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
+                                        ((Chip)questView.findViewById(KcaUtils.getId("quest_class_" + (j+1), R.id.class)))
+                                                .setChipBackgroundColor(ColorStateList.valueOf(Color.TRANSPARENT));
                                     }
                                     if (currentFilterState != i) {
-                                        v.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
-                                                KcaUtils.getId(KcaUtils.format("colorQuestCategory%d", filterCategoryList[i]), R.color.class)));
+                                        // Selection Changed
+                                        ((Chip)v).setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(getApplicationContext(),
+                                                KcaUtils.getId(KcaUtils.format("colorQuestCategory%d", filterCategoryList[i]), R.color.class))));
                                         setQuestView(currentQuestList, false, filterCategoryList[i]);
                                         currentFilterState = i;
                                     } else {
@@ -419,7 +423,7 @@ public class KcaQuestViewService extends Service {
     }
 
     private void setTopBottomNavigation(int centerPage, int totalItemSize) {
-        int totalPage = (totalItemSize - 1) / 5 + 1;
+        int totalPage = (totalItemSize - 1) / PAGE_SIZE + 1;
         int startPage = centerPage - 2;
 
         if (totalPage <= 5) startPage = 1;
@@ -452,7 +456,7 @@ public class KcaQuestViewService extends Service {
 
         String memo = data.get("memo").getAsString();
         TextView memoView = questDescPopupView.findViewById(R.id.view_qd_memo);
-        if (memo.length() > 0) {
+        if (!memo.isEmpty()) {
             memoView.setText(memo);
             memoView.setVisibility(View.VISIBLE);
         } else {
@@ -460,7 +464,7 @@ public class KcaQuestViewService extends Service {
         }
 
         String rewards = data.get("rewards").getAsString();
-        if (rewards.length() > 0) {
+        if (!rewards.isEmpty()) {
             ((TextView) questDescPopupView.findViewById(R.id.view_qd_rewards)).setText(rewards);
             questDescPopupView.findViewById(R.id.view_qd_rewards_layout).setVisibility(View.VISIBLE);
         } else {

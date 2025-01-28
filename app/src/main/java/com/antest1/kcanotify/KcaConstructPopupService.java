@@ -12,7 +12,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import android.util.Log;
@@ -52,7 +51,7 @@ public class KcaConstructPopupService extends Service {
     private int popupWidth, popupHeight;
     private KcaDBHelper dbHelper;
     private boolean spoilerStatus = true;
-    TextView constructionViewButton;
+    View constructionViewButton;
 
     WindowManager.LayoutParams mParams;
 
@@ -78,8 +77,7 @@ public class KcaConstructPopupService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else {
@@ -127,13 +125,10 @@ public class KcaConstructPopupService extends Service {
 
             spoilerStatus = getBooleanPreferences(getApplicationContext(), PREF_SHOW_CONSTRSHIP_NAME);
             constructionViewButton = mView.findViewById(R.id.view_sc_btn);
-            constructionViewButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    spoilerStatus = !spoilerStatus;
-                    updateSpoilerButton();
-                    updatePopup();
-                }
+            constructionViewButton.setOnClickListener(v -> {
+                spoilerStatus = !spoilerStatus;
+                updateSpoilerButton();
+                updatePopup();
             });
 
             updateSpoilerButton();
@@ -145,8 +140,7 @@ public class KcaConstructPopupService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("KCA-CPS", "onStartCommand");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {

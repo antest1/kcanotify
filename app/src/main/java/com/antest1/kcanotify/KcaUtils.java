@@ -14,6 +14,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -27,6 +28,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import android.util.Base64;
@@ -34,11 +36,15 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.google.android.material.button.MaterialButton;
 import com.google.common.io.ByteStreams;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
@@ -292,14 +298,8 @@ public class KcaUtils {
     public static Context getContextWithLocale(Context ac, Context bc) {
         Locale locale = LocaleUtils.getLocale();
         Configuration configuration = new Configuration(ac.getResources().getConfiguration());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            configuration.setLocale(locale);
-            return bc.createConfigurationContext(configuration);
-        } else {
-            configuration.locale = locale;
-            bc.getResources().updateConfiguration(configuration, bc.getResources().getDisplayMetrics());
-            return bc;
-        }
+        configuration.setLocale(locale);
+        return bc.createConfigurationContext(configuration);
     }
 
     public static String getStringWithLocale(Context ac, Context bc, int id) {
@@ -372,14 +372,10 @@ public class KcaUtils {
             }
             if (uri != null && !Uri.EMPTY.equals(uri)) {
                 mediaPlayer.setDataSource(context, uri);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    AudioAttributes attr = new AudioAttributes.Builder()
-                            .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION)
-                            .build();
-                    mediaPlayer.setAudioAttributes(attr);
-                } else {
-                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
-                }
+                AudioAttributes attr = new AudioAttributes.Builder()
+                        .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION)
+                        .build();
+                mediaPlayer.setAudioAttributes(attr);
                 mediaPlayer.prepare();
                 mediaPlayer.start();
             }
@@ -465,13 +461,13 @@ public class KcaUtils {
 
     // True: latest, False: need to update
     public static boolean compareVersion(String version_current, String version_default) {
-        if (version_current != null && version_current.length() == 0) return false;
+        if (version_current != null && version_current.isEmpty()) return false;
         if (version_current.equals(version_default)) return true;
         String[] current_split = version_current.replace("r", ".0.").split("\\.");
         String[] default_split = version_default.replace("r", ".0.").split("\\.");
         int min_length = Math.min(current_split.length, default_split.length);
         for (int i = 0; i < min_length; i++) {
-            if (current_split[i].trim().length() > 0 && default_split[i].trim().length() > 0) {
+            if (!current_split[i].trim().isEmpty() && !default_split[i].trim().isEmpty()) {
                 if (Integer.parseInt(current_split[i]) > Integer.parseInt(default_split[i])) {
                     return true;
                 } else if (Integer.parseInt(current_split[i]) < Integer.parseInt(default_split[i])) {
@@ -493,13 +489,11 @@ public class KcaUtils {
     }
 
     public static int getWindowLayoutType() {
-        int windowLayoutType = -1;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            windowLayoutType = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+            return WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
-            windowLayoutType = WindowManager.LayoutParams.TYPE_PHONE;
+            return WindowManager.LayoutParams.TYPE_PHONE;
         }
-        return windowLayoutType;
     }
 
     public static NotificationCompat.Builder createBuilder(Context context, String channel) {
@@ -823,6 +817,46 @@ public class KcaUtils {
         }
     }
 
+    public static void setFairyImageFromStorage(Context context, String name, MenuItem view, int dp) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        int fairy_id = Integer.parseInt(name.replace("noti_icon_", ""));
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir("fairy", Context.MODE_PRIVATE);
+        File myImageFile = new File(directory, KcaUtils.format("%s.png", name));
+        if (myImageFile.exists()) {
+            if (px > 0) {
+                GlideApp.with(context).load(myImageFile.getPath()).dontAnimate().override(px, px).into(new CustomTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        view.setIcon(resource);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                        view.setIcon(null);
+                    }
+                });
+            } else {
+                GlideApp.with(context).load(myImageFile.getPath()).into(new CustomTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        view.setIcon(resource);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                        view.setIcon(null);
+                    }
+                });
+            }
+        } else if (FAIRY_SPECIAL_FLAG && fairy_id >= FAIRY_SPECIAL_PREFIX) {
+            view.setIcon(getId(name, R.mipmap.class));
+        } else {
+            view.setIcon(R.mipmap.noti_icon_0);
+        }
+    }
+
     public static void showDataLoadErrorToast(Context context, String text) {
         if (getBooleanPreferences(context, PREF_DATALOAD_ERROR_FLAG)) {
             Toast.makeText(context, text, Toast.LENGTH_LONG).show();
@@ -934,7 +968,7 @@ public class KcaUtils {
     public static void resizeFullWidthView(Context context, View v) {
         if (v == null) return;
         int statusBarHeight = 0;
-        int defaultHeight = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? 24 : 25;
+        int defaultHeight = 24;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);

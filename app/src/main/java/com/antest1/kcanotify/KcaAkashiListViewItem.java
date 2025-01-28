@@ -53,7 +53,7 @@ public class KcaAkashiListViewItem {
 
         String kcItemName = getSlotItemTranslation(kcItemData.get("name").getAsString());
         int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
-        int typeres = 0;
+        int typeres;
         try {
             typeres = getId(KcaUtils.format("item_%d", type), R.mipmap.class);
         } catch (Exception e) {
@@ -81,8 +81,6 @@ public class KcaAkashiListViewItem {
         String[] screw3 = new String[4];
 
         int count = 0;
-        List<String> screw = new ArrayList<String>();
-        List<String> material = new ArrayList<String>();
         List<String> ship = new ArrayList<String>();
 
         for (int i = 0; i < data.size(); i++) {
@@ -103,27 +101,27 @@ public class KcaAkashiListViewItem {
                     }
                 }
             }
-            if (shiplist.size() > 0) {
+            if (!shiplist.isEmpty()) {
                 ship.add(joinStr(shiplist,"/"));
 
                 JsonArray resource = data.get(i).getAsJsonObject().getAsJsonArray("resource");
-                JsonArray improv1 = resource.get(1).getAsJsonArray();
-                JsonArray improv2 = resource.get(2).getAsJsonArray();
-                JsonArray improv3 = resource.get(3).getAsJsonArray();
+                JsonArray improve1 = resource.get(1).getAsJsonArray();
+                JsonArray improve2 = resource.get(2).getAsJsonArray();
+                JsonArray improve3 = resource.get(3).getAsJsonArray();
                 if (checked) {
-                    material1[count] = setMaterialScrewString(improv1.get(1).getAsString(), false);
-                    material2[count] = setMaterialScrewString(improv2.get(1).getAsString(), false);
-                    material3[count] = setMaterialScrewString(improv3.get(1).getAsString(), true);
-                    screw1[count] = setMaterialScrewString(improv1.get(3).getAsString(), false);
-                    screw2[count] = setMaterialScrewString(improv2.get(3).getAsString(), false);
-                    screw3[count] = setMaterialScrewString(improv3.get(3).getAsString(), true);
+                    material1[count] = setMaterialScrewString(improve1.get(1).getAsString(), false);
+                    material2[count] = setMaterialScrewString(improve2.get(1).getAsString(), false);
+                    material3[count] = setMaterialScrewString(improve3.get(1).getAsString(), true);
+                    screw1[count] = setMaterialScrewString(improve1.get(3).getAsString(), false);
+                    screw2[count] = setMaterialScrewString(improve2.get(3).getAsString(), false);
+                    screw3[count] = setMaterialScrewString(improve3.get(3).getAsString(), true);
                 } else {
-                    material1[count] = setMaterialScrewString(improv1.get(0).getAsString(), false);
-                    material2[count] = setMaterialScrewString(improv2.get(0).getAsString(), false);
-                    material3[count] = setMaterialScrewString(improv3.get(0).getAsString(), true);
-                    screw1[count] = setMaterialScrewString(improv1.get(2).getAsString(), false);
-                    screw2[count] = setMaterialScrewString(improv2.get(2).getAsString(), false);
-                    screw3[count] = setMaterialScrewString(improv3.get(2).getAsString(), true);
+                    material1[count] = setMaterialScrewString(improve1.get(0).getAsString(), false);
+                    material2[count] = setMaterialScrewString(improve2.get(0).getAsString(), false);
+                    material3[count] = setMaterialScrewString(improve3.get(0).getAsString(), true);
+                    screw1[count] = setMaterialScrewString(improve1.get(2).getAsString(), false);
+                    screw2[count] = setMaterialScrewString(improve2.get(2).getAsString(), false);
+                    screw3[count] = setMaterialScrewString(improve3.get(2).getAsString(), true);
                 }
                 count += 1;
             }
@@ -149,7 +147,7 @@ public class KcaAkashiListViewItem {
             equipMaterials = equipMaterials.trim();
             equipScrews = equipScrews.trim();
             equipSupport = equipSupport.trim();
-        } else {
+        } else if (ship.size() == 1) {
             material_data.add(material1[0]);
             material_data.add(material2[0]);
             material_data.add(material3[0]);
@@ -167,5 +165,4 @@ public class KcaAkashiListViewItem {
         else if (ignore && Integer.parseInt(s) == 0) return "x";
         else return s;
     }
-
 }

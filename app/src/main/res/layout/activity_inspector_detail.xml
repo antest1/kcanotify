@@ -54,17 +54,14 @@
                 android:padding="5dp"
                 app:srcCompat="@mipmap/ic_delete" />
 
-            <TextView
+            <Button
                 android:id="@+id/inspect_data_format"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/colorBtn"
-                android:padding="8dp"
                 android:text="Format"
                 android:textAlignment="textStart"
-                android:textColor="@color/black"
-                android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textSize="16dp"/>
 
         </LinearLayout>
 

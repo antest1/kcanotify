@@ -18,7 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.downloader.Error;
 import com.downloader.OnDownloadListener;
 import com.downloader.PRDownloader;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -33,8 +34,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -77,9 +76,11 @@ public class UpdateCheckActivity extends AppCompatActivity {
     ListView data_list, resource_list;
     KcaResCheckItemAdpater gamedata_adapter = new KcaResCheckItemAdpater();
     KcaResCheckItemAdpater resource_adapter = new KcaResCheckItemAdpater();
-    TextView gamedata_chk, resource_chk, gamedata_server, resource_downall;
+    Button gamedata_chk, resource_chk, resource_downall;
+    TextView gamedata_server;
     TextView gamedata_load, resource_load;
-    CheckBox checkstart_chkbox, localonly_chkbox, resource_reset;
+    MaterialSwitch checkstart_chkbox;
+    MaterialSwitch resource_reset;
 
     JsonArray fairy_queue = new JsonArray();
     boolean main_flag = false;
@@ -95,11 +96,19 @@ public class UpdateCheckActivity extends AppCompatActivity {
     }
 
     private String getVersionString(int current, int latest) {
-        return KcaUtils.format("CURRENT: %d | LATEST: %d", current, latest);
+        if (current == latest) {
+            return KcaUtils.format("UP-TO-DATE: %d", latest);
+        } else {
+            return KcaUtils.format("CURRENT: %d | LATEST: %d", current, latest);
+        }
     }
 
     private String getVersionString(String current, String latest) {
-        return KcaUtils.format("CURRENT: %s | LATEST: %s", current, latest);
+        if (current != null && current.equalsIgnoreCase(latest)) {
+            return KcaUtils.format("UP-TO-DATE: %s", latest);
+        } else {
+            return KcaUtils.format("CURRENT: %s | LATEST: %s", current, latest);
+        }
     }
 
     @Override
@@ -112,7 +121,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
             main_flag = intent.getExtras().getBoolean("main_flag", false);
         }
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.setting_menu_kand_title_game_data_down));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -130,13 +139,11 @@ public class UpdateCheckActivity extends AppCompatActivity {
         resource_target = getResourcesFilter();
 
         checkstart_chkbox = findViewById(R.id.reschk_checkatstart);
-        checkstart_chkbox.setText(getStringWithLocale(R.string.download_setting_checkatstart));
         checkstart_chkbox.setChecked(getBooleanPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START));
         checkstart_chkbox.setOnCheckedChangeListener((buttonView, isChecked)
                 -> setPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START, isChecked));
 
         resource_reset = findViewById(R.id.reschk_reset);
-        resource_reset.setText(getStringWithLocale(R.string.download_reset));
         resource_reset.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(UpdateCheckActivity.this);
@@ -283,6 +290,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
                         gamedata.addProperty("version_str", getVersionString(current_gd_v, latest_gd_v));
                         gamedata.addProperty("highlight", !KcaUtils.compareVersion(current_gd_v, latest_gd_v));
                         gamedata.addProperty("url", "call_kcadata_download");
+                        gamedata_info.clear();
                         gamedata_info.add(gamedata);
                         gamedata_adapter.setContext(getApplicationContext());
                         gamedata_adapter.setListItem(gamedata_info);
@@ -297,7 +305,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                    gamedata_load.setText("Error: " + t.toString());
+                    gamedata_load.setText("Error: " + t);
                 }
             });
         }
@@ -354,7 +362,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
-                    resource_load.setText("Error: " + t.toString());
+                    resource_load.setText("Error: " + t);
                 }
             });
 
@@ -379,7 +387,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
         private final WeakReference<UpdateCheckActivity> mActivity;
 
         UpdateHandler(UpdateCheckActivity activity) {
-            mActivity = new WeakReference<UpdateCheckActivity>(activity);
+            mActivity = new WeakReference<>(activity);
         }
 
         @Override
@@ -410,7 +418,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
         down_gamedata.enqueue(new retrofit2.Callback<String>() {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
-                JsonObject response_data = new JsonObject();
+                JsonObject response_data;
                 try {
                     if (response.body() != null) {
                         response_data = JsonParser.parseString(response.body()).getAsJsonObject();
@@ -524,7 +532,6 @@ public class UpdateCheckActivity extends AppCompatActivity {
 
     private class KcaFairyDownloader extends AsyncTask<Integer, Integer, Integer> {
         boolean fairy_wait = false;
-        int update_version = 0;
         int totalFiles = 0;
         int successedFiles = 0;
         int failedFiles = 0;
@@ -674,6 +681,4 @@ public class UpdateCheckActivity extends AppCompatActivity {
             }
         }
     }
-
-
 }

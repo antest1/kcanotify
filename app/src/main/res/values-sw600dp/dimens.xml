@@ -4,8 +4,7 @@
     <dimen name="activity_vertical_margin">18dp</dimen>
 
     <dimen name="activity_main_btn_size_top">64dp</dimen>
-    <dimen name="activity_main_btn_size_botton">64dp</dimen>
-    <dimen name="activity_main_btn_textsize">22dp</dimen>
+    <dimen name="activity_main_btn_textsize">22sp</dimen>
     <dimen name="activity_main_btn_fairy_padding">12dp</dimen>
     <dimen name="activity_main_btn_tools_padding">14dp</dimen>
     <dimen name="activity_text_size">22sp</dimen>
@@ -16,14 +15,14 @@
     <dimen name="fleetview_text_statusarea">16dp</dimen>
     <dimen name="fleetview_text_moralearea">44dp</dimen>
     <dimen name="fleetview_text_tbutton">18dp</dimen>
-    <dimen name="fleetview_text_rbutton">22dp</dimen>
+    <dimen name="fleetview_text_rbutton">20dp</dimen>
     <dimen name="fleetview_text_ship_large">16dp</dimen>
     <dimen name="fleetview_text_ship_medium">14dp</dimen>
     <dimen name="fleetview_text_ship_small">12dp</dimen>
 
     <dimen name="questview_tag_size">42dp</dimen>
     <dimen name="questview_desc_height">52dp</dimen>
-    <dimen name="questview_text_top">22dp</dimen>
+    <dimen name="questview_text_top">14dp</dimen>
     <dimen name="questview_button_top">20dp</dimen>
     <dimen name="questview_text_large">18dp</dimen>
     <dimen name="questview_text_medium">15dp</dimen>
@@ -49,7 +48,7 @@
     <dimen name="item_popup_icon_size">20dp</dimen>
     <dimen name="item_popup_text_size_large">16dp</dimen>
     <dimen name="item_popup_text_size_small">14dp</dimen>
-    <dimen name="item_popup_xmargin">72dp</dimen>
+    <dimen name="item_popup_margin">36dp</dimen>
 
     <dimen name="button_size_xsmall">48dp</dimen>
     <dimen name="button_size_small">72dp</dimen>
@@ -76,7 +75,7 @@
     <dimen name="popup_t2_width">350dp</dimen>
     <dimen name="popup_t3_width">400dp</dimen>
     <dimen name="popup_t4_width">440dp</dimen>
-    <dimen name="popup_padding">8dp</dimen>
+    <dimen name="popup_padding">12dp</dimen>
 
 
     <dimen name="aircombat_text_mid">12dp</dimen>

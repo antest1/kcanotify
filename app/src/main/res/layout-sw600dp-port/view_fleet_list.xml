@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.antest1.kcanotify.DraggableOverlayLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fleetviewlayout"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="false"
     android:orientation="vertical"
     android:padding="4dp"
+    android:background="@drawable/overlay_background"
+    android:elevation="8dp"
     android:visibility="visible">
 
     <LinearLayout
         android:id="@+id/fleetviewpanel"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:alpha="0.8"
-        android:background="@color/colorPrimaryDark"
         android:orientation="vertical"
         android:paddingBottom="8dp"
         android:paddingLeft="8dp"
@@ -23,8 +23,8 @@
 
         <LinearLayout
             android:id="@+id/fleetview_head"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <TextView
@@ -46,9 +46,9 @@
 
             <ImageView
                 android:id="@+id/fleetview_tool"
-                android:layout_width="24dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="top"
                 android:layout_marginLeft="12dp"
                 android:layout_marginStart="12dp"
                 android:layout_weight="0"
@@ -57,9 +57,9 @@
 
             <ImageView
                 android:id="@+id/fleetview_exit"
-                android:layout_width="24dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="top"
                 android:layout_marginLeft="12dp"
                 android:layout_marginStart="12dp"
                 android:layout_weight="0"
@@ -70,13 +70,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/imageView5"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="4dp"
@@ -95,97 +94,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:background="@color/colorPrimary"
                 android:gravity="right"
                 android:orientation="horizontal">
-                <!--
-                <LinearLayout
-                    android:id="@+id/fleetview_18spring"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimary"
-                    android:gravity="right"
-                    android:orientation="horizontal"
-                    android:paddingEnd="4dp"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:paddingStart="4dp">
-
-                    <TextView
-                        android:id="@+id/fleetview_18spring_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="3dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginStart="3dp"
-                        android:ellipsize="end"
-                        android:gravity="right"
-                        android:singleLine="true"
-                        android:text="R 00"
-                        android:textColor="@color/colorEventRice"
-                        android:textSize="18dp" />
-
-                    <TextView
-                        android:id="@+id/fleetview_18spring_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="3dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginStart="3dp"
-                        android:ellipsize="end"
-                        android:gravity="right"
-                        android:singleLine="true"
-                        android:text="U 00"
-                        android:textColor="@color/colorEventUmeboshi"
-                        android:textSize="18dp" />
-
-                    <TextView
-                        android:id="@+id/fleetview_18spring_3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="3dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginStart="3dp"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:gravity="right"
-                        android:singleLine="true"
-                        android:text="N 00"
-                        android:textColor="@color/colorEventNori"
-                        android:textSize="18dp" />
-
-                    <TextView
-                        android:id="@+id/fleetview_18spring_4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="3dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginStart="3dp"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:gravity="right"
-                        android:singleLine="true"
-                        android:text="T 00"
-                        android:textColor="@color/colorEventTea"
-                        android:textSize="18dp" />
-                </LinearLayout>
-                -->
                 <LinearLayout
                     android:id="@+id/fleetview_cnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimary"
                     android:gravity="right"
                     android:orientation="horizontal"
                     android:paddingEnd="4dp"
@@ -246,7 +163,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimary"
                     android:ellipsize="end"
                     android:gravity="right"
                     android:singleLine="true"
@@ -261,7 +177,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimary"
                     android:gravity="right"
                     android:orientation="horizontal"
                     android:paddingEnd="4dp"
@@ -298,114 +213,95 @@
 
         </LinearLayout>
 
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal"
+                app:selectionRequired="true"
+                app:singleLine="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/fleet_1"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="1"
+                    android:textSize="16dp"
+                    android:theme="@style/AppThemeDark"
+                    app:chipBackgroundColor="@color/transparent"
+                    app:chipStrokeColor="@color/colorAccent"
+                    app:chipSurfaceColor="@android:color/transparent" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/fleet_2"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2"
+                    android:textSize="16dp"
+                    android:theme="@style/AppThemeDark"
+                    app:chipBackgroundColor="@color/transparent"
+                    app:chipSurfaceColor="@android:color/transparent" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/fleet_3"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="3"
+                    android:textSize="16dp"
+                    android:theme="@style/AppThemeDark"
+                    app:chipBackgroundColor="@color/transparent"
+                    app:chipSurfaceColor="@android:color/transparent" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/fleet_4"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="4"
+                    android:textSize="16dp"
+                    android:theme="@style/AppThemeDark"
+                    app:chipBackgroundColor="@color/transparent"
+                    app:chipSurfaceColor="@android:color/transparent" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/fleet_5"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/fleetview_combined"
+                    android:textSize="16dp"
+                    android:theme="@style/AppThemeDark"
+                    app:chipBackgroundColor="@color/transparent"
+                    app:chipSurfaceColor="@android:color/transparent" />
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="4dp"
-            android:alwaysDrawnWithCache="true"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/fleet_1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:layout_weight="1"
-                android:background="@color/colorAccent"
-                android:gravity="top"
-                android:paddingBottom="4dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="4dp"
-                android:text="\#1"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="18dp" />
-
-            <TextView
-                android:id="@+id/fleet_2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:layout_weight="1"
-                android:background="@color/colorFleetInfoBtn"
-                android:gravity="top"
-                android:paddingBottom="4dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="4dp"
-                android:text="\#2"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="18dp" />
-
-            <TextView
-                android:id="@+id/fleet_3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:layout_weight="1"
-                android:background="@color/colorFleetInfoBtn"
-                android:gravity="top"
-                android:paddingBottom="4dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="4dp"
-                android:text="\#3"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="18dp" />
-
-            <TextView
-                android:id="@+id/fleet_4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:layout_weight="1"
-                android:background="@color/colorFleetInfoBtn"
-                android:gravity="top"
-                android:paddingBottom="4dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="4dp"
-                android:text="\#4"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="18dp" />
-
-            <TextView
-                android:id="@+id/fleet_5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:layout_weight="1"
-                android:background="@color/colorFleetInfoBtn"
-                android:gravity="top"
-                android:paddingBottom="4dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="4dp"
-                android:text="@string/fleetview_combined"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="18dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
             android:layout_weight="1.0"
             android:orientation="horizontal">
 
             <ScrollView
                 android:id="@+id/fleetview_shiparea"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0">
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
@@ -466,7 +362,7 @@
                                 android:paddingStart="8dp"
                                 android:paddingTop="3dp"
                                 android:singleLine="true"
-                                android:text="00:15:23"
+                                android:text="00:00:00"
                                 android:textColor="@color/white"
                                 android:textSize="16dp" />
 
@@ -512,7 +408,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
                         android:layout_marginTop="2dp"
@@ -520,8 +416,8 @@
 
                         <LinearLayout
                             android:id="@+id/fleet_list_main"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_marginRight="6dp"
                             android:layout_weight="1.0"
                             android:orientation="vertical">
@@ -590,8 +486,8 @@
 
                         <LinearLayout
                             android:id="@+id/fleet_list_combined"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_marginRight="6dp"
                             android:layout_weight="1.0"
                             android:orientation="vertical">
@@ -669,161 +565,86 @@
                 <ScrollView
                     android:id="@+id/fleetview_menu"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:padding="4dp">
+                    android:layout_height="match_parent">
 
                     <LinearLayout
                         android:id="@+id/viewbutton_area"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:padding="4dp"
                         android:orientation="vertical">
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_quest"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
                             android:text="@string/viewmenu_quest"
-                            android:textColor="@color/white"
-                            android:textSize="22dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_excheck"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
                             android:text="@string/viewmenu_excheck"
-                            android:textColor="@color/white"
-                            android:textSize="22dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_develop"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
                             android:text="@string/viewmenu_develop"
-                            android:textColor="@color/white"
-                            android:textSize="22dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_construction"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
-                            android:scrollIndicators="right"
                             android:text="@string/viewmenu_construction"
-                            android:textColor="@color/white"
-                            android:textSize="22dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_docking"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
                             android:text="@string/viewmenu_docking"
-                            android:textColor="@color/white"
-                            android:textSize="22dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_maphp"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
                             android:text="@string/viewmenu_maphp"
-                            android:textColor="@color/white"
-                            android:textSize="22dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_fchk"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
-                            android:scrollIndicators="right"
                             android:text="@string/viewmenu_fchk"
-                            android:textColor="@color/white"
-                            android:textSize="22dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_labinfo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
-                            android:scrollIndicators="right"
                             android:text="@string/viewmenu_labinfo"
-                            android:textColor="@color/white"
-                            android:textSize="22dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_akashi"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
                             android:text="@string/viewmenu_akashi"
-                            android:textColor="@color/white"
-                            android:textSize="22dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
                     </LinearLayout>
                 </ScrollView>
 
@@ -860,4 +681,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</com.antest1.kcanotify.DraggableOverlayLayout>

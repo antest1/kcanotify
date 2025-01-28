@@ -276,10 +276,7 @@ public class Util {
 
     public static boolean isInteractive(Context context) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT_WATCH)
-            return (pm != null && pm.isScreenOn());
-        else
-            return (pm != null && pm.isInteractive());
+        return (pm != null && pm.isInteractive());
     }
 
     public static boolean isPackageInstalled(String packageName, Context context) {
@@ -566,8 +563,7 @@ public class Util {
             sb.append(KcaUtils.format("Network %s/%s/%s\r\n", tm.getNetworkCountryIso(), tm.getNetworkOperatorName(), tm.getNetworkOperator()));
 
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            sb.append(KcaUtils.format("Power saving %B\r\n", pm.isPowerSaveMode()));
+        sb.append(KcaUtils.format("Power saving %B\r\n", pm.isPowerSaveMode()));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             sb.append(KcaUtils.format("Battery optimizing %B\r\n", batteryOptimizing(context)));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -586,14 +582,11 @@ public class Util {
         NetworkInfo ani = cm.getActiveNetworkInfo();
         List<NetworkInfo> listNI = new ArrayList<>();
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-            listNI.addAll(Arrays.asList(cm.getAllNetworkInfo()));
-        else
-            for (Network network : cm.getAllNetworks()) {
-                NetworkInfo ni = cm.getNetworkInfo(network);
-                if (ni != null)
-                    listNI.add(ni);
-            }
+        for (Network network : cm.getAllNetworks()) {
+            NetworkInfo ni = cm.getNetworkInfo(network);
+            if (ni != null)
+                listNI.add(ni);
+        }
 
         for (NetworkInfo ni : listNI) {
             sb.append(ni.getTypeName()).append('/').append(ni.getSubtypeName())

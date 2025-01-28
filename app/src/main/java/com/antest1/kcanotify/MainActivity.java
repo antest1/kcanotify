@@ -1,5 +1,10 @@
 package com.antest1.kcanotify;
 
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -13,7 +18,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
-import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.net.VpnService;
@@ -45,11 +49,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -96,23 +99,23 @@ public class MainActivity extends AppCompatActivity {
     KcaDBHelper dbHelper;
     Toolbar toolbar;
     KcaDownloader downloader;
-    ToggleButton vpnbtn, svcbtn;
+    MaterialButton vpnbtn, svcbtn;
     Button kcbtn;
-    ImageButton kctoolbtn;
-    public ImageButton kcafairybtn;
+    MenuItem fairyButton;
     public static Handler sHandler;
     TextView textDescription;
-    TextView textWarn, textMainUpdate, textSpecial, textMaintenance;
-    TextView textSpecial2;
+    TextView textMaintenance;
+    Button textMainUpdate, textSpecial, textSpecial2;
+    BottomAppBar bottomAppBar;
 
     ActivityResultLauncher<Intent> vpnPrepareLauncher, exactAlarmPrepareLauncher;
 
     SharedPreferences prefs;
     private BackPressCloseHandler backPressCloseHandler;
+
     public static void setHandler(Handler h) {
         sHandler = h;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,47 +144,50 @@ public class MainActivity extends AppCompatActivity {
         );
 
         vpnbtn = findViewById(R.id.vpnbtn);
-        vpnbtn.setTextOff(getStringWithLocale(R.string.ma_vpn_toggleoff));
-        vpnbtn.setTextOn(getStringWithLocale(R.string.ma_vpn_toggleon));
-        vpnbtn.setText("PASSIVE");
-        vpnbtn.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (getBooleanPreferences(getApplicationContext(), PREF_VPNSERVICE_USAGE_AGREE)) {
-                    startVpnService();
+        svcbtn = findViewById(R.id.svcbtn);
+        MaterialButtonToggleGroup toggleGroup = findViewById(R.id.toggleGroup);
+        toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (checkedId == R.id.svcbtn) {
+                svcbtn.setText(isChecked ? getStringWithLocale(R.string.ma_svc_toggleon) : getStringWithLocale(R.string.ma_svc_toggleoff));
+                if (isChecked) {
+                    if (checkNotificationPermission() && checkExactAlarmPermission()) {
+                        if (!prefs.getBoolean(PREF_SVC_ENABLED, false))
+                            startKcaService();
+                    } else {
+                        if (!checkNotificationPermission())
+                            grantNotificationPermission();
+                        else if (!checkExactAlarmPermission())
+                            grantExactAlarmPermission();
+                    }
                 } else {
-                    showVpnServiceNotification();
+                    stopKcaService();
                 }
-            } else {
-                stopVpnService();
+            } else if (checkedId == R.id.vpnbtn) {
+                vpnbtn.setText(isChecked ? getStringWithLocale(R.string.ma_vpn_toggleon) : getStringWithLocale(R.string.ma_vpn_toggleoff));
+                if (isChecked) {
+                    if (getBooleanPreferences(getApplicationContext(), PREF_VPNSERVICE_USAGE_AGREE)) {
+                        startVpnService();
+                    } else {
+                        showVpnServiceNotification();
+                    }
+                } else {
+                    stopVpnService();
+                }
             }
         });
 
         int sniffer_mode = getSnifferMode();
         vpnbtn.setEnabled(sniffer_mode == SNIFFER_ACTIVE);
-
-        svcbtn = findViewById(R.id.svcbtn);
-        svcbtn.setTextOff(getStringWithLocale(R.string.ma_svc_toggleoff));
-        svcbtn.setTextOn(getStringWithLocale(R.string.ma_svc_toggleon));
-        svcbtn.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (checkNotificationPermission() && checkExactAlarmPermssion()) {
-                    if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) startKcaService();
-                } else {
-                    if (!checkNotificationPermission()) grantNotificationPermission();
-                    else if (!checkExactAlarmPermssion()) grantExactAlarmPermission();
-                }
-            } else {
-                stopKcaService();
-            }
-        });
+        if (sniffer_mode != SNIFFER_ACTIVE) {
+            vpnbtn.setText("PASSIVE");
+        }
 
         kcbtn = findViewById(R.id.kcbtn);
         kcbtn.setOnClickListener(v -> {
             String kcApp = getStringPreferences(getApplicationContext(), PREF_KC_PACKAGE);
             Intent kcIntent = getKcIntent(getApplicationContext());
 
-            boolean is_kca_installed = false;
-            if (!BuildConfig.DEBUG) is_kca_installed = (kcIntent != null);
+            boolean is_kca_installed = (kcIntent != null);
 
             JsonObject statProperties = new JsonObject();
             statProperties.addProperty("browser", kcApp);
@@ -206,32 +212,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        kctoolbtn = findViewById(R.id.kcatoolbtn);
-        kctoolbtn.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ToolsActivity.class);
-            startActivity(intent);
-        });
-        kctoolbtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                R.color.white), PorterDuff.Mode.SRC_ATOP);
+        FrameLayout bottomSheet = findViewById(R.id.bottomSheet);
+        BottomSheetBehavior<FrameLayout> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
-        kcafairybtn = findViewById(R.id.kcafairybtn);
-        boolean is_random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
-        if (is_random_fairy) {
-            kcafairybtn.setImageResource(R.mipmap.ic_help);
-        } else {
-            String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
-            String fairyPath = "noti_icon_".concat(fairyIdValue);
-            KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, kcafairybtn, 24);
-        }
-        kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                R.color.white), PorterDuff.Mode.SRC_ATOP);
-        kcafairybtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                        && !Settings.canDrawOverlays(getApplicationContext())) {
-                    // Can not draw overlays: pass
-                } else if (KcaService.getServiceStatus() && sHandler != null) {
+        bottomAppBar = findViewById(R.id.bottomAppBar);
+        bottomAppBar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.fairy) {
+                if (Settings.canDrawOverlays(getApplicationContext()) && KcaService.getServiceStatus() && sHandler != null) {
                     Bundle bundle = new Bundle();
                     bundle.putString("url", KCA_API_FAIRY_RETURN);
                     bundle.putString("data", "");
@@ -239,13 +227,29 @@ public class MainActivity extends AppCompatActivity {
                     sMsg.setData(bundle);
                     sHandler.sendMessage(sMsg);
                 }
+                return true;
+            } else if (item.getItemId() == R.id.tools)
+            {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
+                return true;
+            } else {
+                return false;
             }
         });
 
-        textWarn = findViewById(R.id.textMainWarn);
-        textWarn.setVisibility(View.GONE);
 
-        String main_html = "";
+        fairyButton = bottomAppBar.getMenu().getItem(0);
+        boolean is_random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
+        if (is_random_fairy) {
+            fairyButton.setIcon(R.mipmap.ic_help);
+        } else {
+            String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
+            String fairyPath = "noti_icon_".concat(fairyIdValue);
+            KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, fairyButton, 24);
+        }
+
+
+        String main_html;
         try {
             InputStream ais = assetManager.open("main-".concat(getResourceLocaleCode()).concat(".html"));
             byte[] bytes = ByteStreams.toByteArray(ais);
@@ -264,26 +268,23 @@ public class MainActivity extends AppCompatActivity {
         Spanned fromHtml = HtmlCompat.fromHtml(main_html, 0);
         textDescription.setMovementMethod(LinkMovementMethod.getInstance());
         textDescription.setText(fromHtml);
-        //Linkify.addLinks(textDescription, Linkify.WEB_URLS);
 
-        backPressCloseHandler = new BackPressCloseHandler(this);
+        backPressCloseHandler = new BackPressCloseHandler();
 
         textMaintenance = findViewById(R.id.textMaintenance);
         String maintenanceInfo = dbHelper.getValue(DB_KEY_KCMAINTNC);
-        if (maintenanceInfo != null && maintenanceInfo.trim().length() > 0) {
+        if (maintenanceInfo != null && !maintenanceInfo.trim().isEmpty()) {
             try {
                 JsonArray maintenance_data = (JsonParser.parseString(maintenanceInfo)).getAsJsonArray();
                 String mt_start = maintenance_data.get(0).getAsString();
                 String mt_end = maintenance_data.get(1).getAsString();
-                if (!mt_start.equals("")) {
+                if (!mt_start.isEmpty()) {
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z", Locale.US);
                     Date start_date = df.parse(mt_start);
                     Date end_date = df.parse(mt_end);
 
-                    SimpleDateFormat out_df = df;
-                    if (Build.VERSION.SDK_INT >= 18) {
-                        out_df = new SimpleDateFormat(DateFormat.getBestDateTimePattern(Locale.getDefault(), "EEE, dd MMM yyyy HH:mm Z"), Locale.getDefault());
-                    }
+                    SimpleDateFormat out_df;
+                    out_df = new SimpleDateFormat(DateFormat.getBestDateTimePattern(Locale.getDefault(), "EEE, dd MMM yyyy HH:mm Z"), Locale.getDefault());
 
                     boolean is_passed = end_date.getTime() < System.currentTimeMillis();
                     boolean before_maintenance = System.currentTimeMillis() < start_date.getTime();
@@ -333,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
 
             final CustomTabsIntent customTabsIntent = intentBuilder.build();
             final List<ResolveInfo> customTabsApps = getPackageManager().queryIntentActivities(customTabsIntent.intent, 0);
-            if (customTabsApps.size() > 0) {
+            if (!customTabsApps.isEmpty()) {
                 customTabsIntent.launchUrl(MainActivity.this, Uri.parse(url));
             } else {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -369,34 +370,25 @@ public class MainActivity extends AppCompatActivity {
         setVpnBtn();
         setCheckBtn();
 
-        kcafairybtn = findViewById(R.id.kcafairybtn);
+        fairyButton = bottomAppBar.getMenu().getItem(0);
         boolean is_random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
         if (is_random_fairy) {
-            kcafairybtn.setImageResource(R.mipmap.ic_help);
+            fairyButton.setIcon(R.mipmap.ic_help);
         } else {
             String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
             String fairyPath = "noti_icon_".concat(fairyIdValue);
-            KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, kcafairybtn, 24);
+            KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, fairyButton, 24);
             showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
         }
-        kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                R.color.white), PorterDuff.Mode.SRC_ATOP);
 
         Arrays.fill(warnType, false);
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_PERMISSION);
-            }
-        }
 
         if (getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)
                 || getBooleanPreferences(getApplicationContext(), PREF_KCA_QUESTVIEW_USE)) {
             warnType[REQUEST_OVERLAY_PERMISSION] = !checkOverlayPermission();
         }
 
-        warnType[REQUEST_NOTIFICATION_PERMISSION] = !(checkNotificationPermission() && checkExactAlarmPermssion());
+        warnType[REQUEST_NOTIFICATION_PERMISSION] = !(checkNotificationPermission() && checkExactAlarmPermission());
         setWarning();
     }
 
@@ -421,22 +413,26 @@ public class MainActivity extends AppCompatActivity {
 
     public void setWarning() {
         String warnText = "";
+        View main = findViewById(R.id.activity_main);
         if (warnType[REQUEST_OVERLAY_PERMISSION]) {
             warnText = warnText.concat("\n").concat(getString(R.string.ma_toast_overay_diabled));
+            Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.setting_menu_perm_head), view -> {
+                        // TODO: Share code with MainPreferenceFragment.java
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                Uri.parse("package:" + getApplicationContext().getPackageName()));
+                        startActivity(intent);
+                    }).show();
         }
         if (warnType[REQUEST_EXTERNAL_PERMISSION]) {
             warnText = warnText.concat("\n").concat(getString(R.string.ma_permission_external_denied));
+            // TODO: Add action
+            Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE).show();
         }
         if (warnType[REQUEST_NOTIFICATION_PERMISSION] || warnType[REQUEST_EXACT_ALARM_PERMISSION]) {
             warnText = warnText.concat("\n").concat(getString(R.string.ma_permission_notification_denied));
-        }
-
-        if (warnText.length() > 0) {
-            textWarn.setVisibility(View.VISIBLE);
-            textWarn.setText(warnText.trim());
-        } else {
-            textWarn.setVisibility(View.GONE);
-            textWarn.setText("");
+            // TODO: Add action
+            Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE).show();
         }
     }
 
@@ -472,8 +468,10 @@ public class MainActivity extends AppCompatActivity {
     public void setVpnBtn() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (getSnifferMode() == SNIFFER_ACTIVE) {
+            boolean isChecked = prefs.getBoolean(PREF_VPN_ENABLED, false);
+            vpnbtn.setText(isChecked ? getStringWithLocale(R.string.ma_vpn_toggleon) : getStringWithLocale(R.string.ma_vpn_toggleoff));
             vpnbtn.setEnabled(true);
-            vpnbtn.setChecked(prefs.getBoolean(PREF_VPN_ENABLED, false));
+            vpnbtn.setChecked(isChecked);
         } else {
             vpnbtn.setText("PASSIVE");
             vpnbtn.setEnabled(false);
@@ -506,8 +504,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean checkOverlayPermission() {
-        return !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext()));
+        return Settings.canDrawOverlays(getApplicationContext());
     }
 
     private boolean checkNotificationPermission() {
@@ -517,7 +514,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private boolean checkExactAlarmPermssion() {
+    private boolean checkExactAlarmPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             return alarmManager.canScheduleExactAlarms();
@@ -555,7 +552,7 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(getApplicationContext(), getString(R.string.ma_permission_service_restart), Toast.LENGTH_LONG).show();
                 }
-                if (!checkExactAlarmPermssion()) grantExactAlarmPermission();
+                if (!checkExactAlarmPermission()) grantExactAlarmPermission();
             }
         }
     }
@@ -595,15 +592,51 @@ public class MainActivity extends AppCompatActivity {
         alert.setPositiveButton(getStringWithLocale(R.string.dialog_ok), (dialog, which) -> {
             setPreferences(getApplicationContext(), PREF_VPNSERVICE_USAGE_AGREE, true);
             startVpnService();
-            dialog.dismiss();
         }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), (dialog, which) -> {
             prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
             vpnbtn.setChecked(false);
-            dialog.cancel();
+        }).setOnDismissListener(dialog -> {
+            prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+            vpnbtn.setChecked(false);
         });
         alert.setMessage(Html.fromHtml(getStringWithLocale(R.string.ma_dialog_vpn_usage)));
         AlertDialog dialog = alert.create();
         dialog.show();
         ((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private class BackPressCloseHandler {
+        private static final int INTERVAL = 1500;
+        long pressedTime = 0;
+        Toast toast;
+
+        public BackPressCloseHandler (){}
+
+        public void onBackPressed() {
+            FrameLayout bottomSheet = findViewById(R.id.bottomSheet);
+            BottomSheetBehavior<FrameLayout> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+            if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                return;
+            }
+            if (System.currentTimeMillis() > pressedTime + INTERVAL) {
+                pressedTime = System.currentTimeMillis();
+                showMessage();
+                return;
+            }
+            if (System.currentTimeMillis() <= pressedTime + INTERVAL) {
+                MainActivity.this.finish();
+                toast.cancel();
+            }
+        }
+
+        public String getStringWithLocale(int id) {
+            return KcaUtils.getStringWithLocale(MainActivity.this.getApplication(), MainActivity.this.getBaseContext(), id);
+        }
+
+        public void showMessage() {
+            toast = Toast.makeText(MainActivity.this, getStringWithLocale(R.string.backpress_msg), Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 }

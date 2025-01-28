@@ -8,7 +8,6 @@ import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -78,8 +77,7 @@ public class KcaLandAirBasePopupService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else {
@@ -117,7 +115,7 @@ public class KcaLandAirBasePopupService extends Service {
             display.getSize(size);
             screenWidth = size.x;
             screenHeight = size.y;
-            Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+            Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
             mParams.x = (screenWidth - popupWidth) / 2;
             mParams.y = (screenHeight - popupHeight) / 2;
@@ -136,8 +134,7 @@ public class KcaLandAirBasePopupService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("KCA-LAB", "onStartCommand");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
@@ -169,9 +166,8 @@ public class KcaLandAirBasePopupService extends Service {
             LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view_list.removeAllViews();
             JsonArray api_air_base = dbHelper.getJsonArrayValue(DB_KEY_LABSIFNO);
-            String value = "";
             try {
-                if (api_air_base != null && api_air_base.size() > 0) {
+                if (api_air_base != null && !api_air_base.isEmpty()) {
                     for (int i = 0; i < api_air_base.size(); i++) {
                         JsonObject item = api_air_base.get(i).getAsJsonObject();
                         View v = vi.inflate(R.layout.listivew_lab, null);
@@ -400,19 +396,18 @@ public class KcaLandAirBasePopupService extends Service {
     }
 
     private float mTouchX, mTouchY;
-    private int mViewX, mViewY, itemViewX, itemViewY;
+    private int mViewX, mViewY;
 
     private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
         private static final int MAX_CLICK_DURATION = 200;
-        private static final int LONG_CLICK_DURATION = 800;
-        int itemViewWidth, itemViewHeight;
+        int itemViewHeight;
 
         private long startClickTime;
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             int id = v.getId();
-            int xMargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
+            int margin = (int) getResources().getDimension(R.dimen.item_popup_margin);
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -420,8 +415,6 @@ public class KcaLandAirBasePopupService extends Service {
                     mTouchY = event.getRawY();
                     mViewX = mParams.x;
                     mViewY = mParams.y;
-                    itemViewX = itemViewParams.x;
-                    itemViewY = itemViewParams.y;
                     Log.e("KCA", KcaUtils.format("mView: %d %d", mViewX, mViewY));
                     startClickTime = Calendar.getInstance().getTimeInMillis();
 
@@ -435,11 +428,9 @@ public class KcaLandAirBasePopupService extends Service {
                             JsonObject item = api_air_base.get(tag).getAsJsonObject();
                             setItemViewLayout(item);
                             itemView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-                            itemViewWidth = itemView.getMeasuredWidth();
                             itemViewHeight = itemView.getMeasuredHeight();
-
-                            itemViewParams.x = (int) (event.getRawX() - xMargin - itemViewWidth);
-                            itemViewParams.y = (int) (event.getRawY() - itemViewHeight / 2);
+                            itemViewParams.x = (int) event.getRawX() + margin;
+                            itemViewParams.y = (int) event.getRawY() - 2 * margin - itemViewHeight;
                             itemViewParams.gravity = Gravity.TOP | Gravity.LEFT;
                             if (itemView.getParent() != null) {
                                 mManager.removeViewImmediate(itemView);
@@ -484,8 +475,8 @@ public class KcaLandAirBasePopupService extends Service {
                     mManager.updateViewLayout(mView, mParams);
 
                     if (itemView.getParent() != null) {
-                        itemViewParams.x = (int) (event.getRawX() - xMargin - itemViewWidth);
-                        itemViewParams.y = (int) (event.getRawY() - itemViewHeight / 2);
+                        itemViewParams.x = (int) event.getRawX() + margin;
+                        itemViewParams.y = (int) event.getRawY() - 2 * margin - itemViewHeight;
                         mManager.updateViewLayout(itemView, itemViewParams);
                     }
                     break;
@@ -511,7 +502,7 @@ public class KcaLandAirBasePopupService extends Service {
         display.getSize(size);
         screenWidth = size.x;
         screenHeight = size.y;
-        Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+        Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
         if (mParams != null) {
             if (mParams.x < 0) mParams.x = 0;

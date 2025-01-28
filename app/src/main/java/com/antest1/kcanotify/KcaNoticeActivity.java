@@ -2,8 +2,8 @@ package com.antest1.kcanotify;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -34,7 +34,7 @@ public class KcaNoticeActivity extends AppCompatActivity {
             }
         });
 
-        TextView ok = findViewById(R.id.notice_confirmed);
+        Button ok = findViewById(R.id.notice_confirmed);
         ok.setOnClickListener(v -> {
             Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(mainIntent);

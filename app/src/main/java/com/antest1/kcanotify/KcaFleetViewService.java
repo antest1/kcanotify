@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -9,14 +10,16 @@ import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.material.chip.Chip;
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -45,6 +49,7 @@ import java.util.concurrent.TimeUnit;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static com.antest1.kcanotify.KcaAkashiViewService.SHOW_AKASHIVIEW_ACTION;
 import static com.antest1.kcanotify.KcaApiData.getSlotItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
@@ -78,7 +83,8 @@ import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
-import static org.apache.commons.lang3.StringUtils.split;
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
 
 public class KcaFleetViewService extends Service {
     public static final String SHOW_FLEETVIEW_ACTION = "show_fleetview_action";
@@ -99,6 +105,7 @@ public class KcaFleetViewService extends Service {
     private static final int HQINFO_ITEMCNT3 = 4;
     private static final int HQINFO_ITEMCNT4 = 5;
 
+    private int screenHeight;
 
     Context contextWithLocale;
     LayoutInflater mInflater;
@@ -116,10 +123,15 @@ public class KcaFleetViewService extends Service {
     static int view_status = 0;
     static boolean error_flag = false;
     boolean active;
-    private View mView, itemView, fleetHqInfoView;
+
+    private DraggableOverlayLayout fleetView;
+    private int fleetViewHeight = 0;
+    private WindowManager.LayoutParams layoutParams;
+
+    private View itemView, fleetHqInfoView;
     private TextView fleetInfoTitle, fleetInfoLine, fleetCnChangeBtn, fleetSwitchBtn, fleetAkashiTimerBtn;
-    private WindowManager mManager;
-    private ScrollView fleetMenu, fleetShipArea;
+    private WindowManager windowManager;
+    private ScrollView fleetMenu;
     private ImageView fleetMenuArrowUp, fleetMenuArrowDown;
     private static boolean isReady;
     private static int[] hqinfoItems = {-1, -1, -1, -1};
@@ -128,9 +140,9 @@ public class KcaFleetViewService extends Service {
 
     int displayWidth = 0;
 
-    WindowManager.LayoutParams mParams;
+    private SnapIndicator snapIndicator;
 
-    int selected;
+    int selectedFleetIndex;
 
     @Nullable
     @Override
@@ -146,18 +158,18 @@ public class KcaFleetViewService extends Service {
         isReady = flag;
     }
 
-    public int setView() {
+    public boolean setView() {
         try {
-            Log.e("KCA-FV", String.valueOf(selected));
+            Log.e("KCA-FV", String.valueOf(selectedFleetIndex));
             setHqInfo();
-            fleetInfoTitle.setVisibility(View.VISIBLE);
-            updateSelectedView(selected);
-            processDeckInfo(selected, isCombinedFlag(selected));
-            return 0;
+            fleetInfoTitle.setVisibility(VISIBLE);
+            updateSelectedFleetView(selectedFleetIndex);
+            processDeckInfo(selectedFleetIndex, isCombinedFlag(selectedFleetIndex));
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             sendReport(e, 0);
-            return 1;
+            return false;
         }
     }
 
@@ -168,17 +180,17 @@ public class KcaFleetViewService extends Service {
 
     private void setHqInfoViewVisibility() {
         if (hqinfoState == HQINFO_EXPVIEW) {
-            fleetHqInfoView.findViewById(R.id.fleetview_exp).setVisibility(View.VISIBLE);
+            fleetHqInfoView.findViewById(R.id.fleetview_exp).setVisibility(VISIBLE);
             fleetHqInfoView.findViewById(R.id.fleetview_cnt).setVisibility(View.GONE);
             fleetHqInfoView.findViewById(R.id.fleetview_item_cnt).setVisibility(View.GONE);
         } else if (hqinfoState == HQINFO_SECOUNT) {
             fleetHqInfoView.findViewById(R.id.fleetview_exp).setVisibility(View.GONE);
-            fleetHqInfoView.findViewById(R.id.fleetview_cnt).setVisibility(View.VISIBLE);
+            fleetHqInfoView.findViewById(R.id.fleetview_cnt).setVisibility(VISIBLE);
             fleetHqInfoView.findViewById(R.id.fleetview_item_cnt).setVisibility(View.GONE);
         } else {
             fleetHqInfoView.findViewById(R.id.fleetview_exp).setVisibility(View.GONE);
             fleetHqInfoView.findViewById(R.id.fleetview_cnt).setVisibility(View.GONE);
-            fleetHqInfoView.findViewById(R.id.fleetview_item_cnt).setVisibility(View.VISIBLE);
+            fleetHqInfoView.findViewById(R.id.fleetview_item_cnt).setVisibility(VISIBLE);
         }
     }
 
@@ -264,7 +276,7 @@ public class KcaFleetViewService extends Service {
 
     void runTimer() {
         timeScheduler = Executors.newSingleThreadScheduledExecutor();
-        timeScheduler.scheduleAtFixedRate(timer, 0, 1, TimeUnit.SECONDS);
+        timeScheduler.scheduleWithFixedDelay(timer, 0, 1, TimeUnit.SECONDS);
     }
 
     void stopTimer() {
@@ -276,42 +288,37 @@ public class KcaFleetViewService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         }
+        updateScreenSize();
         try {
             active = true;
             switch_status = 1;
             prefs = PreferenceManager.getDefaultSharedPreferences(this);
             view_status = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_VIEW_YLOC));
-            mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+            windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
             dbHelper.updateExpScore(0);
             KcaApiData.setDBHelper(dbHelper);
 
             contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+            contextWithLocale = new ContextThemeWrapper(contextWithLocale, R.style.AppTheme);
             deckInfoCalc = new KcaDeckInfo(getApplicationContext(), contextWithLocale);
             gunfitData = loadGunfitData(getAssets());
 
-            //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mInflater = LayoutInflater.from(contextWithLocale);
             initView();
 
             fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
             itemView = mInflater.inflate(R.layout.view_battleview_items, null);
             mHandler = new Handler();
-            timer = new Runnable() {
-                @Override
-                public void run() {
-                    updateFleetInfoLine();
-                }
-            };
+            timer = this::updateFleetInfoLine;
             runTimer();
 
-            mManager.addView(mView, mParams);
+            windowManager.addView(fleetView, layoutParams);
             Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
@@ -329,29 +336,30 @@ public class KcaFleetViewService extends Service {
     public void onDestroy() {
         active = false;
         stopTimer();
-        if (mView != null) {
-            if (mView.getParent() != null) mManager.removeViewImmediate(mView);
+        if (fleetView != null) {
+            if (fleetView.getParent() != null) windowManager.removeViewImmediate(fleetView);
+        }
+        if (snapIndicator != null) {
+            snapIndicator.remove();
         }
         if (itemView != null) {
-            if (itemView.getParent() != null) mManager.removeViewImmediate(itemView);
+            if (itemView.getParent() != null) windowManager.removeViewImmediate(itemView);
         }
         super.onDestroy();
     }
 
     private void setFleetMenu() {
-        LinearLayout fleetMenuArea = mView.findViewById(R.id.viewbutton_area);
+        LinearLayout fleetMenuArea = fleetView.findViewById(R.id.viewbutton_area);
         List<TextView> menuBtnList = new ArrayList<>();
-        for (int i = 0; i < fleetview_menu_keys.length; i++) {
-            String key = fleetview_menu_keys[i];
-            TextView tv = mView.findViewById(KcaUtils.getId(KcaUtils.format("viewbutton_%s", key), R.id.class));
+        for (String key : fleetview_menu_keys) {
+            TextView tv = fleetView.findViewById(KcaUtils.getId(KcaUtils.format("viewbutton_%s", key), R.id.class));
             tv.setText(getStringWithLocale(KcaUtils.getId(KcaUtils.format("viewmenu_%s", key), R.string.class)));
-            tv.setOnTouchListener(mViewTouchListener);
             menuBtnList.add(tv);
             ((ViewGroup) tv.getParent()).removeView(tv);
         }
 
         String order_data = getStringPreferences(getApplicationContext(), PREF_FV_MENU_ORDER);
-        if (order_data.length() > 0) {
+        if (!order_data.isEmpty()) {
             JsonArray order = JsonParser.parseString(order_data).getAsJsonArray();
             for (int i = 0; i < order.size(); i++) {
                 fleetMenuArea.addView(menuBtnList.get(order.get(i).getAsInt()));
@@ -363,48 +371,165 @@ public class KcaFleetViewService extends Service {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initView() {
-        mView = mInflater.inflate(R.layout.view_fleet_list, null);
-        mView.setVisibility(GONE);
-        KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
-        mView.findViewById(R.id.fleetview_shiparea).setOnTouchListener(mViewTouchListener);
-        mView.findViewById(R.id.fleetview_tool).setOnTouchListener(mViewTouchListener);
-        mView.findViewById(R.id.fleetview_head).setOnTouchListener(mViewTouchListener);
-        mView.findViewById(R.id.fleetview_cn_change).setOnTouchListener(mViewTouchListener);
-        mView.findViewById(R.id.fleetview_fleetswitch).setOnTouchListener(mViewTouchListener);
-        mView.findViewById(R.id.fleetview_hqinfo).setOnTouchListener(mViewTouchListener);
+        fleetView = (DraggableOverlayLayout) mInflater.inflate(R.layout.view_fleet_list, null);
+        fleetView.setVisibility(GONE);
+        KcaUtils.resizeFullWidthView(getApplicationContext(), fleetView);
 
+        snapIndicator = new SnapIndicator(windowManager, mInflater);
+
+        fleetView.findViewById(R.id.fleetviewpanel).setOnTouchListener(draggableLayoutTouchListener);
+
+        fleetView.findViewById(R.id.fleetviewpanel).setOnClickListener(v -> {
+            if (abs(layoutParams.x - startViewX) < 20 && abs(layoutParams.y - startViewY) < 20) {
+                JsonObject statProperties = new JsonObject();
+                statProperties.addProperty("manual", true);
+                if (fleetView != null) fleetView.setVisibility(GONE);
+                if (itemView != null) itemView.setVisibility(GONE);
+            }
+        });
+
+        fleetView.findViewById(R.id.viewbutton_quest).setOnClickListener(v -> {
+            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Quest"), null);
+            Intent qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
+            qintent.setAction(SHOW_QUESTVIEW_ACTION_NEW);
+            startService(qintent);
+        });
+        fleetView.findViewById(R.id.viewbutton_excheck).setOnClickListener(v -> {
+            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("ExpeditionCheck"), null);
+            Intent qintent = new Intent(getBaseContext(), KcaExpeditionCheckViewService.class);
+            qintent.setAction(KcaExpeditionCheckViewService.SHOW_EXCHECKVIEW_ACTION.concat("/").concat(String.valueOf(selectedFleetIndex)));
+            startService(qintent);
+        });
+        fleetView.findViewById(R.id.viewbutton_develop).setOnClickListener(v -> {
+            if (isGameDataLoaded()) {
+                sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Develop"), null);
+                Intent qintent = new Intent(getBaseContext(), KcaDevelopPopupService.class);
+                startService(qintent);
+            }
+        });
+        fleetView.findViewById(R.id.viewbutton_construction).setOnClickListener(v -> {
+            if (isGameDataLoaded()) {
+                sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Constr"), null);
+                Intent qintent = new Intent(getBaseContext(), KcaConstructPopupService.class);
+                qintent.setAction(KcaConstructPopupService.CONSTR_DATA_ACTION);
+                startService(qintent);
+            }
+        });
+        fleetView.findViewById(R.id.viewbutton_docking).setOnClickListener(v -> {
+            if (isGameDataLoaded()) {
+                sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Docking"), null);
+                Intent qintent = new Intent(getBaseContext(), KcaDockingPopupService.class);
+                qintent.setAction(KcaDockingPopupService.DOCKING_DATA_ACTION);
+                startService(qintent);
+            }
+        });
+        fleetView.findViewById(R.id.viewbutton_maphp).setOnClickListener(v -> {
+            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("MapHP"), null);
+            Intent qintent = new Intent(getBaseContext(), KcaMapHpPopupService.class);
+            qintent.setAction(KcaMapHpPopupService.MAPHP_SHOW_ACTION);
+            startService(qintent);
+        });
+        fleetView.findViewById(R.id.viewbutton_fchk).setOnClickListener(v -> {
+            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("FleetCheck"), null);
+            Intent qintent = new Intent(getBaseContext(), KcaFleetCheckPopupService.class);
+            qintent.setAction(KcaFleetCheckPopupService.FCHK_SHOW_ACTION);
+            startService(qintent);
+        });
+        fleetView.findViewById(R.id.viewbutton_labinfo).setOnClickListener(v -> {
+            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("LandAirBaseInfo"), null);
+            Intent qintent = new Intent(getBaseContext(), KcaLandAirBasePopupService.class);
+            qintent.setAction(KcaLandAirBasePopupService.LAB_DATA_ACTION);
+            startService(qintent);
+        });
+        fleetView.findViewById(R.id.viewbutton_akashi).setOnClickListener(v -> {
+            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Akashi"), null);
+            Intent qintent = new Intent(getBaseContext(), KcaAkashiViewService.class);
+            qintent.setAction(SHOW_AKASHIVIEW_ACTION);
+            startService(qintent);
+        });
+
+
+        fleetView.findViewById(R.id.fleetview_tool).setOnClickListener(v -> {
+            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Tools"), null);
+            if (fleetView != null) fleetView.setVisibility(GONE);
+            if (itemView != null) itemView.setVisibility(GONE);
+            Intent toolIntent = new Intent(KcaFleetViewService.this, ToolsActivity.class);
+            toolIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(toolIntent);
+        });
+        fleetView.findViewById(R.id.fleetview_cn_change).setOnClickListener(v -> {
+            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("CnChange"), null);
+            changeInternalSeekCn();
+            fleetCnChangeBtn.setText(getSeekType());
+            processDeckInfo(selectedFleetIndex, isCombinedFlag(selectedFleetIndex));
+        });
+        fleetView.findViewById(R.id.fleetview_fleetswitch).setOnClickListener(v -> {
+            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("FleetChange"), null);
+            if (switch_status == 1) {
+                switch_status = 2;
+                fleetView.findViewById(R.id.fleet_list_main).setVisibility(View.GONE);
+                fleetView.findViewById(R.id.fleet_list_combined).setVisibility(VISIBLE);
+                ((TextView) fleetView.findViewById(R.id.fleetview_fleetswitch)).setText(getStringWithLocale(R.string.fleetview_switch_2));
+            } else {
+                switch_status = 1;
+                fleetView.findViewById(R.id.fleet_list_main).setVisibility(VISIBLE);
+                fleetView.findViewById(R.id.fleet_list_combined).setVisibility(View.GONE);
+                ((TextView) fleetView.findViewById(R.id.fleetview_fleetswitch)).setText(getStringWithLocale(R.string.fleetview_switch_1));
+            }
+        });
+        fleetView.findViewById(R.id.fleetview_hqinfo).setOnClickListener(v -> {
+            setNextState();
+            JsonObject statProperties = new JsonObject();
+            statProperties.addProperty("state", hqinfoState);
+            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("HqInfo"), statProperties);
+            setHqInfo();
+        });
         for (int i = 0; i < 5; i++) {
-            mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
+            int finalI = i;
+            fleetView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnClickListener(v -> {
+                selectedFleetIndex = finalI;
+                setView();
+            });
         }
+
         for (int i = 0; i < 12; i++) {
-//            mView.findViewById(getId("fleetview_item_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
-            getFleetViewItem(i).setOnTouchListener(mViewTouchListener);
+            getFleetViewItem(i).setOnTouchListener(fleetViewItemTouchListener);
         }
 
         setFleetMenu();
-        mParams = new WindowManager.LayoutParams(
+        layoutParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 getWindowLayoutType(),
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                 PixelFormat.TRANSLUCENT);
-        mParams.gravity = KcaUtils.getGravity(view_status);
+        layoutParams.gravity = Gravity.TOP;
+
+        fleetView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            if (bottom - top == oldBottom - oldTop) return;
+            fleetViewHeight = bottom - top;
+            layoutParams.y = (screenHeight - fleetViewHeight) * (view_status + 1) / 2;
+            if ((fleetView.getParent() != null)) {
+                windowManager.updateViewLayout(fleetView, layoutParams);
+            }
+        });
+        // Hide at bottom before the fleetView is first rendered
+        layoutParams.y = screenHeight;
         setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
 
-        fleetInfoLine = mView.findViewById(R.id.fleetview_infoline);
-        fleetInfoLine.setOnTouchListener(mViewTouchListener);
-
-        fleetInfoTitle = mView.findViewById(R.id.fleetview_title);
-        fleetHqInfoView = mView.findViewById(R.id.fleetview_hqinfo);
-        fleetCnChangeBtn = mView.findViewById(R.id.fleetview_cn_change);
-        fleetAkashiTimerBtn = mView.findViewById(R.id.fleetview_akashi_timer);
-        fleetSwitchBtn = mView.findViewById(R.id.fleetview_fleetswitch);
+        fleetInfoLine = fleetView.findViewById(R.id.fleetview_infoline);
+        fleetInfoTitle = fleetView.findViewById(R.id.fleetview_title);
+        fleetHqInfoView = fleetView.findViewById(R.id.fleetview_hqinfo);
+        fleetCnChangeBtn = fleetView.findViewById(R.id.fleetview_cn_change);
+        fleetAkashiTimerBtn = fleetView.findViewById(R.id.fleetview_akashi_timer);
+        fleetSwitchBtn = fleetView.findViewById(R.id.fleetview_fleetswitch);
         fleetSwitchBtn.setVisibility(View.GONE);
-        fleetShipArea = mView.findViewById(R.id.fleetview_shiparea);
-        fleetMenu = mView.findViewById(R.id.fleetview_menu);
-        fleetMenuArrowUp = mView.findViewById(R.id.fleetview_menu_up);
-        fleetMenuArrowDown = mView.findViewById(R.id.fleetview_menu_down);
+
+        fleetMenu = fleetView.findViewById(R.id.fleetview_menu);
+        fleetMenuArrowUp = fleetView.findViewById(R.id.fleetview_menu_up);
+        fleetMenuArrowDown = fleetView.findViewById(R.id.fleetview_menu_down);
         fleetMenu.setOnTouchListener((view, motionEvent) -> {
             ViewTreeObserver observer = fleetMenu.getViewTreeObserver();
             observer.addOnScrollChangedListener(fleetMenuScrollChangeListener);
@@ -423,8 +548,8 @@ public class KcaFleetViewService extends Service {
                     fleetMenuArrowDown.setVisibility(View.GONE);
                     fleetMenuArrowUp.setAlpha(0.9f);
                 } else {
-                    fleetMenuArrowUp.setVisibility(View.VISIBLE);
-                    fleetMenuArrowDown.setVisibility(View.VISIBLE);
+                    fleetMenuArrowUp.setVisibility(VISIBLE);
+                    fleetMenuArrowDown.setVisibility(VISIBLE);
                     fleetMenuArrowUp.setAlpha(0.6f);
                     fleetMenuArrowDown.setAlpha(0.6f);
                 }
@@ -434,44 +559,42 @@ public class KcaFleetViewService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(SHOW_FLEETVIEW_ACTION)) {
-                if (mView != null && mView.getVisibility() != View.VISIBLE) {
+                if (fleetView != null && fleetView.getVisibility() != VISIBLE) {
                     if (seekcn_internal == -1) seekcn_internal = getSeekCn();
                     fleetCnChangeBtn.setText(getSeekType());
-                    int setViewResult = setView();
-                    if (setViewResult == 0) {
-                        mView.setVisibility(View.VISIBLE);
-                        if (mView.getParent() != null) {
-                            mManager.removeViewImmediate(mView);
+                    if (setView()) {
+                        fleetView.setVisibility(VISIBLE);
+                        if (fleetView.getParent() != null) {
+                            windowManager.removeViewImmediate(fleetView);
                         }
-                        mManager.addView(mView, mParams);
+                        windowManager.addView(fleetView, layoutParams);
                     }
                     sendUserAnalytics(getApplicationContext(), OPEN_FLEETVIEW, null);
                 }
             }
             if (intent.getAction().equals(REFRESH_FLEETVIEW_ACTION)) {
-                int setViewResult = setView();
-                if (setViewResult == 0) {
-                    if (mView != null && mView.getParent() != null) {
-                        mView.invalidate();
-                        mManager.updateViewLayout(mView, mParams);
+                if (setView()) {
+                    if (fleetView != null && fleetView.getParent() != null) {
+                        fleetView.invalidate();
+                        windowManager.updateViewLayout(fleetView, layoutParams);
                     }
                 }
             }
             if (intent.getAction().equals(CLOSE_FLEETVIEW_ACTION)) {
-                if (mView != null) {
-                    mView.setVisibility(GONE);
-                    if (mView.getParent() != null) {
-                        mManager.removeViewImmediate(mView);
+                if (fleetView != null) {
+                    fleetView.setVisibility(GONE);
+                    if (fleetView.getParent() != null) {
+                        windowManager.removeViewImmediate(fleetView);
                     }
+                    snapIndicator.remove();
                     itemView.setVisibility(GONE);
                     if (itemView.getParent() != null) {
-                        mManager.removeViewImmediate(itemView);
+                        windowManager.removeViewImmediate(itemView);
                     }
                     JsonObject statProperties = new JsonObject();
                     statProperties.addProperty("manual", false);
@@ -482,211 +605,186 @@ public class KcaFleetViewService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
-        private static final int MAX_CLICK_DURATION = 200;
-        private long startClickTime = -1;
-        private long clickDuration;
-        private float mBeforeY, mAfterY;
 
+    private int startViewX, startViewY; // Starting view x y
+    private final View.OnTouchListener draggableLayoutTouchListener = new View.OnTouchListener() {
+        private float startRawX, startRawY; // Starting finger x y
+        private final float[] lastX = new float[3];
+        private final float[] lastY = new float[3];
+        private final long[] lastT = new long[3];
+        private int curr = 0;
+        @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            boolean view_fix = getBooleanPreferences(getApplicationContext(), PREF_FIX_VIEW_LOC);
-            WindowManager.LayoutParams itemViewParams;
-            int xMargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
+            if (getBooleanPreferences(getApplicationContext(), PREF_FIX_VIEW_LOC)) {
+                return false;
+            }
 
-            Intent qintent;
-            int id = v.getId();
+            int maxY = screenHeight - fleetView.getHeight();
+            float finalX, finalY;
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    Log.e("KCA-FV", "ACTION_DOWN");
-                    mBeforeY = event.getRawY();
-                    mAfterY = event.getRawY();
-                    startClickTime = Calendar.getInstance().getTimeInMillis();
-                    if (id == fleetInfoLine.getId()) {
-                        fleetInfoLine.setSelected(true);
-                    }
-                    for (int i = 0; i < 12; i++) {
-//                        String item_id = "fleetview_item_".concat(String.valueOf(i + 1));
-//                        if (id == mView.findViewById(getId(item_id, R.id.class)).getId()) {
-                        if (id == getFleetViewItem(i).getId()) {
-                            JsonArray data;
-                            JsonObject udata, kcdata;
-
-                            if (isCombinedFlag(selected)) {
-                                if (i < 6) {
-                                    data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 0, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
-                                } else {
-                                    data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 1, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
-                                }
-                                udata = data.get(i % 6).getAsJsonObject().getAsJsonObject("user");
-                                kcdata = data.get(i % 6).getAsJsonObject().getAsJsonObject("kc");
-                            } else {
-                                data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), selected, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
-                                udata = data.get(i).getAsJsonObject().getAsJsonObject("user");
-                                kcdata = data.get(i).getAsJsonObject().getAsJsonObject("kc");
-                            }
-
-                            String ship_id = udata.get("ship_id").getAsString();
-                            int ship_married = udata.get("lv").getAsInt() >= 100 ? 1 : 0;
-                            JsonObject itemdata = new JsonObject();
-                            itemdata.add("api_slot", udata.get("slot"));
-                            itemdata.add("api_slot_ex", udata.get("slot_ex"));
-                            itemdata.add("api_onslot", udata.get("onslot"));
-                            itemdata.add("api_maxslot", kcdata.get("maxeq"));
-
-                            setItemViewLayout(itemdata, ship_id, ship_married);
-                            itemViewParams = new WindowManager.LayoutParams(
-                                    WindowManager.LayoutParams.WRAP_CONTENT,
-                                    WindowManager.LayoutParams.WRAP_CONTENT,
-                                    getWindowLayoutType(),
-                                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                                    PixelFormat.TRANSLUCENT);
-                            itemViewParams.x = (int) (event.getRawX() + xMargin);
-                            itemViewParams.y = (int) event.getRawY();
-                            itemViewParams.gravity = Gravity.TOP | Gravity.LEFT;
-                            if (itemView.getParent() != null) {
-                                mManager.removeViewImmediate(itemView);
-                            }
-                            mManager.addView(itemView, itemViewParams);
-                        }
-                    }
+                    startRawX = event.getRawX();
+                    startRawY = event.getRawY();
+                    lastX[curr] = startRawX;
+                    lastY[curr] = startRawY;
+                    lastT[curr] = Calendar.getInstance().getTimeInMillis();
+                    curr = (curr + 1) % 3;
+                    startViewX = layoutParams.x;
+                    startViewY = layoutParams.y;
+                    Log.e("KCA", KcaUtils.format("mView: %d %d", startViewX, startViewY));
+                    snapIndicator.show(layoutParams.y, maxY, fleetViewHeight);
+                    fleetView.cancelAnimations();
                     break;
                 case MotionEvent.ACTION_UP:
-                    Log.e("KCA-FV", "ACTION_UP");
-                    clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-                    if (id == fleetInfoLine.getId()) {
-                        fleetInfoLine.setSelected(false);
+                    float dx = event.getRawX() - lastX[(curr + 1) % 3];
+                    float dy = event.getRawY() - lastY[(curr + 1) % 3];
+                    long dt = Calendar.getInstance().getTimeInMillis() - lastT[(curr + 1) % 3];
+                    float finalXUncap = layoutParams.x + dx / dt * 400;
+                    float finalYUncap = layoutParams.y + dy / dt * 400;
+                    finalX = 0f;
+                    // Snap to either top, center, or bottom
+                    if (finalYUncap < maxY / 4f) {
+                        finalY = 0;
+                        view_status = -1;
+                    } else if (finalYUncap < maxY / 4f * 3f) {
+                        finalY = maxY / 2f;
+                        view_status = 0;
+                    } else {
+                        finalY = maxY;
+                        view_status = 1;
                     }
+                    fleetView.animateTo(layoutParams.x, layoutParams.y,
+                            0, (int) finalY,
+                            finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
+                            500, windowManager, layoutParams);
+                    snapIndicator.remove();
 
-                    for (int i = 0; i < 12; i++) {
-//                        String item_id = "fleetview_item_".concat(String.valueOf(i + 1));
-//                        if (id == mView.findViewById(getId(item_id, R.id.class)).getId()) {
-                        if (id == getFleetViewItem(i).getId()) {
-                            itemView.setVisibility(GONE);
-                            break;
-                        }
-                    }
-
-                    int y_direction = (int) (mAfterY - mBeforeY);
-                    if (!view_fix && Math.abs(y_direction) > 400) {
-                        int status_change = y_direction > 0 ? 1 : -1;
-                        view_status = Math.min(Math.max(view_status + status_change, -1), 1);
-                        mParams.gravity = KcaUtils.getGravity(view_status);
-                        mManager.updateViewLayout(mView, mParams);
-                        setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
-                    }
-
-                    if (clickDuration < MAX_CLICK_DURATION) {
-                        if (id == mView.findViewById(R.id.fleetview_head).getId()) {
-                            JsonObject statProperties = new JsonObject();
-                            statProperties.addProperty("manual", true);
-                            if (mView != null) mView.setVisibility(GONE);
-                            if (itemView != null) itemView.setVisibility(GONE);
-                        } else if (id == mView.findViewById(R.id.fleetview_tool).getId()) {
-                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Tools"), null);
-                            if (mView != null) mView.setVisibility(GONE);
-                            if (itemView != null) itemView.setVisibility(GONE);
-                            Intent toolIntent = new Intent(KcaFleetViewService.this, ToolsActivity.class);
-                            toolIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(toolIntent);
-                        } else if (id == mView.findViewById(R.id.fleetview_cn_change).getId()) {
-                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("CnChange"), null);
-                            changeInternalSeekCn();
-                            fleetCnChangeBtn.setText(getSeekType());
-                            processDeckInfo(selected, isCombinedFlag(selected));
-                        } else if (id == mView.findViewById(R.id.fleetview_fleetswitch).getId()) {
-                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("FleetChange"), null);
-                            if (switch_status == 1) {
-                                switch_status = 2;
-                                mView.findViewById(R.id.fleet_list_main).setVisibility(View.GONE);
-                                mView.findViewById(R.id.fleet_list_combined).setVisibility(View.VISIBLE);
-                                ((TextView) mView.findViewById(R.id.fleetview_fleetswitch)).setText(getStringWithLocale(R.string.fleetview_switch_2));
-                            } else {
-                                switch_status = 1;
-                                mView.findViewById(R.id.fleet_list_main).setVisibility(View.VISIBLE);
-                                mView.findViewById(R.id.fleet_list_combined).setVisibility(View.GONE);
-                                ((TextView) mView.findViewById(R.id.fleetview_fleetswitch)).setText(getStringWithLocale(R.string.fleetview_switch_1));
-                            }
-                        } else if (id == mView.findViewById(R.id.fleetview_hqinfo).getId()) {
-                            setNextState();
-                            JsonObject statProperties = new JsonObject();
-                            statProperties.addProperty("state", hqinfoState);
-                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("HqInfo"), statProperties);
-                            setHqInfo();
-                        } else if (id == mView.findViewById(R.id.viewbutton_quest).getId()) {
-                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Quest"), null);
-                            qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
-                            qintent.setAction(SHOW_QUESTVIEW_ACTION_NEW);
-                            startService(qintent);
-                        } else if (id == mView.findViewById(R.id.viewbutton_akashi).getId()) {
-                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Akashi"), null);
-                            qintent = new Intent(getBaseContext(), KcaAkashiViewService.class);
-                            qintent.setAction(SHOW_AKASHIVIEW_ACTION);
-                            startService(qintent);
-                        } else if (id == mView.findViewById(R.id.viewbutton_develop).getId()) {
-                            if (isGameDataLoaded()) {
-                                sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Develop"), null);
-                                qintent = new Intent(getBaseContext(), KcaDevelopPopupService.class);
-                                startService(qintent);
-                            }
-                        } else if (id == mView.findViewById(R.id.viewbutton_construction).getId()) {
-                            if (isGameDataLoaded()) {
-                                sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Constr"), null);
-                                qintent = new Intent(getBaseContext(), KcaConstructPopupService.class);
-                                qintent.setAction(KcaConstructPopupService.CONSTR_DATA_ACTION);
-                                startService(qintent);
-                            }
-                        } else if (id == mView.findViewById(R.id.viewbutton_docking).getId()) {
-                            if (isGameDataLoaded()) {
-                                sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Docking"), null);
-                                qintent = new Intent(getBaseContext(), KcaDockingPopupService.class);
-                                qintent.setAction(KcaDockingPopupService.DOCKING_DATA_ACTION);
-                                startService(qintent);
-                            }
-                        } else if (id == mView.findViewById(R.id.viewbutton_maphp).getId()) {
-                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("MapHP"), null);
-                            qintent = new Intent(getBaseContext(), KcaMapHpPopupService.class);
-                            qintent.setAction(KcaMapHpPopupService.MAPHP_SHOW_ACTION);
-                            startService(qintent);
-                        } else if (id == mView.findViewById(R.id.viewbutton_fchk).getId()) {
-                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("FleetCheck"), null);
-                            qintent = new Intent(getBaseContext(), KcaFleetCheckPopupService.class);
-                            qintent.setAction(KcaFleetCheckPopupService.FCHK_SHOW_ACTION);
-                            startService(qintent);
-                        } else if (id == mView.findViewById(R.id.viewbutton_labinfo).getId()) {
-                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("LandAirBaseInfo"), null);
-                            qintent = new Intent(getBaseContext(), KcaLandAirBasePopupService.class);
-                            qintent.setAction(KcaLandAirBasePopupService.LAB_DATA_ACTION);
-                            startService(qintent);
-                        } else if (id == mView.findViewById(R.id.viewbutton_excheck).getId()) {
-                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("ExpeditionCheck"), null);
-                            qintent = new Intent(getBaseContext(), KcaExpeditionCheckViewService.class);
-                            qintent.setAction(KcaExpeditionCheckViewService.SHOW_EXCHECKVIEW_ACTION.concat("/").concat(String.valueOf(selected)));
-                            startService(qintent);
-                        } else {
-                            for (int i = 0; i < 5; i++) {
-                                if (id == mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).getId()) {
-                                    selected = i;
-                                    setView();
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
+                    // Save new preference to DB
+                    setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    mAfterY = event.getRawY();
+                    int x = (int) (event.getRawX() - startRawX);
+                    int y = (int) (event.getRawY() - startRawY);
+                    Log.e("KCA", KcaUtils.format("Coord: %d %d", x, y));
+
+                    lastX[curr] = event.getRawX();
+                    lastY[curr] = event.getRawY();
+                    lastT[curr] = Calendar.getInstance().getTimeInMillis();
+                    curr = (curr + 1) % 3;
+                    finalX = startViewX + x;
+                    finalY = startViewY + y;
+
+                    layoutParams.x = (int) finalX;
+                    layoutParams.y = (int) finalY;
+
+                    windowManager.updateViewLayout(fleetView, layoutParams);
+                    snapIndicator.update(finalY, maxY);
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    fleetView.cancelAnimations();
+                    snapIndicator.remove();
+                    layoutParams.x = startViewX;
+                    layoutParams.y = startViewY;
+                    windowManager.updateViewLayout(fleetView, layoutParams);
                     break;
             }
-            if (id == mView.findViewById(R.id.fleetview_shiparea).getId()) return false;
-            else return true;
+            return false;
         }
     };
 
-    private View.OnTouchListener mPopupTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener fleetViewItemTouchListener = new View.OnTouchListener() {
+        private boolean isInsideView(View view, float x, float y) {
+            int[] location = new int[2];
+            view.getLocationOnScreen(location);
+
+            float viewLeft = location[0];
+            float viewTop = location[1];
+            float viewRight = viewLeft + view.getWidth();
+            float viewBottom = viewTop + view.getHeight();
+
+            return (x >= viewLeft && x <= viewRight && y >= viewTop && y <= viewBottom);
+        }
+
+        final WindowManager.LayoutParams itemViewParams = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                getWindowLayoutType(),
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
+
+        int selected = -1;
+        @SuppressLint({"RtlHardcoded", "ClickableViewAccessibility"})
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            int margin = (int) getResources().getDimension(R.dimen.item_popup_margin);
+
+            float x = event.getRawX();
+            float y = event.getRawY();
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_MOVE:
+                case MotionEvent.ACTION_DOWN:
+                    Log.e("KCA-FV", "ACTION_DOWN");
+                    for (int i = 0; i < 12; i++) {
+                        // Check the x, y position is inside the view, instead of id
+                        // because the ACTION_MOVE event is fired on the original start-touch item, not the item current touching
+                        if (isInsideView(getFleetViewItem(i), x , y)) {
+                            if (selected != i) {
+                                // Reload data if selecting another ship
+                                JsonArray data;
+                                int shipIndex;
+                                if (isCombinedFlag(selectedFleetIndex)) {
+                                    if (i < 6) {
+                                        data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 0, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
+                                    } else {
+                                        data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 1, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
+                                    }
+                                    shipIndex = i % 6;
+                                } else {
+                                    data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), selectedFleetIndex, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
+                                    shipIndex = i;
+                                }
+                                if (shipIndex < data.size()) {
+                                    JsonObject udata = data.get(shipIndex).getAsJsonObject().getAsJsonObject("user");
+                                    JsonObject kcdata = data.get(shipIndex).getAsJsonObject().getAsJsonObject("kc");
+
+                                    String ship_id = udata.get("ship_id").getAsString();
+                                    int ship_married = udata.get("lv").getAsInt() >= 100 ? 1 : 0;
+                                    JsonObject itemData = new JsonObject();
+                                    itemData.add("api_slot", udata.get("slot"));
+                                    itemData.add("api_slot_ex", udata.get("slot_ex"));
+                                    itemData.add("api_onslot", udata.get("onslot"));
+                                    itemData.add("api_maxslot", kcdata.get("maxeq"));
+                                    setItemViewLayout(itemData, ship_id, ship_married);
+                                }
+                            }
+
+                            itemViewParams.x = (int) (event.getRawX() + margin);
+                            itemViewParams.y = screenHeight - (int) event.getRawY() + 2 * margin;
+                            itemViewParams.gravity = Gravity.BOTTOM | Gravity.LEFT;
+
+                            if (itemView.getParent() != null) {
+                                if (selected == -1 || selected != i) {
+                                    // Selection changed
+                                    windowManager.removeViewImmediate(itemView);
+                                    windowManager.addView(itemView, itemViewParams);
+                                } else {
+                                    windowManager.updateViewLayout(itemView, itemViewParams);
+                                }
+                            } else {
+                                windowManager.addView(itemView, itemViewParams);
+                            }
+                            selected = i;
+                            return true;
+                        }
+                    }
+                case MotionEvent.ACTION_UP:
+                    Log.e("KCA-FV", "ACTION_UP");
+                    itemView.setVisibility(GONE);
+                    selected = -1;
+                    break;
+            }
             return false;
         }
     };
@@ -703,8 +801,8 @@ public class KcaFleetViewService extends Service {
             fleetCalcInfoText = "";
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNoShip));
             fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
-            mView.findViewById(R.id.fleet_list_main).setVisibility(INVISIBLE);
-            mView.findViewById(R.id.fleet_list_combined).setVisibility(is_landscape? INVISIBLE : View.GONE);
+            fleetView.findViewById(R.id.fleet_list_main).setVisibility(INVISIBLE);
+            fleetView.findViewById(R.id.fleet_list_combined).setVisibility(is_landscape? INVISIBLE : View.GONE);
             fleetSwitchBtn.setVisibility(View.GONE);
             return;
         }
@@ -713,38 +811,38 @@ public class KcaFleetViewService extends Service {
             fleetCalcInfoText = "Not Opened";
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNoShip));
             fleetInfoLine.setText(fleetCalcInfoText);
-            mView.findViewById(R.id.fleet_list_main).setVisibility(INVISIBLE);
-            mView.findViewById(R.id.fleet_list_combined).setVisibility(is_landscape? INVISIBLE : View.GONE);
+            fleetView.findViewById(R.id.fleet_list_main).setVisibility(INVISIBLE);
+            fleetView.findViewById(R.id.fleet_list_combined).setVisibility(is_landscape? INVISIBLE : View.GONE);
             fleetSwitchBtn.setVisibility(View.GONE);
             return;
         }
 
-        if(is_landscape) {
+        if (is_landscape) {
             fleetSwitchBtn.setVisibility(View.GONE);
-            mView.findViewById(R.id.fleet_list_main).setVisibility(View.VISIBLE);
-            mView.findViewById(R.id.fleet_list_combined).setVisibility(is_combined ? View.VISIBLE : INVISIBLE);
+            fleetView.findViewById(R.id.fleet_list_main).setVisibility(VISIBLE);
+            fleetView.findViewById(R.id.fleet_list_combined).setVisibility(is_combined ? VISIBLE : INVISIBLE);
         } else {
             boolean switch_is_one = switch_status == 1;
-            fleetSwitchBtn.setVisibility(is_combined ? View.VISIBLE : View.GONE);
-            mView.findViewById(R.id.fleet_list_main).setVisibility((!is_combined || switch_is_one) ? View.VISIBLE : View.GONE);
-            mView.findViewById(R.id.fleet_list_combined).setVisibility((is_combined && !switch_is_one) ? View.VISIBLE : View.GONE);
+            fleetSwitchBtn.setVisibility(is_combined ? VISIBLE : View.GONE);
+            fleetView.findViewById(R.id.fleet_list_main).setVisibility((!is_combined || switch_is_one) ? VISIBLE : View.GONE);
+            fleetView.findViewById(R.id.fleet_list_combined).setVisibility((is_combined && !switch_is_one) ? VISIBLE : View.GONE);
         }
 
         int cn = seekcn_internal;
         List<String> infoList = new ArrayList<>();
 
-        String airPowerValue = "";
+        String airPowerValue;
         if (isCombined) {
             airPowerValue = deckInfoCalc.getAirPowerRangeString(deckportdata, 0, KcaBattle.getEscapeFlag());
         } else {
             airPowerValue = deckInfoCalc.getAirPowerRangeString(deckportdata, idx, null);
         }
-        if (airPowerValue.length() > 0) {
+        if (!airPowerValue.isEmpty()) {
             infoList.add(airPowerValue);
         }
 
-        double seekValue = 0;
-        String seekStringValue = "";
+        double seekValue;
+        String seekStringValue;
         if (isCombined) {
             seekValue = deckInfoCalc.getSeekValue(deckportdata, "0,1", cn, KcaBattle.getEscapeFlag());
         } else {
@@ -757,7 +855,7 @@ public class KcaFleetViewService extends Service {
         }
         infoList.add(seekStringValue);
 
-        String speedStringValue = "";
+        String speedStringValue;
         if (isCombined) {
             speedStringValue = deckInfoCalc.getSpeedString(deckportdata, "0,1", KcaBattle.getEscapeFlag());
         } else {
@@ -765,7 +863,7 @@ public class KcaFleetViewService extends Service {
         }
         infoList.add(speedStringValue);
 
-        String tpValue = "";
+        String tpValue;
         if (isCombined) {
             tpValue = deckInfoCalc.getTPString(deckportdata, "0,1", KcaBattle.getEscapeFlag());
         } else {
@@ -786,24 +884,24 @@ public class KcaFleetViewService extends Service {
 
             int[] ship_id_list = deckInfoCalc.getDeckList(deckportdata, idx);
             if (ship_id_list.length > 6) { // if need to show combined fleet (maybe 遊撃艦隊)
-                mView.findViewById(R.id.fleet_list_combined).setVisibility(View.VISIBLE);
+                fleetView.findViewById(R.id.fleet_list_combined).setVisibility(VISIBLE);
             }
 
             sum_level += setFleetInfo(ship_id_list, 0);
         }
 
-        isAkashiTimerActive = deckInfoCalc.checkAkashiFlagship(deckportdata).size() > 0;
+        isAkashiTimerActive = !deckInfoCalc.checkAkashiFlagship(deckportdata).isEmpty();
 
         infoList.add("LV ".concat(String.valueOf(sum_level)));
         fleetCalcInfoText = joinStr(infoList, " / ");
         long moraleCompleteTime;
-        if (selected == FLEET_COMBINED_ID) {
+        if (selectedFleetIndex == FLEET_COMBINED_ID) {
             moraleCompleteTime = Math.max(KcaMoraleInfo.getMoraleCompleteTime(0),
                     KcaMoraleInfo.getMoraleCompleteTime(1));
         } else {
-            moraleCompleteTime = KcaMoraleInfo.getMoraleCompleteTime(selected);
+            moraleCompleteTime = KcaMoraleInfo.getMoraleCompleteTime(selectedFleetIndex);
         }
-        if (selected < 4 && KcaExpedition2.isInExpedition(selected)) {
+        if (selectedFleetIndex < 4 && KcaExpedition2.isInExpedition(selectedFleetIndex)) {
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpedition));
         } else if (moraleCompleteTime > 0) {
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNotGoodStatus));
@@ -846,10 +944,10 @@ public class KcaFleetViewService extends Service {
      */
     private KcaFleetViewListItem getFleetViewItem(int index) {
         if (index < 6) {
-            ViewGroup main = mView.findViewById(R.id.fleet_list_main);
+            ViewGroup main = fleetView.findViewById(R.id.fleet_list_main);
             return (KcaFleetViewListItem) main.getChildAt(index);
         } else {
-            ViewGroup combined = mView.findViewById(R.id.fleet_list_combined);
+            ViewGroup combined = fleetView.findViewById(R.id.fleet_list_combined);
             return (KcaFleetViewListItem) combined.getChildAt(index - 6);
         }
     }
@@ -859,15 +957,14 @@ public class KcaFleetViewService extends Service {
     }
 
     public void updateFleetInfoLine(long moraleCompleteTime) {
-        boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         final String displayText;
         if (KcaService.isPortAccessed) {
             if (moraleCompleteTime < -1) {
-                if (selected == FLEET_COMBINED_ID) {
+                if (selectedFleetIndex == FLEET_COMBINED_ID) {
                     moraleCompleteTime = Math.max(KcaMoraleInfo.getMoraleCompleteTime(0),
                             KcaMoraleInfo.getMoraleCompleteTime(1));
                 } else {
-                    moraleCompleteTime = KcaMoraleInfo.getMoraleCompleteTime(selected);
+                    moraleCompleteTime = KcaMoraleInfo.getMoraleCompleteTime(selectedFleetIndex);
                 }
             }
             if (moraleCompleteTime > 0) {
@@ -883,35 +980,36 @@ public class KcaFleetViewService extends Service {
 
         final String akashi_timer_text = KcaUtils.getTimeStr(KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond());
 
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (isReady && displayText.length() > 0) {
-                    if (!displayText.contentEquals(fleetInfoLine.getText())) {
-                        fleetInfoLine.setText(displayText);
-                    }
-
-                    long akashiTimerValue = KcaAkashiRepairInfo.getAkashiTimerValue();
-                    boolean isAkashiActive = akashiTimerValue >= 0 && isAkashiTimerActive;
-                    for (int i = 0; i < 12; i++) {
-                        getFleetViewItem(i).setAkashiTimer(isAkashiActive);
-                    }
-
-                    if (akashiTimerValue < 0) {
-                        fleetAkashiTimerBtn.setVisibility(View.GONE);
-                    } else {
-                        if (isAkashiTimerActive) {
-                            fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnActive));
-                        } else {
-                            fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnDeactive));
-                        }
-                        fleetAkashiTimerBtn.setText(akashi_timer_text);
-                        fleetAkashiTimerBtn.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
-                    fleetAkashiTimerBtn.setVisibility(View.GONE);
+        mHandler.post(() -> {
+            if (isReady && !displayText.isEmpty()) {
+                if (!displayText.contentEquals(fleetInfoLine.getText())) {
+                    fleetInfoLine.setText(displayText);
                 }
+
+                long akashiTimerValue = KcaAkashiRepairInfo.getAkashiTimerValue();
+                boolean isAkashiActive = akashiTimerValue >= 0 && isAkashiTimerActive;
+                for (int i = 0; i < 12; i++) {
+                    getFleetViewItem(i).setAkashiTimer(isAkashiActive);
+                }
+
+                if (akashiTimerValue < 0) {
+                    fleetAkashiTimerBtn.setVisibility(View.GONE);
+                } else {
+                    if (isAkashiTimerActive) {
+                        fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnActive));
+                    } else {
+                        fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnDeactive));
+                    }
+                    if (!akashi_timer_text.contentEquals(fleetAkashiTimerBtn.getText())) {
+                        fleetAkashiTimerBtn.setText(akashi_timer_text);
+                    }
+                    fleetAkashiTimerBtn.setVisibility(VISIBLE);
+                }
+            } else {
+                if (!getStringWithLocale(R.string.kca_init_content).contentEquals(fleetInfoLine.getText())) {
+                    fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
+                }
+                fleetAkashiTimerBtn.setVisibility(View.GONE);
             }
         });
     }
@@ -947,7 +1045,7 @@ public class KcaFleetViewService extends Service {
                 int lv = 0;
                 int alv = -1;
                 if (onslot != null) {
-                    Log.e("KCA", "item_id: " + String.valueOf(item_id));
+                    Log.e("KCA", "item_id: " + item_id);
                     kcItemData = getUserItemStatusById(item_id, "level,alv", "id,type,name");
                     if (kcItemData == null) continue;
                     Log.e("KCA", kcItemData.toString());
@@ -959,7 +1057,7 @@ public class KcaFleetViewService extends Service {
                     if (lv > 0) {
                         ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)))
                                 .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
-                        itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(View.VISIBLE);
+                        itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(VISIBLE);
                     } else {
                         itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(GONE);
                     }
@@ -970,7 +1068,7 @@ public class KcaFleetViewService extends Service {
                         int alvColorId = (alv <= 3) ? 1 : 2;
                         ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), getId(KcaUtils.format("itemalv%d", alvColorId), R.color.class)));
-                        itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)).setVisibility(View.VISIBLE);
+                        itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)).setVisibility(VISIBLE);
                     } else {
                         itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)).setVisibility(GONE);
                     }
@@ -978,12 +1076,12 @@ public class KcaFleetViewService extends Service {
                     int itemtype = kcItemData.getAsJsonArray("type").get(2).getAsInt();
                     if (isItemAircraft(itemtype)) {
                         onslot_count += 1;
-                        Log.e("KCA", "ID: " + String.valueOf(itemtype));
+                        Log.e("KCA", "ID: " + itemtype);
                         int nowSlotValue = onslot.get(i).getAsInt();
                         int maxSlotValue = maxslot.get(i).getAsInt();
                         ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)))
                                 .setText(KcaUtils.format("[%02d/%02d]", nowSlotValue, maxSlotValue));
-                        itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.VISIBLE);
+                        itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(VISIBLE);
                     } else {
                         itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(INVISIBLE);
                     }
@@ -1008,7 +1106,7 @@ public class KcaFleetViewService extends Service {
                 }
 
                 int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
-                int typeres = 0;
+                int typeres;
                 try {
                     typeres = getId(KcaUtils.format("item_%d", type), R.mipmap.class);
                 } catch (Exception e) {
@@ -1024,7 +1122,7 @@ public class KcaFleetViewService extends Service {
                 }
 
                 ((ImageView) itemView.findViewById(getId(KcaUtils.format("item%d_icon", i + 1), R.id.class))).setImageResource(typeres);
-                itemView.findViewById(getId("item".concat(String.valueOf(i + 1)), R.id.class)).setVisibility(View.VISIBLE);
+                itemView.findViewById(getId("item".concat(String.valueOf(i + 1)), R.id.class)).setVisibility(VISIBLE);
             }
         }
 
@@ -1037,7 +1135,7 @@ public class KcaFleetViewService extends Service {
                     String kcItemName = getSlotItemTranslation(kcItemData.get("name").getAsString());
                     int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
                     int lv = kcItemData.get("level").getAsInt();
-                    int typeres = 0;
+                    int typeres;
                     try {
                         typeres = getId(KcaUtils.format("item_%d", type), R.mipmap.class);
                     } catch (Exception e) {
@@ -1045,11 +1143,11 @@ public class KcaFleetViewService extends Service {
                     }
                     ((TextView) itemView.findViewById(R.id.item_ex_name)).setText(kcItemName);
                     ((ImageView) itemView.findViewById(R.id.item_ex_icon)).setImageResource(typeres);
-                    itemView.findViewById(R.id.item_ex_icon).setVisibility(View.VISIBLE);
+                    itemView.findViewById(R.id.item_ex_icon).setVisibility(VISIBLE);
                     if (lv > 0) {
                         ((TextView) itemView.findViewById(R.id.item_ex_level))
                                 .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
-                        itemView.findViewById(R.id.item_ex_level).setVisibility(View.VISIBLE);
+                        itemView.findViewById(R.id.item_ex_level).setVisibility(VISIBLE);
                     } else {
                         itemView.findViewById(R.id.item_ex_level).setVisibility(GONE);
                     }
@@ -1063,7 +1161,7 @@ public class KcaFleetViewService extends Service {
                 itemView.findViewById(R.id.item_ex_level).setVisibility(GONE);
                 itemView.findViewById(R.id.item_ex_slot_list).setVisibility(INVISIBLE);
             }
-            itemView.findViewById(R.id.view_slot_ex).setVisibility(View.VISIBLE);
+            itemView.findViewById(R.id.view_slot_ex).setVisibility(VISIBLE);
         } else {
             itemView.findViewById(R.id.view_slot_ex).setVisibility(GONE);
         }
@@ -1075,7 +1173,7 @@ public class KcaFleetViewService extends Service {
             itemView.findViewById(R.id.item_slot_list).setVisibility(GONE);
             itemView.findViewById(R.id.item_ex_slot_list).setVisibility(GONE);
         } else {
-            itemView.findViewById(R.id.item_slot_list).setVisibility(View.VISIBLE);
+            itemView.findViewById(R.id.item_slot_list).setVisibility(VISIBLE);
         }
 
         if (slot_count == 0) {
@@ -1085,9 +1183,9 @@ public class KcaFleetViewService extends Service {
             itemView.findViewById(R.id.item1_level).setVisibility(GONE);
             itemView.findViewById(R.id.item1_alv).setVisibility(GONE);
             itemView.findViewById(R.id.item1_slot).setVisibility(GONE);
-            itemView.findViewById(R.id.item1).setVisibility(View.VISIBLE);
+            itemView.findViewById(R.id.item1).setVisibility(VISIBLE);
         }
-        itemView.setVisibility(View.VISIBLE);
+        itemView.setVisibility(VISIBLE);
     }
 
     private int getSeekCn() {
@@ -1095,7 +1193,7 @@ public class KcaFleetViewService extends Service {
     }
 
     private String getSeekType() {
-        String seekType = "";
+        String seekType;
         switch (seekcn_internal) {
             case 1:
                 seekType = getStringWithLocale(R.string.seek_type_1);
@@ -1121,26 +1219,23 @@ public class KcaFleetViewService extends Service {
         seekcn_internal %= 5;
     }
 
-    private void updateSelectedView(int idx) {
+    private void updateSelectedFleetView(int selected) {
         for (int i = 0; i < 5; i++) {
             int view_id = getId("fleet_".concat(String.valueOf(i + 1)), R.id.class);
-            if (idx == i) {
-                mView.findViewById(view_id).setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+            Chip chip = fleetView.findViewById(view_id);
+            chip.setChecked(selected == i);
+            if (selected == i) {
+                chip.setChipStrokeColorResource(R.color.colorAccent);
             } else {
                 if (i < 4 && KcaExpedition2.isInExpedition(i)) {
-                    mView.findViewById(view_id).setBackgroundColor(
-                            ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpeditionBtn));
+                    chip.setChipStrokeColorResource(R.color.colorFleetInfoExpeditionBtn);
                 } else if (i < 4 && KcaMoraleInfo.getMoraleCompleteTime(i) > 0) {
-                    mView.findViewById(view_id).setBackgroundColor(
-                            ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNotGoodStatusBtn));
+                    chip.setChipStrokeColorResource(R.color.colorFleetInfoNotGoodStatusBtn);
                 } else if (i == FLEET_COMBINED_ID &&
                         (KcaMoraleInfo.getMoraleCompleteTime(0) > 0 || KcaMoraleInfo.getMoraleCompleteTime(1) > 0)) { // Combined Morale
-                    mView.findViewById(view_id).setBackgroundColor(
-                            ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNotGoodStatusBtn));
+                    chip.setChipStrokeColorResource(R.color.colorFleetInfoNotGoodStatusBtn);
                 } else {
-                    mView.findViewById(view_id).setBackgroundColor(
-                            ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
+                    chip.setChipStrokeColorResource(R.color.colorFleetInfoNormalBtn);
                 }
             }
         }
@@ -1167,7 +1262,7 @@ public class KcaFleetViewService extends Service {
         } else {
             data_str = data.toString();
         }
-        if (mView != null) mView.setVisibility(GONE);
+        if (fleetView != null) fleetView.setVisibility(GONE);
 
         KcaDBHelper helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         helper.recordErrorLog(ERROR_TYPE_FLEETVIEW, "fleetview", "FV_".concat(String.valueOf(type)), data_str, getStringFromException(e));
@@ -1175,29 +1270,38 @@ public class KcaFleetViewService extends Service {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        updateScreenSize();
+
         super.onConfigurationChanged(newConfig);
+
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        contextWithLocale = new ContextThemeWrapper(contextWithLocale, R.style.AppTheme);
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else {
             mInflater = LayoutInflater.from(contextWithLocale);
-            int visibllity = mView.getVisibility();
-            if (mManager != null) {
-                if (mView.getParent() != null) mManager.removeViewImmediate(mView);
+            int visibility = fleetView.getVisibility();
+            if (windowManager != null) {
+                if (fleetView.getParent() != null) windowManager.removeViewImmediate(fleetView);
                 initView();
-                mManager.addView(mView, mParams);
+                windowManager.addView(fleetView, layoutParams);
 
-                int setViewResult = setView();
-                if (setViewResult == 0) {
-                    if (mView.getParent() != null) {
-                        mView.invalidate();
-                        mManager.updateViewLayout(mView, mParams);
+                if (setView()) {
+                    if (fleetView.getParent() != null) {
+                        fleetView.invalidate();
+                        windowManager.updateViewLayout(fleetView, layoutParams);
                     }
                 }
-                mView.setVisibility(visibllity);
+                fleetView.setVisibility(visibility);
             }
         }
+    }
+
+    private void updateScreenSize() {
+        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenHeight = size.y;
     }
 }

@@ -1,31 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.antest1.kcanotify.DraggableOverlayLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/battleviewlayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:clickable="false"
     android:orientation="vertical"
-    android:padding="4dp"
-    android:visibility="visible">
+    android:visibility="visible"
+    android:elevation="8dp"
+    android:background="@drawable/overlay_background"
+    tools:ignore="SpUsage" >
 
-    <ScrollView
+    <LinearLayout
         android:id="@+id/battleview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_centerVertical="true">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/battleviewpanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:alpha="0.8"
-            android:background="@color/colorPrimaryDark"
             android:orientation="vertical"
             android:padding="@dimen/battleview_padding">
 
@@ -918,7 +914,7 @@
                                     android:maxLines="1"
                                     android:minHeight="@dimen/battleview_text_c_large"
                                     android:textColor="@android:color/white"
-                                    android:textSize="@dimen/battleview_text_c_large" />
+                                    android:textSize="@dimen/battleview_text_c_large"/>
 
                                 <TextView
                                     android:id="@+id/fm_5_cond"
@@ -3492,7 +3488,7 @@
             </LinearLayout>
 
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
-</RelativeLayout>
+</com.antest1.kcanotify.DraggableOverlayLayout>
 

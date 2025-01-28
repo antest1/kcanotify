@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
@@ -78,8 +77,7 @@ public class KcaMapHpPopupService extends Service {
     public void onCreate() {
         super.onCreate();
         active = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else {
@@ -107,7 +105,7 @@ public class KcaMapHpPopupService extends Service {
             popupWidth = mView.getMeasuredWidth();
             popupHeight = mView.getMeasuredHeight();
 
-            hp_info = (TextView) mView.findViewById(R.id.hp_info);
+            hp_info = mView.findViewById(R.id.hp_info);
 
             mParams = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.WRAP_CONTENT,
@@ -122,7 +120,7 @@ public class KcaMapHpPopupService extends Service {
             display.getSize(size);
             screenWidth = size.x;
             screenHeight = size.y;
-            Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+            Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
             mParams.x = (screenWidth - popupWidth) / 2;
             mParams.y = (screenHeight - popupHeight) / 2;
@@ -133,9 +131,8 @@ public class KcaMapHpPopupService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e("KCA-MPS", "onStartCommand");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        Log.i("KCA-MPS", "onStartCommand");
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
@@ -152,7 +149,6 @@ public class KcaMapHpPopupService extends Service {
                         for (int i = 0; i < data.size(); i++) {
                             JsonObject item = data.get(i).getAsJsonObject();
                             int id = item.get("api_id").getAsInt();
-                            String map_id_str = getMapString(id);
                             if (item.has("api_eventmap")) {
                                 JsonObject eventitem = item.getAsJsonObject("api_eventmap");
                                 if (eventitem.has("api_state") && eventitem.get("api_state").getAsInt() != 2) {
@@ -213,7 +209,7 @@ public class KcaMapHpPopupService extends Service {
         if (map > 10) {
             return "E-" + no;
         } else {
-            return "" + map + "-" + no;
+            return map + "-" + no;
         }
     }
 
@@ -291,7 +287,7 @@ public class KcaMapHpPopupService extends Service {
         display.getSize(size);
         screenWidth = size.x;
         screenHeight = size.y;
-        Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+        Log.i("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
         if (mParams != null) {
             if (mParams.x < 0) mParams.x = 0;

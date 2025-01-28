@@ -4,10 +4,9 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="activity_main_btn_size_top">42dp</dimen>
-    <dimen name="activity_main_btn_size_botton">42dp</dimen>
-    <dimen name="activity_main_btn_textsize">16dp</dimen>
-    <dimen name="activity_main_btn_fairy_padding">6dp</dimen>
-    <dimen name="activity_main_btn_tools_padding">8dp</dimen>
+    <dimen name="activity_main_btn_textsize">16sp</dimen>
+    <dimen name="activity_main_btn_fairy_padding">10dp</dimen>
+    <dimen name="activity_main_btn_tools_padding">10dp</dimen>
     <dimen name="activity_text_size">14sp</dimen>
 
     <dimen name="view_text_title">20dp</dimen>
@@ -16,14 +15,14 @@
     <dimen name="fleetview_text_statusarea">14dp</dimen>
     <dimen name="fleetview_text_moralearea">40dp</dimen>
     <dimen name="fleetview_text_tbutton">15dp</dimen>
-    <dimen name="fleetview_text_rbutton">20dp</dimen>
+    <dimen name="fleetview_text_rbutton">18dp</dimen>
     <dimen name="fleetview_text_ship_large">14dp</dimen>
     <dimen name="fleetview_text_ship_medium">12dp</dimen>
     <dimen name="fleetview_text_ship_small">10dp</dimen>
 
     <dimen name="questview_tag_size">36dp</dimen>
     <dimen name="questview_desc_height">32dp</dimen>
-    <dimen name="questview_text_top">16dp</dimen>
+    <dimen name="questview_text_top">12dp</dimen>
     <dimen name="questview_button_top">18dp</dimen>
     <dimen name="questview_text_large">14dp</dimen>
     <dimen name="questview_text_medium">11dp</dimen>
@@ -49,7 +48,7 @@
     <dimen name="item_popup_icon_size">14dp</dimen>
     <dimen name="item_popup_text_size_large">11dp</dimen>
     <dimen name="item_popup_text_size_small">10dp</dimen>
-    <dimen name="item_popup_xmargin">72dp</dimen>
+    <dimen name="item_popup_margin">36dp</dimen>
 
     <dimen name="button_size_xsmall">32dp</dimen>
     <dimen name="button_size_small">48dp</dimen>
@@ -76,7 +75,7 @@
     <dimen name="popup_t2_width">250dp</dimen>
     <dimen name="popup_t3_width">300dp</dimen>
     <dimen name="popup_t4_width">350dp</dimen>
-    <dimen name="popup_padding">6dp</dimen>
+    <dimen name="popup_padding">12dp</dimen>
 
     <dimen name="aircombat_text_mid">11dp</dimen>
     <dimen name="aircombat_mid_width">100dp</dimen>

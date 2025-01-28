@@ -1,7 +1,6 @@
 package com.antest1.kcanotify;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.app.Service;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
@@ -47,7 +46,6 @@ import com.google.gson.JsonObject;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -83,9 +81,10 @@ import static com.antest1.kcanotify.KcaUtils.getOrientationPrefix;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
 
 public class KcaViewButtonService extends Service {
-    public static final int FAIRY_NOTIFICATION_ID = 10118;
     public static final int FAIRY_GLOW_INTERVAL = 800;
     public static final int FOREGROUND_CHECK_INTERVAL = 500;
 
@@ -100,8 +99,6 @@ public class KcaViewButtonService extends Service {
     public static final String RETURN_FAIRY_ACTION = "return_fairy_action";
     public static final String RESET_FAIRY_STATUS_ACTION = "reset_fairy_status_action";
     public static final String REMOVE_FAIRY_ACTION = "remove_fairy_action";
-    public static final String SHOW_BATTLE_INFO = "show_battle_info";
-    public static final String SHOW_QUEST_INFO = "show_quest_info";
     public static final String ACTIVATE_BATTLEVIEW_ACTION = "activate_battleview";
     public static final String DEACTIVATE_BATTLEVIEW_ACTION = "deactivate_battleview";
     public static final String ACTIVATE_QUESTVIEW_ACTION = "activate_questview";
@@ -112,11 +109,11 @@ public class KcaViewButtonService extends Service {
     private BroadcastReceiver battlehdmg_receiver;
     private BroadcastReceiver battlenode_receiver;
     private BroadcastReceiver questcmpl_receiver;
-    private View mView;
-    private WindowManager mManager;
+    private DraggableOverlayButtonLayout buttonView;
+    private WindowManager windowManager;
     private Handler mHandler;
     private Vibrator vibrator;
-    private ImageView viewbutton;
+    private ImageView button;
     private int screenWidth, screenHeight;
     private int buttonWidth, buttonHeight;
     private KcaDBHelper dbHelper;
@@ -124,9 +121,8 @@ public class KcaViewButtonService extends Service {
     private boolean battleviewEnabled = false;
     private boolean questviewEnabled = false;
     public String viewBitmapId;
-    WindowManager.LayoutParams mParams;
+    WindowManager.LayoutParams layoutParams;
     NotificationManagerCompat notificationManager;
-    public static JsonObject currentApiData;
     public static int recentVisibility = View.VISIBLE;
     public static boolean hiddenByUser = false;
     public static int type;
@@ -143,10 +139,6 @@ public class KcaViewButtonService extends Service {
         sHandler = h;
     }
 
-    public static JsonObject getCurrentApiData() {
-        return currentApiData;
-    }
-
     public static int getClickCount() {
         return clickcount;
     }
@@ -155,13 +147,9 @@ public class KcaViewButtonService extends Service {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
-    public static int getRecentVisibility() {
-        return recentVisibility;
-    }
-
     public void runForegroundCheck() {
         checkForegroundScheduler = Executors.newSingleThreadScheduledExecutor();
-        checkForegroundScheduler.scheduleAtFixedRate(mForegroundCheckRunnable, 0,
+        checkForegroundScheduler.scheduleWithFixedDelay(mForegroundCheckRunnable, 0,
                 FOREGROUND_CHECK_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
@@ -184,8 +172,7 @@ public class KcaViewButtonService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else if (!KcaService.getServiceStatus()) {
@@ -255,11 +242,11 @@ public class KcaViewButtonService extends Service {
 
             LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             notificationManager = NotificationManagerCompat.from(getApplicationContext());
-            mView = mInflater.inflate(R.layout.view_button, null);
+            buttonView = (DraggableOverlayButtonLayout) mInflater.inflate(R.layout.view_button, null);
 
             // Button (Fairy) Settings
             icon_info = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "icon_info.json", dbHelper);
-            viewbutton = mView.findViewById(R.id.viewbutton);
+            button = buttonView.findViewById(R.id.viewbutton);
             setFairySize();
 
             String fairyIdValue;
@@ -273,7 +260,7 @@ public class KcaViewButtonService extends Service {
             }
             viewBitmapId = "noti_icon_".concat(fairyIdValue);
             setFairyImage();
-            if (icon_info.size() > 0) {
+            if (!icon_info.isEmpty()) {
                 int fairy_id = Integer.parseInt(fairyIdValue);
                 int rev_internal = 0;
                 if (fairy_id < icon_info.size()) {
@@ -282,49 +269,57 @@ public class KcaViewButtonService extends Service {
                 }
                 int rev_setting = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_REV));
                 if ((rev_internal + rev_setting) % 2 == 1) {
-                    viewbutton.setScaleX(-1.0f);
+                    button.setScaleX(-1.0f);
                 } else {
-                    viewbutton.setScaleX(1.0f);
+                    button.setScaleX(1.0f);
                 }
             }
 
-            viewbutton.setOnTouchListener(mViewTouchListener);
-            viewbutton.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-            buttonWidth = viewbutton.getMeasuredWidth();
-            buttonHeight = viewbutton.getMeasuredHeight();
+            button.setOnClickListener(clickListener);
+            button.setOnLongClickListener(longClickListener);
 
-            mParams = new WindowManager.LayoutParams(
+            View bg = buttonView.findViewById(R.id.bg);
+            bg.setOnTouchListener(backgroundOnTouchListener);
+            button.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            buttonWidth = button.getMeasuredWidth();
+            buttonHeight = button.getMeasuredHeight();
+
+            layoutParams = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     getWindowLayoutType(),
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                     PixelFormat.TRANSLUCENT);
 
-            mParams.gravity = Gravity.TOP | Gravity.START;
+            layoutParams.gravity = Gravity.TOP | Gravity.START;
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            screenWidth = size.x;
-            screenHeight = size.y;
-            Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+            updateScreenSize();
+            Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
             JsonObject locdata = null;
             String ori_prefix = getOrientationPrefix(getResources().getConfiguration().orientation);
             if (dbHelper != null) locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
-            if (locdata != null && locdata.toString().length() > 0) {
+            if (locdata != null && !locdata.toString().isEmpty()) {
                 if (locdata.has(ori_prefix.concat("x"))) {
-                    mParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
+                    try {
+                        layoutParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
+                    } catch (NumberFormatException e) {
+                        layoutParams.x = 0;
+                    }
                 }
                 if (locdata.has(ori_prefix.concat("y"))) {
-                    mParams.y = locdata.get(ori_prefix.concat("y")).getAsInt();
+                    try {
+                        layoutParams.y = locdata.get(ori_prefix.concat("y")).getAsInt();
+                    } catch (NumberFormatException e) {
+                        layoutParams.y = 0;
+                    }
                 }
             } else {
-                mParams.y = screenHeight - buttonHeight / 2;
+                layoutParams.y = screenHeight - buttonHeight / 2;
             }
 
-            mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-            mManager.addView(mView, mParams);
+            windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+            windowManager.addView(buttonView, layoutParams);
 
             battleviewEnabled = false;
             questviewEnabled = false;
@@ -335,10 +330,17 @@ public class KcaViewButtonService extends Service {
         }
     }
 
+    private void updateScreenSize() {
+        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenWidth = size.x;
+        screenHeight = size.y;
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else if (!KcaService.getServiceStatus()) {
@@ -346,15 +348,15 @@ public class KcaViewButtonService extends Service {
         } else if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(KCA_STATUS_ON)) {
                 Log.e("KCA", KCA_STATUS_ON);
-                if (mView != null) mView.setVisibility(recentVisibility);
+                if (buttonView != null) buttonView.setVisibility(recentVisibility);
             }
             if (intent.getAction().equals(KCA_STATUS_OFF)) {
                 Log.e("KCA", KCA_STATUS_OFF);
-                if (mView != null) mView.setVisibility(View.GONE);
+                if (buttonView != null) buttonView.setVisibility(View.GONE);
             }
             if (intent.getAction().equals(FAIRY_VISIBLE) || intent.getAction().equals(RETURN_FAIRY_ACTION)) {
-                if (mView != null) {
-                    mView.setVisibility(View.VISIBLE);
+                if (buttonView != null) {
+                    buttonView.setVisibility(View.VISIBLE);
                     recentVisibility = View.VISIBLE;
                 }
             }
@@ -370,8 +372,8 @@ public class KcaViewButtonService extends Service {
                 }
             }
             if (intent.getAction().equals(FAIRY_INVISIBLE)) {
-                if (mView != null) {
-                    mView.setVisibility(View.GONE);
+                if (buttonView != null) {
+                    buttonView.setVisibility(View.GONE);
                     recentVisibility = View.GONE;
                 }
             }
@@ -388,7 +390,7 @@ public class KcaViewButtonService extends Service {
                 String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
                 viewBitmapId = "noti_icon_".concat(fairyIdValue);
                 setFairyImage();
-                if (icon_info.size() > 0) {
+                if (!icon_info.isEmpty()) {
                     int fairy_id = Integer.parseInt(fairyIdValue);
                     int rev_internal = 0;
                     if (fairy_id < icon_info.size()) {
@@ -397,9 +399,9 @@ public class KcaViewButtonService extends Service {
                     }
                     int rev_setting = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_REV));
                     if ((rev_internal + rev_setting) % 2 == 1) {
-                        viewbutton.setScaleX(-1.0f);
+                        button.setScaleX(-1.0f);
                     } else {
-                        viewbutton.setScaleX(1.0f);
+                        button.setScaleX(1.0f);
                     }
                 }
             }
@@ -445,9 +447,6 @@ public class KcaViewButtonService extends Service {
             case 2:
                 size_dp = getResources().getDimensionPixelSize(R.dimen.button_size_small);
                 break;
-            case 3:
-                size_dp = getResources().getDimensionPixelSize(R.dimen.button_size_normal);
-                break;
             case 4:
                 size_dp = getResources().getDimensionPixelSize(R.dimen.button_size_large);
                 break;
@@ -459,17 +458,14 @@ public class KcaViewButtonService extends Service {
                 break;
         }
 
-        if (viewbutton != null) {
-            ViewGroup.LayoutParams params = viewbutton.getLayoutParams();
+        if (button != null) {
+            ViewGroup.LayoutParams params = button.getLayoutParams();
             params.width = size_dp;
             params.height = size_dp;
-            viewbutton.setLayoutParams(params);
+            button.setLayoutParams(params);
         }
     }
 
-    private final int margin = 14;
-    private final int halfMargin = margin / 2;
-    private final int glowRadius = 20;
     private final int glowColor = Color.rgb(0, 192, 255);
     private final int glowColor2 = Color.rgb(230, 249, 255);
 
@@ -477,12 +473,15 @@ public class KcaViewButtonService extends Service {
         boolean glow_available = fairy_glow_on && getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_QUEST_FAIRY_GLOW);
         Bitmap src = KcaUtils.getFairyImageFromStorage(getApplicationContext(), viewBitmapId, dbHelper);
         Bitmap alpha = src.extractAlpha();
+        int margin = 14;
         Bitmap bmp = Bitmap.createBitmap(src.getWidth() + margin,
                 src.getHeight() + margin, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bmp);
+        int halfMargin = margin / 2;
         if (glow_available) {
             Paint glow_paint = new Paint();
             glow_paint.setColor(glowColor);
+            int glowRadius = 20;
             glow_paint.setMaskFilter(new BlurMaskFilter(glowRadius, BlurMaskFilter.Blur.OUTER));
             canvas.drawBitmap(alpha, halfMargin, halfMargin, glow_paint);
         }
@@ -494,7 +493,7 @@ public class KcaViewButtonService extends Service {
             color_paint.setColorFilter(new PorterDuffColorFilter(glowColor2, PorterDuff.Mode.MULTIPLY));
         }
         canvas.drawBitmap(src, halfMargin, halfMargin, color_paint);
-        viewbutton.setImageBitmap(bmp);
+        button.setImageBitmap(bmp);
     }
 
     @Override
@@ -507,124 +506,135 @@ public class KcaViewButtonService extends Service {
         if (checkForegroundScheduler != null && !checkForegroundScheduler.isShutdown()) {
             checkForegroundScheduler.shutdown();
         }
-        if (mManager != null) mManager.removeView(mView);
+        if (windowManager != null) windowManager.removeView(buttonView);
         super.onDestroy();
     }
 
-    private float mTouchX, mTouchY;
-    private int mViewX, mViewY;
-
-    private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
-        private static final int MAX_CLICK_DURATION = 200;
-        private static final int LONG_CLICK_DURATION = 800;
-
-        private long startClickTime;
-
+    private int startViewX, startViewY;
+    private final View.OnTouchListener backgroundOnTouchListener = new View.OnTouchListener() {
+        private final float[] lastX = new float[3];
+        private final float[] lastY = new float[3];
+        private final long[] lastT = new long[3];
+        private float startX, startY;
+        private int curr = 0;
+        @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            int id = v.getId();
-            if (id == viewbutton.getId()) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        mTouchX = event.getRawX();
-                        mTouchY = event.getRawY();
-                        mViewX = mParams.x;
-                        mViewY = mParams.y;
-                        Log.e("KCA", KcaUtils.format("mView: %d %d", mViewX, mViewY));
-                        startClickTime = Calendar.getInstance().getTimeInMillis();
-                        mHandler.postDelayed(mRunnable, LONG_CLICK_DURATION);
-                        break;
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    startX = event.getRawX();
+                    startY = event.getRawY();
+                    lastX[curr] = startX;
+                    lastY[curr] = startY;
+                    lastT[curr] = Calendar.getInstance().getTimeInMillis();
+                    curr = (curr + 1) % 3;
+                    startViewX = layoutParams.x;
+                    startViewY = layoutParams.y;
+                    Log.e("KCA", KcaUtils.format("mView: %d %d", startViewX, startViewY));
 
-                    case MotionEvent.ACTION_UP:
-                        Log.e("KCA", "Callback Canceled");
-                        mHandler.removeCallbacks(mRunnable);
-                        long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-                        if (clickDuration < MAX_CLICK_DURATION) {
-                            clickcount += 1;
-                            if (battleviewEnabled && isBattleViewEnabled()) {
-                                Intent qintent = new Intent(getBaseContext(), KcaBattleViewService.class);
-                                qintent.setAction(KcaBattleViewService.SHOW_BATTLEVIEW_ACTION);
-                                startService(qintent);
-                            } else if (questviewEnabled) {
-                                Intent qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
-                                qintent.setAction(KcaQuestViewService.SHOW_QUESTVIEW_ACTION_NEW);
-                                startService(qintent);
-                            } else {
-                                Intent qintent = new Intent(getBaseContext(), KcaFleetViewService.class);
-                                qintent.setAction(KcaFleetViewService.SHOW_FLEETVIEW_ACTION);
-                                startService(qintent);
-                            }
-                        }
+                    buttonView.cancelAnimations();
+                    break;
 
-                        int[] locations = new int[2];
-                        mView.getLocationOnScreen(locations);
-                        int xx = locations[0];
-                        int yy = locations[1];
-                        Log.e("KCA", KcaUtils.format("Coord: %d %d", xx, yy));
-                        if (mParams.x < 0) mParams.x = 0;
-                        else if (mParams.x > screenWidth - buttonWidth / 2)
-                            mParams.x = screenWidth - buttonWidth / 2;
-                        if (mParams.y < 0) mParams.y = 0;
-                        else if (mParams.y > screenHeight - buttonHeight / 2)
-                            mParams.y = screenHeight - buttonHeight / 2;
+                case MotionEvent.ACTION_UP:
+                    float dx = event.getRawX() - lastX[(curr + 1) % 3];
+                    float dy = event.getRawY() - lastY[(curr + 1) % 3];
+                    long dt = Calendar.getInstance().getTimeInMillis() - lastT[(curr + 1) % 3];
+                    float finalXUncap = layoutParams.x + dx / dt * 400;
+                    float finalYUncap = layoutParams.y + dy / dt * 400;
+                    float finalX = max(buttonView.getPaddingLeft(), Math.min(finalXUncap, screenWidth - buttonView.getWidth() - buttonView.getPaddingRight()));
+                    float finalY = max(buttonView.getPaddingTop(), Math.min(finalYUncap, screenHeight - buttonView.getHeight() - buttonView.getPaddingBottom()));
 
-                        JsonObject locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
-                        String ori_prefix = getOrientationPrefix(getResources().getConfiguration().orientation);
-                        if (locdata != null && locdata.toString().length() > 0) {
-                            locdata.addProperty(ori_prefix.concat("x"), mParams.x);
-                            locdata.addProperty(ori_prefix.concat("y"), mParams.y);
-                        } else {
-                            locdata = new JsonObject();
-                        }
-                        dbHelper.putValue(DB_KEY_FAIRYLOC, locdata.toString());
-                        break;
+                    buttonView.animateTo(layoutParams.x, layoutParams.y,
+                            (int) finalX, (int) finalY,
+                            finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
+                            500, windowManager, layoutParams);
 
-                    case MotionEvent.ACTION_MOVE:
-                        int x = (int) (event.getRawX() - mTouchX);
-                        int y = (int) (event.getRawY() - mTouchY);
+                    JsonObject locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
+                    String ori_prefix = getOrientationPrefix(getResources().getConfiguration().orientation);
+                    if (locdata != null && !locdata.toString().isEmpty()) {
+                        locdata.addProperty(ori_prefix.concat("x"), finalX);
+                        locdata.addProperty(ori_prefix.concat("y"), finalY);
+                    } else {
+                        locdata = new JsonObject();
+                    }
+                    dbHelper.putValue(DB_KEY_FAIRYLOC, locdata.toString());
+                    break;
 
-                        mParams.x = mViewX + x;
-                        mParams.y = mViewY + y;
-                        if (mParams.x < 0) mParams.x = 0;
-                        else if (mParams.x > screenWidth - buttonWidth / 2) mParams.x = screenWidth - buttonWidth / 2;
-                        if (mParams.y < 0) mParams.y = 0;
-                        else if (mParams.y > screenHeight - buttonHeight / 2) mParams.y = screenHeight - buttonHeight / 2;
-                        mManager.updateViewLayout(mView, mParams);
-                        if (Math.abs(x) > 20 || Math.abs(y) > 20) {
-                            Log.e("KCA", "Callback Canceled");
-                            mHandler.removeCallbacks(mRunnable);
-                        }
-                        break;
+                case MotionEvent.ACTION_MOVE:
+                    int x = (int) (event.getRawX() - startX);
+                    int y = (int) (event.getRawY() - startY);
+                    Log.e("KCA", KcaUtils.format("Coord: %d %d", x, y));
+
+                    lastX[curr] = event.getRawX();
+                    lastY[curr] = event.getRawY();
+                    lastT[curr] = Calendar.getInstance().getTimeInMillis();
+                    curr = (curr + 1) % 3;
+                    layoutParams.x = startViewX + x;
+                    layoutParams.y = startViewY + y;
+                    windowManager.updateViewLayout(buttonView, layoutParams);
+                    break;
+
+                case MotionEvent.ACTION_CANCEL:
+                    layoutParams.x = startViewX;
+                    layoutParams.y = startViewY;
+                    buttonView.cancelAnimations();
+                    windowManager.updateViewLayout(buttonView, layoutParams);
+                break;
+            }
+            return false;
+        }
+    };
+
+    private final View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (abs(layoutParams.x - startViewX) < 20 && abs(layoutParams.y - startViewY) < 20) {
+                clickcount += 1;
+                if (battleviewEnabled && isBattleViewEnabled()) {
+                    Intent qintent = new Intent(getBaseContext(), KcaBattleViewService.class);
+                    qintent.setAction(KcaBattleViewService.SHOW_BATTLEVIEW_ACTION);
+                    startService(qintent);
+                } else if (questviewEnabled) {
+                    Intent qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
+                    qintent.setAction(KcaQuestViewService.SHOW_QUESTVIEW_ACTION_NEW);
+                    startService(qintent);
+                } else {
+                    Intent qintent = new Intent(getBaseContext(), KcaFleetViewService.class);
+                    qintent.setAction(KcaFleetViewService.SHOW_FLEETVIEW_ACTION);
+                    startService(qintent);
                 }
             }
-            return true;
         }
     };
 
-
-    private Runnable mRunnable = new Runnable() {
+    private final View.OnLongClickListener longClickListener = new View.OnLongClickListener() {
         @Override
-        public void run() {
-            if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_NOTI_LONGCLICK)) {
-                doVibrate(vibrator, 100);
+        public boolean onLongClick(View v) {
+            if (abs(layoutParams.x - startViewX) < 20 && abs(layoutParams.y - startViewY) < 20) {
+                if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_NOTI_LONGCLICK)) {
+                    doVibrate(vibrator, 100);
+                }
+                Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.viewbutton_hide), Toast.LENGTH_LONG).show();
+                buttonView.setVisibility(View.GONE);
+                recentVisibility = View.GONE;
+                hiddenByUser = true;
+                if (sHandler != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("url", KCA_API_FAIRY_HIDDEN);
+                    bundle.putString("data", "");
+                    Message sMsg = sHandler.obtainMessage();
+                    sMsg.setData(bundle);
+                    sHandler.sendMessage(sMsg);
+                }
+                return true;
+            } else {
+                // Moved too much distance, not count as a long press
+                return false;
             }
-            Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.viewbutton_hide), Toast.LENGTH_LONG).show();
-            mView.setVisibility(View.GONE);
-            recentVisibility = View.GONE;
-            hiddenByUser = true;
-            if (sHandler != null) {
-                Bundle bundle = new Bundle();
-                bundle.putString("url", KCA_API_FAIRY_HIDDEN);
-                bundle.putString("data", "");
-                Message sMsg = sHandler.obtainMessage();
-                sMsg.setData(bundle);
-                sHandler.sendMessage(sMsg);
-            }
-
         }
     };
 
-    private Runnable mForegroundCheckRunnable = new Runnable() {
+    private final Runnable mForegroundCheckRunnable = new Runnable() {
         @Override
         public void run() {
             try {
@@ -637,7 +647,7 @@ public class KcaViewButtonService extends Service {
                     current_foreground_status = gotoFgReceiver.checkForeground();
                 } else {
                     foregroundPackage = checkForegroundPackage();
-                    if (foregroundPackage.trim().length() > 0) {
+                    if (!foregroundPackage.trim().isEmpty()) {
                         if (foregroundPackage.contains(KC_PACKAGE_NAME)) {
                             current_foreground_status = true;
                         } if (foregroundPackage.contains(KC_WV_PACKAGE_NAME)) {
@@ -668,7 +678,7 @@ public class KcaViewButtonService extends Service {
         }
     };
 
-    private Runnable mGlowRunner = new Runnable() {
+    private final Runnable mGlowRunner = new Runnable() {
         @Override
         public void run() {
             try {
@@ -695,7 +705,7 @@ public class KcaViewButtonService extends Service {
     }
 
     private static boolean isForeGroundEvent(UsageEvents.Event event) {
-        if(event == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return false;
+        if(event == null) return false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             return event.getEventType() == UsageEvents.Event.ACTIVITY_RESUMED;
         } else {
@@ -705,44 +715,22 @@ public class KcaViewButtonService extends Service {
 
     @SuppressLint("WrongConstant")
     public String checkForegroundPackage() {
-        String classByUsageStats = null;
-        String packageNameByUsageStats = null;
+        String classByUsageStats;
         String recentPackageName = "";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            UsageStatsManager mUsageStatsManager;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-            } else {
-                //noinspection ResourceType
-                mUsageStatsManager = (UsageStatsManager) getSystemService("usagestats");
-            }
-            final long INTERVAL = 5000;
-            final long end = System.currentTimeMillis();
-            final long begin = end - INTERVAL;
-            final UsageEvents usageEvents = mUsageStatsManager.queryEvents(begin, end);
+        UsageStatsManager mUsageStatsManager;
+        mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
+        final long INTERVAL = 5000;
+        final long end = System.currentTimeMillis();
+        final long begin = end - INTERVAL;
+        final UsageEvents usageEvents = mUsageStatsManager.queryEvents(begin, end);
 
-            while (usageEvents.hasNextEvent()) {
-                UsageEvents.Event event = new UsageEvents.Event();
-                usageEvents.getNextEvent(event);
-                if (isForeGroundEvent(event)) {
-                    packageNameByUsageStats = event.getPackageName();
-                    Date d = new Date(event.getTimeStamp());
-                    classByUsageStats = event.getClassName() + " " + d.toString();
-                    recentPackageName = classByUsageStats;
-                }
-            }
-        } else {
-            recentPackageName = "not_kancolle_process";
-            ActivityManager activityManager = (ActivityManager) getSystemService( Context.ACTIVITY_SERVICE );
-            List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
-            for(ActivityManager.RunningAppProcessInfo appProcess : appProcesses){
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND){
-                    if (appProcess.processName.contains(KC_PACKAGE_NAME)) {
-                        recentPackageName = KC_PACKAGE_NAME;
-                    } else if (appProcess.processName.contains(GOTO_PACKAGE_NAME)) {
-                        recentPackageName = GOTO_PACKAGE_NAME;
-                    }
-                }
+        while (usageEvents.hasNextEvent()) {
+            UsageEvents.Event event = new UsageEvents.Event();
+            usageEvents.getNextEvent(event);
+            if (isForeGroundEvent(event)) {
+                Date d = new Date(event.getTimeStamp());
+                classByUsageStats = event.getClassName() + " " + d;
+                recentPackageName = classByUsageStats;
             }
         }
         return recentPackageName;
@@ -751,37 +739,34 @@ public class KcaViewButtonService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         String ori_prefix = getOrientationPrefix(newConfig.orientation);
-        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
-        Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+        updateScreenSize();
+        Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
         JsonObject locdata = null;
         if (dbHelper != null) {
             locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
 
-            if (locdata != null && locdata.toString().length() > 0) {
+            if (locdata != null && !locdata.toString().isEmpty()) {
                 if (locdata.has(ori_prefix.concat("x"))) {
-                    mParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
+                    layoutParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
                 }
                 if (locdata.has(ori_prefix.concat("y"))) {
-                    mParams.y = locdata.get(ori_prefix.concat("y")).getAsInt();
+                    layoutParams.y = locdata.get(ori_prefix.concat("y")).getAsInt();
                 }
             }
 
-            if (mManager != null && mParams != null) {
-                if (mParams.x < 0) mParams.x = 0;
-                else if (mParams.x > screenWidth - buttonWidth / 2) mParams.x = screenWidth - buttonWidth / 2;
-                if (mParams.y < 0) mParams.y = 0;
-                else if (mParams.y > screenHeight - buttonHeight / 2) mParams.y = screenHeight - buttonHeight / 2;
-                mManager.updateViewLayout(mView, mParams);
+            if (windowManager != null && layoutParams != null) {
+                if (layoutParams.x < 0) layoutParams.x = 0;
+                else if (layoutParams.x > screenWidth - buttonWidth / 2) layoutParams.x = screenWidth - buttonWidth / 2;
+                if (layoutParams.y < 0) layoutParams.y = 0;
+                else if (layoutParams.y > screenHeight - buttonHeight / 2) layoutParams.y = screenHeight - buttonHeight / 2;
+
+                windowManager.updateViewLayout(buttonView, layoutParams);
             }
 
-            if (locdata != null && locdata.toString().length() > 0) {
-                locdata.addProperty(ori_prefix.concat("x"), mParams.x);
-                locdata.addProperty(ori_prefix.concat("y"), mParams.y);
+            if (locdata != null && !locdata.toString().isEmpty()) {
+                locdata.addProperty(ori_prefix.concat("x"), layoutParams.x);
+                locdata.addProperty(ori_prefix.concat("y"), layoutParams.y);
             } else {
                 locdata = new JsonObject();
             }

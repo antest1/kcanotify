@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -41,7 +42,8 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
     String key, value_text= "";
     boolean is_formatted = true;
     Toolbar toolbar;
-    TextView view_key, view_value, view_format;
+    TextView view_key, view_value;
+    Button view_format;
     ImageView view_delete;
     View view_holder;
     ScrollView sv;
@@ -86,51 +88,42 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
             key = type_key_list[1];
             view_key.setText(key);
 
-            view_format.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (value_text == null || value_text.length() > 0) {
-                        is_formatted = !is_formatted;
-                        setText(type_key);
-                    }
+            view_format.setOnClickListener(view -> {
+                if (value_text == null || !value_text.isEmpty()) {
+                    is_formatted = !is_formatted;
+                    setText(type_key);
                 }
             });
 
-            view_delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (value_text != null) {
-                        if (type_key.startsWith(DB_PREFIX)) {
-                            dbHelper.deleteValue(key);
-                        } else if (type_key.startsWith(QT_PREFIX)) {
-                            questTracker.clearQuestTrack();
-                        } else if (type_key.startsWith(DQ_PREFIX)) {
-                            dbHelper.clearQuest();
-                        } else  if (type_key.startsWith(PREF_PREFIX)) {
-                            SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = pref.edit();
-                            String value = SettingActivity.getDefaultValue(key);
-                            if (value.startsWith("R.string.")) {
-                                editor.putString(key, getString(getId(value.replace("R.string.", ""), R.string.class)));
-                            } else if (value.startsWith("boolean_")) {
-                                editor.putBoolean(key, Boolean.parseBoolean(value.replace("boolean_", "")));
-                            } else {
-                                editor.putString(key, value);
-                            }
-                            editor.apply();
+            view_delete.setOnClickListener(v -> {
+                if (value_text != null) {
+                    if (type_key.startsWith(DB_PREFIX)) {
+                        dbHelper.deleteValue(key);
+                    } else if (type_key.startsWith(QT_PREFIX)) {
+                        questTracker.clearQuestTrack();
+                    } else if (type_key.startsWith(DQ_PREFIX)) {
+                        dbHelper.clearQuest();
+                    } else  if (type_key.startsWith(PREF_PREFIX)) {
+                        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = pref.edit();
+                        String value = SettingActivity.getDefaultValue(key);
+                        if (value.startsWith("R.string.")) {
+                            editor.putString(key, getString(getId(value.replace("R.string.", ""), R.string.class)));
+                        } else if (value.startsWith("boolean_")) {
+                            editor.putBoolean(key, Boolean.parseBoolean(value.replace("boolean_", "")));
+                        } else {
+                            editor.putString(key, value);
                         }
-                        setText(type_key);
+                        editor.apply();
                     }
+                    setText(type_key);
                 }
             });
 
 
             setText(type_key);
-            sv.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-                @Override
-                public void onScrollChanged() {
-                    int s_y = sv.getScrollY();
-                }
+            sv.getViewTreeObserver().addOnScrollChangedListener(() -> {
+                int s_y = sv.getScrollY();
             });
 
             sv.post(new Runnable() {
@@ -140,24 +133,21 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
                     scroll_h_total = sv.getMeasuredHeight();
                     scroll_h_layout = sv.getHeight();
 
-                    sv.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View view, MotionEvent motionEvent) {
-                            switch (motionEvent.getAction()) {
-                                case MotionEvent.ACTION_DOWN:
-                                    int y = (int) motionEvent.getY();
-                                    int direction = 1;
-                                    if (y < scroll_h_layout / 2) direction = -1;
-                                    scroll_touch_count = 0;
-                                    autoScrollScheduler = Executors.newSingleThreadScheduledExecutor();
-                                    autoScrollScheduler.scheduleAtFixedRate(auto_scroll(direction), 800, 200, TimeUnit.MILLISECONDS);
-                                    break;
-                                case MotionEvent.ACTION_UP:
-                                    autoScrollScheduler.shutdown();
-                                    break;
-                            }
-                            return false;
+                    sv.setOnTouchListener((view, motionEvent) -> {
+                        switch (motionEvent.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                int y = (int) motionEvent.getY();
+                                int direction = 1;
+                                if (y < scroll_h_layout / 2) direction = -1;
+                                scroll_touch_count = 0;
+                                autoScrollScheduler = Executors.newSingleThreadScheduledExecutor();
+                                autoScrollScheduler.scheduleAtFixedRate(auto_scroll(direction), 800, 200, TimeUnit.MILLISECONDS);
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                autoScrollScheduler.shutdown();
+                                break;
                         }
+                        return false;
                     });
                 }
             });
@@ -180,7 +170,7 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
             value_text = dbHelper.getQuestListData();
         }
 
-        if (value_text == null || value_text.length() == 0) {
+        if (value_text == null || value_text.isEmpty()) {
             view_value.setText("");
         } else {
             Gson gson;

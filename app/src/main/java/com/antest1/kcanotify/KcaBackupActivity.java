@@ -8,6 +8,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,7 +16,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -41,7 +41,7 @@ public class KcaBackupActivity extends AppCompatActivity {
     List<String> db_paths = new ArrayList<>();
     boolean is_exporting = false;
 
-    TextView exportButton;
+    Button exportButton;
     TextView exportMessage;
     TextView backup_load;
     ListView backup_list;
@@ -126,8 +126,7 @@ public class KcaBackupActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             is_exporting = true;
-            exportButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
-            exportButton.setClickable(false);
+            exportButton.setEnabled(false);
         }
 
         @Override
@@ -172,8 +171,7 @@ public class KcaBackupActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             is_exporting = false;
-            exportButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-            exportButton.setClickable(true);
+            exportButton.setEnabled(true);
             if ("Error".equals(result)) {
                 exportMessage.setText(getStringWithLocale(R.string.backup_msg_export_error).concat(result));
             } else if (result != null) {
@@ -222,8 +220,7 @@ public class KcaBackupActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             is_exporting = false;
-            exportButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-            exportButton.setClickable(true);
+            exportButton.setEnabled(true);
             if ("Error".equals(result)) {
                 exportMessage.setText(getStringWithLocale(R.string.backup_msg_import_error).concat(result));
             } else if (result != null) {

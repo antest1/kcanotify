@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -90,8 +89,7 @@ public class KcaDockingPopupService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else {
@@ -122,7 +120,7 @@ public class KcaDockingPopupService extends Service {
             display.getSize(size);
             screenWidth = size.x;
             screenHeight = size.y;
-            Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+            Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
             mParams.x = (screenWidth - popupWidth) / 2;
             mParams.y = (screenHeight - popupHeight) / 2;
@@ -228,12 +226,11 @@ public class KcaDockingPopupService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("KCA-CPS", "onStartCommand");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
-            if(intent.getAction().equals(DOCKING_DATA_ACTION)) {
+            if (intent.getAction().equals(DOCKING_DATA_ACTION)) {
                 api_ndock = dbHelper.getJsonArrayValue(DB_KEY_NDOCKDATA);
                 updatePopup();
             }
