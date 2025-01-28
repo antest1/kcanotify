@@ -237,7 +237,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_fairy_rev">Reverse</string>
     <string name="action_fairy_init">Reset</string>
     <string name="current_fairy_changed_in_next">※ Fairy will be changed after current BattleView/QuestView ends.</string>
-    <string name="setting_menu_kand_title_adv_network">Advanced Network Settings</string>
+    <string name="setting_menu_kand_title_adv_network">SOCKS5 Proxy Settings</string>
     <string name="setting_menu_kand_warn_adv_network">Warning: Setting these incorrectly may make VPN Service unusable. Don\'t change these options unless you know what you are doing! You need to restart VPN Service to make these options effective.</string>
     <string name="setting_menu_kand_title_socks5_enable">Enable SOCKS5 Proxy</string>
     <string name="setting_menu_kand_title_socks5_allapps">Use proxy for all applications</string>
@@ -489,7 +489,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="questview_memo_format" formatted="false">%s ➣Rewards %s</string>
 
     <string name="action_tools">Tools</string>
-    <string name="action_save_msg">Processing...</string>
+    <string name="action_save_msg">Processing…</string>
 
     <string name="action_akashi">Improvement Arsenal Chart</string>
     <string name="action_akashi_detail">Equipment Improvement Detail</string>
@@ -770,7 +770,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="download_iteminfo">Equipment translation</string>
     <string name="download_akashi">Improvement arsenal chart</string>
     <string name="download_fairy">Fairy-san</string>
-    <string name="download_progress">Downloading...</string>
+    <string name="download_progress">Downloading…</string>
     <string name="download_reset">Initialize all resources</string>
     <string name="download_reset_message">Initializing app resource again.</string>
     <string name="download_check_error">Error when loading from storage (using default data)</string>
@@ -863,4 +863,43 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="nat9">Australia</string>
     <string name="nat10">Netherlands</string>
 
+
+    <!-- strings from PCAPdroid -->
+    <string name="setting_menu_kand_desc_socks5_tls_incompatible">cannot use when capturing HTTPS traffic</string>
+
+    <string name="app_intro_next_button">Next</string>
+    <string name="app_intro_skip_button">Skip</string>
+    <string name="app_intro_back_button">Back</string>
+    <string name="app_intro_done_button">Done</string>
+
+    <string name="error">Error</string>
+    <string name="warning">Warning</string>
+    <string name="install_action">Install</string>
+    <string name="export_action">Export</string>
+    <string name="update_action">Update</string>
+    <string name="cancel_action">Cancel</string>
+
+    <string name="no_activity_file_selection">No app found to handle file selection</string>
+    <string name="no_intent_handler_found">No app found to perform this action</string>
+
+    <string name="tls_decryption">Capture HTTPS traffic</string>
+    <string name="tls_decryption_summary">Decrypt the HTTPS(SSL/TLS) traffic by performing mitm. Run the Mitm setup wizard below before using this feature.</string>
+    <string name="mitm_setup_wizard">Mitm setup wizard</string>
+    <string name="mitm_setup_wizard_intro">This wizard will guide you through the installation of the kcanotify mitm addon and certification authority, which are needed for HTTPS traffic capture.</string>
+    <string name="mitm_setup_wizard_done">Kcanotify is now ready to decrypt the HTTPS traffic!</string>
+    <string name="install_the_mitm_addon">Install the <a href='%1$s'>kcanotify mitm addon</a></string>
+    <string name="mitm_addon_autostart_workaround">Connection to the mitm addon failed. As a workaround, you can try to open the mitm addon app and then go back to Kcanotify without closing it. Do you want to open it now?</string>
+    <string name="mitm_skip_notice">The certificate does not seem to be installed. If you proceed, decryption may fail</string>
+    <string name="export_ca_certificate">Export the Kcanotify CA certificate, then open the Android \"Encryption &amp; Credentials\" settings and choose install it as a \"CA certificate\"</string>
+    <string name="install_ca_certificate">Install the Kcanotify CA certificate, choosing \"VPN and apps\".</string>
+    <string name="checking_the_certificate">Checking the certificate…</string>
+    <string name="ca_cert_export_failed">An error occurred while exporting the CA certificate\n\nIf your device implements Autostart or similar software to limit background services execution, be sure to <a href='%1$s'>whitelist Kcanotify</a></string>
+    <string name="cert_exported_now_installed">Certificate exported, now install it from the Android settings</string>
+    <string name="cert_installed_correctly">The CA certificate is installed</string>
+    <string name="cert_reinstall_required">The CA certificate is not installed, run the mitm setup wizard</string>
+    <string name="mitm_addon_bad_version">Bad kcanotify mitm addon version. Please install version %1$s and retry</string>
+    <string name="update_available">Update available</string>
+    <string name="mitm_addon_update_available">A new mitm addon update is available.</string>
+    <string name="mitm_addon_new_version">The kcanotify mitm addon must be updated</string>
+    <string name="mitm_doze_notice">Battery optimization may interfere with the mitm addon</string>
 </resources>

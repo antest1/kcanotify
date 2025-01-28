@@ -1,6 +1,7 @@
 package com.antest1.kcanotify;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.app.Service;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
@@ -53,8 +54,6 @@ import java.util.concurrent.TimeUnit;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLEINFO;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLENODE;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_FAIRYLOC;
-import static com.antest1.kcanotify.KcaConstants.GOTO_FOREGROUND_ACTION;
-import static com.antest1.kcanotify.KcaConstants.GOTO_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_FAIRY_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_FAIRY_HIDDEN;
@@ -64,9 +63,6 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_NODE;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_COMPLETE;
-import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
-import static com.antest1.kcanotify.KcaConstants.KC_WV_PACKAGE_NAME;
-import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_RANDOM;
@@ -74,11 +70,9 @@ import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_REV;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_SIZE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_QUEST_FAIRY_GLOW;
-import static com.antest1.kcanotify.KcaConstants.PREF_KC_PACKAGE;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getOrientationPrefix;
-import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static java.lang.Math.abs;
@@ -86,15 +80,12 @@ import static java.lang.Math.max;
 
 public class KcaViewButtonService extends Service {
     public static final int FAIRY_GLOW_INTERVAL = 800;
-    public static final int FOREGROUND_CHECK_INTERVAL = 500;
 
     public static final String KCA_STATUS_ON = "kca_status_on";
     public static final String KCA_STATUS_OFF = "kca_status_off";
     public static final String FAIRY_VISIBLE = "fairy_visible";
     public static final String FAIRY_INVISIBLE = "fairy_invisible";
     public static final String FAIRY_CHANGE = "fairy_change";
-    public static final String FAIRY_FORECHECK_ON = "fairy_forecheck_on";
-    public static final String FAIRY_FORECHECK_OFF = "fairy_forecheck_off";
     public static final String FAIRY_SIZE_CHANGE = "fairy_size_change";
     public static final String RETURN_FAIRY_ACTION = "return_fairy_action";
     public static final String RESET_FAIRY_STATUS_ACTION = "reset_fairy_status_action";
@@ -131,9 +122,6 @@ public class KcaViewButtonService extends Service {
     public boolean taiha_status = false;
     private boolean fairy_glow_on = false;
     private boolean fairy_glow_mode = false;
-    ScheduledExecutorService checkForegroundScheduler;
-    private boolean is_kc_foreground = true;
-    private GotoForegroundReceiver gotoFgReceiver;
 
     public static void setHandler(Handler h) {
         sHandler = h;
@@ -145,22 +133,6 @@ public class KcaViewButtonService extends Service {
 
     public String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
-    public void runForegroundCheck() {
-        checkForegroundScheduler = Executors.newSingleThreadScheduledExecutor();
-        checkForegroundScheduler.scheduleWithFixedDelay(mForegroundCheckRunnable, 0,
-                FOREGROUND_CHECK_INTERVAL, TimeUnit.MILLISECONDS);
-    }
-
-    public void stopForegroundCheck() {
-        if (checkForegroundScheduler != null) {
-            checkForegroundScheduler.shutdown();
-        }
-        is_kc_foreground = true;
-        Intent intent = new Intent(getApplicationContext(), KcaViewButtonService.class);
-        intent.setAction(KcaViewButtonService.RETURN_FAIRY_ACTION);
-        startService(intent);
     }
 
     @Nullable
@@ -234,11 +206,6 @@ public class KcaViewButtonService extends Service {
             LocalBroadcastManager.getInstance(this).registerReceiver((battlenode_receiver), new IntentFilter(KCA_MSG_BATTLE_NODE));
             LocalBroadcastManager.getInstance(this).registerReceiver((battlehdmg_receiver), new IntentFilter(KCA_MSG_BATTLE_HDMG));
             LocalBroadcastManager.getInstance(this).registerReceiver((questcmpl_receiver), new IntentFilter(KCA_MSG_QUEST_COMPLETE));
-
-            gotoFgReceiver = new GotoForegroundReceiver();
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(GOTO_FOREGROUND_ACTION);
-            registerReceiver(gotoFgReceiver, filter);
 
             LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             notificationManager = NotificationManagerCompat.from(getApplicationContext());
@@ -323,10 +290,6 @@ public class KcaViewButtonService extends Service {
 
             battleviewEnabled = false;
             questviewEnabled = false;
-
-            if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_AUTOHIDE)) {
-                runForegroundCheck();
-            }
         }
     }
 
@@ -379,12 +342,6 @@ public class KcaViewButtonService extends Service {
             }
             if (intent.getAction().equals(FAIRY_SIZE_CHANGE)) {
                 setFairySize();
-            }
-            if (intent.getAction().equals(FAIRY_FORECHECK_ON)) {
-                runForegroundCheck();
-            }
-            if (intent.getAction().equals(FAIRY_FORECHECK_OFF)) {
-                stopForegroundCheck();
             }
             if (intent.getAction().equals(FAIRY_CHANGE)) {
                 String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
@@ -502,10 +459,7 @@ public class KcaViewButtonService extends Service {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlenode_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlehdmg_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(questcmpl_receiver);
-        if (gotoFgReceiver != null) unregisterReceiver(gotoFgReceiver);
-        if (checkForegroundScheduler != null && !checkForegroundScheduler.isShutdown()) {
-            checkForegroundScheduler.shutdown();
-        }
+
         if (windowManager != null) windowManager.removeView(buttonView);
         super.onDestroy();
     }
@@ -634,51 +588,7 @@ public class KcaViewButtonService extends Service {
         }
     };
 
-    private final Runnable mForegroundCheckRunnable = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                boolean current_foreground_status = false;
-                String kcApp = getStringPreferences(getApplicationContext(), PREF_KC_PACKAGE);
-                String foregroundPackage = "";
-
-                if (kcApp.equals(GOTO_PACKAGE_NAME)) {
-                    foregroundPackage = "<gotobrowser>";
-                    current_foreground_status = gotoFgReceiver.checkForeground();
-                } else {
-                    foregroundPackage = checkForegroundPackage();
-                    if (!foregroundPackage.trim().isEmpty()) {
-                        if (foregroundPackage.contains(KC_PACKAGE_NAME)) {
-                            current_foreground_status = true;
-                        } if (foregroundPackage.contains(KC_WV_PACKAGE_NAME)) {
-                            current_foreground_status = true;
-                        } else if (foregroundPackage.contains(GOTO_PACKAGE_NAME)) {
-                            current_foreground_status = true;
-                        }
-                    } else {
-                        current_foreground_status = is_kc_foreground;
-                    }
-                }
-
-                if (current_foreground_status != is_kc_foreground) {
-                    is_kc_foreground = current_foreground_status;
-                    Intent intent = new Intent(getApplicationContext(), KcaViewButtonService.class);
-                    if (is_kc_foreground) {
-                        intent.setAction(KcaViewButtonService.KCA_STATUS_ON);
-                        Log.e("KCA-VB", "kancolle detected: " + foregroundPackage);
-                    } else {
-                        intent.setAction(KcaViewButtonService.KCA_STATUS_OFF);
-                        Log.e("KCA-VB", "kancolle not detected: " + foregroundPackage);
-                    }
-                    startService(intent);
-                }
-            } catch (Exception e) {
-                Log.e("KCA-VB", getStringFromException(e));
-            }
-        }
-    };
-
-    private final Runnable mGlowRunner = new Runnable() {
+    private Runnable mGlowRunner = new Runnable() {
         @Override
         public void run() {
             try {
@@ -703,39 +613,6 @@ public class KcaViewButtonService extends Service {
         fairy_glow_mode = false;
         setFairyImage();
     }
-
-    private static boolean isForeGroundEvent(UsageEvents.Event event) {
-        if(event == null) return false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            return event.getEventType() == UsageEvents.Event.ACTIVITY_RESUMED;
-        } else {
-            return event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND;
-        }
-    }
-
-    @SuppressLint("WrongConstant")
-    public String checkForegroundPackage() {
-        String classByUsageStats;
-        String recentPackageName = "";
-        UsageStatsManager mUsageStatsManager;
-        mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        final long INTERVAL = 5000;
-        final long end = System.currentTimeMillis();
-        final long begin = end - INTERVAL;
-        final UsageEvents usageEvents = mUsageStatsManager.queryEvents(begin, end);
-
-        while (usageEvents.hasNextEvent()) {
-            UsageEvents.Event event = new UsageEvents.Event();
-            usageEvents.getNextEvent(event);
-            if (isForeGroundEvent(event)) {
-                Date d = new Date(event.getTimeStamp());
-                classByUsageStats = event.getClassName() + " " + d;
-                recentPackageName = classByUsageStats;
-            }
-        }
-        return recentPackageName;
-    }
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         String ori_prefix = getOrientationPrefix(newConfig.orientation);
@@ -773,19 +650,5 @@ public class KcaViewButtonService extends Service {
             dbHelper.putValue(DB_KEY_FAIRYLOC, locdata.toString());
         }
         super.onConfigurationChanged(newConfig);
-    }
-
-    private class GotoForegroundReceiver extends BroadcastReceiver {
-        boolean is_front = true;
-
-        public boolean checkForeground() {
-            return is_front;
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            is_front = bundle.getBoolean("is_front", false);
-        }
     }
 }

@@ -31,18 +31,10 @@ public class KcaVpnData {
     public static KcaDBHelper helper;
     public static Handler handler;
 
-    private static final int NONE = 0;
-    private static final int REQUEST = 1;
-    private static final int RESPONSE = 2;
-
-    // Full Server List: http://kancolle.wikia.com/wiki/Servers
-    // 2017.10.18: Truk and Ringga Server was moved.
-    private static String[] kcaServerPrefixList = {
-            "203.104.209", // Yokosuka, Kure, Maizuru, Oominato Truk, Ringga, Kanoya, Iwagawa, Saikiman, Hashirajima, Android Server
-            "125.6.189", // Shortland, Buin, Tawi-Tawi, Palau, Brunel, Hittokappuman, Paramushir, Sukumoman
-            "125.6.184", // Sasebo
-            "203.104.248"  // Rabaul
-    };
+    public static final int NONE = 0;
+    public static final int REQUEST = 1;
+    public static final int RESPONSE = 2;
+    public static final int HEADER_INSPECT_SIZE = 256;
 
     // ooi-based connector ips
     private static String[] kcaExtServiceList = {
@@ -54,7 +46,7 @@ public class KcaVpnData {
             "125.46.39.225"
     };
 
-    private static Set<String> prefixCheckList = new HashSet<>(Arrays.asList(kcaServerPrefixList));
+    private static Set<String> prefixCheckList = new HashSet<>();
     private static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public static int state = NONE;
@@ -102,14 +94,14 @@ public class KcaVpnData {
     }
 
     // Called from native code
-    private static int containsKcaServer(int type, byte[] source, byte[] target, byte[] head) {
+    public static int containsKcaServer(int type, byte[] source, byte[] target, byte[] head) {
         String saddrstr = new String(source);
         String taddrstr = new String(target);
 
         if (type == REQUEST) {
             if (prefixCheckList.contains(taddrstr)) {
                 return 1;
-            } else { // detect kcs host from request header
+            } else if (head != null) { // detect kcs host from request header
                 String headstr = (new String(head)).split("\r\n\r\n")[0];
                 if (headstr.contains("Host: ") && headstr.contains(".kancolle-server.com\r\n")) {
                     Log.e("KCAV", "kcs detected: " + taddrstr);
@@ -130,11 +122,15 @@ public class KcaVpnData {
     }
 
     // Called from native code
-    private static void getDataFromNative(byte[] data, int size, int type, byte[] source, byte[] target, int sport, int tport) {
+    public static void getDataFromNative(byte[] data, int size, int type, byte[] source, byte[] target, int sport, int tport) {
         try {
-            String saddrstr = new String(source);
-            String taddrstr = new String(target);
-            Log.e("KCAV", KcaUtils.format("getDataFromNative[%d] %s:%d => %s:%d", type, saddrstr, sport, taddrstr, tport));
+            if (source != null && target != null) {
+                String saddrstr = new String(source);
+                String taddrstr = new String(target);
+                Log.e("KCAV", KcaUtils.format("getDataFromNative[%d] %s:%d => %s:%d", type, saddrstr, sport, taddrstr, tport));
+            } else {
+                Log.e("KCAV", KcaUtils.format("getDataFromNative[%d] MitM %d => %d", type, sport, tport));
+            }
 
             if (type == REQUEST) {
                 String requestDataStr = new String(data);

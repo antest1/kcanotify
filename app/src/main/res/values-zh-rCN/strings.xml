@@ -190,7 +190,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="current_fairy_changed_in_next">※妖精会于战斗剧透/任务浏览结束后更换</string>
     <string name="action_fairy_rev">水平翻转</string>
     <string name="action_fairy_init">删除重置</string>
-    <string name="setting_menu_kand_title_adv_network">高级网络设置</string>
+    <string name="setting_menu_kand_title_adv_network">SOCKS5代理设置</string>
     <string name="setting_menu_kand_warn_adv_network">警告：错误的设定可能会让VPN失效。请在你清楚确定每个选项的作用时才更改设定！更改设定后你需要重新启用VPN套用变更</string>
     <string name="setting_menu_kand_title_socks5_enable">启用SOCKS5代理</string>
     <string name="setting_menu_kand_title_socks5_allapps">所有应用皆使用代理</string>
@@ -789,4 +789,44 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="nat8">瑞典</string>
     <string name="nat9">澳洲</string>
     <string name="nat10">荷兰</string>
+
+
+    <!-- strings from PCAPdroid -->
+    <string name="setting_menu_kand_desc_socks5_tls_incompatible">捕获HTTPS流量时无法使用</string>
+
+    <string name="app_intro_next_button">Next</string>
+    <string name="app_intro_skip_button">Skip</string>
+    <string name="app_intro_back_button">Back</string>
+    <string name="app_intro_done_button">完成</string>
+
+    <string name="error">错误</string>
+    <string name="warning">警告</string>
+    <string name="install_action">安装</string>
+    <string name="export_action">汇出</string>
+    <string name="update_action">更新</string>
+    <string name="cancel_action">取消</string>
+
+    <string name="no_activity_file_selection">未找到处理文件选择的应用程序</string>
+    <string name="no_intent_handler_found">未找到执行此操作的应用</string>
+
+    <string name="tls_decryption">捕获HTTPS流量</string>
+    <string name="tls_decryption_summary">通过执行 mitm 解密 HTTPS（SSL/TLS）流量。使用此功能前，请先运行下面的「Mitm设置向导」。</string>
+    <string name="mitm_setup_wizard">Mitm设置向导</string>
+    <string name="mitm_setup_wizard_intro">该向导将指导您完成 HTTPS 流量捕获所需的「kcanotify mitm 插件」和认证机构的安装。</string>
+    <string name="mitm_setup_wizard_done">Kcanotify现在已经准备好解密HTTPS流量！</string>
+    <string name="install_the_mitm_addon">安装 <a href='%1$s'>kcanotify mitm 插件</a></string>
+    <string name="mitm_addon_autostart_workaround">mitm 插件连接失败。作为解决方法,您可以尝试打开 mitm 插件应用程序，然后返回 Kcanotify 而不关闭它。您想现在打开它吗？</string>
+    <string name="mitm_skip_notice">证书似乎未安装。如果继续，解密可能会失败</string>
+    <string name="export_ca_certificate">导出「Kcanotify CA」证书，然后打开 Android “加密和凭据”设置并选择将其安装为“CA 证书”</string>
+    <string name="install_ca_certificate">安装「Kcanotify CA」证书，选择“VPN 和应用程序”。</string>
+    <string name="checking_the_certificate">检查证书…</string>
+    <string name="ca_cert_export_failed">导出CA证书时出错\n\n如果您的设备实施了自动启动或类似软件来限制后台服务执行，请务必将 <a href='%1$s'>Kcanotify 列入白名单</a></string>
+    <string name="cert_exported_now_installed">证书已导出，现在从Android设置中安装它</string>
+    <string name="cert_installed_correctly">CA证书已安装</string>
+    <string name="cert_reinstall_required">CA证书未安装，请运行 mitm 安装向导</string>
+    <string name="mitm_addon_bad_version">kcanotify mitm 插件版本已过时。请安装版本(%1$s)并重试</string>
+    <string name="update_available">新版本可用</string>
+    <string name="mitm_addon_update_available">有新的 mitm 插件更新可用。</string>
+    <string name="mitm_addon_new_version">必须更新 kcanotify mitm 插件</string>
+    <string name="mitm_doze_notice">电池优化可能会干扰 mitm 插件</string>
 </resources>

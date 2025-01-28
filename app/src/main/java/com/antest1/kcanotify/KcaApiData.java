@@ -1,6 +1,7 @@
 package com.antest1.kcanotify;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +18,9 @@ import com.google.gson.JsonPrimitive;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -728,6 +731,22 @@ public class KcaApiData {
             return 1;
         } else {
             return -1;
+        }
+    }
+
+    public static String getDecryptionListFromFile(Context context) {
+        String filename = "kc_server_hosts.json";
+        AssetManager am = context.getAssets();
+        try (AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open(filename);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(ais))
+        ) {
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) stringBuilder.append(line);
+            return stringBuilder.toString();
+        } catch (IOException e) {
+            Log.e("KCA", "getDecryptionListFromFile: " + KcaUtils.getStringFromException(e));
+            return "{}";
         }
     }
 

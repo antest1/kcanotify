@@ -10,6 +10,8 @@ public final class KcaConstants {
     public final static String KC_WV_PACKAGE_NAME = "com.example.kcs_webview";
     public final static String DMMLOGIN_PACKAGE_NAME = "com.dmm.app.store";
     public final static String MAINACTIVITY_NAME = "com.antest1.kcanotify.MainActivity";
+    public final static String DMM_SDK_STORE_PACKAGE = "com.dmm.games.android.sdk.store";
+    public final static String KC_WV_START_ACTIVITY = "com.example.kcs_webview.activity.StartActivity";
     public final static String GOTO_PACKAGE_NAME = "com.antest1.gotobrowser";
 
     public static final String REQUEST_PATH = "/request";
@@ -498,6 +500,9 @@ public final class KcaConstants {
     public static final String PREF_FLEETVIEW_ITEMSELECT = "fleetview_item_select";
     public static final String PREF_NOTI_TEST_SHOW = "notify_test_show";
 
+    public static final String PREF_USE_TLS_DECRYPTION = "use_tls_decryption";
+    public static final String PREF_MITM_SETUP_WIZARD = "mitm_setup_wizard";
+    public static final String PREF_DECRYPTION_LIST = "decryption_list";
     public static final String PREF_VPNSERVICE_USAGE_AGREE = "vpnservice_usage_agree";
 
     public static final String NOTI_SOUND_KIND_MIXED = "mixed";
@@ -588,6 +593,7 @@ public final class KcaConstants {
             PREF_FV_ITEM_3,
             PREF_FV_ITEM_4,
             PREF_NOTI_TEST_SHOW,
+            PREF_USE_TLS_DECRYPTION,
             PREF_VPNSERVICE_USAGE_AGREE
     };
 
@@ -622,6 +628,7 @@ public final class KcaConstants {
             PREF_ALLOW_EXTFILTER,
             PREF_HDNOTI_LOCKED,
             PREF_FAIRY_RANDOM,
+            PREF_USE_TLS_DECRYPTION,
             PREF_VPNSERVICE_USAGE_AGREE
     };
 

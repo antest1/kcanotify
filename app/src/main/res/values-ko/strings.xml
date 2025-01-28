@@ -3,7 +3,7 @@
 
     <!-- Application Information -->
     <string name="app_name">시제 깡들리티</string>
-    <string name="action_settings">깡들리티 설정</string>
+    <string name="action_settings">설정</string>
     <string name="action_download">다운로드</string>
     <string name="action_check">확인</string>
     <string name="action_server">서버 선택</string>
@@ -436,7 +436,7 @@
     <string name="setting_menu_kand_title_socks5_address">SOCKS5 프록시 주소</string>
     <string name="setting_menu_kand_title_socks5_username">사용자명(선택)</string>
     <string name="setting_menu_kand_title_socks5_password">비밀번호(선택)</string>
-    <string name="setting_menu_kand_title_adv_network">고급 네트워크 설정</string>
+    <string name="setting_menu_kand_title_adv_network">SOCKS5 프록시 설정</string>
     <string name="sa_bypass_list_invalid">설정된 예외 주소 목록이 올바른 형식이 아닙니다. 입력을 다시 확인하세요.</string>
     <string name="setting_menu_noti_title_notiatsvcoff">서비스가 꺼진 상태에서 알람 활성 여부</string>
     <string name="setting_menu_noti_desc_notiatsvcoff">깡들리티 서비스를 끈 상태에서도 원정/입거 완료 알림이 오도록 함</string>
@@ -691,7 +691,7 @@
     <string name="download_iteminfo">장비번역</string>
     <string name="download_akashi">개수공창</string>
     <string name="download_fairy">요정님</string>
-    <string name="download_progress">다운로드 중...</string>
+    <string name="download_progress">다운로드 중…</string>
     <string name="download_reset">전체 리소스 초기화</string>
     <string name="download_reset_message">리소스를 초기화합니다.</string>
     <string name="download_check_error">데이터 로딩 중 오류 발생 (기본 데이터 사용)</string>
@@ -783,4 +783,44 @@
     <string name="nat8">스웨덴</string>
     <string name="nat9">호주</string>
     <string name="nat10">네덜란드</string>
+
+
+    <!-- strings from PCAPdroid -->
+    <string name="setting_menu_kand_desc_socks5_tls_incompatible">HTTPS 트래픽 캡쳐 중 사용 불가</string>
+
+    <string name="app_intro_next_button">다음</string>
+    <string name="app_intro_skip_button">넘어가기</string>
+    <string name="app_intro_back_button">이전</string>
+    <string name="app_intro_done_button">완료</string>
+
+    <string name="error">에러</string>
+    <string name="warning">주의</string>
+    <string name="install_action">설치</string>
+    <string name="export_action">내보내기</string>
+    <string name="update_action">업데이트</string>
+    <string name="cancel_action">취소</string>
+
+    <string name="no_activity_file_selection">파일 선택을 위한 앱이 존재하지 않습니다</string>
+    <string name="no_intent_handler_found">이 action을 수행하기 위한 앱이 존재하지 않습니다</string>
+
+    <string name="tls_decryption">HTTPS 트래픽 캡쳐</string>
+    <string name="tls_decryption_summary">Mitm 방식을 통해 HTTPS(SSL/TLS) 트래픽을 처리합니다. 이 기능을 사용하기 전에 하단의 Mitm 설치 도우미를 실행해주세요.</string>
+    <string name="mitm_setup_wizard">Mitm 설치 도우미</string>
+    <string name="mitm_setup_wizard_intro">HTTPS 트래픽 캡쳐 기능에 필요한 kcanotify mitm addon 및 CA 인증서 설치 도우미입니다.</string>
+    <string name="mitm_setup_wizard_done">시제 깡들리티가 HTTPS 트래픽을 처리하기 위한 준비가 완료되었습니다!</string>
+    <string name="install_the_mitm_addon">kcanotify <a href='%1$s'>mitm addon</a> 설치</string>
+    <string name="mitm_addon_autostart_workaround">mitm addon과의 연결에 실패했습니다. 시제 깡들리티를 닫지 않고 직접 mitm addon 앱을 연 이후 다시 돌아와보세요. 지금 바로 여시겠습니까?</string>
+    <string name="mitm_skip_notice">인증서가 설치되지 않은 것으로 보입니다. 계속하는 경우 기능이 정상 동작하지 않을 수 있습니다.</string>
+    <string name="export_ca_certificate">Kcanotify CA 인증서를 내보낸 이후, 기기의 보안 설정에서 CA 인증서를 설정하세요. (예: 보안 > 기타 보안 설정 > 기기에 저장된 인증서 설치)</string>
+    <string name="install_ca_certificate">사용에서 "VPN 및 앱"을 선택한 이후 Kcanotify CA 인증서를 설치하세요.</string>
+    <string name="checking_the_certificate">인증서 확인 중…</string>
+    <string name="ca_cert_export_failed">CA 인증서를 내보내는 중 오류가 발생했습니다\n\n만약 기기에서 Autostart와 같이 백그라운드 서비스 실행을 제한하는 어플리케이션이 있다면 <a href='%1$s'>시제 깡들리티를 화이트리스트에 추가</a>하세요.</string>
+    <string name="cert_exported_now_installed">인증서 내보내기에 성공했습니다. 설정에서 인증서를 설치해주세요.</string>
+    <string name="cert_installed_correctly">CA 인증서가 설치되었습니다.</string>
+    <string name="cert_reinstall_required">CA 인증서가 설치되어 있지 않습니다. Mitm 설치 도우미를 실행하세요.</string>
+    <string name="mitm_addon_bad_version">오래된 kcanotify mtim addon을 사용하고 있습니다. 새로운 버전(%1$s)을 설치하세요.</string>
+    <string name="update_available">업데이트 가능</string>
+    <string name="mitm_addon_update_available">새로운 mitm addon 업데이트를 설치할 수 있습니다.</string>
+    <string name="mitm_addon_new_version">mitm addon의 업데이트가 필요합니다.</string>
+    <string name="mitm_doze_notice">배터리 최적화 기능이 mitm addon과 충돌할 수 있습니다.</string>
 </resources>

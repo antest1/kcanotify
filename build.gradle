@@ -23,6 +23,9 @@ allprojects {
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         maven { url "https://jitpack.io" }
     }
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
 }
 
 task clean(type: Delete) {

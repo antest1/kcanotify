@@ -14,26 +14,12 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags ""
-                arguments "-DANDROID_PLATFORM=android-16"
+                arguments "-DANDROID_PLATFORM=android-21"
                 // https://developer.android.com/ndk/guides/cmake.html
             }
         }
 
-        ndk {
-            // https://developer.android.com/ndk/guides/abis.html#sa
-            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
-        }
-
-        lintOptions {
-            checkReleaseBuilds false
-            abortOnError false
-        }
-    }
-
-    externalNativeBuild {
-        cmake {
-            path "CMakeLists.txt"
-        }
+        buildConfigField "long", "BUILD_TIME", System.currentTimeMillis() + "L"
     }
 
     buildTypes {
@@ -44,11 +30,29 @@ android {
         }
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
+    packagingOptions {
+        jniLibs {
+            // NOTE: needed to unpack libpcapd.so when installed as app bundle
+            useLegacyPackaging = true
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/jni/CMakeLists.txt')
+            version "3.22.1"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    ndkVersion '23.1.7779620'
+    ndkVersion '26.1.10909125'
     namespace 'com.antest1.kcanotify'
     compileSdk 33
 }
@@ -64,6 +68,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0'
     api 'com.google.guava:guava:27.0.1-android'
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.9'
+    implementation 'org.brotli:dec:0.1.2'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
     implementation (group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1') {
@@ -75,6 +80,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.github.woxthebox:draglistview:1.5.2'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation 'com.github.amitshekhariitbhu:PRDownloader:1.0.1'

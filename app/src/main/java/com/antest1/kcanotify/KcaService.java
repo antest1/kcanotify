@@ -284,6 +284,11 @@ public class KcaService extends Service {
                     stopSelf();
                 }
 
+                if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_AUTOHIDE)) {
+                    startService(new Intent(this, KcaForegroundCheckService.class)
+                            .setAction(KcaForegroundCheckService.FAIRY_FORECHECK_ON));
+                }
+
                 KcaBattle.setHandler(nHandler);
                 KcaApiData.setHandler(nHandler);
                 KcaAlarmService.setHandler(nHandler);
@@ -349,6 +354,7 @@ public class KcaService extends Service {
                 stopService(new Intent(this, KcaCustomToastService.class));
                 stopService(new Intent(this, KcaFleetCheckPopupService.class));
                 stopService(new Intent(this, KcaDockingPopupService.class));
+                stopService(new Intent(this, KcaForegroundCheckService.class));
                 setServiceDown();
                 KcaAlarmService.clearAlarmCount();
                 stopSelfResult(startId);
