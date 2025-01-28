@@ -628,7 +628,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean startCapture() {
-        if (CaptureService.isServiceActive()) return false;
+        if (CaptureService.isServiceActive()) return true;
 
         if (getBooleanPreferences(this, PREF_USE_TLS_DECRYPTION)) {
             MitmAddon.setCAInstallationSkipped(this, false);
