@@ -379,9 +379,9 @@ public class KcaFleetViewService extends Service {
 
         snapIndicator = new SnapIndicator(windowManager, mInflater);
 
-        fleetView.findViewById(R.id.fleetview_head).setOnTouchListener(draggableLayoutTouchListener);
+        fleetView.findViewById(R.id.fleetviewpanel).setOnTouchListener(draggableLayoutTouchListener);
 
-        fleetView.findViewById(R.id.fleetview_head).setOnClickListener(v -> {
+        fleetView.findViewById(R.id.fleetviewpanel).setOnClickListener(v -> {
             if (abs(layoutParams.x - startViewX) < 20 && abs(layoutParams.y - startViewY) < 20) {
                 JsonObject statProperties = new JsonObject();
                 statProperties.addProperty("manual", true);
@@ -503,7 +503,7 @@ public class KcaFleetViewService extends Service {
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 getWindowLayoutType(),
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                 PixelFormat.TRANSLUCENT);
         layoutParams.gravity = Gravity.TOP;
 
