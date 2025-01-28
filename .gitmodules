@@ -1,9 +1,12 @@
 [submodule "submodules/zdtun"]
 	path = submodules/zdtun
 	url = https://github.com/emanuele-f/zdtun.git
+	ignore = dirty
 [submodule "submodules/libpcap"]
 	path = submodules/libpcap
 	url = https://github.com/the-tcpdump-group/libpcap.git
+	ignore = dirty
 [submodule "submodules/nDPI"]
 	path = submodules/nDPI
 	url = https://github.com/emanuele-f/nDPI.git
+	ignore = dirty
