@@ -307,13 +307,7 @@ public class InitStartActivity extends Activity {
     private void startMainActivity(boolean transition) {
         if (!is_destroyed) {
             runOnUiThread(() -> {
-                Intent mainIntent;
-                String checked = getStringPreferences(getApplicationContext(), PREF_NOTICE_CHK_FLAG);
-                if (!NOTICE_CHK_CODE.equals(checked)) {
-                    mainIntent = new Intent(getApplicationContext(), KcaNoticeActivity.class);
-                } else {
-                    mainIntent = new Intent(getApplicationContext(), MainActivity.class);
-                }
+                Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(mainIntent);
                 finish();
             });
