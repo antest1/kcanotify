@@ -20,7 +20,6 @@ import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -31,7 +30,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -2019,8 +2017,10 @@ public class KcaBattleViewService extends Service {
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 getWindowLayoutType(),
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSLUCENT);;
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                PixelFormat.TRANSLUCENT);
         int selected = -1;
 
         @Override
@@ -2028,7 +2028,8 @@ public class KcaBattleViewService extends Service {
             if (menuView.getParent() != null) {
                 return false;
             }
-            int margin = (int) getResources().getDimension(R.dimen.item_popup_margin);
+            int xmargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
+            int ymargin = (int) getResources().getDimension(R.dimen.item_popup_ymargin);
             float x = event.getRawX();
             float y = event.getRawY();
             switch (event.getAction()) {
@@ -2044,9 +2045,13 @@ public class KcaBattleViewService extends Service {
                                 setItemViewLayout(newSelected);
                             }
                             updateScreenSize();
-                            itemViewParams.x = (int) (event.getRawX() + margin);
-                            itemViewParams.y = screenHeight - (int) event.getRawY() + 2 * margin;
-                            itemViewParams.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                            if (event.getRawX() + itemView.getWidth() > screenWidth) {
+                                itemViewParams.x = (int) (event.getRawX() - xmargin - itemView.getWidth());
+                            } else {
+                                itemViewParams.x = (int) (event.getRawX() + xmargin);
+                            }
+                            itemViewParams.y = (int) (event.getRawY() - ymargin - itemView.getHeight());
+                            itemViewParams.gravity = Gravity.TOP | Gravity.START;
                             if (itemView.getParent() != null) {
                                 if (newSelected == -1) {
                                     itemView.setVisibility(View.GONE);

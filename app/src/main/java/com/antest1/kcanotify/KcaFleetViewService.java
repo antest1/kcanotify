@@ -106,6 +106,7 @@ public class KcaFleetViewService extends Service {
     private static final int HQINFO_ITEMCNT3 = 4;
     private static final int HQINFO_ITEMCNT4 = 5;
 
+    private int screenWidth;
     private int screenHeight;
 
     Context contextWithLocale;
@@ -716,14 +717,17 @@ public class KcaFleetViewService extends Service {
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 getWindowLayoutType(),
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                 PixelFormat.TRANSLUCENT);
 
         int selected = -1;
         @SuppressLint({"RtlHardcoded", "ClickableViewAccessibility"})
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            int margin = (int) getResources().getDimension(R.dimen.item_popup_margin);
+            int xmargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
+            int ymargin = (int) getResources().getDimension(R.dimen.item_popup_ymargin);
 
             float x = event.getRawX();
             float y = event.getRawY();
@@ -766,9 +770,13 @@ public class KcaFleetViewService extends Service {
                                 }
                             }
 
-                            itemViewParams.x = (int) (event.getRawX() + margin);
-                            itemViewParams.y = screenHeight - (int) event.getRawY() + 2 * margin;
-                            itemViewParams.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                            if (event.getRawX() + itemView.getWidth() > screenWidth) {
+                                itemViewParams.x = (int) (event.getRawX() - xmargin - itemView.getWidth());
+                            } else {
+                                itemViewParams.x = (int) (event.getRawX() + xmargin);
+                            }
+                            itemViewParams.y = (int) (event.getRawY() - ymargin - itemView.getHeight());
+                            itemViewParams.gravity = Gravity.TOP | Gravity.START;
 
                             if (itemView.getParent() != null) {
                                 if (selected == -1 || selected != i) {
@@ -1302,6 +1310,12 @@ public class KcaFleetViewService extends Service {
                 }
                 fleetView.setVisibility(visibility);
             }
+
+            if (KcaLandAirBasePopupService.isActive()) {
+                Intent qintent = new Intent(getBaseContext(), KcaLandAirBasePopupService.class);
+                qintent.setAction(KcaLandAirBasePopupService.LAB_DATA_ACTION);
+                startService(qintent);
+            }
         }
     }
 
@@ -1309,6 +1323,7 @@ public class KcaFleetViewService extends Service {
         Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
+        screenWidth = size.x;
         screenHeight = size.y;
     }
 }
