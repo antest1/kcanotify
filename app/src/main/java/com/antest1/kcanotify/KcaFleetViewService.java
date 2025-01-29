@@ -392,66 +392,43 @@ public class KcaFleetViewService extends Service {
             }
         });
 
-        fleetView.findViewById(R.id.viewbutton_quest).setOnClickListener(v -> {
-            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Quest"), null);
-            Intent qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
-            qintent.setAction(SHOW_QUESTVIEW_ACTION_NEW);
-            startService(qintent);
-        });
+        fleetView.findViewById(R.id.viewbutton_quest).setOnClickListener(
+                v -> startPopupService(KcaQuestViewService.class,
+                KcaQuestViewService.SHOW_QUESTVIEW_ACTION_NEW,
+                "Quest"));
         fleetView.findViewById(R.id.viewbutton_excheck).setOnClickListener(v -> {
-            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("ExpeditionCheck"), null);
-            Intent qintent = new Intent(getBaseContext(), KcaExpeditionCheckViewService.class);
-            qintent.setAction(KcaExpeditionCheckViewService.SHOW_EXCHECKVIEW_ACTION.concat("/").concat(String.valueOf(selectedFleetIndex)));
-            startService(qintent);
+            String action = KcaExpeditionCheckViewService.SHOW_EXCHECKVIEW_ACTION
+                    .concat("/").concat(String.valueOf(selectedFleetIndex));
+            startPopupService(KcaExpeditionCheckViewService.class, action, "ExpeditionCheck");
         });
-        fleetView.findViewById(R.id.viewbutton_develop).setOnClickListener(v -> {
-            if (isGameDataLoaded()) {
-                sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Develop"), null);
-                Intent qintent = new Intent(getBaseContext(), KcaDevelopPopupService.class);
-                startService(qintent);
-            }
-        });
-        fleetView.findViewById(R.id.viewbutton_construction).setOnClickListener(v -> {
-            if (isGameDataLoaded()) {
-                sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Constr"), null);
-                Intent qintent = new Intent(getBaseContext(), KcaConstructPopupService.class);
-                qintent.setAction(KcaConstructPopupService.CONSTR_DATA_ACTION);
-                startService(qintent);
-            }
-        });
-        fleetView.findViewById(R.id.viewbutton_docking).setOnClickListener(v -> {
-            if (isGameDataLoaded()) {
-                sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Docking"), null);
-                Intent qintent = new Intent(getBaseContext(), KcaDockingPopupService.class);
-                qintent.setAction(KcaDockingPopupService.DOCKING_DATA_ACTION);
-                startService(qintent);
-            }
-        });
-        fleetView.findViewById(R.id.viewbutton_maphp).setOnClickListener(v -> {
-            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("MapHP"), null);
-            Intent qintent = new Intent(getBaseContext(), KcaMapHpPopupService.class);
-            qintent.setAction(KcaMapHpPopupService.MAPHP_SHOW_ACTION);
-            startService(qintent);
-        });
-        fleetView.findViewById(R.id.viewbutton_fchk).setOnClickListener(v -> {
-            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("FleetCheck"), null);
-            Intent qintent = new Intent(getBaseContext(), KcaFleetCheckPopupService.class);
-            qintent.setAction(KcaFleetCheckPopupService.FCHK_SHOW_ACTION);
-            startService(qintent);
-        });
-        fleetView.findViewById(R.id.viewbutton_labinfo).setOnClickListener(v -> {
-            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("LandAirBaseInfo"), null);
-            Intent qintent = new Intent(getBaseContext(), KcaLandAirBasePopupService.class);
-            qintent.setAction(KcaLandAirBasePopupService.LAB_DATA_ACTION);
-            startService(qintent);
-        });
-        fleetView.findViewById(R.id.viewbutton_akashi).setOnClickListener(v -> {
-            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Akashi"), null);
-            Intent qintent = new Intent(getBaseContext(), KcaAkashiViewService.class);
-            qintent.setAction(SHOW_AKASHIVIEW_ACTION);
-            startService(qintent);
-        });
-
+        fleetView.findViewById(R.id.viewbutton_develop).setOnClickListener(
+                v -> startPopupService(KcaDevelopPopupService.class,
+                        null,
+                        "Develop"));
+        fleetView.findViewById(R.id.viewbutton_construction).setOnClickListener(
+                v -> startPopupService(KcaConstructPopupService.class,
+                KcaConstructPopupService.CONSTR_DATA_ACTION,
+                "Constr"));
+        fleetView.findViewById(R.id.viewbutton_docking).setOnClickListener(
+                v -> startPopupService(KcaDockingPopupService.class,
+                KcaDockingPopupService.DOCKING_DATA_ACTION,
+                "Docking"));
+        fleetView.findViewById(R.id.viewbutton_maphp).setOnClickListener(
+                v -> startPopupService(KcaMapHpPopupService.class,
+                KcaMapHpPopupService.MAPHP_SHOW_ACTION,
+                "MapHP"));
+        fleetView.findViewById(R.id.viewbutton_fchk).setOnClickListener(
+                v -> startPopupService(KcaFleetCheckPopupService.class,
+                KcaFleetCheckPopupService.FCHK_SHOW_ACTION,
+                "FleetCheck"));
+        fleetView.findViewById(R.id.viewbutton_labinfo).setOnClickListener(
+                v -> startPopupService(KcaLandAirBasePopupService.class,
+                KcaLandAirBasePopupService.LAB_DATA_ACTION,
+                "LandAirBaseInfo"));
+        fleetView.findViewById(R.id.viewbutton_akashi).setOnClickListener(
+                v -> startPopupService(KcaAkashiViewService.class,
+                KcaAkashiViewService.SHOW_AKASHIVIEW_ACTION,
+                "Akashi"));
 
         fleetView.findViewById(R.id.fleetview_tool).setOnClickListener(v -> {
             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Tools"), null);
@@ -811,7 +788,7 @@ public class KcaFleetViewService extends Service {
         boolean is_combined = idx == FLEET_COMBINED_ID;
         boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         JsonArray deckportdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-        int deck_count = deckportdata.size();
+        int deck_count = (deckportdata != null) ? deckportdata.size() : 0;
 
         if (!isReady) {
             fleetCalcInfoText = "";
@@ -1255,7 +1232,6 @@ public class KcaFleetViewService extends Service {
         }
     }
 
-
     public static JsonObject loadGunfitData(AssetManager am) {
         try {
             AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("gunfit.json");
@@ -1280,6 +1256,28 @@ public class KcaFleetViewService extends Service {
 
         KcaDBHelper helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         helper.recordErrorLog(ERROR_TYPE_FLEETVIEW, "fleetview", "FV_".concat(String.valueOf(type)), data_str, getStringFromException(e));
+    }
+
+    private void startPopupService(Class<?> target, String action) {
+        startPopupService(target, action, null);
+    }
+    private void startPopupService(Class<?> target, String action, String label) {
+        boolean checkGameData = false;
+        switch (target.getSimpleName()) {
+            case "KcaConstructPopupService":
+            case "KcaDevelopPopupService":
+            case "KcaDockingPopupService":
+                checkGameData = true;
+                break;
+            default:
+                break;
+        }
+
+        if (checkGameData && !isGameDataLoaded()) return;
+        if (label != null) sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat(label), null);
+        Intent popupIntent = new Intent(getBaseContext(), target);
+        if (action != null) popupIntent.setAction(action);
+        startService(popupIntent);
     }
 
     @Override
@@ -1311,10 +1309,35 @@ public class KcaFleetViewService extends Service {
                 fleetView.setVisibility(visibility);
             }
 
+            // reopen popups
+            if (KcaQuestViewService.isActive()) {
+                startPopupService(KcaQuestViewService.class, KcaQuestViewService.SHOW_QUESTVIEW_ACTION_NEW);
+            }
+            if (KcaExpeditionCheckViewService.isActive()) {
+                String action = KcaExpeditionCheckViewService.SHOW_EXCHECKVIEW_ACTION
+                        .concat("/").concat(String.valueOf(selectedFleetIndex));
+                startPopupService(KcaExpeditionCheckViewService.class, action);
+            }
+            if (KcaDevelopPopupService.isActive()) {
+                startPopupService(KcaDevelopPopupService.class, null);
+            }
+            if (KcaConstructPopupService.isActive()) {
+                startPopupService(KcaConstructPopupService.class, KcaConstructPopupService.CONSTR_DATA_ACTION);
+            }
+            if (KcaDockingPopupService.isActive()) {
+                startPopupService(KcaDockingPopupService.class, KcaDockingPopupService.DOCKING_DATA_ACTION);
+            }
+            if (KcaMapHpPopupService.isActive()) {
+                startPopupService(KcaMapHpPopupService.class, KcaMapHpPopupService.MAPHP_SHOW_ACTION);
+            }
+            if (KcaFleetCheckPopupService.isActive()) {
+                startPopupService(KcaFleetCheckPopupService.class, KcaFleetCheckPopupService.FCHK_SHOW_ACTION);
+            }
             if (KcaLandAirBasePopupService.isActive()) {
-                Intent qintent = new Intent(getBaseContext(), KcaLandAirBasePopupService.class);
-                qintent.setAction(KcaLandAirBasePopupService.LAB_DATA_ACTION);
-                startService(qintent);
+                startPopupService(KcaLandAirBasePopupService.class, KcaLandAirBasePopupService.LAB_DATA_ACTION);
+            }
+            if (KcaAkashiViewService.isActive()) {
+                startPopupService(KcaAkashiViewService.class, SHOW_AKASHIVIEW_ACTION);
             }
         }
     }

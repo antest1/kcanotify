@@ -26,8 +26,6 @@ import android.widget.TextView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.util.Calendar;
-
 import static com.antest1.kcanotify.KcaApiData.getSlotItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_LABSIFNO;
@@ -43,7 +41,7 @@ import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 public class KcaLandAirBasePopupService extends Service {
     public final static String LAB_DATA_ACTION = "lab_data_action";
 
-    private View labPopupView, itemView;
+    private View layoutView, itemView;
     private WindowManager windowManager;
     private KcaDBHelper dbHelper;
     KcaDeckInfo deckInfoCalc;
@@ -105,32 +103,29 @@ public class KcaLandAirBasePopupService extends Service {
 
     @Override
     public void onDestroy() {
-        if (labPopupView != null) {
-            if (labPopupView.getParent() != null) windowManager.removeViewImmediate(labPopupView);
-        }
-        if (itemView != null) {
-            if (itemView.getParent() != null) windowManager.removeViewImmediate(itemView);
-        }
+        active = false;
         super.onDestroy();
     }
 
     private void setPopupLayout() {
+        if (checkLayoutExist()) return;
+
         LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        labPopupView = mInflater.inflate(R.layout.view_labinfo_view, null);
+        layoutView = mInflater.inflate(R.layout.view_labinfo_view, null);
         itemView = mInflater.inflate(R.layout.view_battleview_items, null);
 
         // mView.setOnTouchListener(mViewTouchListener);
-        labPopupView.findViewById(R.id.view_lab_head).setOnTouchListener(mViewTouchListener);
-        labPopupView.setVisibility(View.GONE);
-        ((TextView) labPopupView.findViewById(R.id.view_lab_title)).setText(getStringWithLocale(R.string.viewmenu_airbase_title));
-        labPopupView.findViewById(R.id.view_lab_title).setOnClickListener(view -> {
-            if (labPopupView != null) labPopupView.setVisibility(View.GONE);
+        layoutView.findViewById(R.id.view_lab_head).setOnTouchListener(mViewTouchListener);
+        layoutView.setVisibility(View.GONE);
+        ((TextView) layoutView.findViewById(R.id.view_lab_title)).setText(getStringWithLocale(R.string.viewmenu_airbase_title));
+        layoutView.findViewById(R.id.view_lab_title).setOnClickListener(view -> {
+            if (layoutView != null) layoutView.setVisibility(View.GONE);
             if (itemView != null) itemView.setVisibility(View.GONE);
             stopPopup();
         });
 
         layoutParams = getLayoutParams(getResources().getConfiguration());
-        windowManager.addView(labPopupView, layoutParams);
+        windowManager.addView(layoutView, layoutParams);
 
         itemViewParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -150,8 +145,8 @@ public class KcaLandAirBasePopupService extends Service {
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             setPopupContent();
-            windowManager.updateViewLayout(labPopupView, layoutParams);
-            labPopupView.setVisibility(View.VISIBLE);
+            windowManager.updateViewLayout(layoutView, layoutParams);
+            layoutView.setVisibility(View.VISIBLE);
         }
     };
 
@@ -161,7 +156,7 @@ public class KcaLandAirBasePopupService extends Service {
     }
 
     private void setPopupContent() {
-        LinearLayout view_list = labPopupView.findViewById(R.id.view_lab_list);
+        LinearLayout view_list = layoutView.findViewById(R.id.view_lab_list);
         LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view_list.removeAllViews();
         JsonArray api_air_base = dbHelper.getJsonArrayValue(DB_KEY_LABSIFNO);
@@ -271,14 +266,14 @@ public class KcaLandAirBasePopupService extends Service {
                     }
                     view_list.addView(v);
                 }
-                labPopupView.findViewById(R.id.view_lab_test).setVisibility(View.GONE);
+                layoutView.findViewById(R.id.view_lab_test).setVisibility(View.GONE);
             } else {
-                labPopupView.findViewById(R.id.view_lab_test).setVisibility(View.VISIBLE);
-                ((TextView) labPopupView.findViewById(R.id.view_lab_test)).setText("No Data");
+                layoutView.findViewById(R.id.view_lab_test).setVisibility(View.VISIBLE);
+                ((TextView) layoutView.findViewById(R.id.view_lab_test)).setText("No Data");
             }
         } catch (Exception e) {
-            labPopupView.findViewById(R.id.view_lab_test).setVisibility(View.VISIBLE);
-            ((TextView) labPopupView.findViewById(R.id.view_lab_test)).setText("Error while processing data");
+            layoutView.findViewById(R.id.view_lab_test).setVisibility(View.VISIBLE);
+            ((TextView) layoutView.findViewById(R.id.view_lab_test)).setText("Error while processing data");
             dbHelper.putValue(DB_KEY_LABSIFNO, (new JsonArray()).toString());
         }
     }
@@ -375,7 +370,7 @@ public class KcaLandAirBasePopupService extends Service {
         itemView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
     }
 
-    private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
         private static final int MAX_CLICK_DURATION = 200;
         private long startClickTime;
 
@@ -419,7 +414,12 @@ public class KcaLandAirBasePopupService extends Service {
     };
 
     private void stopPopup() {
-        active = false;
+        if (layoutView != null) {
+            if (layoutView.getParent() != null) windowManager.removeViewImmediate(layoutView);
+        }
+        if (itemView != null) {
+            if (itemView.getParent() != null) windowManager.removeViewImmediate(itemView);
+        }
         stopSelf();
     }
 
@@ -445,22 +445,13 @@ public class KcaLandAirBasePopupService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        visibility = labPopupView.getVisibility();
-
-        if (windowManager != null) {
-            if (labPopupView.getParent() != null) windowManager.removeViewImmediate(labPopupView);
-            /*
-            setPopupLayout();
-            layoutParams = getLayoutParams(newConfig);
-            windowManager.addView(labPopupView, layoutParams);
-
-            if (labPopupView.getParent() != null) {
-                setPopupContent();
-                labPopupView.invalidate();
-                windowManager.updateViewLayout(labPopupView, layoutParams);
-            }
-            labPopupView.setVisibility(visibility);
-            */
+        visibility = layoutView.getVisibility();
+        if (windowManager != null && checkLayoutExist()) {
+            windowManager.removeViewImmediate(layoutView);
         }
+    }
+
+    private boolean checkLayoutExist() {
+        return layoutView != null && layoutView.getParent() != null;
     }
 }

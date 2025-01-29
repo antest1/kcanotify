@@ -1,15 +1,13 @@
 package com.antest1.kcanotify;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -45,15 +43,15 @@ public class KcaConstructPopupService extends Service {
     Runnable constructTimer;
     ScheduledExecutorService constructTimeScheduler = null;
 
-    private View mView;
-    private WindowManager mManager;
+    private View popupView;
+    private WindowManager windowManager;
     private int screenWidth, screenHeight;
     private int popupWidth, popupHeight;
     private KcaDBHelper dbHelper;
     private boolean spoilerStatus = true;
     View constructionViewButton;
 
-    WindowManager.LayoutParams mParams;
+    WindowManager.LayoutParams layoutParams;
 
     public static int type;
     public static int clickcount;
@@ -73,6 +71,7 @@ public class KcaConstructPopupService extends Service {
         return null;
     }
 
+    @SuppressLint("DiscouragedApi")
     @Override
     public void onCreate() {
         super.onCreate();
@@ -81,39 +80,10 @@ public class KcaConstructPopupService extends Service {
             // Can not draw overlays: pass
             stopSelf();
         } else {
+            active = true;
             clickcount = 0;
+            windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-
-            LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            mView = mInflater.inflate(R.layout.view_ship_constr, null);
-            mView.setOnTouchListener(mViewTouchListener);
-            ((TextView) mView.findViewById(R.id.view_sc_title)).setText(getStringWithLocale(R.string.viewmenu_construction_title));
-
-            mView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-            popupWidth = mView.getMeasuredWidth();
-            popupHeight = mView.getMeasuredHeight();
-
-            // Button (Fairy) Settings
-            mParams = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    getWindowLayoutType(),
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                    PixelFormat.TRANSLUCENT);
-
-            mParams.gravity = Gravity.TOP | Gravity.START;
-            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            screenWidth = size.x;
-            screenHeight = size.y;
-            Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
-
-            mParams.x = (screenWidth - popupWidth) / 2;
-            mParams.y = (screenHeight - popupHeight) / 2;
-            mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-            mManager.addView(mView, mParams);
-
             constructTimer = () -> {
                 Log.e("KCA-CPS", "constructTimer");
                 try {
@@ -123,18 +93,59 @@ public class KcaConstructPopupService extends Service {
                 }
             };
 
-            spoilerStatus = getBooleanPreferences(getApplicationContext(), PREF_SHOW_CONSTRSHIP_NAME);
-            constructionViewButton = mView.findViewById(R.id.view_sc_btn);
-            constructionViewButton.setOnClickListener(v -> {
-                spoilerStatus = !spoilerStatus;
-                updateSpoilerButton();
-                updatePopup();
-            });
-
-            updateSpoilerButton();
             constructTimeScheduler = Executors.newSingleThreadScheduledExecutor();
             constructTimeScheduler.scheduleAtFixedRate(constructTimer, 0, 1, TimeUnit.SECONDS);
         }
+    }
+
+    private void setPopupLayout() {
+        if (checkPopupExist()) return;
+
+        LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        popupView = mInflater.inflate(R.layout.view_ship_constr, null);
+        popupView.setOnTouchListener(mViewTouchListener);
+        popupView.findViewById(R.id.view_sc_head).setOnTouchListener(mViewTouchListener);
+        ((TextView) popupView.findViewById(R.id.view_sc_title)).setText(getStringWithLocale(R.string.viewmenu_construction_title));
+
+        setPopupContent();
+        updatePopup();
+
+        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        popupWidth = popupView.getMeasuredWidth();
+        popupHeight = popupView.getMeasuredHeight();
+
+        Display display = windowManager.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenWidth = size.x;
+        screenHeight = size.y;
+        Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
+
+        if (layoutParams == null) {
+            layoutParams = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    getWindowLayoutType(),
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    PixelFormat.TRANSLUCENT);
+            layoutParams.gravity = Gravity.TOP | Gravity.START;
+        }
+
+        layoutParams.x = (screenWidth - popupWidth) / 2;
+        layoutParams.y = (screenHeight - popupHeight) / 2;
+        windowManager.addView(popupView, layoutParams);
+    }
+
+    private void setPopupContent() {
+        spoilerStatus = getBooleanPreferences(getApplicationContext(), PREF_SHOW_CONSTRSHIP_NAME);
+        constructionViewButton = popupView.findViewById(R.id.view_sc_btn);
+        constructionViewButton.setOnClickListener(v -> {
+            spoilerStatus = !spoilerStatus;
+            updateSpoilerButton();
+            updatePopup();
+        });
+        updateSpoilerButton();
+        popupView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -144,8 +155,8 @@ public class KcaConstructPopupService extends Service {
             // Can not draw overlays: pass
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
-            if(intent.getAction().equals(CONSTR_DATA_ACTION)) {
-                updatePopup();
+            if (intent.getAction().equals(CONSTR_DATA_ACTION)) {
+                setPopupLayout();
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -153,47 +164,22 @@ public class KcaConstructPopupService extends Service {
 
     @Override
     public void onDestroy() {
+        active = false;
+        if (windowManager != null && popupView != null && popupView.getParent() != null) {
+            windowManager.removeViewImmediate(popupView);
+        }
         if (constructTimeScheduler != null) {
             Log.e("KCA-CPS", "scheduler shutdown");
             constructTimeScheduler.shutdown();
             constructTimeScheduler = null;
         }
-        if (mManager != null) mManager.removeView(mView);
         super.onDestroy();
     }
 
-    final Handler handler = new Handler()  {
-        public void handleMessage(Message msg) {
-            //boolean show_shipname = getBooleanPreferences(getApplicationContext(), PREF_SHOW_CONSTRSHIP_NAME);
-            JsonArray api_kdock = dbHelper.getJsonArrayValue(DB_KEY_KDOCKDATA);
-            if (api_kdock != null) {
-                for (int i = 0; i<api_kdock.size(); i++) {
-                    int index = i + 1;
-                    JsonObject item = api_kdock.get(i).getAsJsonObject();
-                    TextView nameview = (TextView) mView.findViewById(getId(KcaUtils.format("sc%d_name", index), R.id.class));
-                    TextView timeview = (TextView) mView.findViewById(getId(KcaUtils.format("sc%d_time", index), R.id.class));
-                    if (item.get("api_state").getAsInt() != -1) {
-                        int ship_id = item.get("api_created_ship_id").getAsInt();
-                        if (ship_id > 0) {
-                            JsonObject shipdata = KcaApiData.getKcShipDataById(ship_id, "name");
-                            if (spoilerStatus) {
-                                nameview.setText(KcaApiData.getShipTranslation(shipdata.get("name").getAsString(), ship_id, false));
-                            } else {
-                                nameview.setText("？？？");
-                            }
-                            timeview.setText(getLeftTimeStr(item.get("api_complete_time").getAsLong()));
-                        } else {
-                            nameview.setText("-");
-                            timeview.setText("");
-                        }
-                    } else {
-                        nameview.setText("CLOSED");
-                        timeview.setText("");
-                    }
-                }
-            }
-        }
-    };
+    private void stopPopup() {
+        if (popupView != null) popupView.setVisibility(View.GONE);
+        stopSelf();
+    }
 
     private void updateSpoilerButton() {
         if (spoilerStatus) {
@@ -204,16 +190,39 @@ public class KcaConstructPopupService extends Service {
     }
 
     private void updatePopup() {
-        Log.e("KCA-CPS", "updatePopup");
-        handler.sendEmptyMessage(0);
+        JsonArray api_kdock = dbHelper.getJsonArrayValue(DB_KEY_KDOCKDATA);
+        if (api_kdock != null) {
+            for (int i = 0; i<api_kdock.size(); i++) {
+                int index = i + 1;
+                JsonObject item = api_kdock.get(i).getAsJsonObject();
+                TextView nameview = popupView.findViewById(getId(KcaUtils.format("sc%d_name", index), R.id.class));
+                TextView timeview = popupView.findViewById(getId(KcaUtils.format("sc%d_time", index), R.id.class));
+                if (item.get("api_state").getAsInt() != -1) {
+                    int ship_id = item.get("api_created_ship_id").getAsInt();
+                    if (ship_id > 0) {
+                        JsonObject shipdata = KcaApiData.getKcShipDataById(ship_id, "name");
+                        if (spoilerStatus) {
+                            nameview.setText(KcaApiData.getShipTranslation(shipdata.get("name").getAsString(), ship_id, false));
+                        } else {
+                            nameview.setText("？？？");
+                        }
+                        timeview.setText(getLeftTimeStr(item.get("api_complete_time").getAsLong()));
+                    } else {
+                        nameview.setText("-");
+                        timeview.setText("");
+                    }
+                } else {
+                    nameview.setText("CLOSED");
+                    timeview.setText("");
+                }
+            }
+        }
     }
-
     private float mTouchX, mTouchY;
     private int mViewX, mViewY;
 
-    private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
         private static final int MAX_CLICK_DURATION = 200;
-        private static final int LONG_CLICK_DURATION = 800;
 
         private long startClickTime;
 
@@ -225,8 +234,8 @@ public class KcaConstructPopupService extends Service {
                 case MotionEvent.ACTION_DOWN:
                     mTouchX = event.getRawX();
                     mTouchY = event.getRawY();
-                    mViewX = mParams.x;
-                    mViewY = mParams.y;
+                    mViewX = layoutParams.x;
+                    mViewY = layoutParams.y;
                     Log.e("KCA", KcaUtils.format("mView: %d %d", mViewX, mViewY));
                     startClickTime = Calendar.getInstance().getTimeInMillis();
                     break;
@@ -235,11 +244,13 @@ public class KcaConstructPopupService extends Service {
                     Log.e("KCA", "Callback Canceled");
                     long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                     if (clickDuration < MAX_CLICK_DURATION) {
-                        stopSelf();
+                        if (id == R.id.view_sc_head) {
+                            stopPopup();
+                        }
                     }
 
                     int[] locations = new int[2];
-                    mView.getLocationOnScreen(locations);
+                    popupView.getLocationOnScreen(locations);
                     int xx = locations[0];
                     int yy = locations[1];
                     Log.e("KCA", KcaUtils.format("Coord: %d %d", xx, yy));
@@ -249,13 +260,13 @@ public class KcaConstructPopupService extends Service {
                     int x = (int) (event.getRawX() - mTouchX);
                     int y = (int) (event.getRawY() - mTouchY);
 
-                    mParams.x = mViewX + x;
-                    mParams.y = mViewY + y;
-                    if (mParams.x < 0) mParams.x = 0;
-                    else if (mParams.x > screenWidth - popupWidth) mParams.x = screenWidth - popupWidth;
-                    if (mParams.y < 0) mParams.y = 0;
-                    else if (mParams.y > screenHeight - popupHeight) mParams.y = screenHeight - popupHeight;
-                    mManager.updateViewLayout(mView, mParams);
+                    layoutParams.x = mViewX + x;
+                    layoutParams.y = mViewY + y;
+                    if (layoutParams.x < 0) layoutParams.x = 0;
+                    else if (layoutParams.x > screenWidth - popupWidth) layoutParams.x = screenWidth - popupWidth;
+                    if (layoutParams.y < 0) layoutParams.y = 0;
+                    else if (layoutParams.y > screenHeight - popupHeight) layoutParams.y = screenHeight - popupHeight;
+                    windowManager.updateViewLayout(popupView, layoutParams);
                     break;
             }
 
@@ -282,20 +293,13 @@ public class KcaConstructPopupService extends Service {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
-        Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
-
-        if (mParams != null) {
-            if (mParams.x < 0) mParams.x = 0;
-            else if (mParams.x > screenWidth - popupWidth) mParams.x = screenWidth - popupWidth;
-            if (mParams.y < 0) mParams.y = 0;
-            else if (mParams.y > screenHeight - popupHeight) mParams.y = screenHeight - popupHeight;
-        }
-
         super.onConfigurationChanged(newConfig);
+        if (windowManager != null && checkPopupExist()) {
+            windowManager.removeViewImmediate(popupView);
+        }
+    }
+
+    public boolean checkPopupExist() {
+        return popupView != null && popupView.getParent() != null;
     }
 }

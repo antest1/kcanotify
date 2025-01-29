@@ -4,9 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
@@ -50,7 +50,6 @@ public class KcaAkashiViewService extends Service {
 
     Context contextWithLocale;
     LayoutInflater mInflater;
-    public static boolean active;
     public static JsonObject api_data;
     public static JsonObject akashiData, akashiDay;
     private static boolean isSafeChecked = false;
@@ -61,8 +60,8 @@ public class KcaAkashiViewService extends Service {
 
     static boolean error_flag = false;
 
-    private View mView;
-    private WindowManager mManager;
+    private View layoutView;
+    private WindowManager windowManager;
 
     int displayWidth = 0;
 
@@ -73,6 +72,11 @@ public class KcaAkashiViewService extends Service {
     KcaAkashiListViewAdpater2 adapter;
     ArrayList<KcaAkashiListViewItem> listViewItemList;
     ImageView exitbtn;
+
+    public static boolean active = false;
+    public static boolean isActive() {
+        return active;
+    }
 
     @Nullable
     @Override
@@ -123,11 +127,11 @@ public class KcaAkashiViewService extends Service {
             contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
             //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mInflater = LayoutInflater.from(contextWithLocale);
-            mView = mInflater.inflate(R.layout.view_akashi_list, null);
-            KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
-            mView.setVisibility(View.GONE);
+            layoutView = mInflater.inflate(R.layout.view_akashi_list, null);
+            KcaUtils.resizeFullWidthView(getApplicationContext(), layoutView);
+            layoutView.setVisibility(View.GONE);
 
-            akashiview = mView.findViewById(R.id.akashiviewlayout);
+            akashiview = layoutView.findViewById(R.id.akashiviewlayout);
             akashiview.findViewById(R.id.akashiview_head).setOnTouchListener(mViewTouchListener);
 
             akashiview_gtd = (TextView) akashiview.findViewById(R.id.akashiview_gtd);
@@ -150,7 +154,7 @@ public class KcaAkashiViewService extends Service {
                     PixelFormat.TRANSLUCENT);
             mParams.gravity = Gravity.CENTER;
 
-            mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+            windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
             Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
             Point size = new Point();
@@ -168,8 +172,20 @@ public class KcaAkashiViewService extends Service {
     @Override
     public void onDestroy() {
         active = false;
-        mView.setVisibility(View.GONE);
+        layoutView.setVisibility(View.GONE);
         super.onDestroy();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (windowManager != null && checkLayoutExist()) {
+            windowManager.removeViewImmediate(layoutView);
+        }
+    }
+
+    private boolean checkLayoutExist() {
+        return layoutView != null && layoutView.getParent() != null;
     }
 
     @Override
@@ -179,15 +195,16 @@ public class KcaAkashiViewService extends Service {
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(SHOW_AKASHIVIEW_ACTION)) {
+                active = true;
                 int setViewResult = setView();
                 if (setViewResult == 0) {
-                    if (mView.getParent() != null) {
-                        mManager.removeViewImmediate(mView);
+                    if (layoutView.getParent() != null) {
+                        windowManager.removeViewImmediate(layoutView);
                     }
-                    mManager.addView(mView, mParams);
+                    windowManager.addView(layoutView, mParams);
                 }
                 Log.e("KCA", "show_akashiview_action " + String.valueOf(setViewResult));
-                mView.setVisibility(View.VISIBLE);
+                layoutView.setVisibility(View.VISIBLE);
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -209,7 +226,9 @@ public class KcaAkashiViewService extends Service {
                     if (clickDuration < MAX_CLICK_DURATION) {
                         int id = v.getId();
                         if (id == akashiview.findViewById(R.id.akashiview_head).getId()) {
-                            mView.setVisibility(View.GONE);
+                            active = false;
+                            layoutView.setVisibility(View.GONE);
+                            windowManager.removeViewImmediate(layoutView);
                         } else if (id == akashiview.findViewById(R.id.akashiview_star).getId()) {
                             if (isStarChecked) akashiview_star.setText(getString(R.string.aa_btn_star0));
                             else akashiview_star.setText(getString(R.string.aa_btn_star1));

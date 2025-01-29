@@ -1,14 +1,13 @@
 package com.antest1.kcanotify;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -57,15 +56,15 @@ public class KcaDockingPopupService extends Service {
     ScheduledExecutorService dockingTimeScheduler = null;
     KcaDockingPopupListAdapter adapter;
 
-    private View mView;
-    private WindowManager mManager;
+    private View popupView;
+    private WindowManager windowManager;
     private int screenWidth, screenHeight;
     private int popupWidth, popupHeight;
     private KcaDBHelper dbHelper;
     LinearLayout timerView;
     ListView dockListView;
     JsonArray api_ndock;
-    WindowManager.LayoutParams mParams;
+    WindowManager.LayoutParams layoutParams;
 
     public static int type;
     public static int clickcount;
@@ -85,6 +84,7 @@ public class KcaDockingPopupService extends Service {
         return null;
     }
 
+    @SuppressLint("DiscouragedApi")
     @Override
     public void onCreate() {
         super.onCreate();
@@ -93,129 +93,135 @@ public class KcaDockingPopupService extends Service {
             // Can not draw overlays: pass
             stopSelf();
         } else {
+            active = true;
             clickcount = 0;
+            windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
 
-            LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            mView = mInflater.inflate(R.layout.view_docking_info, null);
-            mView.setOnTouchListener(mViewTouchListener);
-            ((TextView) mView.findViewById(R.id.view_dock_title)).setText(getStringWithLocale(R.string.viewmenu_docking_title));
-            ((TextView) mView.findViewById(R.id.view_dock_list_btn)).setText(getStringWithLocale(R.string.viewmenu_docking_list));
+            dockingTimer = () -> {
+                Log.e("KCA-DKS", "dockingTimer");
+                try {
+                    updatePopup();
+                } catch (Exception e) {
+                    Log.e("KCA-DKS", getStringFromException(e));
+                }
+            };
+            dockingTimeScheduler = Executors.newSingleThreadScheduledExecutor();
+            dockingTimeScheduler.scheduleAtFixedRate(dockingTimer, 0, 1, TimeUnit.SECONDS);
+        }
+    }
 
-            mView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-            popupWidth = mView.getMeasuredWidth();
-            popupHeight = mView.getMeasuredHeight();
+    private void setPopupLayout() {
+        if (checkPopupExist()) return;
 
-            // Button (Fairy) Settings
-            mParams = new WindowManager.LayoutParams(
+        LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        popupView = mInflater.inflate(R.layout.view_docking_info, null);
+        popupView.setOnTouchListener(mViewTouchListener);
+        popupView.findViewById(R.id.view_dock_head).setOnTouchListener(mViewTouchListener);
+        ((TextView) popupView.findViewById(R.id.view_dock_title)).setText(getStringWithLocale(R.string.viewmenu_docking_title));
+        ((TextView) popupView.findViewById(R.id.view_dock_list_btn)).setText(getStringWithLocale(R.string.viewmenu_docking_list));
+
+        setPopupContent();
+        updatePopup();
+
+        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        popupWidth = popupView.getMeasuredWidth();
+        popupHeight = popupView.getMeasuredHeight();
+
+        Display display = windowManager.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenWidth = size.x;
+        screenHeight = size.y;
+        Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
+
+        if (layoutParams == null) {
+            layoutParams = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     getWindowLayoutType(),
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                     PixelFormat.TRANSLUCENT);
+            layoutParams.gravity = Gravity.TOP | Gravity.START;
+        }
 
-            mParams.gravity = Gravity.TOP | Gravity.START;
-            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            screenWidth = size.x;
-            screenHeight = size.y;
-            Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
+        layoutParams.x = (screenWidth - popupWidth) / 2;
+        layoutParams.y = (screenHeight - popupHeight) / 2;
+        windowManager.addView(popupView, layoutParams);
+    }
 
-            mParams.x = (screenWidth - popupWidth) / 2;
-            mParams.y = (screenHeight - popupHeight) / 2;
-            mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-            mManager.addView(mView, mParams);
+    private void setPopupContent() {
+        adapter = new KcaDockingPopupListAdapter();
 
-            api_ndock = dbHelper.getJsonArrayValue(DB_KEY_NDOCKDATA);
-            dockingTimer = new Runnable() {
-                @Override
-                public void run() {
-                    Log.e("KCA-DKS", "dockingTimer");
-                    try {
-                        updatePopup();
-                    } catch (Exception e) {
-                        Log.e("KCA-DKS", getStringFromException(e));
+        JsonArray damage_info = new JsonArray();
+        JsonArray ship_info = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
+        if (ship_info != null) {
+            JsonObject indock_list = new JsonObject();
+            if (api_ndock != null) {
+                for (int i = 0; i < api_ndock.size(); i++) {
+                    JsonObject item = api_ndock.get(i).getAsJsonObject();
+                    if (item.get("api_state").getAsInt() != -1) {
+                        int ship_id = item.get("api_ship_id").getAsInt();
+                        if (ship_id > 0) indock_list.addProperty(item.get("api_ship_id").getAsString(), true);
                     }
                 }
-            };
-
-            dockingTimeScheduler = Executors.newSingleThreadScheduledExecutor();
-            dockingTimeScheduler.scheduleAtFixedRate(dockingTimer, 0, 1, TimeUnit.SECONDS);
-
-            adapter = new KcaDockingPopupListAdapter();
-            JsonArray damage_info = new JsonArray();
-            JsonArray ship_info = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
-            if (ship_info != null) {
-                JsonObject indock_list = new JsonObject();
-                if (api_ndock != null) {
-                    for (int i = 0; i < api_ndock.size(); i++) {
-                        JsonObject item = api_ndock.get(i).getAsJsonObject();
-                        if (item.get("api_state").getAsInt() != -1) {
-                            int ship_id = item.get("api_ship_id").getAsInt();
-                            if (ship_id > 0) indock_list.addProperty(item.get("api_ship_id").getAsString(), true);
-                        }
-                    }
-                }
-
-                for (int i = 0; i < ship_info.size(); i++) {
-                    JsonObject item = ship_info.get(i).getAsJsonObject();
-                    int max_hp = item.get("api_maxhp").getAsInt();
-                    int now_hp = item.get("api_nowhp").getAsInt();
-                    int ship_id = item.get("api_ship_id").getAsInt();
-                    int hp_loss = max_hp - now_hp;
-                    if (hp_loss > 0) {
-                        JsonObject kcdata = KcaApiData.getKcShipDataById(ship_id, "name,stype");
-                        if (kcdata != null && kcdata.has("stype")) {
-                            String id = item.get("api_id").getAsString();
-                            int level = item.get("api_lv").getAsInt();
-                            JsonObject repair_item = new JsonObject();
-                            String name = getShipTranslation(kcdata.get("name").getAsString(), ship_id, false);
-                            String name_level = KcaUtils.format("%s (Lv %d)", name, level);
-                            int stype = kcdata.get("stype").getAsInt();
-                            int repair_time = KcaDocking.getDockingTime(hp_loss, level, stype);
-                            repair_item.addProperty("name", name_level);
-                            repair_item.addProperty("time_raw", repair_time);
-                            repair_item.addProperty("time", KcaUtils.getTimeStr(repair_time));
-                            repair_item.addProperty("state", getState(now_hp, max_hp));
-                            repair_item.addProperty("dock", indock_list.has(id));
-                            damage_info.add(repair_item);
-                        }
-                    }
-                }
-
-                Type listType = new TypeToken<List<JsonObject>>() {
-                }.getType();
-                final List<JsonObject> shipItemList = new Gson().fromJson(damage_info, listType);
-                StatComparator cmp = new StatComparator();
-                Collections.sort(shipItemList, cmp);
-                adapter.setItemList(shipItemList);
-
-                timerView = mView.findViewById(R.id.view_dock_timer);
-                timerView.setVisibility(View.VISIBLE);
-                dockListView = mView.findViewById(R.id.view_dock_list);
-                dockListView.setAdapter(adapter);
-                dockListView.setVisibility(View.GONE);
-                TextView dockListViewButton = mView.findViewById(R.id.view_dock_list_btn);
-                dockListViewButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
-                dockListViewButton.setOnClickListener(v -> {
-                    if (dockListView.getVisibility() == View.GONE) {
-                        dockListViewButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-                        dockListView.setVisibility(View.VISIBLE);
-                        timerView.setVisibility(View.GONE);
-                    } else {
-                        dockListViewButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
-                        dockListView.setVisibility(View.GONE);
-                        timerView.setVisibility(View.VISIBLE);
-                    }
-                });
-
-
             }
+
+            for (int i = 0; i < ship_info.size(); i++) {
+                JsonObject item = ship_info.get(i).getAsJsonObject();
+                int max_hp = item.get("api_maxhp").getAsInt();
+                int now_hp = item.get("api_nowhp").getAsInt();
+                int ship_id = item.get("api_ship_id").getAsInt();
+                int hp_loss = max_hp - now_hp;
+                if (hp_loss > 0) {
+                    JsonObject kcdata = KcaApiData.getKcShipDataById(ship_id, "name,stype");
+                    if (kcdata != null && kcdata.has("stype")) {
+                        String id = item.get("api_id").getAsString();
+                        int level = item.get("api_lv").getAsInt();
+                        JsonObject repair_item = new JsonObject();
+                        String name = getShipTranslation(kcdata.get("name").getAsString(), ship_id, false);
+                        String name_level = KcaUtils.format("%s (Lv %d)", name, level);
+                        int stype = kcdata.get("stype").getAsInt();
+                        int repair_time = KcaDocking.getDockingTime(hp_loss, level, stype);
+                        repair_item.addProperty("name", name_level);
+                        repair_item.addProperty("time_raw", repair_time);
+                        repair_item.addProperty("time", KcaUtils.getTimeStr(repair_time));
+                        repair_item.addProperty("state", getState(now_hp, max_hp));
+                        repair_item.addProperty("dock", indock_list.has(id));
+                        damage_info.add(repair_item);
+                    }
+                }
+            }
+
+            Type listType = new TypeToken<List<JsonObject>>() {
+            }.getType();
+            final List<JsonObject> shipItemList = new Gson().fromJson(damage_info, listType);
+            StatComparator cmp = new StatComparator();
+            Collections.sort(shipItemList, cmp);
+            adapter.setItemList(shipItemList);
+
+            timerView = popupView.findViewById(R.id.view_dock_timer);
+            timerView.setVisibility(View.VISIBLE);
+            dockListView = popupView.findViewById(R.id.view_dock_list);
+            dockListView.setAdapter(adapter);
+            dockListView.setVisibility(View.GONE);
+            TextView dockListViewButton = popupView.findViewById(R.id.view_dock_list_btn);
+            dockListViewButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+            dockListViewButton.setOnClickListener(v -> {
+                if (dockListView.getVisibility() == View.GONE) {
+                    dockListViewButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                    dockListView.setVisibility(View.VISIBLE);
+                    timerView.setVisibility(View.GONE);
+                } else {
+                    dockListViewButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+                    dockListView.setVisibility(View.GONE);
+                    timerView.setVisibility(View.VISIBLE);
+                }
+            });
         }
     }
 
-    private class StatComparator implements Comparator<JsonObject> {
+    private static class StatComparator implements Comparator<JsonObject> {
         @Override
         public int compare(JsonObject o1, JsonObject o2) {
             String sort_key = "time_raw";
@@ -231,8 +237,7 @@ public class KcaDockingPopupService extends Service {
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(DOCKING_DATA_ACTION)) {
-                api_ndock = dbHelper.getJsonArrayValue(DB_KEY_NDOCKDATA);
-                updatePopup();
+                setPopupLayout();
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -240,62 +245,60 @@ public class KcaDockingPopupService extends Service {
 
     @Override
     public void onDestroy() {
+        active = false;
         if (dockingTimeScheduler != null) {
             Log.e("KCA-CPS", "scheduler shutdown");
             dockingTimeScheduler.shutdown();
             dockingTimeScheduler = null;
         }
-        if (mManager != null) mManager.removeView(mView);
+        if (windowManager != null) windowManager.removeView(popupView);
         super.onDestroy();
     }
 
-    final Handler handler = new Handler()  {
-        public void handleMessage(Message msg) {
-            if (api_ndock != null) {
-                for (int i = 0; i < api_ndock.size(); i++) {
-                    int index = i + 1;
-                    JsonObject item = api_ndock.get(i).getAsJsonObject();
-                    TextView nameview = mView.findViewById(getId(KcaUtils.format("dock%d_name", index), R.id.class));
-                    TextView timeview = mView.findViewById(getId(KcaUtils.format("dock%d_time", index), R.id.class));
-                    if (item.get("api_state").getAsInt() != -1) {
-                        int ship_id = item.get("api_ship_id").getAsInt();
-                        if (ship_id > 0) {
-                            String ship_name = "";
-                            JsonObject shipData = getUserShipDataById(ship_id, "ship_id");
-                            if (shipData != null) {
-                                int kc_ship_id = shipData.get("ship_id").getAsInt();
-                                JsonObject kcShipData = KcaApiData.getKcShipDataById(kc_ship_id, "name");
-                                if (kcShipData != null) {
-                                    ship_name = getShipTranslation(kcShipData.get("name").getAsString(), kc_ship_id, false);
-                                }
-                                nameview.setText(ship_name);
-                                timeview.setText(getLeftTimeStr(item.get("api_complete_time").getAsLong()));
+    private void stopPopup() {
+        stopSelf();
+    }
+
+    private void updatePopup() {
+        api_ndock = dbHelper.getJsonArrayValue(DB_KEY_NDOCKDATA);
+        if (api_ndock != null) {
+            for (int i = 0; i < api_ndock.size(); i++) {
+                int index = i + 1;
+                JsonObject item = api_ndock.get(i).getAsJsonObject();
+                TextView nameview = popupView.findViewById(getId(KcaUtils.format("dock%d_name", index), R.id.class));
+                TextView timeview = popupView.findViewById(getId(KcaUtils.format("dock%d_time", index), R.id.class));
+                if (item.get("api_state").getAsInt() != -1) {
+                    int ship_id = item.get("api_ship_id").getAsInt();
+                    if (ship_id > 0) {
+                        String ship_name = "";
+                        JsonObject shipData = getUserShipDataById(ship_id, "ship_id");
+                        if (shipData != null) {
+                            int kc_ship_id = shipData.get("ship_id").getAsInt();
+                            JsonObject kcShipData = KcaApiData.getKcShipDataById(kc_ship_id, "name");
+                            if (kcShipData != null) {
+                                ship_name = getShipTranslation(kcShipData.get("name").getAsString(), kc_ship_id, false);
                             }
-                        } else {
-                            nameview.setText("-");
-                            timeview.setText("");
+                            nameview.setText(ship_name);
+                            timeview.setText(getLeftTimeStr(item.get("api_complete_time").getAsLong()));
                         }
                     } else {
-                        nameview.setText("CLOSED");
+                        nameview.setText("-");
                         timeview.setText("");
                     }
+                } else {
+                    nameview.setText("CLOSED");
+                    timeview.setText("");
                 }
             }
         }
-    };
-
-    private void updatePopup() {
-        Log.e("KCA-DKS", "updatePopup");
-        handler.sendEmptyMessage(0);
     }
+
 
     private float mTouchX, mTouchY;
     private int mViewX, mViewY;
 
-    private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
         private static final int MAX_CLICK_DURATION = 200;
-        private static final int LONG_CLICK_DURATION = 800;
-
         private long startClickTime;
 
         @Override
@@ -306,8 +309,8 @@ public class KcaDockingPopupService extends Service {
                 case MotionEvent.ACTION_DOWN:
                     mTouchX = event.getRawX();
                     mTouchY = event.getRawY();
-                    mViewX = mParams.x;
-                    mViewY = mParams.y;
+                    mViewX = layoutParams.x;
+                    mViewY = layoutParams.y;
                     Log.e("KCA", KcaUtils.format("mView: %d %d", mViewX, mViewY));
                     startClickTime = Calendar.getInstance().getTimeInMillis();
                     break;
@@ -316,11 +319,13 @@ public class KcaDockingPopupService extends Service {
                     Log.e("KCA", "Callback Canceled");
                     long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                     if (clickDuration < MAX_CLICK_DURATION) {
-                        stopSelf();
+                        if (id == R.id.view_dock_head) {
+                            stopPopup();
+                        }
                     }
 
                     int[] locations = new int[2];
-                    mView.getLocationOnScreen(locations);
+                    popupView.getLocationOnScreen(locations);
                     int xx = locations[0];
                     int yy = locations[1];
                     Log.e("KCA", KcaUtils.format("Coord: %d %d", xx, yy));
@@ -330,16 +335,15 @@ public class KcaDockingPopupService extends Service {
                     int x = (int) (event.getRawX() - mTouchX);
                     int y = (int) (event.getRawY() - mTouchY);
 
-                    mParams.x = mViewX + x;
-                    mParams.y = mViewY + y;
-                    if (mParams.x < 0) mParams.x = 0;
-                    else if (mParams.x > screenWidth - popupWidth) mParams.x = screenWidth - popupWidth;
-                    if (mParams.y < 0) mParams.y = 0;
-                    else if (mParams.y > screenHeight - popupHeight) mParams.y = screenHeight - popupHeight;
-                    mManager.updateViewLayout(mView, mParams);
+                    layoutParams.x = mViewX + x;
+                    layoutParams.y = mViewY + y;
+                    if (layoutParams.x < 0) layoutParams.x = 0;
+                    else if (layoutParams.x > screenWidth - popupWidth) layoutParams.x = screenWidth - popupWidth;
+                    if (layoutParams.y < 0) layoutParams.y = 0;
+                    else if (layoutParams.y > screenHeight - popupHeight) layoutParams.y = screenHeight - popupHeight;
+                    windowManager.updateViewLayout(popupView, layoutParams);
                     break;
             }
-
             return true;
         }
     };
@@ -369,24 +373,15 @@ public class KcaDockingPopupService extends Service {
         else return STATE_HEAVYDMG;
     }
 
-
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
-        Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
-
-        if (mParams != null) {
-            if (mParams.x < 0) mParams.x = 0;
-            else if (mParams.x > screenWidth - popupWidth) mParams.x = screenWidth - popupWidth;
-            if (mParams.y < 0) mParams.y = 0;
-            else if (mParams.y > screenHeight - popupHeight) mParams.y = screenHeight - popupHeight;
-        }
-
         super.onConfigurationChanged(newConfig);
+        if (windowManager != null && checkPopupExist()) {
+            windowManager.removeViewImmediate(popupView);
+        }
+    }
+
+    public boolean checkPopupExist() {
+        return popupView != null && popupView.getParent() != null;
     }
 }

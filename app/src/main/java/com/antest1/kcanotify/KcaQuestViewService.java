@@ -6,10 +6,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
@@ -52,19 +52,19 @@ public class KcaQuestViewService extends Service {
     public static final String SHOW_QUESTVIEW_ACTION = "show_questview";
     public static final String SHOW_QUESTVIEW_ACTION_NEW = "show_questview_new";
     public static final String CLOSE_QUESTVIEW_ACTION = "close_questview";
-
     private static final int PAGE_SIZE = 5;
+
+    public static boolean active = false;
+    public static JsonObject api_data;
+    private static boolean isamenuvisible = false;
+    private static boolean isquestlist = false;
+    private static boolean error_flag = false;
 
     Context contextWithLocale;
     LayoutInflater mInflater;
     private LocalBroadcastManager broadcaster;
     private BroadcastReceiver refreshreceiver;
-    public static boolean active;
-    public static JsonObject api_data;
-    private static boolean isamenuvisible = false;
-    private static boolean isquestlist = false;
     private int currentPage = 1;
-    static boolean error_flag = false;
     final int[] pageIndexList = {R.id.quest_page_1, R.id.quest_page_2, R.id.quest_page_3, R.id.quest_page_4, R.id.quest_page_5};
     final int[] filterCategoryList = {2, 3, 4, 6, 7};
     int currentFilterState = -1;
@@ -72,12 +72,12 @@ public class KcaQuestViewService extends Service {
 
     public KcaDBHelper helper;
     private KcaQuestTracker questTracker;
-    private View mView;
-    private WindowManager mManager;
+    private View layoutView;
+    private WindowManager windowManager;
 
     int displayWidth = 0;
 
-    WindowManager.LayoutParams mParams;
+    WindowManager.LayoutParams layoutParams;
     ScrollView questView;
     View questDescPopupView;
     ListView questList;
@@ -90,7 +90,7 @@ public class KcaQuestViewService extends Service {
         return null;
     }
 
-    public static boolean getStatus() {
+    public static boolean isActive() {
         return active;
     }
 
@@ -144,10 +144,10 @@ public class KcaQuestViewService extends Service {
             if (checkValid) {
                 questTracker.clearInvalidQuestTrack();
                 helper.checkValidQuest(currentQuestList, tab_id);
-                int filter = -1;
-                if (filter_id > -1) filter = filterCategoryList[filter_id];
-                setQuestView(currentQuestList, true, filter);
             }
+            int filter = -1;
+            if (filter_id > -1) filter = filterCategoryList[filter_id];
+            setQuestView(currentQuestList, checkValid, filter);
             questDescPopupView.setVisibility(View.GONE);
             return 0;
         } catch (Exception e) {
@@ -165,27 +165,26 @@ public class KcaQuestViewService extends Service {
             stopSelf();
         } else {
             try {
-                active = true;
                 helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
                 questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
                 contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
                 contextWithLocale = new ContextThemeWrapper(contextWithLocale, R.style.AppTheme);
                 broadcaster = LocalBroadcastManager.getInstance(this);
                 mInflater = LayoutInflater.from(contextWithLocale);
-                mView = mInflater.inflate(R.layout.view_quest_list_v2, null);
-                KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
-                mView.setVisibility(View.GONE);
+                layoutView = mInflater.inflate(R.layout.view_quest_list_v2, null);
+                KcaUtils.resizeFullWidthView(getApplicationContext(), layoutView);
+                layoutView.setVisibility(View.GONE);
 
-                questView = mView.findViewById(R.id.questview);
+                questView = layoutView.findViewById(R.id.questview);
                 questView.findViewById(R.id.quest_head).setOnTouchListener(mViewTouchListener);
-                questDescPopupView = mView.findViewById(R.id.quest_desc_popup);
+                questDescPopupView = layoutView.findViewById(R.id.quest_desc_popup);
                 questDescPopupView.setVisibility(View.GONE);
                 questDescPopupView.findViewById(R.id.view_qd_head).setOnTouchListener(popupViewTouchListener);
                 ((TextView) questDescPopupView.findViewById(R.id.view_qd_rewards_hd))
                         .setText(getStringWithLocale(R.string.questview_reward));
 
                 adapter = new KcaQuestListAdpater(KcaQuestViewService.this, questTracker);
-                questList = mView.findViewById(R.id.quest_list);
+                questList = layoutView.findViewById(R.id.quest_list);
                 questList.setOnScrollListener(new AbsListView.OnScrollListener() {
                     @Override
                     public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -221,15 +220,15 @@ public class KcaQuestViewService extends Service {
                     view.setOnTouchListener(mViewTouchListener);
                 }
 
-                mParams = new WindowManager.LayoutParams(
+                layoutParams = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.MATCH_PARENT,
                         WindowManager.LayoutParams.MATCH_PARENT,
                         getWindowLayoutType(),
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                         PixelFormat.TRANSLUCENT);
-                mParams.gravity = Gravity.CENTER;
+                layoutParams.gravity = Gravity.CENTER;
 
-                mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+                windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
                 Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
                 Point size = new Point();
@@ -248,28 +247,40 @@ public class KcaQuestViewService extends Service {
     @Override
     public void onDestroy() {
         active = false;
-        if (mView != null) {
-            mView.setVisibility(View.GONE);
-            if (mView.getParent() != null) mManager.removeView(mView);
+        if (layoutView != null) {
+            layoutView.setVisibility(View.GONE);
+            if (layoutView.getParent() != null) windowManager.removeView(layoutView);
         }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(refreshreceiver);
-        mView = null;
-        mManager = null;
+        layoutView = null;
+        windowManager = null;
         super.onDestroy();
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (windowManager != null && checkLayoutExist()) {
+            windowManager.removeViewImmediate(layoutView);
+        }
+    }
+
+    private boolean checkLayoutExist() {
+        return layoutView != null && layoutView.getParent() != null;
+    }
+
     private void updateView(int setViewResult, boolean isreset) {
-        if (mManager != null && setViewResult == 0) {
-            if(mView.getParent() != null) {
+        if (windowManager != null && setViewResult == 0) {
+            if(layoutView.getParent() != null) {
                 if (isreset) {
-                    mManager.removeViewImmediate(mView);
-                    mManager.addView(mView, mParams);
+                    windowManager.removeViewImmediate(layoutView);
+                    windowManager.addView(layoutView, layoutParams);
                 } else {
-                    mView.invalidate();
-                    mManager.updateViewLayout(mView, mParams);
+                    layoutView.invalidate();
+                    windowManager.updateViewLayout(layoutView, layoutParams);
                 }
             } else {
-                mManager.addView(mView, mParams);
+                windowManager.addView(layoutView, layoutParams);
             }
         }
     }
@@ -282,26 +293,29 @@ public class KcaQuestViewService extends Service {
             stopSelf();
         } else if (!KcaService.getServiceStatus()) {
             stopSelf();
-        } else if (intent != null && intent.getAction() != null && mView != null) {
+        } else if (intent != null && intent.getAction() != null && layoutView != null) {
             if (intent.getAction().equals(REFRESH_QUESTVIEW_ACTION)) {
                 int extra = intent.getIntExtra("tab_id", -1);
                 updateView(setView(isquestlist, true, extra, currentFilterState), false);
             } else if (intent.getAction().equals(SHOW_QUESTVIEW_ACTION)) {
                 currentPage = 1;
                 updateView(setView(isquestlist, false, 0, currentFilterState), false);
-                mView.setVisibility(View.VISIBLE);
+                layoutView.setVisibility(View.VISIBLE);
+                active = true;
                 statProperties.addProperty("type", "no_reset");
                 sendUserAnalytics(getApplicationContext(), OPEN_QUESTVIEW, statProperties);
             } else if (intent.getAction().equals(SHOW_QUESTVIEW_ACTION_NEW)) {
                 currentPage = 1;
                 updateView(setView(isquestlist, false, 0, currentFilterState), true);
-                mView.setVisibility(View.VISIBLE);
+                layoutView.setVisibility(View.VISIBLE);
+                active = true;
                 statProperties.addProperty("type", "new");
                 sendUserAnalytics(getApplicationContext(), OPEN_QUESTVIEW, statProperties);
             } else if (intent.getAction().equals(CLOSE_QUESTVIEW_ACTION)) {
-                if (mView.getParent() != null) {
-                    mView.setVisibility(View.GONE);
-                    mManager.removeViewImmediate(mView);
+                if (layoutView.getParent() != null) {
+                    layoutView.setVisibility(View.GONE);
+                    windowManager.removeViewImmediate(layoutView);
+                    active = false;
                     statProperties.addProperty("manual", false);
                     sendUserAnalytics(getApplicationContext(), OPEN_QUESTVIEW, statProperties);
                 }
@@ -336,7 +350,7 @@ public class KcaQuestViewService extends Service {
         }
     };
 
-    private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
         private static final int MAX_CLICK_DURATION = 200;
         private long startClickTime = -1;
         private long clickDuration;
@@ -355,8 +369,9 @@ public class KcaQuestViewService extends Service {
                     if (clickDuration < MAX_CLICK_DURATION) {
                         int id = v.getId();
                         if (id == questView.findViewById(R.id.quest_head).getId()) {
-                            mView.setVisibility(View.GONE);
-                            mManager.removeViewImmediate(mView);
+                            active = false;
+                            layoutView.setVisibility(View.GONE);
+                            windowManager.removeViewImmediate(layoutView);
                             sendUserAnalytics(getApplicationContext(), OPEN_QUESTVIEW, statProperties);
                         } else if (id == questMenuButton.getId()) {
                             if (isamenuvisible) {
@@ -485,7 +500,7 @@ public class KcaQuestViewService extends Service {
     private void sendReport(Exception e, int type) {
         error_flag = true;
         String data = "";
-        if (mView != null) mView.setVisibility(View.GONE);
+        if (layoutView != null) layoutView.setVisibility(View.GONE);
         if (api_data == null) data = "[api data is null]";
         else data = api_data.toString();
         KcaDBHelper helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
