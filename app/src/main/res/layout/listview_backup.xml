@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:padding="6dp"
-                app:srcCompat="@mipmap/ic_restore" />
+                app:srcCompat="@drawable/ic_backup_restore" />
 
             <ImageView
                 android:id="@+id/backup_delete"
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:padding="6dp"
-                app:srcCompat="@mipmap/ic_delete" />
+                app:srcCompat="@drawable/ic_delete" />
         </LinearLayout>
 
     </LinearLayout>

@@ -247,9 +247,9 @@ public class KcaFleetViewService extends Service {
 
                 ImageView item_icon = fleetHqInfoView.findViewById(R.id.fleetview_item_cnt_icon);
                 if (item_id == 68 || item_id == 93) {
-                    item_icon.setImageResource(R.mipmap.ic_saury);
+                    item_icon.setImageResource(R.drawable.ic_saury);
                 } else {
-                    item_icon.setImageResource(R.mipmap.ic_gift);
+                    item_icon.setImageResource(R.drawable.ic_gift);
                 }
                 item_icon.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                         KcaUtils.getId("colorFleetViewItem" + (hqinfoState-1), R.color.class)), PorterDuff.Mode.SRC_ATOP);

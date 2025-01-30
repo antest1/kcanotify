@@ -137,7 +137,7 @@
                         android:text="@string/notification_message"
                         android:textColor="@color/colorUpdateText"
                         app:chipBackgroundColor="@color/colorUpdate"
-                        app:chipIcon="@android:drawable/ic_dialog_info"
+                        app:chipIcon="@drawable/ic_notice"
                         app:chipIconTint="@color/colorUpdateText" />
 
                     <com.google.android.material.chip.Chip
@@ -148,7 +148,7 @@
                         android:text="@string/special_message"
                         android:textColor="@color/colorSpecialText"
                         app:chipBackgroundColor="@color/colorSpecial"
-                        app:chipIcon="@android:drawable/ic_menu_gallery"
+                        app:chipIcon="@drawable/ic_image"
                         app:chipIconTint="@color/colorSpecialText" />
 
                     <com.google.android.material.chip.Chip
@@ -159,7 +159,7 @@
                         android:text="@string/setting_menu_kand_title_game_data_down"
                         android:textColor="@color/white"
                         app:chipBackgroundColor="@color/colorMainBtn"
-                        app:chipIcon="@android:drawable/stat_sys_download"
+                        app:chipIcon="@drawable/ic_download"
                         app:chipIconTint="@color/white" />
 
                 </com.google.android.material.chip.ChipGroup>
@@ -237,7 +237,7 @@
         android:layout_gravity="end"
         android:layout_margin="16dp"
         android:text="GAME START"
-        app:icon="@android:drawable/ic_media_play"
+        app:icon="@drawable/ic_play"
         app:layout_anchor="@id/anchor_dummy"
         app:layout_anchorGravity="end" />
 

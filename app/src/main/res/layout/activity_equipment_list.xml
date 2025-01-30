@@ -20,8 +20,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background"
-        android:padding="5dp">
+            android:padding="5dp">
 
         <LinearLayout
             android:id="@+id/equipment_filter"
@@ -146,7 +145,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:src="@mipmap/ic_cancel" />
+                    android:src="@drawable/ic_cancel" />
             </RelativeLayout>
 
             <ImageView

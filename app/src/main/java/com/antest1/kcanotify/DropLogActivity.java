@@ -102,14 +102,14 @@ public class DropLogActivity extends AppCompatActivity {
         showhide_btn = findViewById(R.id.droplog_showhide);
         showhide_btn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.black), PorterDuff.Mode.MULTIPLY);
-        showhide_btn.setImageResource(R.mipmap.ic_arrow_up);
+        showhide_btn.setImageResource(R.drawable.ic_arrow_up);
         showhide_btn.setOnClickListener(view -> {
             is_hidden = !is_hidden;
             if (is_hidden) {
-                showhide_btn.setImageResource(R.mipmap.ic_arrow_down);
+                showhide_btn.setImageResource(R.drawable.ic_arrow_down);
                 findViewById(R.id.droplog_filter_area).setVisibility(View.GONE);
             } else {
-                showhide_btn.setImageResource(R.mipmap.ic_arrow_up);
+                showhide_btn.setImageResource(R.drawable.ic_arrow_up);
                 findViewById(R.id.droplog_filter_area).setVisibility(View.VISIBLE);
             }
         });

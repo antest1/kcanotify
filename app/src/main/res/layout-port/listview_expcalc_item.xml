@@ -194,8 +194,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/ic_cancel"
-            app:srcCompat="@mipmap/ic_cancel" />
+            android:src="@drawable/ic_cancel"
+            app:srcCompat="@drawable/ic_cancel" />
     </RelativeLayout>
 
 </LinearLayout>

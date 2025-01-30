@@ -65,8 +65,8 @@
                         android:layout_marginRight="5dp"
                         android:layout_marginBottom="2dp"
                         android:rotation="270"
-                        android:src="@mipmap/ic_arrow_down"
-                        app:srcCompat="@mipmap/ic_arrow_down" />
+                        android:src="@drawable/ic_arrow_down"
+                        app:srcCompat="@drawable/ic_arrow_down" />
 
                     <LinearLayout
                         android:id="@+id/quest_amenu"
@@ -82,8 +82,8 @@
                             android:layout_height="18dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:src="@mipmap/ic_delete"
-                            app:srcCompat="@mipmap/ic_delete" />
+                            android:src="@drawable/ic_delete"
+                            app:srcCompat="@drawable/ic_delete" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -207,8 +207,8 @@
                     android:layout_gravity="top"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
-                    android:src="@mipmap/ic_cancel"
-                    app:srcCompat="@mipmap/ic_cancel" />
+                    android:src="@drawable/ic_cancel"
+                    app:srcCompat="@drawable/ic_cancel" />
             </RelativeLayout>
 
             <ImageView
@@ -260,8 +260,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:layout_weight="1"
-                    android:src="@android:drawable/ic_media_previous"
-                    app:srcCompat="@android:drawable/ic_media_previous" />
+                    android:src="@drawable/ic_skip_prev"
+                    app:srcCompat="@drawable/ic_skip_prev" />
 
                 <TextView
                     android:id="@+id/quest_page_1"
@@ -323,8 +323,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:layout_weight="1"
-                    android:src="@android:drawable/ic_media_next"
-                    app:srcCompat="@android:drawable/ic_media_next" />
+                    android:src="@drawable/ic_skip_next"
+                    app:srcCompat="@drawable/ic_skip_next" />
             </LinearLayout>
 
         </LinearLayout>
@@ -369,7 +369,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@mipmap/ic_cancel" />
+                    android:src="@drawable/ic_cancel" />
             </LinearLayout>
 
 

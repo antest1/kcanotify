@@ -203,7 +203,7 @@ public class KcaQuestViewService extends Service {
                 questView.findViewById(R.id.quest_amenu).setVisibility(View.GONE);
                 questMenuButton = questView.findViewById(R.id.quest_amenu_btn);
                 questMenuButton.setOnTouchListener(mViewTouchListener);
-                questMenuButton.setImageResource(R.mipmap.ic_arrow_up);
+                questMenuButton.setImageResource(R.drawable.ic_arrow_up);
 
                 questView.findViewById(R.id.quest_page_top).setOnTouchListener(mViewTouchListener);
                 questView.findViewById(R.id.quest_page_bottom).setOnTouchListener(mViewTouchListener);
@@ -376,10 +376,10 @@ public class KcaQuestViewService extends Service {
                         } else if (id == questMenuButton.getId()) {
                             if (isamenuvisible) {
                                 questView.findViewById(R.id.quest_amenu).setVisibility(View.GONE);
-                                questMenuButton.setImageResource(R.mipmap.ic_arrow_up);
+                                questMenuButton.setImageResource(R.drawable.ic_arrow_up);
                             } else {
                                 questView.findViewById(R.id.quest_amenu).setVisibility(View.VISIBLE);
-                                questMenuButton.setImageResource(R.mipmap.ic_arrow_down);
+                                questMenuButton.setImageResource(R.drawable.ic_arrow_down);
                             }
                             isamenuvisible = !isamenuvisible;
                         } else if (id ==  questView.findViewById(R.id.quest_clear).getId()) {

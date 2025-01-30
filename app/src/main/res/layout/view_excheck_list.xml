@@ -99,8 +99,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 android:layout_marginLeft="10dp"
-                android:src="@mipmap/ic_cancel"
-                app:srcCompat="@mipmap/ic_cancel" />
+                android:src="@drawable/ic_cancel"
+                app:srcCompat="@drawable/ic_cancel" />
         </LinearLayout>
 
         <ImageView

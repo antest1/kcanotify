@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
         fairyButton = bottomAppBar.getMenu().getItem(0);
         boolean is_random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
         if (is_random_fairy) {
-            fairyButton.setIcon(R.mipmap.ic_help);
+            fairyButton.setIcon(R.drawable.ic_dice);
         } else {
             String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
             String fairyPath = "noti_icon_".concat(fairyIdValue);
@@ -411,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
         fairyButton = bottomAppBar.getMenu().getItem(0);
         boolean is_random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
         if (is_random_fairy) {
-            fairyButton.setIcon(R.mipmap.ic_help);
+            fairyButton.setIcon(R.drawable.ic_dice);
         } else {
             String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
             String fairyPath = "noti_icon_".concat(fairyIdValue);

@@ -149,15 +149,15 @@ public class ResourceLogActivity extends AppCompatActivity {
         showhide_btn = findViewById(R.id.reslog_showhide);
         showhide_btn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.black), PorterDuff.Mode.MULTIPLY);
-        showhide_btn.setImageResource(R.mipmap.ic_arrow_down);
+        showhide_btn.setImageResource(R.drawable.ic_arrow_down);
         showhide_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 is_hidden = !is_hidden;
                 if (is_hidden) {
-                    showhide_btn.setImageResource(R.mipmap.ic_arrow_up);
+                    showhide_btn.setImageResource(R.drawable.ic_arrow_up);
                 } else {
-                    showhide_btn.setImageResource(R.mipmap.ic_arrow_down);
+                    showhide_btn.setImageResource(R.drawable.ic_arrow_down);
                 }
                 pageAdapter.notifyDataSetChanged();
             }

@@ -120,10 +120,10 @@ public class ExpCalcActivity extends AppCompatActivity {
                 R.color.grey), PorterDuff.Mode.SRC_ATOP);
         cal_hide_bar.setOnClickListener(v -> {
             if (cal_visible) {
-                cal_hide_bar.setImageResource(R.mipmap.ic_arrow_down);
+                cal_hide_bar.setImageResource(R.drawable.ic_arrow_down);
                 cal_area.setVisibility(View.GONE);
             } else {
-                cal_hide_bar.setImageResource(R.mipmap.ic_arrow_up);
+                cal_hide_bar.setImageResource(R.drawable.ic_arrow_up);
                 cal_area.setVisibility(View.VISIBLE);
             }
             cal_visible = !cal_visible;

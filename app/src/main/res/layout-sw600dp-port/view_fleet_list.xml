@@ -54,8 +54,8 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginLeft="12dp"
                 android:layout_weight="0"
-                android:src="@mipmap/ic_dashboard"
-                app:srcCompat="@mipmap/ic_dashboard" />
+                android:src="@drawable/ic_tools"
+                app:srcCompat="@drawable/ic_tools" />
 
             <ImageView
                 android:id="@+id/fleetview_exit"
@@ -65,8 +65,8 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginLeft="12dp"
                 android:layout_weight="0"
-                android:src="@mipmap/ic_cancel"
-                app:srcCompat="@mipmap/ic_cancel" />
+                android:src="@drawable/ic_cancel"
+                app:srcCompat="@drawable/ic_cancel" />
         </LinearLayout>
 
         <LinearLayout
@@ -119,8 +119,8 @@
                         android:layout_gravity="center_vertical"
                         android:paddingEnd="2dp"
                         android:paddingRight="2dp"
-                        android:src="@mipmap/ic_ship"
-                        app:srcCompat="@mipmap/ic_ship" />
+                        android:src="@drawable/ic_ship"
+                        app:srcCompat="@drawable/ic_ship" />
 
                     <TextView
                         android:id="@+id/fleetview_cnt1"
@@ -143,8 +143,8 @@
                         android:layout_gravity="center_vertical"
                         android:paddingEnd="2dp"
                         android:paddingRight="2dp"
-                        android:src="@mipmap/ic_equip"
-                        app:srcCompat="@mipmap/ic_equip" />
+                        android:src="@drawable/ic_equip"
+                        app:srcCompat="@drawable/ic_equip" />
 
                     <TextView
                         android:id="@+id/fleetview_cnt2"
@@ -194,8 +194,8 @@
                         android:layout_gravity="center_vertical"
                         android:paddingEnd="2dp"
                         android:paddingRight="2dp"
-                        android:src="@mipmap/ic_gift"
-                        app:srcCompat="@mipmap/ic_gift" />
+                        android:src="@drawable/ic_gift"
+                        app:srcCompat="@drawable/ic_gift" />
 
                     <TextView
                         android:id="@+id/fleetview_item_cnt_value"
@@ -661,9 +661,9 @@
                     android:alpha="0.6"
                     android:clickable="false"
                     android:focusable="false"
-                    android:src="@mipmap/ic_arrow_up"
+                    android:src="@drawable/ic_arrow_up"
                     android:visibility="gone"
-                    app:srcCompat="@mipmap/ic_arrow_up" />
+                    app:srcCompat="@drawable/ic_arrow_up" />
 
                 <ImageView
                     android:id="@+id/fleetview_menu_down"
@@ -675,8 +675,8 @@
                     android:alpha="0.9"
                     android:clickable="false"
                     android:focusable="false"
-                    android:src="@mipmap/ic_arrow_down"
-                    app:srcCompat="@mipmap/ic_arrow_down" />
+                    android:src="@drawable/ic_arrow_down"
+                    app:srcCompat="@drawable/ic_arrow_down" />
 
             </RelativeLayout>
 

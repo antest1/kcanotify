@@ -276,10 +276,10 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         sp_op.setOnItemSelectedListener(getListener(target, "op", 0));
 
         if(add_flag) {
-            add_remove_btn.setImageResource(R.mipmap.ic_add_circle);
+            add_remove_btn.setImageResource(R.drawable.ic_add_circle);
             add_remove_btn.setTag(true);
         } else {
-            add_remove_btn.setImageResource(R.mipmap.ic_remove_circle);
+            add_remove_btn.setImageResource(R.drawable.ic_remove_circle);
             add_remove_btn.setTag(false);
         }
 
@@ -292,7 +292,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
             ImageView im = (ImageView) view;
             boolean is_add = (Boolean) im.getTag();
             if (is_add) {
-                im.setImageResource(R.mipmap.ic_remove_circle);
+                im.setImageResource(R.drawable.ic_remove_circle);
                 im.setTag(false);
                 makeAndFilterItem();
             } else {
