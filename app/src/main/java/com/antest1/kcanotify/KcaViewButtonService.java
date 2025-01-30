@@ -256,7 +256,7 @@ public class KcaViewButtonService extends Service {
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     getWindowLayoutType(),
-                    getWindowLayoutParamsFlags(getResources().getConfiguration()),
+                    getLayoutParamsFlags(),
                     PixelFormat.TRANSLUCENT);
 
             layoutParams.gravity = Gravity.TOP | Gravity.START;
@@ -496,8 +496,8 @@ public class KcaViewButtonService extends Service {
                     long dt = Calendar.getInstance().getTimeInMillis() - lastT[(curr + 1) % 3];
                     float finalXUncap = layoutParams.x + dx / dt * 400;
                     float finalYUncap = layoutParams.y + dy / dt * 400;
-                    float finalX = max(buttonView.getPaddingLeft(), Math.min(finalXUncap, screenWidth - buttonView.getWidth() / 2.0f - buttonView.getPaddingRight()));
-                    float finalY = max(buttonView.getPaddingTop(), Math.min(finalYUncap, screenHeight - buttonView.getHeight() / 2.0f - buttonView.getPaddingBottom()));
+                    float finalX = max(buttonView.getPaddingLeft(), Math.min(finalXUncap, screenWidth - buttonView.getWidth() - buttonView.getPaddingRight()));
+                    float finalY = max(buttonView.getPaddingTop(), Math.min(finalYUncap, screenHeight - buttonView.getHeight() - buttonView.getPaddingBottom()));
 
                     buttonView.animateTo(layoutParams.x, layoutParams.y,
                             (int) finalX, (int) finalY,
@@ -624,7 +624,7 @@ public class KcaViewButtonService extends Service {
         if (dbHelper != null) {
             locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
 
-            layoutParams.flags = getWindowLayoutParamsFlags(newConfig);
+            layoutParams.flags = getLayoutParamsFlags();
             if (locdata != null && !locdata.toString().isEmpty()) {
                 if (locdata.has(ori_prefix.concat("x"))) {
                     layoutParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
@@ -652,5 +652,10 @@ public class KcaViewButtonService extends Service {
             dbHelper.putValue(DB_KEY_FAIRYLOC, locdata.toString());
         }
         super.onConfigurationChanged(newConfig);
+    }
+
+    private int getLayoutParamsFlags() {
+        return getWindowLayoutParamsFlags(getResources().getConfiguration())
+                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
     }
 }
