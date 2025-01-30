@@ -844,10 +844,28 @@ public class KcaDeckInfo {
             JsonArray deckShipIdList = deckPortData.get(i).getAsJsonObject().getAsJsonArray("api_ship");
             int flagship = deckShipIdList.get(0).getAsInt();
             if (flagship != -1) {
-                JsonObject shipData = getUserShipDataById(flagship, "ship_id");
+                JsonObject shipData = getUserShipDataById(flagship, "ship_id,slot");
                 if (shipData != null) {
                     int kc_ship_id = shipData.get("ship_id").getAsInt();
-                    if (kc_ship_id == 182 || kc_ship_id == 187) deck_id_list.add(i);
+                    if (kc_ship_id == 182 || kc_ship_id == 187 || kc_ship_id == 985) {
+                        int available = 1;
+                        if (kc_ship_id == 182 || kc_ship_id == 187) available += 1;
+
+                        JsonArray shipItem = (JsonArray) shipData.get("slot");
+                        for (int j = 0; j < shipItem.size(); j++) {
+                            int item_id = shipItem.get(j).getAsInt();
+                            if (item_id != -1) {
+                                JsonObject itemData = getUserItemStatusById(item_id, "level", "type");
+                                if (itemData == null) continue;
+                                int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                                if (itemType == T2_REPAIR_INFRA) available += 1;
+                            }
+                        }
+                        JsonObject repairInfo = new JsonObject();
+                        repairInfo.addProperty("id", i);
+                        repairInfo.addProperty("count", available);
+                        deck_id_list.add(repairInfo);
+                    }
                 }
             }
         }

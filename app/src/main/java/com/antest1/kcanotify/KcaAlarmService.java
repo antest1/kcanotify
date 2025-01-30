@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,7 +35,6 @@ import static com.antest1.kcanotify.KcaApiData.isExpeditionDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_NOTI;
-import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_NOTICOUNT_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_UPDATE_FRONTVIEW;
@@ -244,7 +242,7 @@ public class KcaAlarmService extends Service {
                     } else if (type == TYPE_AKASHI) {
                         if (isAkashiAlarmEnabled()) {
                             int nid = getNotificationId(NOTI_AKASHI, 0);
-                            if (KcaAkashiRepairInfo.getAkashiInFlasship()) {
+                            if (KcaAkashiRepairInfo.getAkashiInAnyFlagship()) {
                                 show_notification(nid, createAkashiRepairNotification(nid));
                                 alarm_set.add(nid);
                             }

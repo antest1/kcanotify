@@ -1007,8 +1007,6 @@ public class KcaService extends Service {
                             KcaBattle.cleanEscapeList();
                         }
 
-
-
                         //Log.e("KCA", "Total Ships: " + String.valueOf(size));
                         if (reqPortApiData.has("api_deck_port")) {
                             processExpeditionInfo();
@@ -1022,7 +1020,7 @@ public class KcaService extends Service {
                             JsonArray akashi_flagship_deck = deckInfoCalc.checkAkashiFlagship(portdeckdata);
                             boolean is_init_state = KcaAkashiRepairInfo.getAkashiTimerValue() < 0;
                             boolean over_20min = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond() >= AKASHI_TIMER_20MIN;
-                            if (akashi_flagship_deck.size() > 0) {
+                            if (!akashi_flagship_deck.isEmpty()) {
                                 if (is_init_state || over_20min) {
                                     KcaAkashiRepairInfo.setAkashiTimer();
                                     processAkashiTimerInfo();
@@ -1035,7 +1033,7 @@ public class KcaService extends Service {
                                     isAkashiTimerNotiWait = false;
                                 }
                             }
-                            KcaAkashiRepairInfo.setAkashiExist(akashi_flagship_deck.size() > 0);
+                            KcaAkashiRepairInfo.setAkashiData(akashi_flagship_deck);
                             updateFleetView();
                         }
                     }
@@ -1877,15 +1875,17 @@ public class KcaService extends Service {
                                 processMoraleInfo(i, portdeckdata, result);
                             }
                             JsonArray akashi_flagship_deck = deckInfoCalc.checkAkashiFlagship(portdeckdata);
+                            KcaAkashiRepairInfo.setAkashiData(akashi_flagship_deck);
+
                             boolean akashi_nochange_flag = true;
                             for (int i = 0; i < akashi_flagship_deck.size(); i++) {
-                                int deckid = akashi_flagship_deck.get(i).getAsInt();
+                                JsonObject item = akashi_flagship_deck.get(i).getAsJsonObject();;
+                                int deckid = item.get("id").getAsInt();
                                 if (deckid == deckIdx || deckid == originalDeckIdx) {
                                     akashi_nochange_flag = false;
                                     break;
                                 }
                             }
-                            KcaAkashiRepairInfo.setAkashiExist(akashi_flagship_deck.size() > 0);
                             if (!akashi_nochange_flag) {
                                 KcaAkashiRepairInfo.setAkashiTimer();
                                 processAkashiTimerInfo();

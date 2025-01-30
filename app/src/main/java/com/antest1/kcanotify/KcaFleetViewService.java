@@ -70,7 +70,6 @@ import static com.antest1.kcanotify.KcaConstants.PREF_FV_MENU_ORDER;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_VIEW_YLOC;
 import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
-import static com.antest1.kcanotify.KcaQuestViewService.SHOW_QUESTVIEW_ACTION_NEW;
 import static com.antest1.kcanotify.KcaUseStatConstant.CLOSE_FLEETVIEW;
 import static com.antest1.kcanotify.KcaUseStatConstant.FV_BTN_PRESS;
 import static com.antest1.kcanotify.KcaUseStatConstant.OPEN_FLEETVIEW;
@@ -119,7 +118,7 @@ public class KcaFleetViewService extends Service {
     Handler mHandler;
     Runnable timer;
     String fleetCalcInfoText = "";
-    boolean isAkashiTimerActive = false;
+    int akashiAvailableCount = 0;
     ScheduledExecutorService timeScheduler = null;
 
     static int view_status = 0;
@@ -881,7 +880,7 @@ public class KcaFleetViewService extends Service {
             sum_level += setFleetInfo(ship_id_list, 0);
         }
 
-        isAkashiTimerActive = !deckInfoCalc.checkAkashiFlagship(deckportdata).isEmpty();
+        akashiAvailableCount = KcaAkashiRepairInfo.getAkashiAvailableCount(idx);
 
         infoList.add("LV ".concat(String.valueOf(sum_level)));
         fleetCalcInfoText = joinStr(infoList, " / ");
@@ -978,15 +977,19 @@ public class KcaFleetViewService extends Service {
                 }
 
                 long akashiTimerValue = KcaAkashiRepairInfo.getAkashiTimerValue();
-                boolean isAkashiActive = akashiTimerValue >= 0 && isAkashiTimerActive;
-                for (int i = 0; i < 12; i++) {
-                    getFleetViewItem(i).setAkashiTimer(isAkashiActive);
+                boolean isAkashiActive = akashiTimerValue >= 0 && akashiAvailableCount > 0;
+                for (int i = 0; i < 6; i++) {
+                    if (i < akashiAvailableCount) {
+                        getFleetViewItem(i).setAkashiTimer(isAkashiActive);
+                    } else {
+                        getFleetViewItem(i).setAkashiTimer(false);
+                    }
                 }
 
                 if (akashiTimerValue < 0) {
                     fleetAkashiTimerBtn.setVisibility(View.GONE);
                 } else {
-                    if (isAkashiTimerActive) {
+                    if (akashiAvailableCount > 0) {
                         fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnActive));
                     } else {
                         fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnDeactive));
