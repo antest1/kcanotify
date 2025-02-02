@@ -3,11 +3,9 @@ package com.antest1.kcanotify;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Vibrator;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +22,7 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 
-public class ErrorlogActivity extends AppCompatActivity{
+public class ErrorlogActivity extends BaseActivity {
     private final int SHOW_LIMIT = 50;
     Vibrator vibrator;
     KcaDBHelper dbHelper;
@@ -32,10 +30,6 @@ public class ErrorlogActivity extends AppCompatActivity{
     Button loadbtn, clearbtn, exportbtn;
     TextView text, exportPathView;
     String exportPath;
-
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,52 +47,35 @@ public class ErrorlogActivity extends AppCompatActivity{
         text = findViewById(R.id.errorlogview);
         text.setText("");
         text.setLongClickable(true);
-        text.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                clip.setPrimaryClip(ClipData.newPlainText("text", ((TextView) v).getText()));
-                doVibrate(vibrator, 100);
-                Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
-                return false;
-            }
+        text.setOnLongClickListener(v -> {
+            ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            clip.setPrimaryClip(ClipData.newPlainText("text", ((TextView) v).getText()));
+            doVibrate(vibrator, 100);
+            Toast.makeText(getApplicationContext(), getString(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
+            return false;
         });
 
         loadbtn = findViewById(R.id.error_load);
-        loadbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<String> loglist = dbHelper.getErrorLog(SHOW_LIMIT, false);
-                if (loglist.size() > 0) {
-                    text.setText(joinStr(loglist, "\n"));
-                } else {
-                    text.setText("No Error Log");
-                }
+        loadbtn.setOnClickListener(v -> {
+            List<String> loglist = dbHelper.getErrorLog(SHOW_LIMIT, false);
+            if (!loglist.isEmpty()) {
+                text.setText(joinStr(loglist, "\n"));
+            } else {
+                text.setText("No Error Log");
             }
         });
 
         clearbtn = findViewById(R.id.error_clear);
-        clearbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(ErrorlogActivity.this);
-                alert.setPositiveButton(getStringWithLocale(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dbHelper.clearErrorLog();
-                        text.setText("No Error Log");
-                        Toast.makeText(getApplicationContext(), "Cleared", Toast.LENGTH_LONG).show();
-                        dialog.dismiss();
-                    }
-                }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                alert.setMessage(getStringWithLocale(R.string.errlog_dialog_message));
-                alert.show();
-            }
+        clearbtn.setOnClickListener(v -> {
+            AlertDialog.Builder alert = new AlertDialog.Builder(ErrorlogActivity.this);
+            alert.setPositiveButton(getString(R.string.dialog_ok), (dialog, which) -> {
+                dbHelper.clearErrorLog();
+                text.setText("No Error Log");
+                Toast.makeText(getApplicationContext(), "Cleared", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }).setNegativeButton(getString(R.string.dialog_cancel), (dialog, which) -> dialog.cancel());
+            alert.setMessage(getString(R.string.errlog_dialog_message));
+            alert.show();
         });
 
         File savedir = new File(getExternalFilesDir(null), "logs");
@@ -108,28 +85,25 @@ public class ErrorlogActivity extends AppCompatActivity{
         exportPathView.setText(exportPath);
 
         exportbtn = findViewById(R.id.error_export);
-        exportbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<String> loglist = dbHelper.getErrorLog(-1, true);
-                if (loglist.size() > 0) {
-                    String filename = KcaUtils.format("/log_%s_%s.txt", BuildConfig.VERSION_NAME, String.valueOf(System.currentTimeMillis()));
-                    File file = new File(exportPath.concat(filename));
-                    try {
-                        BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
-                        for(String line: loglist) {
-                            bw.write(line);
-                            bw.write("\r\n");
-                        }
-                        bw.close();
-                        Toast.makeText(getApplicationContext(), "Exported to ".concat(file.getPath()), Toast.LENGTH_LONG).show();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "An error occurred when exporting error log.", Toast.LENGTH_LONG).show();
+        exportbtn.setOnClickListener(v -> {
+            List<String> loglist = dbHelper.getErrorLog(-1, true);
+            if (!loglist.isEmpty()) {
+                String filename = KcaUtils.format("/log_%s_%s.txt", BuildConfig.VERSION_NAME, String.valueOf(System.currentTimeMillis()));
+                File file = new File(exportPath.concat(filename));
+                try {
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
+                    for(String line: loglist) {
+                        bw.write(line);
+                        bw.write("\r\n");
                     }
-                } else {
-                    Toast.makeText(getApplicationContext(), "No log to export.", Toast.LENGTH_LONG).show();
+                    bw.close();
+                    Toast.makeText(getApplicationContext(), "Exported to ".concat(file.getPath()), Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "An error occurred when exporting error log.", Toast.LENGTH_LONG).show();
                 }
+            } else {
+                Toast.makeText(getApplicationContext(), "No log to export.", Toast.LENGTH_LONG).show();
             }
         });
     }

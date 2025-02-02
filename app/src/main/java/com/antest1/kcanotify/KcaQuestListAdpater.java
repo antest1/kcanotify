@@ -7,12 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -21,12 +19,9 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static com.antest1.kcanotify.KcaApiData.getExpeditionInfo;
 import static com.antest1.kcanotify.KcaApiData.getQuestTrackInfo;
-import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
 import static com.antest1.kcanotify.KcaApiData.isQuestTrackable;
 import static com.antest1.kcanotify.KcaApiData.kcQuestInfoData;
 import static com.antest1.kcanotify.KcaUtils.getId;
@@ -36,19 +31,19 @@ import static com.antest1.kcanotify.KcaUtils.joinStr;
 public class KcaQuestListAdpater extends BaseAdapter {
     private List<JsonObject> listViewItemList = new ArrayList<>();
     private KcaQuestViewService service;
-    private Context application_context;
     private KcaQuestTracker questTracker;
+    private final Context context;
     public static final float PROGRESS_1 = 0.5f;
     public static final float PROGRESS_2 = 0.8f;
 
     public KcaQuestListAdpater(KcaQuestViewService svc, KcaQuestTracker qt) {
         service = svc;
-        application_context = svc.getApplicationContext();
+        context = svc.getBaseContext();
         questTracker = qt;
     }
 
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(application_context, service.getBaseContext(), id);
+    public String getStringFromResId(int id) {
+        return context.getString(id);
     }
 
     @Override
@@ -124,7 +119,7 @@ public class KcaQuestListAdpater extends BaseAdapter {
             }
         }
 
-        holder.quest_category.setText(getStringWithLocale(getIdWithFallback(KcaUtils.format("quest_category_%d", api_category), "quest_category_10",  R.string.class)));
+        holder.quest_category.setText(getStringFromResId(getIdWithFallback(KcaUtils.format("quest_category_%d", api_category), "quest_category_10",  R.string.class)));
         holder.quest_category.setBackgroundColor(getQuestCategoryColor(api_category));
 
         holder.quest_type.setText(getQuestLabelString(api_label_type));
@@ -145,8 +140,8 @@ public class KcaQuestListAdpater extends BaseAdapter {
 
         if (api_progress != 0) {
             holder.quest_progress
-                    .setText(getStringWithLocale(getId(KcaUtils.format("quest_progress_%d", api_progress), R.string.class)));
-            holder.quest_progress.setBackgroundColor(ContextCompat.getColor(application_context,
+                    .setText(getStringFromResId(getId(KcaUtils.format("quest_progress_%d", api_progress), R.string.class)));
+            holder.quest_progress.setBackgroundColor(ContextCompat.getColor(context,
                             getId(KcaUtils.format("colorQuestProgress%d", api_progress), R.color.class)));
             holder.quest_progress.setVisibility(View.VISIBLE);
         } else {
@@ -205,13 +200,13 @@ public class KcaQuestListAdpater extends BaseAdapter {
             holder.quest_progress_track.setVisibility(View.GONE);
         }
 
-        holder.quest_name.setTextColor(ContextCompat.getColor(application_context,
+        holder.quest_name.setTextColor(ContextCompat.getColor(context,
                         getId(KcaUtils.format("colorQuestState%d", api_state), R.color.class)));
         return v;
     }
 
     private String getQuestPopupDetailText(String desc, String memo, String rewards) {
-        String memo_rewards = KcaUtils.format(getStringWithLocale(R.string.questview_memo_format), memo, rewards).trim();
+        String memo_rewards = KcaUtils.format(getStringFromResId(R.string.questview_memo_format), memo, rewards).trim();
         return KcaUtils.format("%s %s", desc, memo_rewards);
     }
 
@@ -252,20 +247,20 @@ public class KcaQuestListAdpater extends BaseAdapter {
     }
 
     public int getQuestCategoryColor(int category) {
-        return ContextCompat.getColor(application_context, KcaUtils.getIdWithFallback(KcaUtils.format("colorQuestCategory%d", category), "colorQuestCategory10", R.color.class));
+        return ContextCompat.getColor(context, KcaUtils.getIdWithFallback(KcaUtils.format("colorQuestCategory%d", category), "colorQuestCategory10", R.color.class));
     }
 
     public String getQuestLabelString(int label) {
         if (label > 100 && label < 120) {
-            String format = getStringWithLocale(R.string.quest_label_type_100);
+            String format = getStringFromResId(R.string.quest_label_type_100);
             return KcaUtils.format(format, label % 100);
         } else {
-            return getStringWithLocale(getIdWithFallback(KcaUtils.format("quest_label_type_%d", label), "quest_label_type_7", R.string.class));
+            return getStringFromResId(getIdWithFallback(KcaUtils.format("quest_label_type_%d", label), "quest_label_type_7", R.string.class));
         }
     }
 
     public int getQuestLabelColor(int label) {
         if (label > 100 && label < 120) label = 100;
-        return ContextCompat.getColor(application_context, KcaUtils.getIdWithFallback(KcaUtils.format("colorQuestLabel%d", label), "colorQuestLabel7", R.color.class));
+        return ContextCompat.getColor(context, KcaUtils.getIdWithFallback(KcaUtils.format("colorQuestLabel%d", label), "colorQuestLabel7", R.color.class));
     }
 }

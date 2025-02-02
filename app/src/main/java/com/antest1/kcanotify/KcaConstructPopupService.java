@@ -1,8 +1,6 @@
 package com.antest1.kcanotify;
 
 import android.annotation.SuppressLint;
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
@@ -37,7 +35,7 @@ import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
-public class KcaConstructPopupService extends Service {
+public class KcaConstructPopupService extends BaseService {
     public final static String CONSTR_DATA_ACTION = "constr_data_action";
 
     Runnable constructTimer;
@@ -59,10 +57,6 @@ public class KcaConstructPopupService extends Service {
 
     public static boolean isActive() {
         return active;
-    }
-
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
     @Nullable
@@ -101,11 +95,11 @@ public class KcaConstructPopupService extends Service {
     private void setPopupLayout() {
         if (checkPopupExist()) return;
 
-        LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater mInflater = LayoutInflater.from(this);
         popupView = mInflater.inflate(R.layout.view_ship_constr, null);
         popupView.setOnTouchListener(mViewTouchListener);
         popupView.findViewById(R.id.view_sc_head).setOnTouchListener(mViewTouchListener);
-        ((TextView) popupView.findViewById(R.id.view_sc_title)).setText(getStringWithLocale(R.string.viewmenu_construction_title));
+        ((TextView) popupView.findViewById(R.id.view_sc_title)).setText(getString(R.string.viewmenu_construction_title));
 
         setPopupContent();
         updatePopup();

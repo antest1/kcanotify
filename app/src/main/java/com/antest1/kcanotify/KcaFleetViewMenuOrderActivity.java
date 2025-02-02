@@ -2,7 +2,7 @@ package com.antest1.kcanotify;
 
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.appcompat.widget.Toolbar;
 
@@ -21,7 +21,7 @@ import static com.antest1.kcanotify.KcaFleetViewService.fleetview_menu_keys;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
-public class KcaFleetViewMenuOrderActivity extends AppCompatActivity {
+public class KcaFleetViewMenuOrderActivity extends BaseActivity {
     Toolbar toolbar;
     private static Handler sHandler;
     static Gson gson = new Gson();
@@ -33,29 +33,25 @@ public class KcaFleetViewMenuOrderActivity extends AppCompatActivity {
         sHandler = h;
     }
 
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_mbtn_order);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getStringWithLocale(R.string.setting_menu_kand_title_fleetview_button_order));
+        getSupportActionBar().setTitle(getString(R.string.setting_menu_kand_title_fleetview_button_order));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ArrayList<JsonObject> data = new ArrayList<>();
         String pref_value = getStringPreferences(getApplicationContext(), PREF_FV_MENU_ORDER);
-        if (pref_value.length() > 0) {
+        if (!pref_value.isEmpty()) {
             order_data = JsonParser.parseString(pref_value).getAsJsonArray();
             for (int i = 0; i < order_data.size(); i++) {
                 JsonObject item = new JsonObject();
                 int key = order_data.get(i).getAsInt();
                 item.addProperty("key", key);
                 item.addProperty("value", fleetview_menu_keys[key]);
-                item.addProperty("label", getStringWithLocale(KcaUtils.getId(
+                item.addProperty("label", getString(KcaUtils.getId(
                         KcaUtils.format("viewmenu_%s", fleetview_menu_keys[key]), R.string.class)));
                 data.add(item);
             }
@@ -64,7 +60,7 @@ public class KcaFleetViewMenuOrderActivity extends AppCompatActivity {
                 JsonObject item = new JsonObject();
                 item.addProperty("key", i);
                 item.addProperty("value", fleetview_menu_keys[i]);
-                item.addProperty("label", getStringWithLocale(KcaUtils.getId(
+                item.addProperty("label", getString(KcaUtils.getId(
                         KcaUtils.format("viewmenu_%s", fleetview_menu_keys[i]), R.string.class)));
                 data.add(item);
                 order_data.add(i);

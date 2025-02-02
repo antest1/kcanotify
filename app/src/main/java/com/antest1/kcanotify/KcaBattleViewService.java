@@ -1,7 +1,6 @@
 package com.antest1.kcanotify;
 
 import android.annotation.SuppressLint;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -64,7 +63,6 @@ import static com.antest1.kcanotify.KcaUseStatConstant.BV_BTN_PRESS;
 import static com.antest1.kcanotify.KcaUseStatConstant.CLOSE_BATTEVIEW;
 import static com.antest1.kcanotify.KcaUseStatConstant.OPEN_BATTEVIEW;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
-import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -77,13 +75,12 @@ import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
 
-public class KcaBattleViewService extends Service {
+public class KcaBattleViewService extends BaseService {
     public static final String SHOW_BATTLEVIEW_ACTION = "show_battleview";
     public static final String HIDE_BATTLEVIEW_ACTION = "hide_battleview";
 
     public static final int[] contact_bonus = {112, 112, 117, 120};
-
-    Context contextWithLocale;
+    
     KcaDBHelper dbHelper;
     KcaDeckInfo deckInfoCalc;
     LayoutInflater mInflater;
@@ -165,10 +162,6 @@ public class KcaBattleViewService extends Service {
         else return "HP".concat(data);
     }
 
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     private static String makeLvString(int level) {
         return KcaUtils.format("Lv %d", level);
     }
@@ -222,7 +215,7 @@ public class KcaBattleViewService extends Service {
                 int api_event_id = api_data.get("api_event_id").getAsInt();
                 int api_event_kind = api_data.get("api_event_kind").getAsInt();
                 int api_color_no = api_data.get("api_color_no").getAsInt();
-                currentNodeInfo = getNodeFullInfo(contextWithLocale, current_node, api_event_id, api_event_kind, api_color_no, true);
+                currentNodeInfo = getNodeFullInfo(this, current_node, api_event_id, api_event_kind, api_color_no, true);
                 currentNodeInfo = currentNodeInfo.replaceAll("[()]", "");
 
                 // View Settings
@@ -262,14 +255,14 @@ public class KcaBattleViewService extends Service {
                 ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_1_name"), R.id.class) ))
                         .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
-                if (!getBooleanPreferences(contextWithLocale, PREF_SHOWDROP_SETTING)) {
+                if (!getBooleanPreferences(this, PREF_SHOWDROP_SETTING)) {
                     battleview.findViewById(R.id.battle_getship_row).setVisibility(View.GONE);
                 } else {
                     battleview.findViewById(R.id.battle_getship_row).setVisibility(View.VISIBLE);
                     if (checkUserPortEnough()) {
                         ((TextView) battleview.findViewById(R.id.battle_getship)).setText("");
                     } else {
-                        ((TextView) battleview.findViewById(R.id.battle_getship)).setText(getStringWithLocale(R.string.getship_max));
+                        ((TextView) battleview.findViewById(R.id.battle_getship)).setText(getString(R.string.getship_max));
                     }
                 }
 
@@ -278,7 +271,7 @@ public class KcaBattleViewService extends Service {
                     List<String> itemTextList = new ArrayList<String>();
                     for (int i = 0; i < api_itemget.size(); i++) {
                         JsonObject itemdata = api_itemget.get(i).getAsJsonObject();
-                        String itemname = getItemString(contextWithLocale, itemdata.get("api_id").getAsInt());
+                        String itemname = getItemString(this, itemdata.get("api_id").getAsInt());
                         int itemgetcount = itemdata.get("api_getcount").getAsInt();
                         itemTextList.add(KcaUtils.format("%s +%d", itemname, itemgetcount));
                     }
@@ -289,12 +282,12 @@ public class KcaBattleViewService extends Service {
                     JsonObject api_airsearch = api_data.getAsJsonObject("api_airsearch");
                     int airsearch_result = api_airsearch.get("api_result").getAsInt();
                     if (airsearch_result == 0) {
-                        ((TextView) battleview.findViewById(R.id.battle_result)).setText(getStringWithLocale(R.string.recon_failed));
+                        ((TextView) battleview.findViewById(R.id.battle_result)).setText(getString(R.string.recon_failed));
                         ((TextView) battleview.findViewById(R.id.battle_result))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorReconFailed));
                     } else {
                         JsonObject itemdata = api_data.getAsJsonObject("api_itemget");
-                        String itemname = getItemString(contextWithLocale, itemdata.get("api_id").getAsInt());
+                        String itemname = getItemString(this, itemdata.get("api_id").getAsInt());
                         int itemgetcount = itemdata.get("api_getcount").getAsInt();
                         ((TextView) battleview.findViewById(R.id.battle_result)).setText(KcaUtils.format("%s +%d", itemname, itemgetcount));
                         ((TextView) battleview.findViewById(R.id.battle_result))
@@ -302,7 +295,7 @@ public class KcaBattleViewService extends Service {
                     }
                 } else if (api_event_id == API_NODE_EVENT_ID_LOSS) {
                     JsonObject api_happening = api_data.getAsJsonObject("api_happening");
-                    String itemname = getItemString(contextWithLocale, api_happening.get("api_mst_id").getAsInt());
+                    String itemname = getItemString(this, api_happening.get("api_mst_id").getAsInt());
                     int itemgetcount = api_happening.get("api_count").getAsInt();
                     ((TextView) battleview.findViewById(R.id.battle_result)).setText(KcaUtils.format("%s -%d", itemname, itemgetcount));
                     ((TextView) battleview.findViewById(R.id.battle_result))
@@ -311,7 +304,7 @@ public class KcaBattleViewService extends Service {
                     battleViewLayout.findViewById(R.id.battleviewpanel)
                             .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                     JsonObject api_itemget_eo_comment = api_data.getAsJsonObject("api_itemget_eo_comment");
-                    String itemname = getItemString(contextWithLocale, api_itemget_eo_comment.get("api_id").getAsInt());
+                    String itemname = getItemString(this, api_itemget_eo_comment.get("api_id").getAsInt());
                     int itemgetcount = api_itemget_eo_comment.get("api_getcount").getAsInt();
                     ((TextView) battleview.findViewById(R.id.battle_result)).setText(KcaUtils.format("%s +%d", itemname, itemgetcount));
                     ((TextView) battleview.findViewById(R.id.battle_result))
@@ -323,22 +316,22 @@ public class KcaBattleViewService extends Service {
                     int api_lost_kind = api_destruction_battle.get("api_lost_kind").getAsInt();
                     switch (api_lost_kind) {
                         case RAID_LOST_TYPE_1:
-                            ((TextView) battleview.findViewById(R.id.battle_result)).setText(getStringWithLocale(R.string.raid_type1));
+                            ((TextView) battleview.findViewById(R.id.battle_result)).setText(getString(R.string.raid_type1));
                             ((TextView) battleview.findViewById(R.id.battle_result))
                                     .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRaidDamaged));
                             break;
                         case RAID_LOST_TYPE_2:
-                            ((TextView) battleview.findViewById(R.id.battle_result)).setText(getStringWithLocale(R.string.raid_type2));
+                            ((TextView) battleview.findViewById(R.id.battle_result)).setText(getString(R.string.raid_type2));
                             ((TextView) battleview.findViewById(R.id.battle_result))
                                     .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRaidHeavyDamaged));
                             break;
                         case RAID_LOST_TYPE_3:
-                            ((TextView) battleview.findViewById(R.id.battle_result)).setText(getStringWithLocale(R.string.raid_type3));
+                            ((TextView) battleview.findViewById(R.id.battle_result)).setText(getString(R.string.raid_type3));
                             ((TextView) battleview.findViewById(R.id.battle_result))
                                     .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRaidDamaged));
                             break;
                         case RAID_LOST_TYPE_4:
-                            ((TextView) battleview.findViewById(R.id.battle_result)).setText(getStringWithLocale(R.string.raid_type4));
+                            ((TextView) battleview.findViewById(R.id.battle_result)).setText(getString(R.string.raid_type4));
                             ((TextView) battleview.findViewById(R.id.battle_result))
                                     .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRaidNoDamaged));
                             break;
@@ -348,7 +341,7 @@ public class KcaBattleViewService extends Service {
                     JsonObject api_air_based_attack = api_destruction_battle.getAsJsonObject("api_air_base_attack");
                     int api_disp_seiku = api_air_based_attack.getAsJsonObject("api_stage1").get("api_disp_seiku").getAsInt();
                     ((TextView) battleview.findViewById(R.id.battle_airpower))
-                            .setText(getAirForceResultString(contextWithLocale, api_disp_seiku));
+                            .setText(getAirForceResultString(this, api_disp_seiku));
                 }
 
                 for (int i = 0; i < 7; i++) ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_exp_count", i + 1), R.id.class))).setText("");
@@ -363,7 +356,7 @@ public class KcaBattleViewService extends Service {
             if (api_data.has("api_deck_port")) { // common sortie, practice
                 boolean midnight_flag = api_data.get("api_url").getAsString().contains("midnight");
                 if (is_practice && !midnight_flag) {
-                    ((TextView) battleview.findViewById(R.id.battle_node)).setText(getStringWithLocale(R.string.node_info_practice));
+                    ((TextView) battleview.findViewById(R.id.battle_node)).setText(getString(R.string.node_info_practice));
                     ((TextView) battleview.findViewById(R.id.battle_result)).setText("");
                     ((TextView) battleview.findViewById(R.id.friend_fleet_formation)).setText("");
                     ((TextView) battleview.findViewById(R.id.enemy_fleet_formation)).setText("");
@@ -483,7 +476,7 @@ public class KcaBattleViewService extends Service {
                                             .setText(makeExpString(exp_left, fc_flag));
                                     if (!((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", j + 1), R.id.class)))
                                             .getText().toString()
-                                            .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
+                                            .contains(getString(R.string.battleview_text_retreated))) {
                                         ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", j + 1), R.id.class)))
                                                 .setText(makeHpString(nowhp, maxhp));
                                     }
@@ -565,7 +558,7 @@ public class KcaBattleViewService extends Service {
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_lv", j + 1), R.id.class))).setText(makeLvString(level));
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_exp", j + 1), R.id.class))).setText(makeExpString(exp_left, true));
                                     if (!((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", j + 1), R.id.class))).getText().toString()
-                                            .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
+                                            .contains(getString(R.string.battleview_text_retreated))) {
                                         ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", j + 1), R.id.class)))
                                                 .setText(makeHpString(nowhp, maxhp));
                                     }
@@ -589,7 +582,7 @@ public class KcaBattleViewService extends Service {
                 for (int j = 0; j < api_escape.size(); j++) {
                     int idx = api_escape.get(j).getAsInt();
                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", idx), R.id.class)))
-                            .setText(getStringWithLocale(R.string.battleview_text_retreated));
+                            .setText(getString(R.string.battleview_text_retreated));
                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", idx), R.id.class)))
                             .setGravity(Gravity.CENTER_HORIZONTAL);
                     battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", idx), R.id.class))
@@ -602,7 +595,7 @@ public class KcaBattleViewService extends Service {
                 for (int j = 0; j < api_escape_combined.size(); j++) {
                     int idx = api_escape_combined.get(j).getAsInt();
                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", idx), R.id.class)))
-                            .setText(getStringWithLocale(R.string.battleview_text_retreated));
+                            .setText(getString(R.string.battleview_text_retreated));
                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", idx), R.id.class)))
                             .setGravity(Gravity.CENTER_HORIZONTAL);
                     battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", idx), R.id.class))
@@ -638,18 +631,18 @@ public class KcaBattleViewService extends Service {
 
                     // fleet formation and engagement show
                     ((TextView) battleview.findViewById(R.id.friend_fleet_formation)).
-                            setText(getFormationString(contextWithLocale, api_formation.get(0).getAsInt(), fc_flag));
+                            setText(getFormationString(this, api_formation.get(0).getAsInt(), fc_flag));
                     ((TextView) battleview.findViewById(R.id.enemy_fleet_formation)).
-                            setText(getFormationString(contextWithLocale, api_formation.get(1).getAsInt(), fc_flag));
+                            setText(getFormationString(this, api_formation.get(1).getAsInt(), fc_flag));
                     ((TextView) battleview.findViewById(R.id.battle_engagement)).
-                            setText(getEngagementString(contextWithLocale, api_formation.get(2).getAsInt()));
+                            setText(getEngagementString(this, api_formation.get(2).getAsInt()));
 
                     // airforce result
                     if (api_kouku != null && !api_kouku.get("api_stage1").isJsonNull()) {
                         JsonObject api_stage1 = api_kouku.getAsJsonObject("api_stage1");
                         int api_disp_seiku = api_stage1.get("api_disp_seiku").getAsInt();
                         ((TextView) battleview.findViewById(R.id.battle_airpower))
-                                .setText(getAirForceResultString(contextWithLocale, api_disp_seiku));
+                                .setText(getAirForceResultString(this, api_disp_seiku));
                     }
 
                     if (!KcaBattle.currentEnemyDeckName.isEmpty()) {
@@ -657,7 +650,7 @@ public class KcaBattleViewService extends Service {
                                 setText(KcaBattle.currentEnemyDeckName);
                     } else {
                         ((TextView) battleview.findViewById(R.id.enemy_fleet_name)).
-                                setText(getStringWithLocale(R.string.enemy_fleet_name));
+                                setText(getString(R.string.enemy_fleet_name));
                     }
                 }
 
@@ -686,18 +679,18 @@ public class KcaBattleViewService extends Service {
 
                         ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_yomi", i + 1), R.id.class))).setText("");
                         if (!is_practice) {
-                            if (kcname.contains(getStringWithLocale(R.string.ship_name_class))) {
-                                if (kcyomi.equals(getStringWithLocale(R.string.yomi_elite))) {
+                            if (kcname.contains(getString(R.string.ship_name_class))) {
+                                if (kcyomi.equals(getString(R.string.yomi_elite))) {
                                     if (fc_flag || ec_flag) {
-                                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_yomi", i + 1), R.id.class))).setText(getStringWithLocale(R.string.yomi_elite_short));
+                                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_yomi", i + 1), R.id.class))).setText(getString(R.string.yomi_elite_short));
                                     } else {
                                         ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_yomi", i + 1), R.id.class))).setText(kcyomi);
                                     }
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_yomi", i + 1), R.id.class)))
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorElite));
-                                } else if (kcyomi.equals(getStringWithLocale(R.string.yomi_flagship))) {
+                                } else if (kcyomi.equals(getString(R.string.yomi_flagship))) {
                                     if (fc_flag || ec_flag) {
-                                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_yomi", i + 1), R.id.class))).setText(getStringWithLocale(R.string.yomi_flagship_short));
+                                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_yomi", i + 1), R.id.class))).setText(getString(R.string.yomi_flagship_short));
                                     } else {
                                         ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_yomi", i + 1), R.id.class))).setText(kcyomi);
                                     }
@@ -740,7 +733,7 @@ public class KcaBattleViewService extends Service {
                         battleview.findViewById(getId(KcaUtils.format("fm_%d_dcflag", i + 1), R.id.class))
                                 .setVisibility(damecon_flag ? View.VISIBLE : View.GONE);
                         if (!((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", i + 1), R.id.class)))
-                                .getText().toString().contains(getStringWithLocale(R.string.battleview_text_retreated))) {
+                                .getText().toString().contains(getString(R.string.battleview_text_retreated))) {
                             ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", i + 1), R.id.class)))
                                     .setText(makeHpString(afterhp, maxhp, damecon_flag));
                         }
@@ -804,7 +797,7 @@ public class KcaBattleViewService extends Service {
                             battleview.findViewById(getId(KcaUtils.format("fs_%d_dcflag", i + 1), R.id.class))
                                     .setVisibility(damecon_flag ? View.VISIBLE : View.GONE);
                             if (!((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", i + 1), R.id.class)))
-                                    .getText().toString().contains(getStringWithLocale(R.string.battleview_text_retreated))) {
+                                    .getText().toString().contains(getString(R.string.battleview_text_retreated))) {
                                 ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", i + 1), R.id.class)))
                                         .setText(makeHpString(afterhp, maxhp, damecon_flag));
                             }
@@ -822,9 +815,9 @@ public class KcaBattleViewService extends Service {
                 // For enemy combined fleet
                 if (api_data.has("api_ship_ke_combined")) {
                     ((TextView) battleview.findViewById(R.id.enemy_fleet_name)).
-                            setText(getStringWithLocale(R.string.enemy_main_fleet_name));
+                            setText(getString(R.string.enemy_main_fleet_name));
                     ((TextView) battleview.findViewById(R.id.enemy_combined_fleet_name)).
-                            setText(getStringWithLocale(R.string.enemy_combined_fleet_name));
+                            setText(getString(R.string.enemy_combined_fleet_name));
 
                     JsonArray eSlotCombined = api_data.getAsJsonArray("api_eSlot_combined");
                     for (int i = 0; i < eSlotCombined.size(); i++) {
@@ -851,13 +844,13 @@ public class KcaBattleViewService extends Service {
                             ((TextView) battleview.findViewById(getId(KcaUtils.format("es_%d_name", i + 1), R.id.class))).setText(kcname);
                             ((TextView) battleview.findViewById(getId(KcaUtils.format("es_%d_lv", i + 1), R.id.class))).setText(makeLvString(level));
 
-                            if (kcname.contains(getStringWithLocale(R.string.ship_name_class))) {
-                                if (kcyomi.equals(getStringWithLocale(R.string.yomi_elite))) {
-                                    ((TextView) battleview.findViewById(getId(KcaUtils.format("es_%d_yomi", i + 1), R.id.class))).setText(getStringWithLocale(R.string.yomi_elite_short));
+                            if (kcname.contains(getString(R.string.ship_name_class))) {
+                                if (kcyomi.equals(getString(R.string.yomi_elite))) {
+                                    ((TextView) battleview.findViewById(getId(KcaUtils.format("es_%d_yomi", i + 1), R.id.class))).setText(getString(R.string.yomi_elite_short));
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("es_%d_yomi", i + 1), R.id.class)))
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorElite));
-                                } else if (kcyomi.equals(getStringWithLocale(R.string.yomi_flagship))) {
-                                    ((TextView) battleview.findViewById(getId(KcaUtils.format("es_%d_yomi", i + 1), R.id.class))).setText(getStringWithLocale(R.string.yomi_flagship_short));
+                                } else if (kcyomi.equals(getString(R.string.yomi_flagship))) {
+                                    ((TextView) battleview.findViewById(getId(KcaUtils.format("es_%d_yomi", i + 1), R.id.class))).setText(getString(R.string.yomi_flagship_short));
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("es_%d_yomi", i + 1), R.id.class)))
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFlagship));
                                 } else {
@@ -1031,43 +1024,43 @@ public class KcaBattleViewService extends Service {
                 switch (rank) {
                     case JUDGE_SS:
                         ((TextView) battleview.findViewById(R.id.battle_result))
-                                .setText(getStringWithLocale(R.string.rank_ss));
+                                .setText(getString(R.string.rank_ss));
                         ((TextView) battleview.findViewById(R.id.battle_result))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRankS));
                         break;
                     case JUDGE_S:
                         ((TextView) battleview.findViewById(R.id.battle_result))
-                                .setText(getStringWithLocale(R.string.rank_s));
+                                .setText(getString(R.string.rank_s));
                         ((TextView) battleview.findViewById(R.id.battle_result))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRankS));
                         break;
                     case JUDGE_A:
                         ((TextView) battleview.findViewById(R.id.battle_result))
-                                .setText(getStringWithLocale(R.string.rank_a));
+                                .setText(getString(R.string.rank_a));
                         ((TextView) battleview.findViewById(R.id.battle_result))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRankA));
                         break;
                     case JUDGE_B:
                         ((TextView) battleview.findViewById(R.id.battle_result))
-                                .setText(getStringWithLocale(R.string.rank_b));
+                                .setText(getString(R.string.rank_b));
                         ((TextView) battleview.findViewById(R.id.battle_result))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRankB));
                         break;
                     case JUDGE_C:
                         ((TextView) battleview.findViewById(R.id.battle_result))
-                                .setText(getStringWithLocale(R.string.rank_c));
+                                .setText(getString(R.string.rank_c));
                         ((TextView) battleview.findViewById(R.id.battle_result))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRankC));
                         break;
                     case JUDGE_D:
                         ((TextView) battleview.findViewById(R.id.battle_result))
-                                .setText(getStringWithLocale(R.string.rank_d));
+                                .setText(getString(R.string.rank_d));
                         ((TextView) battleview.findViewById(R.id.battle_result))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRankD));
                         break;
                     case JUDGE_E:
                         ((TextView) battleview.findViewById(R.id.battle_result))
-                                .setText(getStringWithLocale(R.string.rank_e));
+                                .setText(getString(R.string.rank_e));
                         ((TextView) battleview.findViewById(R.id.battle_result))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRankE));
                         break;
@@ -1098,7 +1091,7 @@ public class KcaBattleViewService extends Service {
                             .setText(getShipTranslation(ship_name, ship_id, false));
                 } else if (!is_practice && checkUserPortEnough()) {
                     ((TextView) battleview.findViewById(R.id.battle_getship))
-                            .setText(getStringWithLocale(R.string.getship_none));
+                            .setText(getString(R.string.getship_none));
                 }
                 if (api_data.has("api_get_useitem")) {
                     int useitem_id = api_data.getAsJsonObject("api_get_useitem").get("api_useitem_id").getAsInt();
@@ -1270,7 +1263,7 @@ public class KcaBattleViewService extends Service {
 
                     if (lv > 0) {
                         ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)))
-                                .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
+                                .setText(getString(R.string.lv_star).concat(String.valueOf(lv)));
                         itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(View.VISIBLE);
                     } else {
                         itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(View.GONE);
@@ -1278,7 +1271,7 @@ public class KcaBattleViewService extends Service {
 
                     if (alv > 0) {
                         ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)))
-                                .setText(getStringWithLocale(getId(KcaUtils.format("alv_%d", alv), R.string.class)));
+                                .setText(getString(getId(KcaUtils.format("alv_%d", alv), R.string.class)));
                         int alvColorId = (alv <= 3) ? 1 : 2;
                         ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), getId(KcaUtils.format("itemalv%d", alvColorId), R.color.class)));
@@ -1336,7 +1329,7 @@ public class KcaBattleViewService extends Service {
                 ((ImageView) itemView.findViewById(R.id.item_ex_icon)).setImageResource(typeres);
                 if (lv > 0) {
                     ((TextView) itemView.findViewById(R.id.item_ex_level))
-                            .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
+                            .setText(getString(R.string.lv_star).concat(String.valueOf(lv)));
                     itemView.findViewById(R.id.item_ex_level).setVisibility(View.VISIBLE);
                 } else {
                     itemView.findViewById(R.id.item_ex_level).setVisibility(View.GONE);
@@ -1350,7 +1343,7 @@ public class KcaBattleViewService extends Service {
         }
 
         if (slot_count == 0) {
-            ((TextView) itemView.findViewById(R.id.item1_name)).setText(getStringWithLocale(R.string.slot_empty));
+            ((TextView) itemView.findViewById(R.id.item1_name)).setText(getString(R.string.slot_empty));
             ((ImageView) itemView.findViewById(R.id.item1_icon)).setImageResource(R.mipmap.item_0);
             itemView.findViewById(R.id.item1_level).setVisibility(View.GONE);
             itemView.findViewById(R.id.item1_alv).setVisibility(View.GONE);
@@ -1383,14 +1376,13 @@ public class KcaBattleViewService extends Service {
             try {
                 active = true;
                 view_status = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_VIEW_YLOC));
-                contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
                 dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-                deckInfoCalc = new KcaDeckInfo(getApplicationContext(), contextWithLocale);
+                deckInfoCalc = new KcaDeckInfo(getBaseContext());
                 customToast = new KcaCustomToast(getApplicationContext());
                 prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
                 windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-                mInflater = LayoutInflater.from(contextWithLocale);
+                mInflater = LayoutInflater.from(this);
                 battleViewLayout = (DraggableOverlayLayout) mInflater.inflate(R.layout.view_sortie_battle, null);
                 snapIndicator = new SnapIndicator(this, windowManager, mInflater);
 
@@ -1407,14 +1399,14 @@ public class KcaBattleViewService extends Service {
                 acView.findViewById(R.id.view_ac_phase1_0_e).setOnTouchListener(acViewTouchListener);
                 acView.findViewById(R.id.view_ac_phase2_0_f).setOnTouchListener(acViewTouchListener);
                 acView.findViewById(R.id.view_ac_phase2_0_e).setOnTouchListener(acViewTouchListener);
-                ((TextView) acView.findViewById(R.id.view_ac_title)).setText(getStringWithLocale(R.string.battleview_menu0));
+                ((TextView) acView.findViewById(R.id.view_ac_title)).setText(getString(R.string.battleview_menu0));
                 menuView = mInflater.inflate(R.layout.view_battleview_menu, null);
                 menuView.setVisibility(View.GONE);
                 menuView.findViewById(R.id.view_head).setOnClickListener(battleViewMenuListener);
                 menuView.findViewById(R.id.view_item0).setOnClickListener(battleViewMenuListener);
                 menuView.findViewById(R.id.view_item1).setOnClickListener(battleViewMenuListener);
                 menuView.findViewById(R.id.view_item2).setOnClickListener(battleViewMenuListener);
-                ((TextView) menuView.findViewById(R.id.view_bm_title)).setText(getStringWithLocale(R.string.battleview_menu_head));
+                ((TextView) menuView.findViewById(R.id.view_bm_title)).setText(getString(R.string.battleview_menu_head));
 
                 layoutParams = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.MATCH_PARENT,
@@ -1480,7 +1472,7 @@ public class KcaBattleViewService extends Service {
 
         List<String> infoList = new ArrayList<>();
         float[] exp_score = dbHelper.getExpScore();
-        String exp_str = KcaUtils.format(getStringWithLocale(R.string.battleview_expview),
+        String exp_str = KcaUtils.format(getString(R.string.battleview_expview),
                 exp_score[0], exp_score[1]);
         infoList.add(exp_str);
 
@@ -1505,9 +1497,9 @@ public class KcaBattleViewService extends Service {
             seekValue = deckInfoCalc.getSeekValue(data, String.valueOf(idx), cn, null);
         }
         if (cn == SEEK_PURE) {
-            seekStringValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_seekvalue_d), deckInfoCalc.getSeekType(cn), (int) seekValue);
+            seekStringValue = KcaUtils.format(getString(R.string.kca_toast_seekvalue_d), deckInfoCalc.getSeekType(cn), (int) seekValue);
         } else {
-            seekStringValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), deckInfoCalc.getSeekType(cn), seekValue);
+            seekStringValue = KcaUtils.format(getString(R.string.kca_toast_seekvalue_f), deckInfoCalc.getSeekType(cn), seekValue);
         }
         infoList.add(seekStringValue);
 
@@ -1517,7 +1509,7 @@ public class KcaBattleViewService extends Service {
         } else {
             speedStringValue = deckInfoCalc.getSpeedString(data, String.valueOf(idx), null);
         }
-        infoList.add(speedStringValue.concat(getStringWithLocale(R.string.speed_postfix)));
+        infoList.add(speedStringValue.concat(getString(R.string.speed_postfix)));
 
         String tpValue = "";
         if (isCombined) {
@@ -1532,7 +1524,7 @@ public class KcaBattleViewService extends Service {
 
     private void setAirCombatContact(String prefix, JsonObject data) {
         ((TextView) acView.findViewById(getId(prefix.concat("0_msg"), R.id.class))).setText(
-                getStringWithLocale(R.string.contact_term));
+                getString(R.string.contact_term));
         TextView friendContactText = acView.findViewById(getId(prefix.concat("0_f"), R.id.class));
         TextView enemyContactText = acView.findViewById(getId(prefix.concat("0_e"), R.id.class));
         ImageView friendContactIcon = acView.findViewById(getId(prefix.concat("0_f_icon"), R.id.class));
@@ -1554,7 +1546,7 @@ public class KcaBattleViewService extends Service {
                         friendContactIcon.setImageResource(typeres);
                         int houm_val = Math.min(f_data.get("houm").getAsInt(), 3);
                         int dm_value = contact_bonus[houm_val];
-                        friendContactDm.setText(KcaUtils.format(getStringWithLocale(R.string.contact_dm), dm_value));
+                        friendContactDm.setText(KcaUtils.format(getString(R.string.contact_dm), dm_value));
                     } else {
                         friendContactText.setText("???");
                         friendContactDm.setText("???");
@@ -1564,7 +1556,7 @@ public class KcaBattleViewService extends Service {
                     friendContactDm.setVisibility(View.VISIBLE);
                     friendContactText.setSelected(true);
                 } else {
-                    friendContactText.setText(getStringWithLocale(R.string.contact_none));
+                    friendContactText.setText(getString(R.string.contact_none));
                     friendContactDm.setVisibility(View.GONE);
                     friendContactIcon.setVisibility(View.GONE);
                 }
@@ -1579,7 +1571,7 @@ public class KcaBattleViewService extends Service {
                         enemyContactIcon.setImageResource(typeres);
                         int houm_val = Math.min(e_data.get("houm").getAsInt(), 3);
                         int dm_value = contact_bonus[houm_val];
-                        enemyContactDm.setText(KcaUtils.format(getStringWithLocale(R.string.contact_dm), dm_value));
+                        enemyContactDm.setText(KcaUtils.format(getString(R.string.contact_dm), dm_value));
                     } else {
                         enemyContactText.setText("???");
                         enemyContactDm.setText("???");
@@ -1589,7 +1581,7 @@ public class KcaBattleViewService extends Service {
                     enemyContactDm.setVisibility(View.VISIBLE);
                     enemyContactText.setSelected(true);
                 } else {
-                    enemyContactText.setText(getStringWithLocale(R.string.contact_none));
+                    enemyContactText.setText(getString(R.string.contact_none));
                     enemyContactDm.setVisibility(View.GONE);
                     enemyContactIcon.setVisibility(View.GONE);
                 }
@@ -1627,7 +1619,7 @@ public class KcaBattleViewService extends Service {
 
                 if (n == 1) {
                     if (stage_data.has("api_disp_seiku")) {
-                        msgView.setText(getAirForceResultString(contextWithLocale,
+                        msgView.setText(getAirForceResultString(this,
                                 stage_data.get("api_disp_seiku").getAsInt()));
                     } else {
                         msgView.setText("-");
@@ -1660,7 +1652,7 @@ public class KcaBattleViewService extends Service {
             if (api_data.has("api_kouku")) {
                 JsonObject kdata = api_data.getAsJsonObject("api_kouku");
                 ((TextView) acView.findViewById(R.id.view_ac_phase1_title))
-                        .setText(KcaUtils.format(getStringWithLocale(R.string.phase_term), 1));
+                        .setText(KcaUtils.format(getString(R.string.phase_term), 1));
                 setAirCombatTextView("view_ac_phase1_", kdata);
                 setAirCombatContact("view_ac_phase1_", kdata);
                 acView.findViewById(R.id.view_ac_phase1).setVisibility(View.VISIBLE);
@@ -1671,7 +1663,7 @@ public class KcaBattleViewService extends Service {
             if (api_data.has("api_kouku2")) {
                 JsonObject kdata = api_data.getAsJsonObject("api_kouku2");
                 ((TextView) acView.findViewById(R.id.view_ac_phase2_title))
-                        .setText(KcaUtils.format(getStringWithLocale(R.string.phase_term), 2));
+                        .setText(KcaUtils.format(getString(R.string.phase_term), 2));
                 setAirCombatTextView("view_ac_phase2_", kdata);
                 setAirCombatContact("view_ac_phase2_", kdata);
                 acView.findViewById(R.id.view_ac_phase2).setVisibility(View.VISIBLE);
@@ -1682,8 +1674,8 @@ public class KcaBattleViewService extends Service {
             if (api_data.has("api_air_base_injection")) {
                 JsonObject kdata = api_data.getAsJsonObject("api_air_base_injection");
                 ((TextView) acView.findViewById(R.id.view_ac_abinj_title))
-                        .setText(getStringWithLocale(R.string.injection_term)
-                                .concat("/").concat(getStringWithLocale(R.string.airbase_term)));
+                        .setText(getString(R.string.injection_term)
+                                .concat("/").concat(getString(R.string.airbase_term)));
                 setAirCombatTextView("view_ac_abinj_", kdata);
                 acView.findViewById(R.id.view_ac_abinj).setVisibility(View.VISIBLE);
             } else {
@@ -1693,7 +1685,7 @@ public class KcaBattleViewService extends Service {
             if (api_data.has("api_injection_kouku")) {
                 JsonObject kdata = api_data.getAsJsonObject("api_injection_kouku");
                 ((TextView) acView.findViewById(R.id.view_ac_inj_title))
-                        .setText(getStringWithLocale(R.string.injection_term));
+                        .setText(getString(R.string.injection_term));
                 setAirCombatTextView("view_ac_inj_", kdata);
                 acView.findViewById(R.id.view_ac_inj).setVisibility(View.VISIBLE);
             } else {
@@ -1704,8 +1696,8 @@ public class KcaBattleViewService extends Service {
                 String viewidformat = "view_ac_aba_%d";
                 JsonObject kdata = api_data.getAsJsonObject("api_destruction_battle").getAsJsonObject("api_air_base_attack");
                 ((TextView) acView.findViewById(R.id.view_ac_aba_0_title))
-                        .setText(getStringWithLocale(R.string.airbase_term).concat(" ")
-                                .concat(KcaUtils.format(getStringWithLocale(R.string.phase_term), 1)));
+                        .setText(getString(R.string.airbase_term).concat(" ")
+                                .concat(KcaUtils.format(getString(R.string.phase_term), 1)));
                 setAirCombatTextView("view_ac_aba_0_", kdata);
                 acView.findViewById(R.id.view_ac_aba_0).setVisibility(View.VISIBLE);
                 for (int i = 1; i < 6; i++) {
@@ -1724,8 +1716,8 @@ public class KcaBattleViewService extends Service {
                     } else {
                         JsonObject kdata = kdata_list.get(i).getAsJsonObject();
                         ((TextView) acView.findViewById(getId(viewid.concat("_title"), R.id.class)))
-                                .setText(getStringWithLocale(R.string.airbase_term).concat(" ")
-                                        .concat(KcaUtils.format(getStringWithLocale(R.string.phase_term), i + 1)));
+                                .setText(getString(R.string.airbase_term).concat(" ")
+                                        .concat(KcaUtils.format(getString(R.string.phase_term), i + 1)));
                         setAirCombatTextView(viewid.concat("_"), kdata);
                         acView.findViewById(getId(viewid, R.id.class)).setVisibility(View.VISIBLE);
                         Log.e("KCA-BV", viewid + " " + kdata.toString());
@@ -2163,7 +2155,7 @@ public class KcaBattleViewService extends Service {
         if (itemView != null) itemView.setVisibility(View.GONE);
         if (menuView != null) menuView.setVisibility(View.GONE);
 
-        Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.battleview_error), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.battleview_error), Toast.LENGTH_SHORT).show();
 
         String api_url = "url";
         JsonObject sendData = new JsonObject();

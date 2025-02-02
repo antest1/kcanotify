@@ -1,7 +1,6 @@
 package com.antest1.kcanotify;
 
 import android.annotation.SuppressLint;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -38,7 +37,7 @@ import static com.antest1.kcanotify.KcaConstants.LAB_STATUS_STANDBY;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
-public class KcaLandAirBasePopupService extends Service {
+public class KcaLandAirBasePopupService extends BaseService {
     public final static String LAB_DATA_ACTION = "lab_data_action";
 
     private View layoutView, itemView;
@@ -55,10 +54,6 @@ public class KcaLandAirBasePopupService extends Service {
 
     public static boolean isActive() {
         return active;
-    }
-
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
     @Nullable
@@ -78,7 +73,7 @@ public class KcaLandAirBasePopupService extends Service {
             active = true;
             clickcount = 0;
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-            deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
+            deckInfoCalc = new KcaDeckInfo(getBaseContext());
             KcaApiData.setDBHelper(dbHelper);
             setDefaultGameData();
 
@@ -110,14 +105,14 @@ public class KcaLandAirBasePopupService extends Service {
     private void setPopupLayout() {
         if (checkLayoutExist()) return;
 
-        LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater mInflater = LayoutInflater.from(this);
         layoutView = mInflater.inflate(R.layout.view_labinfo_view, null);
         itemView = mInflater.inflate(R.layout.view_battleview_items, null);
 
         // mView.setOnTouchListener(mViewTouchListener);
         layoutView.findViewById(R.id.view_lab_head).setOnTouchListener(mViewTouchListener);
         layoutView.setVisibility(View.GONE);
-        ((TextView) layoutView.findViewById(R.id.view_lab_title)).setText(getStringWithLocale(R.string.viewmenu_airbase_title));
+        ((TextView) layoutView.findViewById(R.id.view_lab_title)).setText(getString(R.string.viewmenu_airbase_title));
         layoutView.findViewById(R.id.view_lab_title).setOnClickListener(view -> {
             if (layoutView != null) layoutView.setVisibility(View.GONE);
             if (itemView != null) itemView.setVisibility(View.GONE);
@@ -170,7 +165,7 @@ public class KcaLandAirBasePopupService extends Service {
                     int distance_base = distance_info.get("api_base").getAsInt();
                     int distance_bonus = distance_info.get("api_bonus").getAsInt();
                     ((TextView) v.findViewById(R.id.lab_dist)).setText(
-                            KcaUtils.format(getStringWithLocale(R.string.labinfoview_dist_format), distance_base + distance_bonus));
+                            KcaUtils.format(getString(R.string.labinfoview_dist_format), distance_base + distance_bonus));
 
                     TextView titleView = v.findViewById(R.id.lab_title);
                     titleView.setText(KcaUtils.format("[%d-%d] %s",
@@ -182,33 +177,33 @@ public class KcaLandAirBasePopupService extends Service {
                     int action_status = item.get("api_action_kind").getAsInt();
                     switch (action_status) {
                         case LAB_STATUS_STANDBY:
-                            statusView.setText(getStringWithLocale(R.string.labinfoview_status_standby));
+                            statusView.setText(getString(R.string.labinfoview_status_standby));
                             statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsStatusStandby));
                             fpView.setText("");
                             fpView.setVisibility(View.GONE);
                             break;
                         case LAB_STATUS_SORTIE:
-                            statusView.setText(getStringWithLocale(R.string.labinfoview_status_sortie));
+                            statusView.setText(getString(R.string.labinfoview_status_sortie));
                             statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsStatusSortie));
                             fp_value = deckInfoCalc.getAirPowerInAirBase(LAB_STATUS_SORTIE, item.getAsJsonArray("api_plane_info"));
-                            fpView.setText(KcaUtils.format(getStringWithLocale(R.string.labinfoview_fp_format), fp_value));
+                            fpView.setText(KcaUtils.format(getString(R.string.labinfoview_fp_format), fp_value));
                             fpView.setVisibility(View.VISIBLE);
                             break;
                         case LAB_STATUS_DEFENSE:
-                            statusView.setText(getStringWithLocale(R.string.labinfoview_status_defense));
+                            statusView.setText(getString(R.string.labinfoview_status_defense));
                             statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsStatusDefense));
                             fp_value = deckInfoCalc.getAirPowerInAirBase(LAB_STATUS_DEFENSE, item.getAsJsonArray("api_plane_info"));
-                            fpView.setText(KcaUtils.format(getStringWithLocale(R.string.labinfoview_fp_format), fp_value));
+                            fpView.setText(KcaUtils.format(getString(R.string.labinfoview_fp_format), fp_value));
                             fpView.setVisibility(View.VISIBLE);
                             break;
                         case LAB_STATUS_RETREAT:
-                            statusView.setText(getStringWithLocale(R.string.labinfoview_status_retreat));
+                            statusView.setText(getString(R.string.labinfoview_status_retreat));
                             statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsStatusRetreat));
                             fpView.setText("");
                             fpView.setVisibility(View.GONE);
                             break;
                         case LAB_STATUS_REST:
-                            statusView.setText(getStringWithLocale(R.string.labinfoview_status_rest));
+                            statusView.setText(getString(R.string.labinfoview_status_rest));
                             statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsStatusRest));
                             fpView.setText("");
                             fpView.setVisibility(View.GONE);
@@ -305,7 +300,7 @@ public class KcaLandAirBasePopupService extends Service {
 
                 if (lv > 0) {
                     ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)))
-                            .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
+                            .setText(getString(R.string.lv_star).concat(String.valueOf(lv)));
                     itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(View.VISIBLE);
                 } else {
                     itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(View.GONE);
@@ -313,7 +308,7 @@ public class KcaLandAirBasePopupService extends Service {
 
                 if (alv > 0) {
                     ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)))
-                            .setText(getStringWithLocale(getId(KcaUtils.format("alv_%d", alv), R.string.class)));
+                            .setText(getString(getId(KcaUtils.format("alv_%d", alv), R.string.class)));
                     int alvColorId = (alv <= 3) ? 1 : 2;
                     ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)))
                             .setTextColor(ContextCompat.getColor(getApplicationContext(), getId(KcaUtils.format("itemalv%d", alvColorId), R.color.class)));

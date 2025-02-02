@@ -3,7 +3,6 @@ package com.antest1.kcanotify;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-public class KcaInfoActivity extends AppCompatActivity {
+public class KcaInfoActivity extends BaseActivity {
     Toolbar toolbar;
     TextView app_gpl, app_source;
     public static final String TAG = "KCA";
@@ -21,12 +20,12 @@ public class KcaInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.setting_menu_app_info));
+        getSupportActionBar().setTitle(getString(R.string.setting_menu_app_info));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        app_gpl = (TextView) findViewById(R.id.app_gpl);
+        app_gpl = findViewById(R.id.app_gpl);
 
         int year = Calendar.getInstance().get(Calendar.YEAR);
         TextView app_license = findViewById(R.id.AppLicense);

@@ -25,7 +25,7 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class MitmSetupWizardActivity extends AppCompatActivity {
+public class MitmSetupWizardActivity extends BaseActivity {
     Toolbar toolbar;
 
     @Override
@@ -35,7 +35,7 @@ public class MitmSetupWizardActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.mitm_setup_wizard));
+        getSupportActionBar().setTitle(getString(R.string.mitm_setup_wizard));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

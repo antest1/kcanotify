@@ -3,7 +3,6 @@ package com.antest1.kcanotify;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +33,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
-public class KcaInspectorActivity extends AppCompatActivity {
+public class KcaInspectorActivity extends BaseActivity {
     final String SPREF_PREFIX = "SPREF ";
     final String PREF_PREFIX = "PREF ";
     final String DB_PREFIX = "DB ";
@@ -52,17 +51,13 @@ public class KcaInspectorActivity extends AppCompatActivity {
     Button packletlogClear, packetlogDump;
     KcaPacketLogger packetLogger;
 
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspector);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.action_inspector));
+        getSupportActionBar().setTitle(getString(R.string.action_inspector));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         listViewItemList = new ArrayList<>();

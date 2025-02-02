@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -27,19 +26,13 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 
-public class ShipInfoSortActivity extends AppCompatActivity {
+public class ShipInfoSortActivity extends BaseActivity {
     Toolbar toolbar;
     LinearLayout listview;
     TextView listcounter;
     public int count;
     public List<Integer> sort_items = new ArrayList<>();
     public SparseArray<String> sort_values = new SparseArray<>();
-
-    KcaDBHelper dbHelper;
-
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
 
     private String makeStatPrefValue(int idx, boolean is_desc) {
         return KcaUtils.format("%d,%b", idx, is_desc);
@@ -62,7 +55,7 @@ public class ShipInfoSortActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shipinfo_sort);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getStringWithLocale(R.string.shipinfo_btn_sort));
+        getSupportActionBar().setTitle(getString(R.string.shipinfo_btn_sort));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         listview = findViewById(R.id.ship_stat_sort_list);
         listcounter = findViewById(R.id.ship_stat_count);
@@ -93,7 +86,7 @@ public class ShipInfoSortActivity extends AppCompatActivity {
         Spinner sp = v.findViewById(R.id.ship_stat_spinner);
         ImageView add_remove_btn = v.findViewById(R.id.ship_stat_add_remove_btn);
         final CheckBox desc_check = v.findViewById(R.id.ship_stat_isdesc);
-        desc_check.setText(getStringWithLocale(R.string.shipinfo_sort_asc));
+        desc_check.setText(getString(R.string.shipinfo_sort_asc));
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.ship_stat_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
@@ -117,14 +110,14 @@ public class ShipInfoSortActivity extends AppCompatActivity {
 
         desc_check.setOnCheckedChangeListener((compoundButton, checked) -> {
             if (checked) {
-                compoundButton.setText(getStringWithLocale(R.string.shipinfo_sort_desc));
+                compoundButton.setText(getString(R.string.shipinfo_sort_desc));
             } else {
-                compoundButton.setText(getStringWithLocale(R.string.shipinfo_sort_asc));
+                compoundButton.setText(getString(R.string.shipinfo_sort_asc));
             }
             if (sort_values.indexOfKey(target) >= 0) {
                 int value = Integer.valueOf(sort_values.get(target).split(",")[0]);
                 sort_values.put(target, makeStatPrefValue(value, checked));
-                listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size() - 1));
+                listcounter.setText(KcaUtils.format(getString(R.string.shipinfo_criteria_count), sort_values.size() - 1));
             }
         });
         if(add_flag) {
@@ -152,12 +145,12 @@ public class ShipInfoSortActivity extends AppCompatActivity {
                     removeViewByTag(target);
                     sort_items.remove(Integer.valueOf(target));
                     sort_values.delete(target);
-                    listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size() - 1));
+                    listcounter.setText(KcaUtils.format(getString(R.string.shipinfo_criteria_count), sort_values.size() - 1));
                 }
             }
         });
         listview.addView(v);
-        listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_items.size() - 1));
+        listcounter.setText(KcaUtils.format(getString(R.string.shipinfo_criteria_count), sort_items.size() - 1));
         CheckBox cb = listview.findViewWithTag(target).findViewById(R.id.ship_stat_isdesc);
         cb.setChecked(is_desc);
     }

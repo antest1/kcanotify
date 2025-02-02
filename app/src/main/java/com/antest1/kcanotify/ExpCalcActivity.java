@@ -6,7 +6,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,7 +46,7 @@ import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 
 
-public class ExpCalcActivity extends AppCompatActivity {
+public class ExpCalcActivity extends BaseActivity {
     public static final int LEVEL_MAX = 180;
     private static final int RANK_S = 0;
     private static final int RANK_A = 1;
@@ -85,10 +83,6 @@ public class ExpCalcActivity extends AppCompatActivity {
     boolean load_flag = false;
     JsonObject current_state = new JsonObject();
 
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +102,7 @@ public class ExpCalcActivity extends AppCompatActivity {
         setContentView(R.layout.activity_expcalc);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getStringWithLocale(R.string.action_expcalc));
+        getSupportActionBar().setTitle(getString(R.string.action_expcalc));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         current_ship_data = null;
@@ -473,12 +467,12 @@ public class ExpCalcActivity extends AppCompatActivity {
         level_before.setText(data.get("current_lv").getAsString());
         level_after.setText(data.get("target_lv").getAsString());
         exp_left.setText(String.valueOf(Math.max(0, data.get("target_exp").getAsInt() - data.get("current_exp").getAsInt())));
-        label_battle.setText(getStringWithLocale(R.string.expcalc_battle));
+        label_battle.setText(getString(R.string.expcalc_battle));
         value_battle.setText(data.get("counter").getAsString());
         stat_area.setText(data.get("map").getAsString());
         stat_rank.setText(data.get("rank").getAsString());
-        stat_flagship.setText(getStringWithLocale(R.string.expcalc_flagship));
-        stat_mvp.setText(getStringWithLocale(R.string.expcalc_mvp));
+        stat_flagship.setText(getString(R.string.expcalc_flagship));
+        stat_mvp.setText(getString(R.string.expcalc_mvp));
 
         if (data.get("is_flagship").getAsBoolean()) {
             stat_flagship.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpCalcFlagship));

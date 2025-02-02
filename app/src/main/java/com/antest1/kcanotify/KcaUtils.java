@@ -30,7 +30,7 @@ import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
+
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -44,7 +44,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.google.android.material.button.MaterialButton;
 import com.google.common.io.ByteStreams;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
@@ -109,7 +108,6 @@ import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_DATALOAD;
-import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_MIXED;
 import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_MUTE;
 import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_NORMAL;
@@ -298,17 +296,6 @@ public class KcaUtils {
         String package_name = getStringPreferences(context, PREF_KC_PACKAGE);
         Intent kcIntent = context.getPackageManager().getLaunchIntentForPackage(package_name);
         return kcIntent;
-    }
-
-    public static Context getContextWithLocale(Context ac, Context bc) {
-        Locale locale = LocaleUtils.getLocale();
-        Configuration configuration = new Configuration(ac.getResources().getConfiguration());
-        configuration.setLocale(locale);
-        return bc.createConfigurationContext(configuration);
-    }
-
-    public static String getStringWithLocale(Context ac, Context bc, int id) {
-        return getContextWithLocale(ac, bc).getString(id);
     }
 
     public static JsonObject getJsonObjectCopy(JsonObject data) {

@@ -848,7 +848,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_fleetview_item_select">Target items of the counter (touch to change) at the top right</string>
     <string name="setting_service_running_desc">Cannot change while service is running</string>
     <string name="text_api_houk2">INT</string>
-    <string name="ma_permission_notification_denied">Notification Permission is required for Kcanotify functions. You need to allow when you turn on SERVICE button.</string>
+    <string name="ma_permission_notification_denied">Notification Permission is required for Kcanotify functions.</string>
     <string name="ma_permission_service_restart">Press SERVICE button again to start kcanotify.</string>
     <string name="setting_menu_noti_title_test">Show Test Notification</string>
     <string name="ship_nat_label">Nationality Filter</string>

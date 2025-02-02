@@ -164,7 +164,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         isActivitySet = true;
 
         ((AppCompatActivity) getActivity()).getSupportActionBar()
-                .setTitle(getStringWithLocale(R.string.action_settings));
+                .setTitle(getString(R.string.action_settings));
 
         Map<String, ?> allEntries = sharedPref.getAll();
 
@@ -187,7 +187,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             } else if (PREF_KCA_NOTI_RINGTONE.equals(preference.getKey())) {
                 String uri = sharedPref.getString(PREF_KCA_NOTI_RINGTONE, "");
                 Uri ringtoneUri = Uri.parse(uri);
-                String ringtoneTitle = getStringWithLocale(R.string.settings_string_silent);
+                String ringtoneTitle = getString(R.string.settings_string_silent);
                 if (uri.length() > 0) {
                     ringtoneTitle = getRingtoneTitle(ringtoneUri);
                 }
@@ -267,16 +267,12 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         sHandler = h;
     }
 
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getActivity().getApplicationContext(), getActivity().getBaseContext(), id);
-    }
-
     public void showObtainingPermissionOverlayWindow() {
         String package_name = getContext().getPackageName();
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + package_name));
         if (intent.resolveActivity(getContext().getPackageManager()) == null) {
             intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + package_name));
-            showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_appearontop), Toast.LENGTH_LONG);
+            showToast(getActivity(), getString(R.string.sa_overlay_appearontop), Toast.LENGTH_LONG);
         }
         currentActivity = REQUEST_OVERLAY_PERMISSION;
         startActivityResult.launch(intent);
@@ -289,7 +285,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
         if (intent.resolveActivity(getContext().getPackageManager()) == null) {
             intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + package_name));
-            showToast(getActivity(), getStringWithLocale(R.string.sa_batteryoptim_appearontop), Toast.LENGTH_LONG);
+            showToast(getActivity(), getString(R.string.sa_batteryoptim_appearontop), Toast.LENGTH_LONG);
         }
         currentActivity = REQUEST_BATOPTIM_PERMISSION;
         startActivityResult.launch(intent);
@@ -316,9 +312,9 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                 Context context = getContext();
                 if (context != null) {
                     if (Settings.canDrawOverlays(getContext())) {
-                        showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_ok), Toast.LENGTH_SHORT);
+                        showToast(getActivity(), getString(R.string.sa_overlay_ok), Toast.LENGTH_SHORT);
                     } else {
-                        showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_no), Toast.LENGTH_SHORT);
+                        showToast(getActivity(), getString(R.string.sa_overlay_no), Toast.LENGTH_SHORT);
                     }
                 }
             }, delay);
@@ -333,9 +329,9 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                 if (context != null) {
                     PowerManager manager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
                     if (manager.isIgnoringBatteryOptimizations(context.getPackageName())) {
-                        showToast(getActivity(), getStringWithLocale(R.string.sa_batteryoptim_ok), Toast.LENGTH_SHORT);
+                        showToast(getActivity(), getString(R.string.sa_batteryoptim_ok), Toast.LENGTH_SHORT);
                     } else {
-                        showToast(getActivity(), getStringWithLocale(R.string.sa_batteryoptim_no), Toast.LENGTH_SHORT);
+                        showToast(getActivity(), getString(R.string.sa_batteryoptim_no), Toast.LENGTH_SHORT);
                     }
                 }
             }, delay);
@@ -345,9 +341,9 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     private void showUsageStatsPermissionResult() {
         if (checkActivityValid()) {
             if(hasUsageStatPermission(getContext())) {
-                showToast(getActivity(), getStringWithLocale(R.string.sa_usagestat_ok), Toast.LENGTH_SHORT);
+                showToast(getActivity(), getString(R.string.sa_usagestat_ok), Toast.LENGTH_SHORT);
             } else {
-                showToast(getActivity(), getStringWithLocale(R.string.sa_usagestat_no), Toast.LENGTH_SHORT);
+                showToast(getActivity(), getString(R.string.sa_usagestat_no), Toast.LENGTH_SHORT);
             }
         }
     }
@@ -418,7 +414,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             ListPreference lp = (ListPreference) preference;
             if (PREF_KCA_LANGUAGE.equals(key)) {
                 preference.setSummary(KcaUtils.format("%s - %s",
-                        getStringWithLocale(R.string.setting_menu_kand_desc_language),
+                        getString(R.string.setting_menu_kand_desc_language),
                         lp.getEntry()));
             } else {
                 preference.setSummary(lp.getEntry());
@@ -469,11 +465,11 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             boolean isTrue = (Boolean) newValue;
             if (isTrue && !hasUsageStatPermission(getContext())) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                alertDialog.setTitle(getStringWithLocale(R.string.sa_usagestat_dialog_title))
-                    .setMessage(getStringWithLocale(R.string.sa_usagestat_dialog_desc))
-                    .setPositiveButton(getStringWithLocale(R.string.dialog_ok),
+                alertDialog.setTitle(getString(R.string.sa_usagestat_dialog_title))
+                    .setMessage(getString(R.string.sa_usagestat_dialog_desc))
+                    .setPositiveButton(getString(R.string.dialog_ok),
                             (dialogInterface, i) -> showObtainingUsageStatPermission())
-                    .setNegativeButton(getStringWithLocale(R.string.dialog_cancel),
+                    .setNegativeButton(getString(R.string.dialog_cancel),
                             (dialogInterface, i) -> {
                     })
                     .setIcon(R.mipmap.ic_launcher);
@@ -524,7 +520,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         if (PREF_HDNOTI_MINLEVEL.equals(key)) {
             if (value.equals("0")) {
                 return KcaUtils.format("%s (%s)", value,
-                        getStringWithLocale(R.string.setting_menu_view_desc_hdmg_minlevel));
+                        getString(R.string.setting_menu_view_desc_hdmg_minlevel));
             }
         }
         return value;
@@ -539,7 +535,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                 Ringtone ringtone = RingtoneManager.getRingtone(getContext(), ringtoneUri);
                 return ringtone.getTitle(getContext());
             } else {
-                return getStringWithLocale(R.string.settings_string_silent);
+                return getString(R.string.settings_string_silent);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -550,7 +546,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     private void setSnifferModeSettingEnabled(boolean enabled) {
         ListPreference pref = findPreference(PREF_SNIFFER_MODE);
         if (enabled) pref.setSummary(pref.getEntry());
-        else pref.setSummary(getStringWithLocale(R.string.setting_menu_kand_desc_sniffer_type_na));
+        else pref.setSummary(getString(R.string.setting_menu_kand_desc_sniffer_type_na));
         pref.setEnabled(enabled);
     }
 
@@ -560,7 +556,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         if (enabled) {
             pref.setSummary("");
         } else {
-            pref.setSummary(getStringWithLocale(R.string.setting_menu_kand_desc_socks5_tls_incompatible));
+            pref.setSummary(getString(R.string.setting_menu_kand_desc_socks5_tls_incompatible));
         }
     }
 
@@ -584,7 +580,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         if (KcaService.getServiceStatus()) {
             for (String key: keys) {
                 findPreference(key).setEnabled(false);
-                findPreference(key).setSummary(getStringWithLocale(R.string.setting_service_running_desc));
+                findPreference(key).setSummary(getString(R.string.setting_service_running_desc));
             }
         }
     }
@@ -614,33 +610,33 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                         String recentVersion = response_data.get("version").getAsString();
                         if (compareVersion(currentVersion, recentVersion)) { // True if latest
                             showToast(getActivity(),
-                                    KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_latest), currentVersion),
+                                    KcaUtils.format(getString(R.string.sa_checkupdate_latest), currentVersion),
                                     Toast.LENGTH_LONG);
                         } else if (!getActivity().isFinishing()) {
                             AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                            alertDialog.setMessage(KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_hasupdate), recentVersion));
-                            alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
+                            alertDialog.setMessage(KcaUtils.format(getString(R.string.sa_checkupdate_hasupdate), recentVersion));
+                            alertDialog.setPositiveButton(getString(R.string.dialog_ok),
                                     (dialog, which) -> {
                                         String downloadUrl = getStringPreferences(getContext(), PREF_APK_DOWNLOAD_SITE);
-                                        if (downloadUrl.contains(getStringWithLocale(R.string.app_download_link_playstore))) {
-                                            downloadUrl = getStringWithLocale(R.string.app_download_link_luckyjervis);
+                                        if (downloadUrl.contains(getString(R.string.app_download_link_playstore))) {
+                                            downloadUrl = getString(R.string.app_download_link_luckyjervis);
                                         }
                                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
                                     });
-                            alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel),
+                            alertDialog.setNegativeButton(getString(R.string.dialog_cancel),
                                     (dialog, which) -> {
                                         // None
                                     });
                             AlertDialog alert = alertDialog.create();
                             alert.setIcon(R.mipmap.ic_launcher);
-                            alert.setTitle(getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
+                            alert.setTitle(getString(R.string.sa_checkupdate_dialogtitle));
                             alert.show();
                         }
                     } else {
                         showToast(getActivity(),
-                                getStringWithLocale(R.string.sa_checkupdate_servererror),
+                                getString(R.string.sa_checkupdate_servererror),
                                 Toast.LENGTH_LONG);
                     }
                 }
@@ -650,7 +646,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             public void onFailure(Call<String> call, Throwable t) {
                 Activity activity = getActivity();
                 if (activity != null && KcaUtils.checkOnline(activity)) {
-                    showToast(activity, getStringWithLocale(R.string.sa_checkupdate_servererror), Toast.LENGTH_LONG);
+                    showToast(activity, getString(R.string.sa_checkupdate_servererror), Toast.LENGTH_LONG);
                     dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "version_check", "", "", t.getMessage());
                 }
             }
@@ -708,7 +704,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         try {
             notificationManager.cancel(TEST_NOTI_ID);
 
-            String title = "[Test] " + getStringWithLocale(R.string.app_name);
+            String title = "[Test] " + getString(R.string.app_name);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss z");
             String content = sdf.format(new Date());
 

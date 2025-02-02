@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,16 +34,14 @@ import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
-import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.LocaleUtils.getResourceLocaleCode;
 
-public class FleetInfoActivity extends AppCompatActivity {
+public class FleetInfoActivity extends BaseActivity {
     static final String KC_REQ_LIST = "id,name,stype,houg,raig,tyku,souk,tais,luck,afterlv,slot_num";
 
     Toolbar toolbar;
     KcaDBHelper dbHelper;
-    Context contextWithLocale;
 
     static int current_fleet = 0;
     static boolean is_portrait = true;
@@ -59,27 +56,22 @@ public class FleetInfoActivity extends AppCompatActivity {
     View export_popup, export_exit;
     TextView export_clipboard, export_openpage_noro6, export_openpage_jervisor, export_openpage2;
 
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fleetlist);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getStringWithLocale(R.string.action_fleetlist));
+        getSupportActionBar().setTitle(getString(R.string.action_fleetlist));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
-        deckInfoCalc = new KcaDeckInfo(getApplicationContext(), contextWithLocale);
+        deckInfoCalc = new KcaDeckInfo(this);
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();
 
-        final String[] deck_list = {"1", "2", "3", "4", getStringWithLocale(R.string.fleetview_combined)};
+        final String[] deck_list = {"1", "2", "3", "4", getString(R.string.fleetview_combined)};
 
         fleetlist_select = findViewById(R.id.fleetlist_select);
         fleetlist_select.setColorFilter(ContextCompat.getColor(getApplicationContext(),
@@ -104,7 +96,7 @@ public class FleetInfoActivity extends AppCompatActivity {
         fleetlist_seek = findViewById(R.id.fleetlist_seek);
         fleetlist_loading = findViewById(R.id.fleetlist_loading);
         for (int i = 1; i <= 7; i++) {
-            KcaFleetInfoItemAdapter.alv_format[i] = getStringWithLocale(getId(KcaUtils.format("alv_%d", i), R.string.class));
+            KcaFleetInfoItemAdapter.alv_format[i] = getString(getId(KcaUtils.format("alv_%d", i), R.string.class));
         }
 
         adapter = new KcaFleetInfoItemAdapter();
@@ -119,7 +111,7 @@ public class FleetInfoActivity extends AppCompatActivity {
 
         export_popup = findViewById(R.id.export_popup);
         ((TextView) export_popup.findViewById(R.id.export_title))
-                .setText(getStringWithLocale(R.string.fleetinfo_export_title));
+                .setText(getString(R.string.fleetinfo_export_title));
         export_popup.setVisibility(View.GONE);
         is_popup_on = false;
 
@@ -135,18 +127,18 @@ public class FleetInfoActivity extends AppCompatActivity {
         TextView content = findViewById(R.id.export_content);
 
         export_clipboard = export_popup.findViewById(R.id.export_clipboard);
-        export_clipboard.setText(getStringWithLocale(R.string.fleetinfo_export_clipboard));
+        export_clipboard.setText(getString(R.string.fleetinfo_export_clipboard));
         export_clipboard.setOnClickListener(v -> {
             CharSequence text = content.getText();
             ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             clip.setPrimaryClip(ClipData.newPlainText("text", text));
             doVibrate(vibrator, 100);
             Toast.makeText(getApplicationContext(),
-                    getStringWithLocale(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
+                    getString(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
         });
 
         export_openpage_noro6 = export_popup.findViewById(R.id.export_openpage_noro6);
-        export_openpage_noro6.setText(getStringWithLocale(R.string.fleetinfo_export_openpage_noro6));
+        export_openpage_noro6.setText(getString(R.string.fleetinfo_export_openpage_noro6));
         export_openpage_noro6.setOnClickListener(v -> {
             Intent bIntent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse("https://noro6.github.io/kc-web/#/aircalc"));
@@ -154,7 +146,7 @@ public class FleetInfoActivity extends AppCompatActivity {
         });
 
         export_openpage_jervisor = export_popup.findViewById(R.id.export_openpage_jervisor);
-        export_openpage_jervisor.setText(getStringWithLocale(R.string.fleetinfo_export_openpage_jervisor));
+        export_openpage_jervisor.setText(getString(R.string.fleetinfo_export_openpage_jervisor));
         export_openpage_jervisor.setOnClickListener(v -> {
             Intent bIntent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse("https://jervis.vercel.app/"));
@@ -162,7 +154,7 @@ public class FleetInfoActivity extends AppCompatActivity {
         });
 
         export_openpage2 = export_popup.findViewById(R.id.export_openpage2);
-        export_openpage2.setText(getStringWithLocale(R.string.fleetinfo_export_openpage2));
+        export_openpage2.setText(getString(R.string.fleetinfo_export_openpage2));
         export_openpage2.setOnClickListener(v -> {
             String data = imageBuilderData();
             String locale_code = getResourceLocaleCode();
@@ -212,7 +204,7 @@ public class FleetInfoActivity extends AppCompatActivity {
                 return null;
             } else {
                 if (current_fleet == 4) {
-                    fleet_name = getStringWithLocale(R.string.fleetlist_combined_fleet);
+                    fleet_name = getString(R.string.fleetlist_combined_fleet);
                     if (deck_data.size() < 2) {
                         return null;
                     } else {
@@ -256,13 +248,13 @@ public class FleetInfoActivity extends AppCompatActivity {
                 if (current_fleet == 4) {
                     findViewById(R.id.fleetlist_content).setVisibility(View.VISIBLE);
                     fleetlist_fp.setText(deckInfoCalc.getAirPowerRangeString(deck_data, 0, null));
-                    fleetlist_seek.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_seekvalue_f),
+                    fleetlist_seek.setText(KcaUtils.format(getString(R.string.fleetview_seekvalue_f),
                             deckInfoCalc.getSeekValue(deck_data, "0,1", SEEK_33CN1, null)));
 
                 } else {
                     findViewById(R.id.fleetlist_content).setVisibility(View.VISIBLE);
                     fleetlist_fp.setText(deckInfoCalc.getAirPowerRangeString(deck_data, current_fleet, null));
-                    fleetlist_seek.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_seekvalue_f),
+                    fleetlist_seek.setText(KcaUtils.format(getString(R.string.fleetview_seekvalue_f),
                             deckInfoCalc.getSeekValue(deck_data, String.valueOf(current_fleet), SEEK_33CN1, null)));
                 }
                 adapter.notifyDataSetChanged();

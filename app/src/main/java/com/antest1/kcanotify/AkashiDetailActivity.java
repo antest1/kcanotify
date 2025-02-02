@@ -39,7 +39,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 
-public class AkashiDetailActivity extends AppCompatActivity {
+public class AkashiDetailActivity extends BaseActivity {
     Toolbar toolbar;
     KcaDBHelper dbHelper;
     TextView itemNameTextView, itemImprovDefaultShipTextView, getItemImprovStat;
@@ -47,10 +47,6 @@ public class AkashiDetailActivity extends AppCompatActivity {
     static JsonArray requiredItemTranslation;
     TextView dmat_count, smat_count;
     TextView current_date;
-
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
 
     public static void setRequiredItemTranslation(JsonArray data) {
         requiredItemTranslation = data;
@@ -60,9 +56,9 @@ public class AkashiDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_akashi_detail);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.action_akashi_detail));
+        getSupportActionBar().setTitle(getString(R.string.action_akashi_detail));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
@@ -72,7 +68,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
         SimpleDateFormat date_format = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
         current_date = findViewById(R.id.current_date);
         current_date.setText(KcaUtils.format("%s (%s)", date_format.format(date),
-                getStringWithLocale(getId("akashi_term_day_" + dayOfWeek, R.string.class))));
+                getString(getId("akashi_term_day_" + dayOfWeek, R.string.class))));
 
         dmat_count = findViewById(R.id.count_dmat);
         smat_count = findViewById(R.id.count_smat);
@@ -338,7 +334,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
                 JsonArray day = item.get(0).getAsJsonArray();
                 for (int j = 0; j < day.size(); j++) {
                     if (day.get(j).getAsBoolean()) {
-                        daylist.add(getStringWithLocale(getId("akashi_term_day_".concat(String.valueOf(j)), R.string.class)));
+                        daylist.add(getString(getId("akashi_term_day_".concat(String.valueOf(j)), R.string.class)));
                     }
                 }
                 String daytext = joinStr(daylist, ",");

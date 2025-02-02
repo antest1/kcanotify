@@ -1,7 +1,6 @@
 package com.antest1.kcanotify;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,19 +18,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.common.io.ByteStreams;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -43,7 +39,6 @@ import static com.antest1.kcanotify.KcaConstants.DB_KEY_KCMAINTNC;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_MAIN;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.NOTICE_CHK_CODE;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_ALLOW_EXTFILTER;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
@@ -54,7 +49,6 @@ import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_NOTICE_CHK_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_LAST_UPDATE_CHECK;
 import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_FLAG;
 import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_PREFIX;
@@ -68,10 +62,9 @@ import static com.antest1.kcanotify.KcaUtils.gzipdecompress;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
-public class InitStartActivity extends Activity {
+public class InitStartActivity extends BaseActivity {
     public static final String ACTION_RESET = "ACTION_RESET";
 
-    boolean download_finished = false;
     Handler handler = new Handler();
 
     KcaDBHelper dbHelper;
@@ -85,16 +78,11 @@ public class InitStartActivity extends Activity {
     boolean validated_flag = false;
     boolean is_skipped = false;
 
-    static Gson gson = new Gson();
-    Type listType = new TypeToken<ArrayList<JsonObject>>(){}.getType();
-
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setAppLocale();
+
         setContentView(R.layout.activity_init_download);
         Log.e("KCA-DA", "created");
 
@@ -106,8 +94,6 @@ public class InitStartActivity extends Activity {
 
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         setDefaultPreferences();
-
-        setAppLocale();
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
@@ -219,7 +205,7 @@ public class InitStartActivity extends Activity {
                                     AlertDialog alert = alertDialog.create();
                                     alert.setIcon(R.mipmap.ic_launcher);
                                     alert.setTitle(
-                                            getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
+                                            getString(R.string.sa_checkupdate_dialogtitle));
                                     alert.show();
                                 } catch (WindowManager.BadTokenException e) {
                                     // activity closed, no need to show dialog
@@ -237,18 +223,18 @@ public class InitStartActivity extends Activity {
     private AlertDialog.Builder getUpdateAlertDialog(String recentVersion, JsonObject data) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(InitStartActivity.this);
         alertDialog.setCancelable(false);
-        alertDialog.setMessage(KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_hasupdate), recentVersion));
-        alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
+        alertDialog.setMessage(KcaUtils.format(getString(R.string.sa_checkupdate_hasupdate), recentVersion));
+        alertDialog.setPositiveButton(getString(R.string.dialog_ok),
                 (dialog, which) -> {
                     String downloadUrl = getStringPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE);
-                    if (downloadUrl.contains(getStringWithLocale(R.string.app_download_link_playstore))) {
-                        downloadUrl = getStringWithLocale(R.string.app_download_link_luckyjervis);
+                    if (downloadUrl.contains(getString(R.string.app_download_link_playstore))) {
+                        downloadUrl = getString(R.string.app_download_link_luckyjervis);
                     }
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     if (intent.resolveActivity(getPackageManager()) != null) startActivity(intent);
                 });
-        alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel),
+        alertDialog.setNegativeButton(getString(R.string.dialog_cancel),
                 (dialog, which) -> {
                     dataCheck(data);
                 });
@@ -281,16 +267,16 @@ public class InitStartActivity extends Activity {
         if (latest_flag) {
             startMainActivity(true);
         } else {
-            String message = getStringWithLocale(R.string.download_description_head);
+            String message = getString(R.string.download_description_head);
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(InitStartActivity.this);
-            alertDialog.setTitle(getStringWithLocale(R.string.download_title));
+            alertDialog.setTitle(getString(R.string.download_title));
             alertDialog.setMessage(message.trim());
             alertDialog.setCancelable(false);
-            alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok), (dialog, which) -> {
+            alertDialog.setPositiveButton(getString(R.string.dialog_ok), (dialog, which) -> {
                 startUpdateActivity();
              });
 
-            alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel), (dialog, which) -> {
+            alertDialog.setNegativeButton(getString(R.string.dialog_cancel), (dialog, which) -> {
                 startMainActivity(true);
             });
 
@@ -431,5 +417,6 @@ public class InitStartActivity extends Activity {
             LocaleUtils.setLocale(getBaseContext(), new Locale(locale[0], locale[1]));
         }
         KcaApplication.defaultLocale = LocaleUtils.getLocale();
+        updateLocaleConfig();
     }
 }

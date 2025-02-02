@@ -1,13 +1,10 @@
 package com.antest1.kcanotify;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
@@ -27,10 +24,6 @@ public class NestedPreferenceFragment extends PreferenceFragmentCompat implement
         SharedPreferences.OnSharedPreferenceChangeListener, androidx.preference.Preference.OnPreferenceChangeListener {
     public static final String NESTED_TAG = "NESTED_TAG";
     public final static int FRAGMENT_ADV_NETWORK = 701;
-
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getActivity().getApplicationContext(), getActivity().getBaseContext(), id);
-    }
 
     public static NestedPreferenceFragment newInstance(int key) {
         NestedPreferenceFragment fragment = new NestedPreferenceFragment();
@@ -70,7 +63,7 @@ public class NestedPreferenceFragment extends PreferenceFragmentCompat implement
                 setPreferencesFromResource(R.xml.advance_network_settings, rootKey);
                 getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
                 ((AppCompatActivity) getActivity()).getSupportActionBar()
-                        .setTitle(getStringWithLocale(R.string.setting_menu_kand_title_adv_network));
+                        .setTitle(getString(R.string.setting_menu_kand_title_adv_network));
                 break;
             default:
                 break;

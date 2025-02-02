@@ -1,7 +1,6 @@
 package com.antest1.kcanotify;
 
 import android.annotation.SuppressLint;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -40,14 +39,13 @@ import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
 import static com.antest1.kcanotify.KcaUseStatConstant.OPEN_QUESTVIEW;
-import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 
 
-public class KcaQuestViewService extends Service {
+public class KcaQuestViewService extends BaseService {
     public static final String REFRESH_QUESTVIEW_ACTION = "refresh_questview";
     public static final String SHOW_QUESTVIEW_ACTION = "show_questview";
     public static final String SHOW_QUESTVIEW_ACTION_NEW = "show_questview_new";
@@ -60,7 +58,7 @@ public class KcaQuestViewService extends Service {
     private static boolean isquestlist = false;
     private static boolean error_flag = false;
 
-    Context contextWithLocale;
+    Context contextWithTheme;
     LayoutInflater mInflater;
     private LocalBroadcastManager broadcaster;
     private BroadcastReceiver refreshreceiver;
@@ -104,10 +102,6 @@ public class KcaQuestViewService extends Service {
 
     public static void setApiData(JsonObject data) {
         api_data = data;
-    }
-
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
     @SuppressLint("DefaultLocale")
@@ -167,10 +161,10 @@ public class KcaQuestViewService extends Service {
             try {
                 helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
                 questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
-                contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
-                contextWithLocale = new ContextThemeWrapper(contextWithLocale, R.style.AppTheme);
+
+                contextWithTheme = new ContextThemeWrapper(this, R.style.AppTheme);
                 broadcaster = LocalBroadcastManager.getInstance(this);
-                mInflater = LayoutInflater.from(contextWithLocale);
+                mInflater = LayoutInflater.from(contextWithTheme);
                 layoutView = mInflater.inflate(R.layout.view_quest_list_v2, null);
                 KcaUtils.resizeFullWidthView(getApplicationContext(), layoutView);
                 layoutView.setVisibility(View.GONE);
@@ -181,7 +175,7 @@ public class KcaQuestViewService extends Service {
                 questDescPopupView.setVisibility(View.GONE);
                 questDescPopupView.findViewById(R.id.view_qd_head).setOnTouchListener(popupViewTouchListener);
                 ((TextView) questDescPopupView.findViewById(R.id.view_qd_rewards_hd))
-                        .setText(getStringWithLocale(R.string.questview_reward));
+                        .setText(getString(R.string.questview_reward));
 
                 adapter = new KcaQuestListAdpater(KcaQuestViewService.this, questTracker);
                 questList = layoutView.findViewById(R.id.quest_list);
@@ -189,7 +183,7 @@ public class KcaQuestViewService extends Service {
                     @Override
                     public void onScrollStateChanged(AbsListView view, int scrollState) {
                         TextView page_title = questView.findViewById(R.id.quest_page);
-                        page_title.setText(getStringWithLocale(R.string.questview_page)
+                        page_title.setText(getString(R.string.questview_page)
                                 .replace("%d/%d", "???"));
                     }
 
@@ -215,7 +209,7 @@ public class KcaQuestViewService extends Service {
 
                 for (int i = 1; i <= 5; i++) {
                     TextView view = questView.findViewById(getId(KcaUtils.format("quest_class_%d", i), R.id.class));
-                    view.setText(getStringWithLocale(getId(KcaUtils.format("quest_class_%d", i), R.string.class)));
+                    view.setText(getString(getId(KcaUtils.format("quest_class_%d", i), R.string.class)));
                     view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
                     view.setOnTouchListener(mViewTouchListener);
                 }
@@ -446,7 +440,7 @@ public class KcaQuestViewService extends Service {
         else if (centerPage > totalPage - 4) startPage = totalPage - 4;
 
         TextView page_title = questView.findViewById(R.id.quest_page);
-        page_title.setText(KcaUtils.format(getStringWithLocale(R.string.questview_page), centerPage, totalPage));
+        page_title.setText(KcaUtils.format(getString(R.string.questview_page), centerPage, totalPage));
 
         for (int i = 0; i < 5; i++) {
             questView.findViewById(pageIndexList[i])

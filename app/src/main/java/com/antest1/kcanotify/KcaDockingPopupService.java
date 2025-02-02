@@ -1,8 +1,6 @@
 package com.antest1.kcanotify;
 
 import android.annotation.SuppressLint;
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
@@ -49,7 +47,7 @@ import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
-public class KcaDockingPopupService extends Service {
+public class KcaDockingPopupService extends BaseService {
     public final static String DOCKING_DATA_ACTION = "docking_data_action";
 
     Runnable dockingTimer;
@@ -72,10 +70,6 @@ public class KcaDockingPopupService extends Service {
 
     public static boolean isActive() {
         return active;
-    }
-
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
     @Nullable
@@ -114,12 +108,12 @@ public class KcaDockingPopupService extends Service {
     private void setPopupLayout() {
         if (checkPopupExist()) return;
 
-        LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater mInflater = LayoutInflater.from(this);
         popupView = mInflater.inflate(R.layout.view_docking_info, null);
         popupView.setOnTouchListener(mViewTouchListener);
         popupView.findViewById(R.id.view_dock_head).setOnTouchListener(mViewTouchListener);
-        ((TextView) popupView.findViewById(R.id.view_dock_title)).setText(getStringWithLocale(R.string.viewmenu_docking_title));
-        ((TextView) popupView.findViewById(R.id.view_dock_list_btn)).setText(getStringWithLocale(R.string.viewmenu_docking_list));
+        ((TextView) popupView.findViewById(R.id.view_dock_title)).setText(getString(R.string.viewmenu_docking_title));
+        ((TextView) popupView.findViewById(R.id.view_dock_list_btn)).setText(getString(R.string.viewmenu_docking_list));
 
         setPopupContent();
         updatePopup();

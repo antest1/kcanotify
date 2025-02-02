@@ -5,7 +5,6 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -66,7 +65,6 @@ import static com.antest1.kcanotify.KcaTimerWidget.WIDGET_DATA_UPDATE;
 import static com.antest1.kcanotify.KcaUtils.createBuilder;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
-import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getNotificationId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
@@ -77,7 +75,7 @@ import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 import static com.antest1.kcanotify.KcaViewButtonService.REMOVE_FAIRY_ACTION;
 import static com.antest1.kcanotify.KcaViewButtonService.RETURN_FAIRY_ACTION;
 
-public class KcaService extends Service {
+public class KcaService extends BaseService {
     public static final String KCASERVICE_START = "kcaservice_start";
     public static final String KCASERVICE_STOP = "kcaservice_stop";
 
@@ -105,7 +103,6 @@ public class KcaService extends Service {
     public static boolean isInBattle;
     public static boolean isCombined;
 
-    Context contextWithLocale;
     KcaDBHelper dbHelper;
     KcaQuestTracker questTracker;
     KcaDropLogger dropLogger;
@@ -178,10 +175,6 @@ public class KcaService extends Service {
         return SERVICE_CHANNEL_ID.concat(String.valueOf(priority));
     }
 
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     void runTimer() {
         if (timeScheduler == null || timeScheduler.isShutdown()) {
             if (isMissionTimerViewEnabled() || isAkashiTimerNotiEnabled()) {
@@ -212,19 +205,17 @@ public class KcaService extends Service {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
                 prefs.edit().putBoolean(PREF_SVC_ENABLED, true).apply();
 
-                contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
                 dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
                 questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
                 dropLogger = new KcaDropLogger(getApplicationContext(), null, KCANOTIFY_DROPLOG_VERSION);
                 resourceLogger = new KcaResourceLogger(getApplicationContext(), null, KCANOTIFY_RESOURCELOG_VERSION);
                 packetLogger = new KcaPacketLogger(getApplicationContext(), null, KCANOTIFY_PACKETLOG_VERSION);
-                deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
+                deckInfoCalc = new KcaDeckInfo(getBaseContext());
                 KcaApiData.setDBHelper(dbHelper);
 
                 JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
                 //Log.e("KCA", kcDataObj.toJSONString());
                 if (kcDataObj != null && kcDataObj.has("api_data")) {
-                    //Toast.makeText(contextWithLocale, "Load Kancolle Data", Toast.LENGTH_LONG).show();
                     KcaApiData.getKcGameData(kcDataObj.getAsJsonObject("api_data"));
                 }
 
@@ -254,7 +245,7 @@ public class KcaService extends Service {
                 loadQuestTrackDataFromStorage(dbHelper, getApplicationContext());
                 dbHelper.initExpScore();
 
-                showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
+                showDataLoadErrorToast(getApplicationContext(), getString(R.string.download_check_error));
 
                 mediaPlayer = new MediaPlayer();
                 mediaPlayer.setOnCompletionListener(mp -> {
@@ -308,11 +299,11 @@ public class KcaService extends Service {
                 }
 
                 notifyFirstTime = true;
-                notifyBuilder = createBuilder(contextWithLocale, getServiceChannelId());
-                notifyTitle = KcaUtils.format(getStringWithLocale(R.string.kca_init_title), getStringWithLocale(R.string.app_name));
-                notifyContent = getStringWithLocale(R.string.kca_init_content);
-                // String initSubContent = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
-                kcaFirstDeckInfo = getStringWithLocale(R.string.kca_init_content);
+                notifyBuilder = createBuilder(this, getServiceChannelId());
+                notifyTitle = KcaUtils.format(getString(R.string.kca_init_title), getString(R.string.app_name));
+                notifyContent = getString(R.string.kca_init_content);
+                // String initSubContent = KcaUtils.format("%s %s", getString(R.string.app_name), getString(R.string.app_version));
+                kcaFirstDeckInfo = getString(R.string.kca_init_content);
                 initViewNotificationBuilder(notifyTitle, notifyContent);
 
                 Handler toForegroundHandler = new Handler(getMainLooper());
@@ -461,8 +452,8 @@ public class KcaService extends Service {
         notifyContent = "";
         if (isMissionTimerViewEnabled()) {
             if (!KcaExpedition2.isMissionExist()) {
-                if (isFirstState) notifyContent = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
-                else notifyContent = notifyContent.concat(getStringWithLocale(R.string.kca_view_noexpedition));
+                if (isFirstState) notifyContent = KcaUtils.format("%s %s", getString(R.string.app_name), getString(R.string.app_version));
+                else notifyContent = notifyContent.concat(getString(R.string.kca_view_noexpedition));
             } else {
                 List<String> kcaExpStrList = new ArrayList<String>();
                 for (int i = 1; i < 4; i++) {
@@ -480,10 +471,10 @@ public class KcaService extends Service {
                 }
             }
             if (notifyContent.trim().length() == 0) {
-                notifyContent = notifyContent.concat(getStringWithLocale(R.string.kca_view_noexpedition));
+                notifyContent = notifyContent.concat(getString(R.string.kca_view_noexpedition));
             }
         } else {
-            notifyContent = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
+            notifyContent = KcaUtils.format("%s %s", getString(R.string.app_name), getString(R.string.app_version));
         }
 
         String nodeString = "";
@@ -493,13 +484,13 @@ public class KcaService extends Service {
 
         switch (heavyDamagedMode) {
             case HD_DAMECON:
-                notifyTitle = KcaUtils.format(getStringWithLocale(R.string.kca_view_hdmg_damecon_format), getStringWithLocale(R.string.app_name), nodeString).trim();
+                notifyTitle = KcaUtils.format(getString(R.string.kca_view_hdmg_damecon_format), getString(R.string.app_name), nodeString).trim();
                 break;
             case HD_DANGER:
-                notifyTitle = KcaUtils.format(getStringWithLocale(R.string.kca_view_hdmg_format), getStringWithLocale(R.string.app_name), nodeString).trim();
+                notifyTitle = KcaUtils.format(getString(R.string.kca_view_hdmg_format), getString(R.string.app_name), nodeString).trim();
                 break;
             default:
-                notifyTitle = KcaUtils.format(getStringWithLocale(R.string.kca_view_normal_format), getStringWithLocale(R.string.app_name), nodeString).trim();
+                notifyTitle = KcaUtils.format(getString(R.string.kca_view_normal_format), getString(R.string.app_name), nodeString).trim();
                 break;
         }
         updateNotification(true);
@@ -668,7 +659,7 @@ public class KcaService extends Service {
                     e1.printStackTrace();
                 }
 
-                makeToast(getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                makeToast(getString(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 dbHelper.recordErrorLog(ERROR_TYPE_VPN, api_url, api_request, api_response, api_error);
                 return;
             }
@@ -692,7 +683,7 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(API_WORLD_GET_WORLDINFO)) {
-                makeToast(getStringWithLocale(R.string.kca_toast_server_select), Toast.LENGTH_LONG,
+                makeToast(getString(R.string.kca_toast_server_select), Toast.LENGTH_LONG,
                         ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 return;
             }
@@ -713,7 +704,7 @@ public class KcaService extends Service {
                 if (jsonDataObj.has("api_data")) {
                     api_start2_data = jsonDataObj.toString();
                     dbHelper.putValue(DB_KEY_STARTDATA, api_start2_data);
-                    //Toast.makeText(contextWithLocale, "Load Kancolle Data", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(this, "Load Kancolle Data", Toast.LENGTH_LONG).show();
                     KcaApiData.getKcGameData(jsonDataObj.getAsJsonObject("api_data"));
                     if (kca_version != null) {
                         setPreferences(getApplicationContext(), "kca_version", kca_version);
@@ -905,7 +896,7 @@ public class KcaService extends Service {
                     int api_event_kind = api_data.get("api_event_kind").getAsInt();
                     int api_event_id = api_data.get("api_event_id").getAsInt();
                     int api_color_no = api_data.get("api_color_no").getAsInt();
-                    currentNodeInfo = KcaApiData.getNodeFullInfo(contextWithLocale, currentNodeAlphabet, api_event_id, api_event_kind, api_color_no, false);
+                    currentNodeInfo = KcaApiData.getNodeFullInfo(this, currentNodeAlphabet, api_event_id, api_event_kind, api_color_no, false);
                     makeToast(currentNodeInfo, Toast.LENGTH_LONG, getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
                 }
             }
@@ -981,10 +972,10 @@ public class KcaService extends Service {
 
             // Game Data Dependent Tasks
             if (restartFlag) {
-                makeToast(getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                makeToast(getString(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
             }
             else if (!checkDataLoadTriggered()) {
-                makeToast(getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                makeToast(getString(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 //new retrieveApiStartData().execute("", "down", "");
             }
             else {
@@ -1106,7 +1097,7 @@ public class KcaService extends Service {
                             if (url.startsWith(API_GET_MEMBER_MISSION) && i == 0) continue;
                             if (deckInfoCalc.checkNotSuppliedExist(portdeckdata, i)) {
                                 isNotSuppliedFlag = true;
-                                message = message.concat(KcaUtils.format(getStringWithLocale(R.string.not_supplied), i + 1)).concat("\n");
+                                message = message.concat(KcaUtils.format(getString(R.string.not_supplied), i + 1)).concat("\n");
                             }
                         }
 
@@ -1118,9 +1109,9 @@ public class KcaService extends Service {
                                     case HD_DANGER:
                                         isHeavyDamagedFlag = true;
                                         if (checkvalue == HD_DANGER) {
-                                            message = message.concat(KcaUtils.format("[#%d] %s", i + 1, getStringWithLocale(R.string.heavy_damaged))).concat("\n");
+                                            message = message.concat(KcaUtils.format("[#%d] %s", i + 1, getString(R.string.heavy_damaged))).concat("\n");
                                         } else if (checkvalue == HD_DAMECON) {
-                                            message = message.concat(KcaUtils.format("[#%d] %s", i + 1, getStringWithLocale(R.string.heavy_damaged_damecon))).concat("\n");
+                                            message = message.concat(KcaUtils.format("[#%d] %s", i + 1, getString(R.string.heavy_damaged_damecon))).concat("\n");
                                         }
                                         break;
                                     default:
@@ -2198,8 +2189,8 @@ public class KcaService extends Service {
                 PendingIntent removePendingIntent = PendingIntent.getService(getApplicationContext(), 0,
                         removeIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-                notifyBuilder.addAction(new NotificationCompat.Action(0, getStringWithLocale(R.string.fairy_hidden_notification_action_return), returnPendingIntent))
-                        .addAction(new NotificationCompat.Action(0, getStringWithLocale(R.string.fairy_hidden_notification_action_remove), removePendingIntent));
+                notifyBuilder.addAction(new NotificationCompat.Action(0, getString(R.string.fairy_hidden_notification_action_return), returnPendingIntent))
+                        .addAction(new NotificationCompat.Action(0, getString(R.string.fairy_hidden_notification_action_remove), removePendingIntent));
             }
 
             if (url.startsWith(KCA_API_FAIRY_CHECKED)) {
@@ -2351,13 +2342,13 @@ public class KcaService extends Service {
                 }
 
                 if (heavyDamagedMode == HD_DANGER) {
-                    makeToast(getStringWithLocale(R.string.heavy_damaged), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
+                    makeToast(getString(R.string.heavy_damaged), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
                     Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
                     intent.putExtra(KCA_MSG_DATA, "1");
                     broadcaster.sendBroadcast(intent);
                 } else {
                     if (heavyDamagedMode == HD_DAMECON) {
-                        makeToast(getStringWithLocale(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
+                        makeToast(getString(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
                     }
                     Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
                     intent.putExtra(KCA_MSG_DATA, "0");
@@ -2389,7 +2380,7 @@ public class KcaService extends Service {
                 String api_url = jsonDataObj.get("api_url").getAsString();
                 String api_node = jsonDataObj.get("api_node").getAsString();
                 String api_error = jsonDataObj.get("api_error").getAsString();
-                makeToast(getStringWithLocale(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+                makeToast(getString(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
                 dbHelper.recordErrorLog(ERROR_TYPE_BATTLE, api_url, api_node, api_data, api_error);
             }
 
@@ -2399,7 +2390,7 @@ public class KcaService extends Service {
             makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
-            makeToast(getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+            makeToast(getString(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
             dbHelper.recordErrorLog(ERROR_TYPE_NOTI, url, "notification", data, getStringFromException(e));
         }
     }
@@ -2467,16 +2458,16 @@ public class KcaService extends Service {
         String seekType = "";
         switch (cn) {
             case 1:
-                seekType = getStringWithLocale(R.string.seek_type_1);
+                seekType = getString(R.string.seek_type_1);
                 break;
             case 3:
-                seekType = getStringWithLocale(R.string.seek_type_3);
+                seekType = getString(R.string.seek_type_3);
                 break;
             case 4:
-                seekType = getStringWithLocale(R.string.seek_type_4);
+                seekType = getString(R.string.seek_type_4);
                 break;
             default:
-                seekType = getStringWithLocale(R.string.seek_type_0);
+                seekType = getString(R.string.seek_type_0);
                 break;
         }
         return seekType;
@@ -2652,7 +2643,7 @@ public class KcaService extends Service {
         JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         if (data == null) {
             KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
-            makeToast(getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+            makeToast(getString(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorPrimaryDark));
             Log.e("KCA", KcaUtils.format("currentPortDeckData is null"));
             return false;
         } else {

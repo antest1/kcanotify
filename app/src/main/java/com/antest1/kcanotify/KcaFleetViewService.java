@@ -1,7 +1,6 @@
 package com.antest1.kcanotify;
 
 import android.annotation.SuppressLint;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -74,7 +73,6 @@ import static com.antest1.kcanotify.KcaUseStatConstant.CLOSE_FLEETVIEW;
 import static com.antest1.kcanotify.KcaUseStatConstant.FV_BTN_PRESS;
 import static com.antest1.kcanotify.KcaUseStatConstant.OPEN_FLEETVIEW;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
-import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -86,7 +84,7 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
-public class KcaFleetViewService extends Service {
+public class KcaFleetViewService extends BaseService {
     public static final String SHOW_FLEETVIEW_ACTION = "show_fleetview_action";
     public static final String REFRESH_FLEETVIEW_ACTION = "update_fleetview_action";
     public static final String CLOSE_FLEETVIEW_ACTION = "close_fleetview_action";
@@ -108,7 +106,7 @@ public class KcaFleetViewService extends Service {
     private int screenWidth;
     private int screenHeight;
 
-    Context contextWithLocale;
+    Context contextWithTheme;
     LayoutInflater mInflater;
     SharedPreferences prefs;
     public KcaDBHelper dbHelper;
@@ -149,10 +147,6 @@ public class KcaFleetViewService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
-    }
-
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
     public static void setReadyFlag(boolean flag) {
@@ -206,7 +200,7 @@ public class KcaFleetViewService extends Service {
                 TextView expview = fleetHqInfoView.findViewById(R.id.fleetview_exp);
                 float[] exp_score = dbHelper.getExpScore();
                 expview.setText(KcaUtils.format(
-                        getStringWithLocale(R.string.fleetview_expview),
+                        getString(R.string.fleetview_expview),
                         exp_score[0], exp_score[1]));
                 break;
             case HQINFO_SECOUNT:
@@ -305,15 +299,14 @@ public class KcaFleetViewService extends Service {
             dbHelper.updateExpScore(0);
             KcaApiData.setDBHelper(dbHelper);
 
-            contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
-            contextWithLocale = new ContextThemeWrapper(contextWithLocale, R.style.AppTheme);
-            deckInfoCalc = new KcaDeckInfo(getApplicationContext(), contextWithLocale);
+            contextWithTheme = new ContextThemeWrapper(this, R.style.AppTheme);
+            deckInfoCalc = new KcaDeckInfo(contextWithTheme);
             gunfitData = loadGunfitData(getAssets());
 
-            mInflater = LayoutInflater.from(contextWithLocale);
+            mInflater = LayoutInflater.from(contextWithTheme);
             initView();
 
-            fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
+            fleetInfoLine.setText(getString(R.string.kca_init_content));
             itemView = mInflater.inflate(R.layout.view_battleview_items, null);
             mHandler = new Handler();
             timer = this::updateFleetInfoLine;
@@ -354,7 +347,7 @@ public class KcaFleetViewService extends Service {
         List<TextView> menuBtnList = new ArrayList<>();
         for (String key : fleetview_menu_keys) {
             TextView tv = fleetView.findViewById(KcaUtils.getId(KcaUtils.format("viewbutton_%s", key), R.id.class));
-            tv.setText(getStringWithLocale(KcaUtils.getId(KcaUtils.format("viewmenu_%s", key), R.string.class)));
+            tv.setText(getString(KcaUtils.getId(KcaUtils.format("viewmenu_%s", key), R.string.class)));
             menuBtnList.add(tv);
             ((ViewGroup) tv.getParent()).removeView(tv);
         }
@@ -450,12 +443,12 @@ public class KcaFleetViewService extends Service {
                 switch_status = 2;
                 fleetView.findViewById(R.id.fleet_list_main).setVisibility(View.GONE);
                 fleetView.findViewById(R.id.fleet_list_combined).setVisibility(VISIBLE);
-                ((TextView) fleetView.findViewById(R.id.fleetview_fleetswitch)).setText(getStringWithLocale(R.string.fleetview_switch_2));
+                ((TextView) fleetView.findViewById(R.id.fleetview_fleetswitch)).setText(getString(R.string.fleetview_switch_2));
             } else {
                 switch_status = 1;
                 fleetView.findViewById(R.id.fleet_list_main).setVisibility(VISIBLE);
                 fleetView.findViewById(R.id.fleet_list_combined).setVisibility(View.GONE);
-                ((TextView) fleetView.findViewById(R.id.fleetview_fleetswitch)).setText(getStringWithLocale(R.string.fleetview_switch_1));
+                ((TextView) fleetView.findViewById(R.id.fleetview_fleetswitch)).setText(getString(R.string.fleetview_switch_1));
             }
         });
         fleetView.findViewById(R.id.fleetview_hqinfo).setOnClickListener(v -> {
@@ -792,7 +785,7 @@ public class KcaFleetViewService extends Service {
         if (!isReady) {
             fleetCalcInfoText = "";
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNoShip));
-            fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
+            fleetInfoLine.setText(getString(R.string.kca_init_content));
             fleetView.findViewById(R.id.fleet_list_main).setVisibility(INVISIBLE);
             fleetView.findViewById(R.id.fleet_list_combined).setVisibility(is_landscape? INVISIBLE : View.GONE);
             fleetSwitchBtn.setVisibility(View.GONE);
@@ -842,9 +835,9 @@ public class KcaFleetViewService extends Service {
             seekValue = deckInfoCalc.getSeekValue(deckportdata, String.valueOf(idx), cn, null);
         }
         if (cn == SEEK_PURE) {
-            seekStringValue = KcaUtils.format(getStringWithLocale(R.string.fleetview_seekvalue_d), (int) seekValue);
+            seekStringValue = KcaUtils.format(getString(R.string.fleetview_seekvalue_d), (int) seekValue);
         } else {
-            seekStringValue = KcaUtils.format(getStringWithLocale(R.string.fleetview_seekvalue_f), seekValue);
+            seekStringValue = KcaUtils.format(getString(R.string.fleetview_seekvalue_f), seekValue);
         }
         infoList.add(seekStringValue);
 
@@ -1000,8 +993,8 @@ public class KcaFleetViewService extends Service {
                     fleetAkashiTimerBtn.setVisibility(VISIBLE);
                 }
             } else {
-                if (!getStringWithLocale(R.string.kca_init_content).contentEquals(fleetInfoLine.getText())) {
-                    fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
+                if (!getString(R.string.kca_init_content).contentEquals(fleetInfoLine.getText())) {
+                    fleetInfoLine.setText(getString(R.string.kca_init_content));
                 }
                 fleetAkashiTimerBtn.setVisibility(View.GONE);
             }
@@ -1050,7 +1043,7 @@ public class KcaFleetViewService extends Service {
 
                     if (lv > 0) {
                         ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)))
-                                .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
+                                .setText(getString(R.string.lv_star).concat(String.valueOf(lv)));
                         itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(VISIBLE);
                     } else {
                         itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(GONE);
@@ -1058,7 +1051,7 @@ public class KcaFleetViewService extends Service {
 
                     if (alv > 0) {
                         ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)))
-                                .setText(getStringWithLocale(getId(KcaUtils.format("alv_%d", alv), R.string.class)));
+                                .setText(getString(getId(KcaUtils.format("alv_%d", alv), R.string.class)));
                         int alvColorId = (alv <= 3) ? 1 : 2;
                         ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), getId(KcaUtils.format("itemalv%d", alvColorId), R.color.class)));
@@ -1140,7 +1133,7 @@ public class KcaFleetViewService extends Service {
                     itemView.findViewById(R.id.item_ex_icon).setVisibility(VISIBLE);
                     if (lv > 0) {
                         ((TextView) itemView.findViewById(R.id.item_ex_level))
-                                .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
+                                .setText(getString(R.string.lv_star).concat(String.valueOf(lv)));
                         itemView.findViewById(R.id.item_ex_level).setVisibility(VISIBLE);
                     } else {
                         itemView.findViewById(R.id.item_ex_level).setVisibility(GONE);
@@ -1150,7 +1143,7 @@ public class KcaFleetViewService extends Service {
                     itemView.findViewById(R.id.view_slot_ex).setVisibility(INVISIBLE);
                 }
             } else {
-                ((TextView) itemView.findViewById(R.id.item_ex_name)).setText(getStringWithLocale(R.string.slot_empty));
+                ((TextView) itemView.findViewById(R.id.item_ex_name)).setText(getString(R.string.slot_empty));
                 ((ImageView) itemView.findViewById(R.id.item_ex_icon)).setImageResource(R.mipmap.item_0);
                 itemView.findViewById(R.id.item_ex_level).setVisibility(GONE);
                 itemView.findViewById(R.id.item_ex_slot_list).setVisibility(INVISIBLE);
@@ -1171,7 +1164,7 @@ public class KcaFleetViewService extends Service {
         }
 
         if (slot_count == 0) {
-            ((TextView) itemView.findViewById(R.id.item1_name)).setText(getStringWithLocale(R.string.slot_empty));
+            ((TextView) itemView.findViewById(R.id.item1_name)).setText(getString(R.string.slot_empty));
             ((TextView) itemView.findViewById(R.id.item1_name)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
             ((ImageView) itemView.findViewById(R.id.item1_icon)).setImageResource(R.mipmap.item_0);
             itemView.findViewById(R.id.item1_level).setVisibility(GONE);
@@ -1190,19 +1183,19 @@ public class KcaFleetViewService extends Service {
         String seekType;
         switch (seekcn_internal) {
             case 1:
-                seekType = getStringWithLocale(R.string.seek_type_1);
+                seekType = getString(R.string.seek_type_1);
                 break;
             case 2:
-                seekType = getStringWithLocale(R.string.seek_type_2);
+                seekType = getString(R.string.seek_type_2);
                 break;
             case 3:
-                seekType = getStringWithLocale(R.string.seek_type_3);
+                seekType = getString(R.string.seek_type_3);
                 break;
             case 4:
-                seekType = getStringWithLocale(R.string.seek_type_4);
+                seekType = getString(R.string.seek_type_4);
                 break;
             default:
-                seekType = getStringWithLocale(R.string.seek_type_0);
+                seekType = getString(R.string.seek_type_0);
                 break;
         }
         return seekType;
@@ -1286,16 +1279,14 @@ public class KcaFleetViewService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         updateScreenSize();
-
         super.onConfigurationChanged(newConfig);
 
-        contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
-        contextWithLocale = new ContextThemeWrapper(contextWithLocale, R.style.AppTheme);
+        contextWithTheme = new ContextThemeWrapper(this, R.style.AppTheme);
         if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else {
-            mInflater = LayoutInflater.from(contextWithLocale);
+            mInflater = LayoutInflater.from(contextWithTheme);
             int visibility = fleetView.getVisibility();
             if (windowManager != null) {
                 if (fleetView.getParent() != null) windowManager.removeViewImmediate(fleetView);

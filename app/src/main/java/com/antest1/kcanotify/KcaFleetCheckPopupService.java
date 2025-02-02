@@ -1,6 +1,5 @@
 package com.antest1.kcanotify;
 
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -32,7 +31,7 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
-public class KcaFleetCheckPopupService extends Service {
+public class KcaFleetCheckPopupService extends BaseService {
     public static final String FCHK_SHOW_ACTION = "fchk_show_action";
 
     private static final int FCHK_FUNC_SEEKTP = 0;
@@ -67,10 +66,6 @@ public class KcaFleetCheckPopupService extends Service {
         return active;
     }
 
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -87,7 +82,7 @@ public class KcaFleetCheckPopupService extends Service {
         } else {
             windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-            deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
+            deckInfoCalc = new KcaDeckInfo(getBaseContext());
             notificationManager = NotificationManagerCompat.from(getApplicationContext());
         }
     }
@@ -101,7 +96,7 @@ public class KcaFleetCheckPopupService extends Service {
         popupView = mInflater.inflate(R.layout.view_fleet_check, null);
         popupView.setOnTouchListener(mViewTouchListener);
         popupView.findViewById(R.id.view_fchk_head).setOnTouchListener(mViewTouchListener);
-        ((TextView) popupView.findViewById(R.id.view_fchk_title)).setText(getStringWithLocale(R.string.fleetcheckview_title));
+        ((TextView) popupView.findViewById(R.id.view_fchk_title)).setText(getString(R.string.fleetcheckview_title));
 
         for (int fchk_id: FCHK_BTN_LIST) {
             popupView.findViewById(fchk_id).setOnTouchListener(mViewTouchListener);
@@ -198,7 +193,7 @@ public class KcaFleetCheckPopupService extends Service {
                         double seekValue_4 = deckInfoCalc.getSeekValue(portdeckdata, target_str, 4, KcaBattle.getEscapeFlag());
 
                         int[] tp = deckInfoCalc.getTPValue(portdeckdata, target_str, KcaBattle.getEscapeFlag());
-                        fchk_info.setText(KcaUtils.format(getStringWithLocale(R.string.fleetcheckview_content_seeklos),
+                        fchk_info.setText(KcaUtils.format(getString(R.string.fleetcheckview_content_seeklos),
                                 seekValue_0, seekValue_1, seekValue_2, seekValue_3, seekValue_4, tp[0], tp[1]));
                         break;
                     case FCHK_FUNC_AIRBATTLE:
@@ -208,7 +203,7 @@ public class KcaFleetCheckPopupService extends Service {
                         double select_rate_1 = contact.getAsJsonArray("stage2").get(0).getAsDouble() * 100;
                         double start_rate_2 = contact.getAsJsonArray("stage1").get(1).getAsDouble() * 100;
                         double select_rate_2 = contact.getAsJsonArray("stage2").get(1).getAsDouble() * 100;
-                        fchk_info.setText(KcaUtils.format(getStringWithLocale(R.string.fleetcheckview_content_airbattle),
+                        fchk_info.setText(KcaUtils.format(getString(R.string.fleetcheckview_content_airbattle),
                                 airPowerRange[0], airPowerRange[1], start_rate_1, select_rate_1, start_rate_2, select_rate_2));
                         break;
                     case FCHK_FUNC_FUELBULL:

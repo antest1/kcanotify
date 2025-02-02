@@ -9,7 +9,6 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -41,9 +40,9 @@ import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_RESLOG;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_RESOURCELOG_VERSION;
 
-public class ResourceLogActivity extends AppCompatActivity {
+public class ResourceLogActivity extends BaseActivity {
     Toolbar toolbar;
-    private final String FILE_PATH = "/export_data";
+    private final String FILE_PATH = "export_data";
     public static final long DAY_MILLISECOND = 86400000;
 
     public static final int INTERVAL_1H = 0;
@@ -80,17 +79,13 @@ public class ResourceLogActivity extends AppCompatActivity {
         return is_hidden;
     }
 
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resourcelog);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getStringWithLocale(R.string.action_reslog));
+        getSupportActionBar().setTitle(getString(R.string.action_reslog));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
@@ -98,8 +93,8 @@ public class ResourceLogActivity extends AppCompatActivity {
         KcaApiData.setDBHelper(dbHelper);
 
         tabLayout = findViewById(R.id.reslog_tab);
-        tabLayout.addTab(tabLayout.newTab().setText(getStringWithLocale(R.string.reslog_label_resource)));
-        tabLayout.addTab(tabLayout.newTab().setText(getStringWithLocale(R.string.reslog_label_consumable)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.reslog_label_resource)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.reslog_label_consumable)));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         export_msg = findViewById(R.id.export_msg);
@@ -267,7 +262,7 @@ public class ResourceLogActivity extends AppCompatActivity {
                 return true;
             case R.id.action_reslog_clear:
                 AlertDialog.Builder alert = new AlertDialog.Builder(ResourceLogActivity.this);
-                alert.setPositiveButton(getStringWithLocale(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                alert.setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         resourceLogger.clearResoureLog();
@@ -276,13 +271,13 @@ public class ResourceLogActivity extends AppCompatActivity {
                         pageAdapter.notifyDataSetChanged();
                         dialog.dismiss();
                     }
-                }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+                }).setNegativeButton(getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
                 });
-                alert.setMessage(getStringWithLocale(R.string.reslog_clear_dialog_message));
+                alert.setMessage(getString(R.string.reslog_clear_dialog_message));
                 alert.show();
                 return true;
             case R.id.action_reslog_export:
@@ -353,25 +348,25 @@ public class ResourceLogActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             is_exporting = true;
-            export_msg.setText(getStringWithLocale(R.string.action_save_msg));
+            export_msg.setText(getString(R.string.action_save_msg));
             export_msg.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Integer doInBackground(String[] params) {
-            File savedir = new File(getExternalFilesDir(null), "export_data");
+            File savedir = new File(getExternalFilesDir(null), FILE_PATH);
             if (!savedir.exists()) savedir.mkdirs();
             String exportPath = savedir.getPath();
 
-            String label_date = getStringWithLocale(R.string.reslog_label_time);
-            String label_1 = getStringWithLocale(R.string.item_fuel);
-            String label_2 = getStringWithLocale(R.string.item_ammo);
-            String label_3 = getStringWithLocale(R.string.item_stel);
-            String label_4 = getStringWithLocale(R.string.item_baux);
-            String label_5 = getStringWithLocale(R.string.item_bgtz);
-            String label_6 = getStringWithLocale(R.string.item_brnr);
-            String label_7 = getStringWithLocale(R.string.item_mmat);
-            String label_8 = getStringWithLocale(R.string.item_kmat);
+            String label_date = getString(R.string.reslog_label_time);
+            String label_1 = getString(R.string.item_fuel);
+            String label_2 = getString(R.string.item_ammo);
+            String label_3 = getString(R.string.item_stel);
+            String label_4 = getString(R.string.item_baux);
+            String label_5 = getString(R.string.item_bgtz);
+            String label_6 = getString(R.string.item_brnr);
+            String label_7 = getString(R.string.item_mmat);
+            String label_8 = getString(R.string.item_kmat);
 
             String label_line = KcaUtils.format("%s,%s,%s,%s,%s,%s,%s,%s,%s",
                     label_date, label_1, label_2, label_3, label_4, label_5, label_6, label_7, label_8);

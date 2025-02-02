@@ -1,34 +1,23 @@
 package com.antest1.kcanotify;
 
-import android.content.res.Configuration;
 import android.media.RingtoneManager;
-import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.MenuItem;
 
-import java.util.Locale;
-
 import static com.antest1.kcanotify.KcaConstants.*;
-import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.NestedPreferenceFragment.NESTED_TAG;
 
-public class SettingActivity extends AppCompatActivity implements MainPreferenceFragment.Callback {
-    public static String currentVersion = BuildConfig.VERSION_NAME;
+public class SettingActivity extends BaseActivity implements MainPreferenceFragment.Callback {
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
     public static final int REQUEST_USAGESTAT_PERMISSION = 3;
     public static final int REQUEST_ALERT_RINGTONE = 4;
     public static final int REQUEST_BATOPTIM_PERMISSION = 5;
 
     Toolbar toolbar;
-
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

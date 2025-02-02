@@ -775,7 +775,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_fleetview_item_select">舰队资讯计数器显示的道具</string>
     <string name="setting_menu_kand_desc_fleetview_item_select">右上计数器目标道具（可触碰更改）</string>
     <string name="setting_service_running_desc">服务执行时无法更改</string>
-    <string name="ma_permission_notification_denied">Kcanotify功能需要启用通知权限。点选「SERVICE」按钮时允许权限。 </string>
+    <string name="ma_permission_notification_denied">Kcanotify功能需要启用通知权限。</string>
     <string name="ma_permission_service_restart">再次按 SERVICE 按钮启动 kcanotify。</string>
     <string name="setting_menu_noti_title_test">显示测试通知</string>
     <string name="ship_nat_label">国籍筛选</string>

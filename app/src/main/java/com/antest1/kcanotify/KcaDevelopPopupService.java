@@ -1,6 +1,5 @@
 package com.antest1.kcanotify;
 
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -39,7 +38,7 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
-public class KcaDevelopPopupService extends Service {
+public class KcaDevelopPopupService extends BaseService {
     public static final String DEV_DATA_ACTION = "dev_data_action";
 
     private LocalBroadcastManager broadcaster;
@@ -63,10 +62,6 @@ public class KcaDevelopPopupService extends Service {
 
     public static boolean isActive() {
         return active;
-    }
-
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
     @Nullable
@@ -103,11 +98,11 @@ public class KcaDevelopPopupService extends Service {
     private void setPopupLayout() {
         if (checkPopupExist()) return;
 
-        LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater mInflater = LayoutInflater.from(this);
         popupView = mInflater.inflate(R.layout.view_equip_dev, null);
         popupView.setOnTouchListener(mViewTouchListener);
         popupView.findViewById(R.id.view_ed_head).setOnTouchListener(mViewTouchListener);
-        ((TextView) popupView.findViewById(R.id.view_ed_title)).setText(getStringWithLocale(R.string.viewmenu_develop_title));
+        ((TextView) popupView.findViewById(R.id.view_ed_title)).setText(getString(R.string.viewmenu_develop_title));
 
         setPopupContent();
         updatePopup();
@@ -197,7 +192,7 @@ public class KcaDevelopPopupService extends Service {
         ed_count.setText(data.get("count").getAsString());
         String item_name = data.get("name").getAsString();
         if (item_name.equals("item_fail")) {
-            ed_name.setText(getStringWithLocale(R.string.develop_failed_text));
+            ed_name.setText(getString(R.string.develop_failed_text));
             typeres = R.mipmap.item_99;
         } else {
             ed_name.setText(KcaApiData.getSlotItemTranslation(item_name));

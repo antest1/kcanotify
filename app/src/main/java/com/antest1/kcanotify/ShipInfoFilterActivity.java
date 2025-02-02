@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
@@ -42,7 +41,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 
-public class ShipInfoFilterActivity extends AppCompatActivity {
+public class ShipInfoFilterActivity extends BaseActivity {
     public final static int SPECIAL_EQUIPMENT_COUNT = 5;
     public final static int SHIP_STATUS_COUNT = 2;
 
@@ -57,10 +56,6 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
     LinearLayout listview;
     public int count;
     public static SparseArray<String> sort_values = new SparseArray<>();
-
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
 
     public static String makeStatPrefValue(int idx, int op, String val) {
         return KcaUtils.format("%d,%d,%s", idx, op, val);
@@ -100,7 +95,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shipinfo_filter);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getStringWithLocale(R.string.shipinfo_btn_filter));
+        getSupportActionBar().setTitle(getString(R.string.shipinfo_btn_filter));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         String pref_special_equips = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SPEQUIPS);
@@ -113,7 +108,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                     KcaUtils.getId(KcaUtils.format("equip_%s", key), R.id.class)
             ));
             CheckBox item = filterSpecialEquipment.get(i);
-            item.setText(getStringWithLocale(
+            item.setText(getString(
                     KcaUtils.getId(KcaUtils.format("ship_stat_equip_%s", key), R.string.class)
             ));
             item.setChecked(specialEquipsFilterList.contains(key));
@@ -134,7 +129,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                     KcaUtils.getId(KcaUtils.format("exclude_%s", key), R.id.class)
             ));
             CheckBox item = filterShipStatus.get(i);
-            item.setText(getStringWithLocale(
+            item.setText(getString(
                     KcaUtils.getId(KcaUtils.format("ship_exclude_%s", key), R.string.class)
             ));
             item.setChecked(shipStatusFilterList.contains(key));
@@ -155,7 +150,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                     KcaUtils.getId(KcaUtils.format("%s", key), R.id.class)
             ));
             CheckBox item = filterShipNat.get(i);
-            item.setText(getStringWithLocale(
+            item.setText(getString(
                     KcaUtils.getId(KcaUtils.format("%s", key), R.string.class)
             ));
             item.setChecked(shipNatFilterList.contains(key));
@@ -240,7 +235,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                         sp_val.setVisibility(View.VISIBLE);
                         if(prev_position != position) {
                             setupListSelect(sp_val, target, "val", position, null);
-                            sp_val.setText(getStringWithLocale(R.string.shipinfo_filt_list_dialog_title));
+                            sp_val.setText(getString(R.string.shipinfo_filt_list_dialog_title));
                         }
                     } else {
                         sp_val.setVisibility(View.GONE);
@@ -299,13 +294,13 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                 if (sort_values.size() > 1) {
                     removeViewByTag(target);
                     sort_values.delete(target);
-                    listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size() - 1));
+                    listcounter.setText(KcaUtils.format(getString(R.string.shipinfo_criteria_count), sort_values.size() - 1));
                 }
             }
         });
 
         listview.addView(v);
-        listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size() - 1));
+        listcounter.setText(KcaUtils.format(getString(R.string.shipinfo_criteria_count), sort_values.size() - 1));
         if (key != -1) ((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_spinner))
                 .setSelection(KcaShipListViewAdpater.getFilterIndexByKey(key));
         if (op != -1) ((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_operator)).setSelection(op);
@@ -411,7 +406,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         }
 
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(getStringWithLocale(R.string.shipinfo_filt_list_dialog_title))
+                .setTitle(getString(R.string.shipinfo_filt_list_dialog_title))
                 .setMultiChoiceItems(arr, selected_arr, (dialog13, indexSelected, isChecked) -> {
                     if (isChecked) {
                         // If the user checked the item, add it to the selected items
@@ -420,7 +415,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                         // Else, if the item is already in the array, remove it
                         selectedItems.remove(Integer.valueOf(indexSelected));
                     }
-                }).setPositiveButton(getStringWithLocale(R.string.dialog_ok), (dialog12, id) -> {
+                }).setPositiveButton(getString(R.string.dialog_ok), (dialog12, id) -> {
                     sp_val.setText(KcaUtils.format("%d/%d", selectedItems.size(), arr.length));
 
                     List<String> vals = new ArrayList<>();
@@ -443,7 +438,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                     }
                     obj.addProperty(key, KcaUtils.joinStr(vals, "_"));
                     sort_values.put(target, makeStatPrefValue(obj));
-                }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), (dialog1, id) -> {
+                }).setNegativeButton(getString(R.string.dialog_cancel), (dialog1, id) -> {
 
                 }).create();
         return dialog;
@@ -462,10 +457,10 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
 
     private String[] getSpeedArray() {
         List<String> speed_list = new ArrayList<>();
-        speed_list.add(getStringWithLocale(R.string.speed_slow));
-        speed_list.add(getStringWithLocale(R.string.speed_fast));
-        speed_list.add(getStringWithLocale(R.string.speed_fastplus));
-        speed_list.add(getStringWithLocale(R.string.speed_superfast));
+        speed_list.add(getString(R.string.speed_slow));
+        speed_list.add(getString(R.string.speed_fast));
+        speed_list.add(getString(R.string.speed_fastplus));
+        speed_list.add(getString(R.string.speed_superfast));
 
         String[] speed_arr = new String[speed_list.size()];
         speed_arr = speed_list.toArray(speed_arr);
@@ -474,9 +469,9 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
 
     private String[] getTagArray() {
         List<String> tag_list = new ArrayList<>();
-        tag_list.add(getStringWithLocale(R.string.ship_tag_none));
+        tag_list.add(getString(R.string.ship_tag_none));
         for (int i = 1; i <= TAG_COUNT; i++) {
-            tag_list.add(getStringWithLocale(R.string.ship_tag_prefix).concat(String.valueOf(i)));
+            tag_list.add(getString(R.string.ship_tag_prefix).concat(String.valueOf(i)));
         }
 
         String[] tag_arr = new String[tag_list.size()];
@@ -486,9 +481,9 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
 
     private String[] getFleetArray() {
         List<String> tag_list = new ArrayList<>();
-        tag_list.add(getStringWithLocale(R.string.ship_fleet_0));
+        tag_list.add(getString(R.string.ship_fleet_0));
         for (int i = 0; i < 4; i++) {
-            tag_list.add(KcaUtils.format(getStringWithLocale(R.string.fleet_format), i+1));
+            tag_list.add(KcaUtils.format(getString(R.string.fleet_format), i+1));
         }
 
         String[] tag_arr = new String[tag_list.size()];
@@ -499,7 +494,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
     private String[] getHPArray() {
         List<String> tag_list = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            tag_list.add(getStringWithLocale(KcaUtils.getId(KcaUtils.format("ship_hp_%d", i), R.string.class)));
+            tag_list.add(getString(KcaUtils.getId(KcaUtils.format("ship_hp_%d", i), R.string.class)));
         }
 
         String[] tag_arr = new String[tag_list.size()];

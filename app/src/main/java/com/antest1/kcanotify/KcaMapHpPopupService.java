@@ -1,6 +1,5 @@
 package com.antest1.kcanotify;
 
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -36,7 +35,7 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_INFO;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
-public class KcaMapHpPopupService extends Service {
+public class KcaMapHpPopupService extends BaseService {
     public static final String MAPHP_SHOW_ACTION = "maphp_show_action";
     public static final String MAPHP_RESET_ACTION = "maphp_reset_action";
 
@@ -62,10 +61,6 @@ public class KcaMapHpPopupService extends Service {
 
     public static boolean isActive() {
         return active;
-    }
-
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
     @Nullable
@@ -152,11 +147,11 @@ public class KcaMapHpPopupService extends Service {
     private void setPopupLayout() {
         if (checkPopupExist()) return;
 
-        LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater mInflater = LayoutInflater.from(this);
         popupView = mInflater.inflate(R.layout.view_map_hp, null);
         popupView.setOnTouchListener(mViewTouchListener);
         popupView.findViewById(R.id.view_hp_head).setOnTouchListener(mViewTouchListener);
-        ((TextView) popupView.findViewById(R.id.view_hp_title)).setText(getStringWithLocale(R.string.viewmenu_maphp_title));
+        ((TextView) popupView.findViewById(R.id.view_hp_title)).setText(getString(R.string.viewmenu_maphp_title));
 
         setPopupContent();
 

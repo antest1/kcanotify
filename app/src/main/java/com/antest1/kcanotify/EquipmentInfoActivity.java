@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -45,7 +44,7 @@ import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
-public class EquipmentInfoActivity extends AppCompatActivity {
+public class EquipmentInfoActivity extends BaseActivity {
     static final int EQUIPINFO_GET_FILTER_RESULT = 2;
 
     Toolbar toolbar;
@@ -68,17 +67,13 @@ public class EquipmentInfoActivity extends AppCompatActivity {
     Button export_clipboard, export_openpage2;
     Vibrator vibrator;
 
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_equipment_list);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.action_equipmentinfo));
+        getSupportActionBar().setTitle(getString(R.string.action_equipmentinfo));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -153,19 +148,19 @@ public class EquipmentInfoActivity extends AppCompatActivity {
 
         JsonObject itemStatTranslation = new JsonObject();
         for (String key: KcaEquipListViewAdpater.STAT_KEYS) {
-            itemStatTranslation.addProperty(key, getStringWithLocale(getId("text_"+key, R.string.class)));
+            itemStatTranslation.addProperty(key, getString(getId("text_"+key, R.string.class)));
         }
-        itemStatTranslation.addProperty("api_houm2", getStringWithLocale(R.string.text_api_houm2));
-        itemStatTranslation.addProperty("api_houk2", getStringWithLocale(R.string.text_api_houk2));
+        itemStatTranslation.addProperty("api_houm2", getString(R.string.text_api_houm2));
+        itemStatTranslation.addProperty("api_houk2", getString(R.string.text_api_houk2));
         for (int i = 1; i <= 4; i++) {
-            itemStatTranslation.addProperty("api_leng"+i, getStringWithLocale(getId("text_api_leng_"+i, R.string.class)));
+            itemStatTranslation.addProperty("api_leng"+i, getString(getId("text_api_leng_"+i, R.string.class)));
         }
 
         totalcountview = findViewById(R.id.equipinfo_count);
         totalstarview = findViewById(R.id.equipinfo_total_star);
 
         adapter = new KcaEquipListViewAdpater();
-        adapter.setSummaryFormat(getStringWithLocale(R.string.equipinfo_summary));
+        adapter.setSummaryFormat(getString(R.string.equipinfo_summary));
         adapter.setStatTranslation(itemStatTranslation);
         adapter.setListViewItemList(equipment_data, counter, ship_equip_info, filtcond);
 
@@ -204,7 +199,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
 
         export_popup = findViewById(R.id.export_popup);
         ((TextView) export_popup.findViewById(R.id.export_title))
-                .setText(getStringWithLocale(R.string.equipinfo_export_title));
+                .setText(getString(R.string.equipinfo_export_title));
         export_popup.setVisibility(View.GONE);
 
         export_exit = export_popup.findViewById(R.id.export_exit);
@@ -217,18 +212,18 @@ public class EquipmentInfoActivity extends AppCompatActivity {
         });
 
         export_clipboard = export_popup.findViewById(R.id.export_clipboard);
-        export_clipboard.setText(getStringWithLocale(R.string.equipinfo_export_clipboard));
+        export_clipboard.setText(getString(R.string.equipinfo_export_clipboard));
         export_clipboard.setOnClickListener(v -> {
             CharSequence text = ((TextView) findViewById(R.id.export_content)).getText();
             ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             clip.setPrimaryClip(ClipData.newPlainText("text", text));
             doVibrate(vibrator, 100);
             Toast.makeText(getApplicationContext(),
-                    getStringWithLocale(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
+                    getString(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
         });
 
         export_openpage2 = export_popup.findViewById(R.id.export_openpage2);
-        export_openpage2.setText(getStringWithLocale(R.string.equipinfo_export_openpage2));
+        export_openpage2.setText(getString(R.string.equipinfo_export_openpage2));
         export_openpage2.setOnClickListener(v -> {
             Intent bIntent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse("https://noro6.github.io/kc-web/#/manager"));
@@ -237,8 +232,8 @@ public class EquipmentInfoActivity extends AppCompatActivity {
     }
 
     private void setSummary() {
-        totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.equipinfo_btn_total_format), adapter.getTotalCount()));
-        totalstarview.setText(KcaUtils.format(getStringWithLocale(R.string.equipinfo_btn_total_star_format), adapter.getStarCount()));
+        totalcountview.setText(KcaUtils.format(getString(R.string.equipinfo_btn_total_format), adapter.getTotalCount()));
+        totalstarview.setText(KcaUtils.format(getString(R.string.equipinfo_btn_total_star_format), adapter.getStarCount()));
     }
 
     private String getItemKey(JsonObject item) {

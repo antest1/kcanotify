@@ -19,7 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-public class KcaFleetViewItemSelectActivity extends AppCompatActivity {
+public class KcaFleetViewItemSelectActivity extends BaseActivity {
     public static final int API_USETYPE_4 = 4;
     public static final String[] FV_ITEMS = {PREF_FV_ITEM_1, PREF_FV_ITEM_2, PREF_FV_ITEM_3, PREF_FV_ITEM_4};
 
@@ -27,9 +27,6 @@ public class KcaFleetViewItemSelectActivity extends AppCompatActivity {
     Spinner[] spinnerUseItem;
     JsonArray useItemList = getUseItemDataByUseType(API_USETYPE_4);
 
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +34,7 @@ public class KcaFleetViewItemSelectActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getStringWithLocale(R.string.setting_menu_kand_title_fleetview_item_select));
+        getSupportActionBar().setTitle(getString(R.string.setting_menu_kand_title_fleetview_item_select));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         spinnerUseItem = new Spinner[4];

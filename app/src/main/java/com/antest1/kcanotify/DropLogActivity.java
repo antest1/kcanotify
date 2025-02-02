@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,7 +41,7 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DROPLOG_VERSION;
 
 
-public class DropLogActivity extends AppCompatActivity {
+public class DropLogActivity extends BaseActivity {
     public static final long DAY_MILLISECOND = 86400000;
 
     public static final int RANK_S = 32;
@@ -73,17 +72,13 @@ public class DropLogActivity extends AppCompatActivity {
     ListView droplog_listview;
     String[] world_list = {"*", "1", "2", "3", "4", "5", "6", "7"};
 
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_droplog_list);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getStringWithLocale(R.string.action_droplog));
+        getSupportActionBar().setTitle(getString(R.string.action_droplog));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
@@ -116,11 +111,11 @@ public class DropLogActivity extends AppCompatActivity {
 
         maprank_info[0] = "-";
         for (int i = 1; i < maprank_info.length; i++) {
-            maprank_info[i] = getStringWithLocale(KcaUtils.getId("maprank_" + i, R.string.class));
+            maprank_info[i] = getString(KcaUtils.getId("maprank_" + i, R.string.class));
         }
         KcaDropLogger.maprank_info = maprank_info;
-        KcaDropLogger.ship_none = getStringWithLocale(R.string.droplog_ship_none);
-        KcaDropLogger.ship_full = getStringWithLocale(R.string.droplog_ship_full);
+        KcaDropLogger.ship_none = getString(R.string.droplog_ship_none);
+        KcaDropLogger.ship_full = getString(R.string.droplog_ship_full);
         KcaDroplogItemAdpater.color_normal = ContextCompat.getColor(getApplicationContext(), R.color.black);
         KcaDroplogItemAdpater.color_none = ContextCompat.getColor(getApplicationContext(), R.color.grey);
         KcaDroplogItemAdpater.color_item = ContextCompat.getColor(getApplicationContext(), R.color.colorListItemBack);
@@ -132,7 +127,7 @@ public class DropLogActivity extends AppCompatActivity {
         end_date.setOnClickListener(dateViewListener);
 
         row_count = findViewById(R.id.droplog_result_info);
-        row_count.setText(KcaUtils.format(getStringWithLocale(R.string.droplog_total_format), 0));
+        row_count.setText(KcaUtils.format(getString(R.string.droplog_total_format), 0));
 
         sp_world = findViewById(R.id.droplog_world);
         sp_map = findViewById(R.id.droplog_map);
@@ -185,7 +180,7 @@ public class DropLogActivity extends AppCompatActivity {
         chkbox_desc = findViewById(R.id.droplog_isdesc);
         chkbox_desc.setOnCheckedChangeListener((compoundButton, b) -> {
             setConditionData("isdesc", b ? 1 : 0);
-            chkbox_desc.setText(getStringWithLocale(b ? R.string.droplog_sort_desc : R.string.droplog_sort_asc));
+            chkbox_desc.setText(getString(b ? R.string.droplog_sort_desc : R.string.droplog_sort_asc));
         });
         chkbox_desc.setChecked(true);
 
@@ -233,12 +228,12 @@ public class DropLogActivity extends AppCompatActivity {
                 return true;
             case R.id.action_droplog_clear:
                 AlertDialog.Builder alert = new AlertDialog.Builder(DropLogActivity.this);
-                alert.setPositiveButton(getStringWithLocale(R.string.dialog_ok), (dialog, which) -> {
+                alert.setPositiveButton(getString(R.string.dialog_ok), (dialog, which) -> {
                     dropLogger.clearDropLog();
                     setListView();
                     dialog.dismiss();
-                }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), (dialog, which) -> dialog.cancel());
-                alert.setMessage(getStringWithLocale(R.string.droplog_clear_dialog_message));
+                }).setNegativeButton(getString(R.string.dialog_cancel), (dialog, which) -> dialog.cancel());
+                alert.setMessage(getString(R.string.droplog_clear_dialog_message));
                 alert.show();
                 return true;
             case R.id.action_droplog_export:
@@ -255,7 +250,7 @@ public class DropLogActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             is_exporting = true;
-            row_count.setText(getStringWithLocale(R.string.action_save_msg));
+            row_count.setText(getString(R.string.action_save_msg));
             row_count.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPanelWarning));
         }
 
@@ -265,11 +260,11 @@ public class DropLogActivity extends AppCompatActivity {
             if (!savedir.exists()) savedir.mkdirs();
             String exportPath = savedir.getPath();
 
-            String label_date = getStringWithLocale(R.string.droplog_item_label_time);
-            String label_area = getStringWithLocale(R.string.droplog_item_label_area);
-            String label_isboss = getStringWithLocale(R.string.droplog_label_isboss);
-            String label_rank = getStringWithLocale(R.string.droplog_label_rank);
-            String label_name = getStringWithLocale(R.string.droplog_item_label_name);
+            String label_date = getString(R.string.droplog_item_label_time);
+            String label_area = getString(R.string.droplog_item_label_area);
+            String label_isboss = getString(R.string.droplog_label_isboss);
+            String label_rank = getString(R.string.droplog_label_rank);
+            String label_name = getString(R.string.droplog_item_label_name);
 
             String label_line = KcaUtils.format("%s,%s,%s,%s,%s", label_date, label_area, label_isboss, label_rank, label_name);
 
@@ -302,7 +297,7 @@ public class DropLogActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer result) {
             is_exporting = false;
-            row_count.setText(KcaUtils.format(getStringWithLocale(R.string.droplog_total_format), adapter.getCount()));
+            row_count.setText(KcaUtils.format(getString(R.string.droplog_total_format), adapter.getCount()));
             row_count.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
             switch (result) {
                 case 0:
@@ -323,7 +318,7 @@ public class DropLogActivity extends AppCompatActivity {
     public void setListView() {
         adapter.setListViewItemList(dropLogger.getDropLogWithCondition(condition_data), 0);
         droplog_listview.setAdapter(adapter);
-        if (!is_exporting) row_count.setText(KcaUtils.format(getStringWithLocale(R.string.droplog_total_format), adapter.getCount()));
+        if (!is_exporting) row_count.setText(KcaUtils.format(getString(R.string.droplog_total_format), adapter.getCount()));
         findViewById(R.id.droplog_infoline).setVisibility(View.VISIBLE);
     }
 
@@ -362,76 +357,66 @@ public class DropLogActivity extends AppCompatActivity {
         return dateFormat.format(d);
     }
 
-    View.OnClickListener dateViewListener = new View.OnClickListener() {
-        @Override
-        public void onClick(final View view) {
-            DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
-
-                @Override
-                public void onDateSet(DatePicker v, int year, int monthOfYear, int dayOfMonth) {
-                    boolean valid_flag = true;
-                    String text = KcaUtils.format("%02d-%02d-%04d", monthOfYear + 1, dayOfMonth, year);
-                    try {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
-                        long timestamp = dateFormat.parse(text).getTime();
-                        long new_value = timestamp;
-                        if (view.getId() == R.id.droplog_date_start) {
-                            if (new_value < condition_data.get("enddate").getAsLong()) {
-                                condition_data.addProperty("startdate", timestamp);
-                            } else {
-                                valid_flag = false;
-                            }
-                        } else if (view.getId() == R.id.droplog_date_end) {
-                            new_value = timestamp + (DAY_MILLISECOND - 1);
-                            if (new_value > condition_data.get("startdate").getAsLong()) {
-                                condition_data.addProperty("enddate", timestamp + (DAY_MILLISECOND - 1));
-                            } else {
-                                valid_flag = false;
-                            }
-                        }
-                        if (valid_flag) ((TextView) view).setText(convertMillsToDate(timestamp));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+    View.OnClickListener dateViewListener = view -> {
+        DatePickerDialog.OnDateSetListener listener = (v, year, monthOfYear, dayOfMonth) -> {
+            boolean valid_flag = true;
+            String text = KcaUtils.format("%02d-%02d-%04d", monthOfYear + 1, dayOfMonth, year);
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
+                long timestamp = dateFormat.parse(text).getTime();
+                long new_value = timestamp;
+                if (view.getId() == R.id.droplog_date_start) {
+                    if (new_value < condition_data.get("enddate").getAsLong()) {
+                        condition_data.addProperty("startdate", timestamp);
+                    } else {
+                        valid_flag = false;
+                    }
+                } else if (view.getId() == R.id.droplog_date_end) {
+                    new_value = timestamp + (DAY_MILLISECOND - 1);
+                    if (new_value > condition_data.get("startdate").getAsLong()) {
+                        condition_data.addProperty("enddate", timestamp + (DAY_MILLISECOND - 1));
+                    } else {
+                        valid_flag = false;
                     }
                 }
-            };
+                if (valid_flag) ((TextView) view).setText(convertMillsToDate(timestamp));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        };
 
-            long current_time = System.currentTimeMillis();
-            current_time = KcaUtils.getCurrentDateTimestamp(current_time);
-            if (view.getId() == R.id.droplog_date_end) current_time += (DAY_MILLISECOND - 1);
+        long current_time = System.currentTimeMillis();
+        current_time = KcaUtils.getCurrentDateTimestamp(current_time);
+        if (view.getId() == R.id.droplog_date_end) current_time += (DAY_MILLISECOND - 1);
 
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date(current_time));
-            int year = cal.get(Calendar.YEAR);
-            int month = cal.get(Calendar.MONTH);
-            int day = cal.get(Calendar.DAY_OF_MONTH);
-            DatePickerDialog dialog = new DatePickerDialog(DropLogActivity.this, listener, year, month, day);
-            dialog.show();
-        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date(current_time));
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog dialog = new DatePickerDialog(DropLogActivity.this, listener, year, month, day);
+        dialog.show();
     };
 
-    CompoundButton.OnCheckedChangeListener chkboxListener = new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-            int id = compoundButton.getId();
-            switch (id) {
-                case R.id.droplog_rank_s:
-                    rank_flag = rank_bitop(rank_flag, RANK_S, b);
-                    break;
-                case R.id.droplog_rank_a:
-                    rank_flag = rank_bitop(rank_flag, RANK_A, b);
-                    break;
-                case R.id.droplog_rank_b:
-                    rank_flag = rank_bitop(rank_flag, RANK_B, b);
-                    break;
-                case R.id.droplog_rank_x:
-                    rank_flag = rank_bitop(rank_flag, RANK_C | RANK_D | RANK_E, b);
-                    break;
-                default:
-                    break;
-            }
-            setConditionData("rank", convertRankFlagToText(rank_flag));
+    CompoundButton.OnCheckedChangeListener chkboxListener = (compoundButton, b) -> {
+        int id = compoundButton.getId();
+        switch (id) {
+            case R.id.droplog_rank_s:
+                rank_flag = rank_bitop(rank_flag, RANK_S, b);
+                break;
+            case R.id.droplog_rank_a:
+                rank_flag = rank_bitop(rank_flag, RANK_A, b);
+                break;
+            case R.id.droplog_rank_b:
+                rank_flag = rank_bitop(rank_flag, RANK_B, b);
+                break;
+            case R.id.droplog_rank_x:
+                rank_flag = rank_bitop(rank_flag, RANK_C | RANK_D | RANK_E, b);
+                break;
+            default:
+                break;
         }
+        setConditionData("rank", convertRankFlagToText(rank_flag));
     };
 
 

@@ -3,7 +3,6 @@ package com.antest1.kcanotify;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -19,7 +18,7 @@ import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 
 
-public class ExpeditionTableActivity extends AppCompatActivity {
+public class ExpeditionTableActivity extends BaseActivity {
 
     Toolbar toolbar;
     static Gson gson = new Gson();
@@ -35,17 +34,13 @@ public class ExpeditionTableActivity extends AppCompatActivity {
     KcaDBHelper dbHelper;
     KcaExpeditionTableViewAdpater adapter;
 
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expeditiontable_list);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.action_expdtable));
+        getSupportActionBar().setTitle(getString(R.string.action_expdtable));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
@@ -53,7 +48,7 @@ public class ExpeditionTableActivity extends AppCompatActivity {
         setDefaultGameData();
         loadSimpleExpeditionInfoFromStorage(getApplicationContext());
 
-        adapter = new KcaExpeditionTableViewAdpater(getApplicationContext(), getBaseContext());
+        adapter = new KcaExpeditionTableViewAdpater(getBaseContext());
 
         for (int i = 0; i <= 7; i++) {
             final int target = i;
@@ -86,7 +81,7 @@ public class ExpeditionTableActivity extends AppCompatActivity {
         });
 
         expeditionData = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "expedition.json", dbHelper);
-        showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
+        showDataLoadErrorToast(getApplicationContext(), getString(R.string.download_check_error));
         adapter.setListViewItemList(expeditionData, world_idx);
         listview = findViewById(R.id.expeditiontable_listiview);
         listview.setAdapter(adapter);
@@ -125,9 +120,9 @@ public class ExpeditionTableActivity extends AppCompatActivity {
 
     private void setGsButtonStyle(Chip tv) {
         if (is_great_success) {
-            tv.setText(getStringWithLocale(R.string.expdtable_btn_s2));
+            tv.setText(getString(R.string.expdtable_btn_s2));
         } else {
-            tv.setText(getStringWithLocale(R.string.expdtable_btn_s1));
+            tv.setText(getString(R.string.expdtable_btn_s1));
         }
     }
 

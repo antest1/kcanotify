@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static android.view.View.GONE;
 import static com.antest1.kcanotify.KcaResourcelogItemAdpater.resourceData;
@@ -51,10 +52,6 @@ public class KcaResoureLogFragment extends Fragment {
     static long xaxis_interval = DAY_MILLISECOND;
     static String xaxis_format = "MM/dd";
     KcaResourcelogItemAdpater adapter = new KcaResourcelogItemAdpater();
-
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getContext(), getActivity(), id);
-    }
 
     public static KcaResoureLogFragment create(List<JsonObject> data, int pos) {
         Log.e("KCA", "create " + pos);
@@ -107,17 +104,17 @@ public class KcaResoureLogFragment extends Fragment {
             box.setChecked(is_draw_enabled[k]);
         }
 
-        ((TextView) v.findViewById(R.id.reslog_item_label_0)).setText(getStringWithLocale(R.string.reslog_label_date));
+        ((TextView) v.findViewById(R.id.reslog_item_label_0)).setText(getString(R.string.reslog_label_date));
         if (position == 0) {
-            ((TextView) v.findViewById(R.id.reslog_item_label_1)).setText(getStringWithLocale(R.string.item_fuel));
-            ((TextView) v.findViewById(R.id.reslog_item_label_2)).setText(getStringWithLocale(R.string.item_ammo));
-            ((TextView) v.findViewById(R.id.reslog_item_label_3)).setText(getStringWithLocale(R.string.item_stel));
-            ((TextView) v.findViewById(R.id.reslog_item_label_4)).setText(getStringWithLocale(R.string.item_baux));
+            ((TextView) v.findViewById(R.id.reslog_item_label_1)).setText(getString(R.string.item_fuel));
+            ((TextView) v.findViewById(R.id.reslog_item_label_2)).setText(getString(R.string.item_ammo));
+            ((TextView) v.findViewById(R.id.reslog_item_label_3)).setText(getString(R.string.item_stel));
+            ((TextView) v.findViewById(R.id.reslog_item_label_4)).setText(getString(R.string.item_baux));
         } else {
-            ((TextView) v.findViewById(R.id.reslog_item_label_1)).setText(getStringWithLocale(R.string.item_bgtz));
-            ((TextView) v.findViewById(R.id.reslog_item_label_2)).setText(getStringWithLocale(R.string.item_brnr));
-            ((TextView) v.findViewById(R.id.reslog_item_label_3)).setText(getStringWithLocale(R.string.item_mmat));
-            ((TextView) v.findViewById(R.id.reslog_item_label_4)).setText(getStringWithLocale(R.string.item_kmat));
+            ((TextView) v.findViewById(R.id.reslog_item_label_1)).setText(getString(R.string.item_bgtz));
+            ((TextView) v.findViewById(R.id.reslog_item_label_2)).setText(getString(R.string.item_brnr));
+            ((TextView) v.findViewById(R.id.reslog_item_label_3)).setText(getString(R.string.item_mmat));
+            ((TextView) v.findViewById(R.id.reslog_item_label_4)).setText(getString(R.string.item_kmat));
         }
 
         ListView resource_data = v.findViewById(R.id.reslog_listview);

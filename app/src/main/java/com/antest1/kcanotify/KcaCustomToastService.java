@@ -2,18 +2,16 @@ package com.antest1.kcanotify;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationManagerCompat;
 
 import android.util.Log;
 import android.view.Display;
@@ -30,7 +28,7 @@ import com.google.gson.JsonParser;
 import static com.antest1.kcanotify.KcaUtils.adjustAlpha;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
-public class KcaCustomToastService extends Service {
+public class KcaCustomToastService extends BaseService {
     public static final String TOAST_SHOW_ACTION = "toast_show_action";
     public static final int CUSTOM_LENGTH_SHORT = 2000;
     public static final int CUSTOM_LENGTH_LONG = 3500;
@@ -50,10 +48,6 @@ public class KcaCustomToastService extends Service {
         return active;
     }
 
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -69,7 +63,7 @@ public class KcaCustomToastService extends Service {
             stopSelf();
         } else {
             mHandler = new Handler();
-            LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater mInflater = LayoutInflater.from(this);
             mView = mInflater.inflate(R.layout.toast_layout, null);
             mView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
 
@@ -105,29 +99,32 @@ public class KcaCustomToastService extends Service {
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
             if(intent.getAction().equals(TOAST_SHOW_ACTION)) {
-                JsonObject data = JsonParser.parseString(intent.getExtras().getString("data")).getAsJsonObject();
-                String body = data.get("text").getAsString();
-                int color = data.get("color").getAsInt();
-                int duration = data.get("duration").getAsInt();
-                toast_view.setText(body);
-                toast_view.setBackgroundColor(adjustAlpha(color, 0.8f));
+                Bundle extras = intent.getExtras();
+                if (extras != null && extras.containsKey("data")) {
+                    JsonObject data = JsonParser.parseString(extras.getString("data")).getAsJsonObject();
+                    String body = data.get("text").getAsString();
+                    int color = data.get("color").getAsInt();
+                    int duration = data.get("duration").getAsInt();
+                    toast_view.setText(body);
+                    toast_view.setBackgroundColor(adjustAlpha(color, 0.8f));
 
-                mView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-                popupWidth = mView.getMeasuredWidth();
-                popupHeight = mView.getMeasuredHeight();
-                mParams.x = (screenWidth - popupWidth) / 2;
-                mParams.y = (int)((screenHeight - popupHeight) * 0.8);
-                mManager.updateViewLayout(mView, mParams);
-                mView.setAlpha(0f);
-                mView.setVisibility(View.VISIBLE);
-                mView.animate()
-                        .alpha(1f)
-                        .setDuration(CUSTOM_FADE_DURATION)
-                        .setListener(null);
+                    mView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                    popupWidth = mView.getMeasuredWidth();
+                    popupHeight = mView.getMeasuredHeight();
+                    mParams.x = (screenWidth - popupWidth) / 2;
+                    mParams.y = (int)((screenHeight - popupHeight) * 0.8);
+                    mManager.updateViewLayout(mView, mParams);
+                    mView.setAlpha(0f);
+                    mView.setVisibility(View.VISIBLE);
+                    mView.animate()
+                            .alpha(1f)
+                            .setDuration(CUSTOM_FADE_DURATION)
+                            .setListener(null);
 
-                if (duration == 1) duration = CUSTOM_LENGTH_LONG;
-                else duration = CUSTOM_LENGTH_SHORT;
-                mHandler.postDelayed(mRunnable, duration);
+                    if (duration == 1) duration = CUSTOM_LENGTH_LONG;
+                    else duration = CUSTOM_LENGTH_SHORT;
+                    mHandler.postDelayed(mRunnable, duration);
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -139,7 +136,7 @@ public class KcaCustomToastService extends Service {
         super.onDestroy();
     }
 
-    private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (view.getId() == R.id.toast_text) {
@@ -150,7 +147,7 @@ public class KcaCustomToastService extends Service {
         }
     };
 
-    private Runnable mRunnable = new Runnable() {
+    private final Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
             mView.animate()
