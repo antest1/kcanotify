@@ -4,6 +4,7 @@
     <!-- Application Information -->
     <string name="app_name">시제 깡들리티</string>
     <string name="action_settings">설정</string>
+    <string name="action_manual">도움말</string>
     <string name="action_download">다운로드</string>
     <string name="action_check">확인</string>
     <string name="action_server">서버 선택</string>

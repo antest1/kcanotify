@@ -4,6 +4,7 @@
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
     <string name="action_settings">設定</string>
+    <string name="action_manual">マニュアル</string>
     <string name="action_download">ダウンロード</string>
     <string name="action_check">チェック</string>
     <string name="action_server">サーバー選択</string>

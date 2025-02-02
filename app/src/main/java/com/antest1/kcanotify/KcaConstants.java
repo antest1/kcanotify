@@ -25,6 +25,9 @@ public final class KcaConstants {
     public static final String GOTO_BROADCAST_ACTION = "com.antest1.gotobrowser.broadcast";
     public static final String GOTO_FOREGROUND_ACTION = "com.antest1.gotobrowser.foreground";
 
+    public static final String KCANOTIFY_NOTICE_LINK = "https://luckyjervis.com/kcanotify/notice";
+    public static final String KCANOTIFY_DOCS_LINK = "https://luckyjervis.com/kcanotify/docs";
+
     public static final String KCS_VERSION = "/kcs2/version.json";
     public static final String KCS_VERSION_A = "/kcs2/version_a.json";
 

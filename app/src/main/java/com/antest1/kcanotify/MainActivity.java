@@ -337,26 +337,7 @@ public class MainActivity extends BaseActivity {
 
         textSpecial2 = findViewById(R.id.textSpecial2);
         textSpecial2.setText(getString(R.string.notification_message));
-        textSpecial2.setOnClickListener(v -> {
-            String url = getString(R.string.app_notice_link);
-
-            CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
-            intentBuilder.setShowTitle(true);
-            CustomTabColorSchemeParams params = new CustomTabColorSchemeParams.Builder()
-                    .setToolbarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
-                    .build();
-            intentBuilder.setDefaultColorSchemeParams(params);
-            intentBuilder.setUrlBarHidingEnabled(true);
-
-            final CustomTabsIntent customTabsIntent = intentBuilder.build();
-            final List<ResolveInfo> customTabsApps = getPackageManager().queryIntentActivities(customTabsIntent.intent, 0);
-            if (!customTabsApps.isEmpty()) {
-                customTabsIntent.launchUrl(MainActivity.this, Uri.parse(url));
-            } else {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(browserIntent);
-            }
-        });
+        textSpecial2.setOnClickListener(v -> showWebPage(KCANOTIFY_NOTICE_LINK));
 
         CaptureService.observeStatus(this, serviceStatus -> {
             Log.d(TAG, "Service status: " + serviceStatus.name());
@@ -525,6 +506,9 @@ public class MainActivity extends BaseActivity {
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingActivity.class));
             return true;
+        } else if (id == R.id.action_manual) {
+            showWebPage(KCANOTIFY_DOCS_LINK);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -598,6 +582,25 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         backPressCloseHandler.onBackPressed();
+    }
+
+    private void showWebPage(String url) {
+        CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
+        intentBuilder.setShowTitle(true);
+        CustomTabColorSchemeParams params = new CustomTabColorSchemeParams.Builder()
+                .setToolbarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
+                .build();
+        intentBuilder.setDefaultColorSchemeParams(params);
+        intentBuilder.setUrlBarHidingEnabled(true);
+
+        final CustomTabsIntent customTabsIntent = intentBuilder.build();
+        final List<ResolveInfo> customTabsApps = getPackageManager().queryIntentActivities(customTabsIntent.intent, 0);
+        if (!customTabsApps.isEmpty()) {
+            customTabsIntent.launchUrl(MainActivity.this, Uri.parse(url));
+        } else {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(browserIntent);
+        }
     }
 
     public void startVpnService() {

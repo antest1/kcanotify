@@ -4,6 +4,7 @@
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
     <string name="action_settings">Ajustes</string>
+    <string name="action_manual">Manual</string>
     <string name="action_download">Descargar</string>
     <string name="action_check">COMPROBAR</string>
     <string name="action_server">CAMBIAR SERVIDOR</string>
