@@ -395,7 +395,7 @@
     <string name="action_akashi">改修工廠表</string>
     <string name="aa_btn_safe_state0">一般</string>
     <string name="aa_btn_safe_state1">確定</string>
-    <string name="aa_btn_filter">フィルタ</string>
+    <string name="aa_btn_filter">ﾌｨﾙﾀ</string>
     <string name="recon_failed">偵察失敗</string>
     <string name="action_akashi_detail">装備改修詳細</string>
     <string name="akashi_term_detail1">改修詳細情報</string>
@@ -451,7 +451,7 @@
 
     <string name="action_shipinfo">艦船リスト</string>
     <string name="shipinfo_btn_sort">ソート</string>
-    <string name="shipinfo_btn_filter">フィルター</string>
+    <string name="shipinfo_btn_filter">フィルタ</string>
     <string name="shipinfo_btn_search">検索</string>
     <string name="shipinfo_btn_search_hint">名前で検索</string>
     <string name="shipinfo_btn_total_format" formatted="false">総合：%d</string>
@@ -488,7 +488,7 @@
     <string name="ship_exclude_label">艦娘状態フィルタ</string>
     <string name="ship_exclude_type1">遠征中の艦娘を除外する</string>
     <string name="ship_exclude_type2">修理中の艦娘を除外する</string>
-    <string name="ship_stat_equip_stype_label">特殊装備フィルター</string>
+    <string name="ship_stat_equip_stype_label">特殊装備フィルタ</string>
     <string name="ship_stat_equip_stype1">大発系</string>
     <string name="ship_stat_equip_stype2">内火艇</string>
     <string name="ship_stat_equip_stype3">バルジ(中)</string>
