@@ -81,6 +81,9 @@ public class InitStartActivity extends BaseActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
+        setDefaultPreferences();
+
         setAppLocale();
 
         setContentView(R.layout.activity_init_download);
@@ -91,9 +94,6 @@ public class InitStartActivity extends BaseActivity {
         Intent mainIntent = getIntent();
         reset_flag = mainIntent.getBooleanExtra(ACTION_RESET, false);
         is_destroyed = false;
-
-        PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
-        setDefaultPreferences();
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
@@ -410,7 +410,7 @@ public class InitStartActivity extends BaseActivity {
 
     private void setAppLocale() {
         String pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
-        if (pref.startsWith("default")) {
+        if (pref.startsWith("default") || !pref.contains("-")) {
             LocaleUtils.setLocale(getBaseContext(), Locale.getDefault());
         } else {
             String[] locale = pref.split("-");
