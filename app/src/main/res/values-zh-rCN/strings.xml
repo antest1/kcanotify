@@ -16,6 +16,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_download">下载</string>
     <string name="action_check">检查</string>
     <string name="action_server">选择伺服器</string>
+    <string name="action_perm">权限设定</string>
     <string name="action_downloadall">全部下载</string>
     <string name="backpress_msg">再按一次返回键退出应用程式</string>
     <string name="notification_appinfo_title">Kcanotify通知</string>

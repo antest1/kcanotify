@@ -8,6 +8,7 @@
     <string name="action_download">다운로드</string>
     <string name="action_check">확인</string>
     <string name="action_server">서버 선택</string>
+    <string name="action_perm">권한 설정</string>
     <string name="action_downloadall">모두 받기</string>
     <string name="backpress_msg">\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.</string>
     <string name="notification_appinfo_title">깡들리티 알림</string>

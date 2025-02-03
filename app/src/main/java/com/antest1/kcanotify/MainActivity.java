@@ -442,7 +442,7 @@ public class MainActivity extends BaseActivity {
         if (warnType[REQUEST_OVERLAY_PERMISSION]) {
             warnText = getString(R.string.ma_toast_overay_diabled);
             snackbar = Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.setting_menu_perm_head), view -> {
+                    .setAction(getString(R.string.action_perm), view -> {
                         // TODO: Share code with MainPreferenceFragment.java
                         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                                 Uri.parse("package:" + getApplicationContext().getPackageName()));
@@ -451,7 +451,7 @@ public class MainActivity extends BaseActivity {
         } else if (warnType[REQUEST_NOTIFICATION_PERMISSION] || warnType[REQUEST_EXACT_ALARM_PERMISSION]) {
             warnText = getString(R.string.ma_permission_notification_denied);
             snackbar = Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.setting_menu_perm_head), view -> {
+                    .setAction(getString(R.string.action_perm), view -> {
                         grantNotificationPermission();
                     });
         } else if (warnType[REQUEST_EXTERNAL_PERMISSION]) {

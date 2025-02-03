@@ -8,6 +8,7 @@
     <string name="action_download">Descargar</string>
     <string name="action_check">COMPROBAR</string>
     <string name="action_server">CAMBIAR SERVIDOR</string>
+    <string name="action_perm">Permisos de concesión</string>
     <string name="action_errorlog">Informe de Errores</string>
     <string name="action_downloadall">Descargar Todo</string>
     <string name="backpress_msg">Presionar nuevamente para cerrar</string>

@@ -19,6 +19,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_download">Download</string>
     <string name="action_check">CHECK</string>
     <string name="action_server">CHANGE SERVER</string>
+    <string name="action_perm">Grant Permissions</string>
     <string name="action_downloadall">DL ALL</string>
     <string name="action_inspector" translatable="false">Inspector</string>
     <string name="app_vpn_name">Kcanotify Sniffer</string>
@@ -884,7 +885,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="tls_decryption">Capture HTTPS traffic</string>
     <string name="tls_decryption_summary">Decrypt the HTTPS(SSL/TLS) traffic by performing mitm. Run the Mitm setup wizard below before using this feature.</string>
-    <string name="mitm_setup_wizard">Mitm setup wizard</string>
+    <string name="mitm_setup_wizard">Mitm Setup Wizard</string>
     <string name="mitm_setup_wizard_intro">This wizard will guide you through the installation of the kcanotify mitm addon and certification authority, which are needed for HTTPS traffic capture.</string>
     <string name="mitm_setup_wizard_done">Kcanotify is now ready to decrypt the HTTPS traffic!</string>
     <string name="install_the_mitm_addon">Install the <a href='%1$s'>kcanotify mitm addon</a></string>
@@ -898,7 +899,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="cert_installed_correctly">The CA certificate is installed</string>
     <string name="cert_reinstall_required">The CA certificate is not installed, run the mitm setup wizard</string>
     <string name="mitm_addon_bad_version">Bad kcanotify mitm addon version. Please install version %1$s and retry</string>
-    <string name="update_available">Update available</string>
+    <string name="update_available">Update Available</string>
     <string name="mitm_addon_update_available">A new mitm addon update is available.</string>
     <string name="mitm_addon_new_version">The kcanotify mitm addon must be updated</string>
     <string name="mitm_doze_notice">Battery optimization may interfere with the mitm addon</string>
