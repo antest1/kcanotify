@@ -1,5 +1,5 @@
 # Kcanotify (시제 깡들리티)
-<img src="https://upload.cc/i1/2018/10/27/cieDyM.png" width=250/>
+<img src="https://kcanotify-docs.s3.ap-northeast-1.amazonaws.com/common/main_image.webp" width=192/>
 Viewer Application for KanColle Android
 
 About Project
@@ -8,7 +8,7 @@ Kcanotify is an open-source viewer tool for Kantai Collection Android, provides 
 
 This application does not modify any incoming/outcoming packet when communicate with kancolle/DMM server, and it does not provide any cheat or macro tools. Data not related with kancolle is not processed.
 
-Requirement
+Requirements
 -------
 - Android 7 (Nougat) or later
 - [Kancolle Android](https://en.kancollewiki.net/Kancolle_Android_Version) or [GotoBrowser](https://luckyjervis.com/GotoBrowser/) must be installed
@@ -22,12 +22,6 @@ Download
 - [kcwiki mirror](https://mirrors.kcwiki.moe/kcanotify/) (All versions)
 - [Google Drive](https://bit.ly/kcanotify_gdrive) (Latest Version)
 - [MEGA](https://mega.nz/#F!0FtUTBoB!cSUJtRA76C4KBcrnc2-xdw) (All versions)
-
-Demo
--------
-[![Youtube](https://img.youtube.com/vi/ZEAor_9jsaM/0.jpg)](https://www.youtube.com/watch?v=ZEAor_9jsaM)
-
-[6-5 with Kcanotify](https://www.youtube.com/watch?v=ZEAor_9jsaM) / [5-5](https://www.youtube.com/watch?v=QHg9exh9zQ8)
 
 Main Features
 -------
@@ -53,26 +47,20 @@ Translations to other languages are welcomed. (please contact to developer to em
 
 Attribution
 -------
-- This project uses the modified source code of [PCAPdroid](https://github.com/emanuele-f/PCAPdroid/) and [NetGuard](https://github.com/M66B/NetGuard/) for capturing the traffic of Kancolle application.
-  - The license for PCAPdroid and NetGuard is [GNU General Public License version 3](http://www.gnu.org/licenses/gpl.txt), therefore Kcanotify also has this license.
-- Icon and banner images are provided by [SPICA](https://www.pixiv.net/member.php?id=9209813).
-- The fairy and equipment images are from the kancolle resources. I will take action immediately when there is a request from the copyright holder for correction.
+- This project uses the modified source code of [PCAPdroid](https://github.com/emanuele-f/PCAPdroid/) and [NetGuard](https://github.com/M66B/NetGuard/) for capturing the traffic of Kancolle application.  
+  The license for PCAPdroid and NetGuard is [GNU General Public License version 3](http://www.gnu.org/licenses/gpl.txt).
+- The fairy and equipment images are from the original kancolle resources.  
+  I will take action immediately when there is a request from the copyright holder for correction.  
 - Translation data for ships, equipments and quest are mainly from [kc3-translations](https://github.com/KC3Kai/kc3-translations) and [kcwiki舰娘百科](https://zh.kcwiki.org).
   - License for kc3-translations: The MIT License [Text](https://github.com/KC3Kai/kc3-translations/blob/master/LICENSE)
 - The code for line of seek(索敵) & fighter power(制空権) calculation are written with reference to [艦隊シミュレーター＆デッキビルダー](http://kancolle-calc.net/deckbuilder.html)
 - Akashi's arsenal improvement data is written with reference to [KC3Kai](https://github.com/KC3Kai/KC3Kai), [WhoCallsTheFleet](https://github.com/TeamFleet/WhoCallsTheFleet-DB) and [明石の改修工廠早見表](http://akashi-list.me).
 - Reference sites: [艦これ 攻略 Wiki*](http://wikiwiki.jp/kancolle/), [Kancolle Wikia](http://kancolle.wikia.com), [kcwiki舰娘百科](https://zh.kcwiki.org)
 
+
 Contact
 -------
-**First, read [FAQ](FAQ) before asking.**
-
 For suggestion or error report, make an [Issue](https://github.com/antest1/kcanotify/issues) or mail to me.  
-
-I can speak Korean and English, and I can understand Japanese (but not good at writing).  
-
-**※ For non-supported locale, English is the default language.**
-
 E-mail: kcanotify@gmail.com
 
 
@@ -82,6 +70,7 @@ You can support the project via [Open Collective](https://opencollective.com/). 
 Thank you to all our backers! [[Become a backer](https://opencollective.com/kcanotify)]
 
 <a href="https://opencollective.com/kcanotify" target="_blank"><img src="https://opencollective.com/kcanotify/backers.svg?width=890"></a>
+
 
 License
 -------
