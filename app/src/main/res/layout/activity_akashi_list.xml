@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -27,12 +26,12 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
             android:layout_marginStart="4dp"
-            android:paddingBottom="2dp"
-            android:paddingTop="2dp">
+            android:layout_marginLeft="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp">
 
             <TextView
                 android:id="@+id/current_date"
@@ -45,11 +44,11 @@
                 android:id="@+id/icon_dmat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="false"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentRight="false"
                 android:layout_alignParentStart="false"
+                android:layout_alignParentLeft="false"
                 android:layout_alignParentTop="false"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentRight="false"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="4dp"
                 android:layout_marginRight="4dp"
@@ -64,8 +63,8 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/icon_smat"
                 android:layout_toStartOf="@+id/icon_smat"
+                android:layout_toLeftOf="@+id/icon_smat"
                 android:text="0"
                 android:textColor="@color/colorConsumableDevmat"
                 android:textSize="14dp" />
@@ -74,11 +73,11 @@
                 android:id="@+id/icon_smat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="false"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentRight="false"
                 android:layout_alignParentStart="false"
+                android:layout_alignParentLeft="false"
                 android:layout_alignParentTop="false"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentRight="false"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="4dp"
                 android:layout_marginRight="4dp"
@@ -90,9 +89,9 @@
                 android:id="@+id/count_smat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
                 android:text="0"
                 android:textColor="@color/colorConsumableScrew"
                 android:textSize="14dp" />
@@ -138,6 +137,7 @@
                 android:layout_weight="2"
                 app:selectionRequired="true"
                 app:singleSelection="true">
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/akashi_btn_unsafe"
                     style="?attr/materialButtonOutlinedStyle"
@@ -147,7 +147,8 @@
                     android:gravity="center_vertical|center_horizontal"
                     android:padding="2dp"
                     android:text="@string/aa_btn_safe_state0"
-                    android:textAlignment="gravity"/>
+                    android:textAlignment="gravity" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/akashi_btn_safe"
                     style="?attr/materialButtonOutlinedStyle"
@@ -159,6 +160,7 @@
                     android:text="@string/aa_btn_safe_state1"
                     android:textAlignment="gravity" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
+
             <Button
                 android:id="@+id/akashi_btn_filter"
                 style="@style/Widget.Material3.Button.TonalButton"
@@ -266,10 +268,10 @@
             android:id="@+id/akashi_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
             android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
             android:layout_weight="1"
             android:listSelector="@android:color/transparent" />
 

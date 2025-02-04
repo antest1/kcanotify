@@ -39,7 +39,6 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.text.HtmlCompat;
 
@@ -84,23 +83,21 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 import static com.antest1.kcanotify.LocaleUtils.getResourceLocaleCode;
 
-public class MainActivity extends AppCompatActivity {
-    private final static String TAG = "KCAV";
+public class MainActivity extends BaseActivity {
+    private final static String TAG = "MainActivity";
     public static boolean[] warnType = new boolean[8];
+    public static final String ACTION_OPEN_TOOL = "open_tool";
     private static final int REQUEST_VPN = 1;
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
     public static final int REQUEST_EXTERNAL_PERMISSION = 3;
     public static final int REQUEST_NOTIFICATION_PERMISSION = 4;
     public static final int REQUEST_EXACT_ALARM_PERMISSION = 5;
 
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     AudioManager audioManager;
     AssetManager assetManager;
     KcaDBHelper dbHelper;
     Toolbar toolbar;
+    Snackbar snackbar;
     KcaDownloader downloader;
     MaterialButton vpnbtn, svcbtn;
     Button kcbtn;
@@ -110,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
     TextView textMaintenance;
     Button textMainUpdate, textSpecial, textSpecial2;
     BottomAppBar bottomAppBar;
+    FrameLayout bottomSheet;
+    BottomSheetBehavior<FrameLayout> bottomSheetBehavior;
 
     ActivityResultLauncher<Intent> vpnPrepareLauncher, exactAlarmPrepareLauncher;
 
@@ -123,10 +122,12 @@ public class MainActivity extends AppCompatActivity {
     private CaptureHelper mCapHelper;
     private boolean mWasStarted = false;
     private boolean mStartPressed = false;
+    private boolean mToolOpened = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_vpn_main);
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         assetManager = getAssets();
@@ -163,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
         MaterialButtonToggleGroup toggleGroup = findViewById(R.id.toggleGroup);
         toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (checkedId == R.id.svcbtn) {
-                svcbtn.setText(isChecked ? getStringWithLocale(R.string.ma_svc_toggleon) : getStringWithLocale(R.string.ma_svc_toggleoff));
+                svcbtn.setText(isChecked ? getString(R.string.ma_svc_toggleon) : getString(R.string.ma_svc_toggleoff));
                 if (isChecked) {
                     if (checkNotificationPermission() && checkExactAlarmPermission()) {
                         if (!prefs.getBoolean(PREF_SVC_ENABLED, false))
@@ -178,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                     stopKcaService();
                 }
             } else if (checkedId == R.id.vpnbtn) {
-                vpnbtn.setText(isChecked ? getStringWithLocale(R.string.ma_vpn_toggleon) : getStringWithLocale(R.string.ma_vpn_toggleoff));
+                vpnbtn.setText(isChecked ? getString(R.string.ma_vpn_toggleon) : getString(R.string.ma_vpn_toggleoff));
                 if (isChecked) {
                     if (getBooleanPreferences(getApplicationContext(), PREF_VPNSERVICE_USAGE_AGREE)) {
                         startVpnService();
@@ -227,8 +228,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FrameLayout bottomSheet = findViewById(R.id.bottomSheet);
-        BottomSheetBehavior<FrameLayout> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheet = findViewById(R.id.bottomSheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         bottomAppBar = findViewById(R.id.bottomAppBar);
@@ -256,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
         fairyButton = bottomAppBar.getMenu().getItem(0);
         boolean is_random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
         if (is_random_fairy) {
-            fairyButton.setIcon(R.mipmap.ic_help);
+            fairyButton.setIcon(R.drawable.ic_dice);
         } else {
             String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
             String fairyPath = "noti_icon_".concat(fairyIdValue);
@@ -274,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         textMainUpdate = findViewById(R.id.textMainUpdate);
-        textMainUpdate.setText(getStringWithLocale(R.string.setting_menu_kand_title_game_data_down));
+        textMainUpdate.setText(getString(R.string.setting_menu_kand_title_game_data_down));
         textMainUpdate.setOnClickListener(v -> {
             startActivity(new Intent(this, UpdateCheckActivity.class));
         });
@@ -305,9 +306,9 @@ public class MainActivity extends AppCompatActivity {
                     boolean before_maintenance = System.currentTimeMillis() < start_date.getTime();
 
                     if (before_maintenance) {
-                        textMaintenance.setText(KcaUtils.format(getStringWithLocale(R.string.ma_nextmaintenance), out_df.format(start_date)));
+                        textMaintenance.setText(KcaUtils.format(getString(R.string.ma_nextmaintenance), out_df.format(start_date)));
                     } else if (!is_passed) {
-                        textMaintenance.setText(KcaUtils.format(getStringWithLocale(R.string.ma_endmaintenance), out_df.format(end_date)));
+                        textMaintenance.setText(KcaUtils.format(getString(R.string.ma_endmaintenance), out_df.format(end_date)));
                     }
                     textMaintenance.setVisibility(View.VISIBLE);
                 } else {
@@ -327,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
         specialImage.setOnClickListener(v -> v.setVisibility(View.GONE));
 
         textSpecial = findViewById(R.id.textSpecial);
-        textSpecial.setText(getStringWithLocale(R.string.special_message));
+        textSpecial.setText(getString(R.string.special_message));
         textSpecial.setOnClickListener(v -> {
             specialImage.setImageResource(R.mipmap.special_image);
             specialImage.setVisibility(View.VISIBLE);
@@ -335,27 +336,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         textSpecial2 = findViewById(R.id.textSpecial2);
-        textSpecial2.setText(getStringWithLocale(R.string.notification_message));
-        textSpecial2.setOnClickListener(v -> {
-            String url = getStringWithLocale(R.string.app_notice_link);
-
-            CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
-            intentBuilder.setShowTitle(true);
-            CustomTabColorSchemeParams params = new CustomTabColorSchemeParams.Builder()
-                    .setToolbarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
-                    .build();
-            intentBuilder.setDefaultColorSchemeParams(params);
-            intentBuilder.setUrlBarHidingEnabled(true);
-
-            final CustomTabsIntent customTabsIntent = intentBuilder.build();
-            final List<ResolveInfo> customTabsApps = getPackageManager().queryIntentActivities(customTabsIntent.intent, 0);
-            if (!customTabsApps.isEmpty()) {
-                customTabsIntent.launchUrl(MainActivity.this, Uri.parse(url));
-            } else {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(browserIntent);
-            }
-        });
+        textSpecial2.setText(getString(R.string.notification_message));
+        textSpecial2.setOnClickListener(v -> showWebPage(KCANOTIFY_NOTICE_LINK));
 
         CaptureService.observeStatus(this, serviceStatus -> {
             Log.d(TAG, "Service status: " + serviceStatus.name());
@@ -402,16 +384,17 @@ public class MainActivity extends AppCompatActivity {
 
         setVpnBtn();
         setCheckBtn();
+        handleOpenToolIntent(getIntent());
 
         fairyButton = bottomAppBar.getMenu().getItem(0);
         boolean is_random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
         if (is_random_fairy) {
-            fairyButton.setIcon(R.mipmap.ic_help);
+            fairyButton.setIcon(R.drawable.ic_dice);
         } else {
             String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
             String fairyPath = "noti_icon_".concat(fairyIdValue);
             KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, fairyButton, 24);
-            showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
+            showDataLoadErrorToast(getApplicationContext(), getString(R.string.download_check_error));
         }
 
         Arrays.fill(warnType, false);
@@ -420,8 +403,6 @@ public class MainActivity extends AppCompatActivity {
                 || getBooleanPreferences(getApplicationContext(), PREF_KCA_QUESTVIEW_USE)) {
             warnType[REQUEST_OVERLAY_PERMISSION] = !checkOverlayPermission();
         }
-
-        warnType[REQUEST_NOTIFICATION_PERMISSION] = !(checkNotificationPermission() && checkExactAlarmPermission());
         setWarning();
     }
 
@@ -445,29 +426,43 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        mToolOpened = false;
+        handleOpenToolIntent(intent);
+    }
+
     public void setWarning() {
         String warnText = "";
         View main = findViewById(R.id.activity_main);
+        warnType[REQUEST_NOTIFICATION_PERMISSION] = !(checkNotificationPermission() && checkExactAlarmPermission());
+        if (snackbar != null) snackbar.dismiss();
+
         if (warnType[REQUEST_OVERLAY_PERMISSION]) {
-            warnText = warnText.concat("\n").concat(getString(R.string.ma_toast_overay_diabled));
-            Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.setting_menu_perm_head), view -> {
+            warnText = getString(R.string.ma_toast_overay_diabled);
+            snackbar = Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.action_perm), view -> {
                         // TODO: Share code with MainPreferenceFragment.java
                         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                                 Uri.parse("package:" + getApplicationContext().getPackageName()));
                         startActivity(intent);
-                    }).show();
+                    });
+        } else if (warnType[REQUEST_NOTIFICATION_PERMISSION] || warnType[REQUEST_EXACT_ALARM_PERMISSION]) {
+            warnText = getString(R.string.ma_permission_notification_denied);
+            snackbar = Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.action_perm), view -> {
+                        grantNotificationPermission();
+                    });
+        } else if (warnType[REQUEST_EXTERNAL_PERMISSION]) {
+            warnText = getString(R.string.ma_permission_external_denied);
+            // not called in general situation, implement grant permission when required
+            snackbar = Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE);
+        } else {
+            snackbar = null;
         }
-        if (warnType[REQUEST_EXTERNAL_PERMISSION]) {
-            warnText = warnText.concat("\n").concat(getString(R.string.ma_permission_external_denied));
-            // TODO: Add action
-            Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE).show();
-        }
-        if (warnType[REQUEST_NOTIFICATION_PERMISSION] || warnType[REQUEST_EXACT_ALARM_PERMISSION]) {
-            warnText = warnText.concat("\n").concat(getString(R.string.ma_permission_notification_denied));
-            // TODO: Add action
-            Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE).show();
-        }
+
+        if (snackbar != null) snackbar.show();
     }
 
     public final int getSnifferMode() {
@@ -477,24 +472,11 @@ public class MainActivity extends AppCompatActivity {
             return Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE));
         }
     }
-
-    public void startActivityResultCallback(int type, int resultCode) {
-        if (type == REQUEST_EXACT_ALARM_PERMISSION) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                new Handler().postDelayed(() -> {
-                    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                    warnType[REQUEST_EXACT_ALARM_PERMISSION] = !alarmManager.canScheduleExactAlarms();
-                    setWarning();
-                }, 1000);
-            }
-        }
-    }
-
     public void setVpnBtn() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (getSnifferMode() == SNIFFER_ACTIVE) {
             boolean isChecked = prefs.getBoolean(PREF_VPN_ENABLED, false);
-            vpnbtn.setText(isChecked ? getStringWithLocale(R.string.ma_vpn_toggleon) : getStringWithLocale(R.string.ma_vpn_toggleoff));
+            vpnbtn.setText(isChecked ? getString(R.string.ma_vpn_toggleon) : getString(R.string.ma_vpn_toggleoff));
             vpnbtn.setEnabled(true);
             vpnbtn.setChecked(isChecked);
         } else {
@@ -524,6 +506,9 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingActivity.class));
             return true;
+        } else if (id == R.id.action_manual) {
+            showWebPage(KCANOTIFY_DOCS_LINK);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -534,7 +519,8 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean checkNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
+            return ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
         }
         return true;
     }
@@ -549,7 +535,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void grantNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATION_PERMISSION);
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                    REQUEST_NOTIFICATION_PERMISSION);
         }
     }
 
@@ -572,19 +560,47 @@ public class MainActivity extends AppCompatActivity {
                 setWarning();
             }
             case REQUEST_NOTIFICATION_PERMISSION: {
-                warnType[REQUEST_NOTIFICATION_PERMISSION] = !(grantResults[0] == PackageManager.PERMISSION_GRANTED);
-                setWarning();
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.ma_permission_service_restart), Toast.LENGTH_LONG).show();
+                if (!checkExactAlarmPermission()) {
+                    grantExactAlarmPermission();
+                } else {
+                    setWarning();
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                        Toast.makeText(getApplicationContext(), getString(R.string.ma_permission_service_restart), Toast.LENGTH_LONG).show();
                 }
-                if (!checkExactAlarmPermission()) grantExactAlarmPermission();
             }
+        }
+    }
+
+    public void startActivityResultCallback(int type, int resultCode) {
+        if (type == REQUEST_EXACT_ALARM_PERMISSION) {
+            if (resultCode == PackageManager.PERMISSION_GRANTED)
+                Toast.makeText(getApplicationContext(), getString(R.string.ma_permission_service_restart), Toast.LENGTH_LONG).show();
+            setWarning();
         }
     }
 
     @Override
     public void onBackPressed() {
         backPressCloseHandler.onBackPressed();
+    }
+
+    private void showWebPage(String url) {
+        CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
+        intentBuilder.setShowTitle(true);
+        CustomTabColorSchemeParams params = new CustomTabColorSchemeParams.Builder()
+                .setToolbarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
+                .build();
+        intentBuilder.setDefaultColorSchemeParams(params);
+        intentBuilder.setUrlBarHidingEnabled(true);
+
+        final CustomTabsIntent customTabsIntent = intentBuilder.build();
+        final List<ResolveInfo> customTabsApps = getPackageManager().queryIntentActivities(customTabsIntent.intent, 0);
+        if (!customTabsApps.isEmpty()) {
+            customTabsIntent.launchUrl(MainActivity.this, Uri.parse(url));
+        } else {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(browserIntent);
+        }
     }
 
     public void startVpnService() {
@@ -609,13 +625,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void showVpnServiceNotification() {
         AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-        alert.setPositiveButton(getStringWithLocale(R.string.dialog_ok), (dialog, which) -> {
+        alert.setPositiveButton(getString(R.string.dialog_ok), (dialog, which) -> {
             setPreferences(getApplicationContext(), PREF_VPNSERVICE_USAGE_AGREE, true);
             startVpnService();
-        }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), (dialog, which) -> {
+        }).setNegativeButton(getString(R.string.dialog_cancel), (dialog, which) -> {
             stopVpnService();
         });
-        alert.setMessage(Html.fromHtml(getStringWithLocale(R.string.ma_dialog_vpn_usage)));
+        alert.setMessage(Html.fromHtml(getString(R.string.ma_dialog_vpn_usage)));
         AlertDialog dialog = alert.create();
         dialog.show();
         ((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
@@ -628,7 +644,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean startCapture() {
-        if (CaptureService.isServiceActive()) return false;
+        if (CaptureService.isServiceActive()) return true;
 
         if (getBooleanPreferences(this, PREF_USE_TLS_DECRYPTION)) {
             MitmAddon.setCAInstallationSkipped(this, false);
@@ -668,6 +684,14 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    private void handleOpenToolIntent(Intent intent) {
+        boolean result = ACTION_OPEN_TOOL.equals(intent.getAction())
+                && (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0;
+        if (result && !mToolOpened) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
+            mToolOpened = true;
+        }
+    }
 
     private class BackPressCloseHandler {
         private static final int INTERVAL = 1500;
@@ -694,12 +718,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        public String getStringWithLocale(int id) {
-            return KcaUtils.getStringWithLocale(MainActivity.this.getApplication(), MainActivity.this.getBaseContext(), id);
-        }
-
         public void showMessage() {
-            toast = Toast.makeText(MainActivity.this, getStringWithLocale(R.string.backpress_msg), Toast.LENGTH_SHORT);
+            toast = Toast.makeText(MainActivity.this, getString(R.string.backpress_msg), Toast.LENGTH_SHORT);
             toast.show();
         }
     }

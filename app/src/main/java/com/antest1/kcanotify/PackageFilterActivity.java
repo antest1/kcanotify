@@ -1,20 +1,16 @@
 package com.antest1.kcanotify;
 
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.appcompat.widget.Toolbar;
-import android.util.Log;
+
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 
@@ -24,20 +20,13 @@ import static com.antest1.kcanotify.KcaConstants.PREF_PACKAGE_ALLOW;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
-public class PackageFilterActivity extends AppCompatActivity {
+public class PackageFilterActivity extends BaseActivity {
     Toolbar toolbar;
-    static Gson gson = new Gson();
     ListView listview;
     TextView countview;
 
-    KcaDBHelper dbHelper;
     KcaPackageListViewAdpater adapter;
     static UpdateHandler handler;
-
-
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +34,11 @@ public class PackageFilterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_package_list);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getStringWithLocale(R.string.setting_menu_sniffer_title_package_allow));
+        getSupportActionBar().setTitle(getString(R.string.setting_menu_sniffer_title_package_allow));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         TextView notice = findViewById(R.id.package_notice);
-        notice.setText(getStringWithLocale(R.string.packagefilter_restart));
+        notice.setText(getString(R.string.packagefilter_restart));
 
         handler = new UpdateHandler(this);
 
@@ -99,6 +88,6 @@ public class PackageFilterActivity extends AppCompatActivity {
 
     public void setAllowCount() {
         JsonArray data = JsonParser.parseString(getStringPreferences(getApplicationContext(), PREF_PACKAGE_ALLOW)).getAsJsonArray();
-        countview.setText(KcaUtils.format(getStringWithLocale(R.string.packagefilter_count_format), data.size()));
+        countview.setText(KcaUtils.format(getString(R.string.packagefilter_count_format), data.size()));
     }
 }

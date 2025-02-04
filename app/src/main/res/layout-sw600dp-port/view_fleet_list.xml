@@ -25,6 +25,8 @@
             android:id="@+id/fleetview_head"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -49,28 +51,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:layout_marginLeft="12dp"
                 android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
                 android:layout_weight="0"
-                android:src="@mipmap/ic_dashboard"
-                app:srcCompat="@mipmap/ic_dashboard" />
+                android:src="@drawable/ic_tools"
+                app:srcCompat="@drawable/ic_tools" />
 
             <ImageView
                 android:id="@+id/fleetview_exit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:layout_marginLeft="12dp"
                 android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
                 android:layout_weight="0"
-                android:src="@mipmap/ic_cancel"
-                app:srcCompat="@mipmap/ic_cancel" />
+                android:src="@drawable/ic_cancel"
+                app:srcCompat="@drawable/ic_cancel" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -82,10 +83,10 @@
                 android:layout_marginRight="4dp"
                 android:layout_weight="1"
                 android:background="@android:color/darker_gray"
-                android:paddingBottom="1dp"
                 android:paddingLeft="5dp"
-                android:paddingRight="5dp"
                 android:paddingTop="0dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="1dp"
                 android:scaleType="fitXY"
                 android:src="@android:drawable/divider_horizontal_bright" />
 
@@ -97,6 +98,7 @@
                 android:background="@color/colorPrimary"
                 android:gravity="right"
                 android:orientation="horizontal">
+
                 <LinearLayout
                     android:id="@+id/fleetview_cnt"
                     android:layout_width="wrap_content"
@@ -105,10 +107,10 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:orientation="horizontal"
-                    android:paddingEnd="4dp"
+                    android:paddingStart="4dp"
                     android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:paddingStart="4dp">
+                    android:paddingEnd="4dp"
+                    android:paddingRight="4dp">
 
                     <ImageView
                         android:id="@+id/fleetview_cnt1_icon"
@@ -117,8 +119,8 @@
                         android:layout_gravity="center_vertical"
                         android:paddingEnd="2dp"
                         android:paddingRight="2dp"
-                        android:src="@mipmap/ic_ship"
-                        app:srcCompat="@mipmap/ic_ship" />
+                        android:src="@drawable/ic_ship"
+                        app:srcCompat="@drawable/ic_ship" />
 
                     <TextView
                         android:id="@+id/fleetview_cnt1"
@@ -141,8 +143,8 @@
                         android:layout_gravity="center_vertical"
                         android:paddingEnd="2dp"
                         android:paddingRight="2dp"
-                        android:src="@mipmap/ic_equip"
-                        app:srcCompat="@mipmap/ic_equip" />
+                        android:src="@drawable/ic_equip"
+                        app:srcCompat="@drawable/ic_equip" />
 
                     <TextView
                         android:id="@+id/fleetview_cnt2"
@@ -179,10 +181,10 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:orientation="horizontal"
-                    android:paddingEnd="4dp"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
                     android:paddingStart="4dp"
+                    android:paddingLeft="4dp"
+                    android:paddingEnd="4dp"
+                    android:paddingRight="4dp"
                     android:visibility="gone">
 
                     <ImageView
@@ -192,8 +194,8 @@
                         android:layout_gravity="center_vertical"
                         android:paddingEnd="2dp"
                         android:paddingRight="2dp"
-                        android:src="@mipmap/ic_gift"
-                        app:srcCompat="@mipmap/ic_gift" />
+                        android:src="@drawable/ic_gift"
+                        app:srcCompat="@drawable/ic_gift" />
 
                     <TextView
                         android:id="@+id/fleetview_item_cnt_value"
@@ -205,7 +207,7 @@
                         android:singleLine="true"
                         android:text="150/150"
                         android:textColor="@color/white"
-                        android:textSize="18dp"/>
+                        android:textSize="18dp" />
 
                 </LinearLayout>
 
@@ -659,9 +661,9 @@
                     android:alpha="0.6"
                     android:clickable="false"
                     android:focusable="false"
-                    android:src="@mipmap/ic_arrow_up"
+                    android:src="@drawable/ic_arrow_up"
                     android:visibility="gone"
-                    app:srcCompat="@mipmap/ic_arrow_up" />
+                    app:srcCompat="@drawable/ic_arrow_up" />
 
                 <ImageView
                     android:id="@+id/fleetview_menu_down"
@@ -673,8 +675,8 @@
                     android:alpha="0.9"
                     android:clickable="false"
                     android:focusable="false"
-                    android:src="@mipmap/ic_arrow_down"
-                    app:srcCompat="@mipmap/ic_arrow_down" />
+                    android:src="@drawable/ic_arrow_down"
+                    app:srcCompat="@drawable/ic_arrow_down" />
 
             </RelativeLayout>
 

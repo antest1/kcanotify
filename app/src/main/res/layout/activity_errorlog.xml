@@ -22,8 +22,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:background="@drawable/background"
-        android:orientation="vertical"
+            android:orientation="vertical"
         android:padding="16dp">
 
         <LinearLayout

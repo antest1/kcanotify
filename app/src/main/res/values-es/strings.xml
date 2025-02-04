@@ -4,9 +4,11 @@
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
     <string name="action_settings">Ajustes</string>
+    <string name="action_manual">Manual</string>
     <string name="action_download">Descargar</string>
     <string name="action_check">COMPROBAR</string>
     <string name="action_server">CAMBIAR SERVIDOR</string>
+    <string name="action_perm">Permisos de concesión</string>
     <string name="action_errorlog">Informe de Errores</string>
     <string name="action_downloadall">Descargar Todo</string>
     <string name="backpress_msg">Presionar nuevamente para cerrar</string>
@@ -15,7 +17,7 @@
     <string name="app_name_kancolle">KanColle Android (Oficial)</string>
     <string name="app_name_gotobrowser">GotoBrowser</string>
 
-    <string name="special_message">¡¡Feliz navidad!!</string>
+    <string name="special_message">¡Jervis afortunado!</string>
     <string name="notification_message">Notificación e información</string>
 
     <!-- Common Text -->
@@ -420,6 +422,7 @@
     <string name="akashi_term_day_2">Mar</string>
     <string name="akashi_term_day_3">Mie</string>
     <string name="akashi_term_day_4">Jue</string>
+    <string name="akashi_term_day_none">N/A</string>
     <string name="filter_equip_title">Filtrar por Tipo de Equipamiento</string>
     <string name="action_akashi_filter">Ajustes de Filtro</string>
     <string name="filter_equip_rev">REVERTIR</string>
@@ -772,7 +775,7 @@
     <string name="setting_menu_kand_title_fleetview_item_select">Artículos para mostrar en el contador de FleetView</string>
     <string name="setting_menu_kand_desc_fleetview_item_select">elementos de destino del contador (toque para cambiar) en la parte superior derecha</string>
     <string name="setting_service_running_desc">No se puede cambiar mientras el servicio se está ejecutando</string>
-    <string name="ma_permission_notification_denied">Se requiere permiso de notificación para las funciones de Kcanotify. (Debe permitir cuando enciende el botón SERVICIE)</string>
+    <string name="ma_permission_notification_denied">Se requiere permiso de notificación para las funciones de Kcanotify.</string>
     <string name="ma_permission_service_restart">Vuelva a pulsar el botón SERVICE para iniciar kcanotify.</string>
     <string name="setting_menu_noti_title_test">Mostrar notificación de prueba</string>
     <string name="ship_nat_label">Filtro de nacionalidad</string>

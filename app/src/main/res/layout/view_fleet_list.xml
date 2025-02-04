@@ -146,8 +146,8 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="2dp"
                         android:layout_marginRight="2dp"
-                        android:src="@mipmap/ic_ship"
-                        app:srcCompat="@mipmap/ic_ship" />
+                        android:src="@drawable/ic_ship"
+                        app:srcCompat="@drawable/ic_ship" />
 
                     <TextView
                         android:id="@+id/fleetview_cnt1"
@@ -169,8 +169,8 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="2dp"
                         android:layout_marginRight="2dp"
-                        android:src="@mipmap/ic_equip"
-                        app:srcCompat="@mipmap/ic_equip" />
+                        android:src="@drawable/ic_equip"
+                        app:srcCompat="@drawable/ic_equip" />
 
                     <TextView
                         android:id="@+id/fleetview_cnt2"
@@ -182,32 +182,6 @@
                         android:text="1500/1500"
                         android:textColor="@color/white"
                         android:textSize="@dimen/fleetview_text_tbutton" />
-
-                    <ImageView
-                        android:id="@+id/fleetview_cnt3_icon"
-                        android:layout_width="@dimen/fleetview_text_tbutton"
-                        android:layout_height="@dimen/fleetview_text_tbutton"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="2dp"
-                        android:layout_marginRight="2dp"
-                        android:layout_weight="1"
-                        android:src="@mipmap/ic_saury"
-                        android:visibility="gone"
-                        app:srcCompat="@mipmap/ic_saury" />
-
-                    <TextView
-                        android:id="@+id/fleetview_cnt3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:gravity="right"
-                        android:singleLine="true"
-                        android:text="10"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/fleetview_text_tbutton"
-                        android:visibility="gone" />
 
                 </LinearLayout>
 
@@ -235,26 +209,27 @@
                     android:gravity="right"
                     android:orientation="horizontal"
                     android:visibility="gone"
-                    tools:visibility="gone">
+                    tools:visibility="visible">
 
                     <ImageView
                         android:id="@+id/fleetview_item_cnt_icon"
                         android:layout_width="@dimen/fleetview_text_tbutton"
-                        android:layout_height="@dimen/fleetview_text_tbutton"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="2dp"
                         android:layout_marginRight="2dp"
                         android:layout_weight="1"
-                        android:src="@mipmap/ic_gift"
-                        app:srcCompat="@mipmap/ic_gift" />
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_gift"
+                        app:srcCompat="@drawable/ic_gift" />
 
                     <TextView
                         android:id="@+id/fleetview_item_cnt_value"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:ellipsize="end"
-                        android:gravity="right"
+                        android:gravity="center_vertical|right"
                         android:singleLine="true"
                         android:text="150/150"
                         android:textColor="@color/white"
@@ -270,8 +245,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 android:layout_marginLeft="10dp"
-                android:src="@mipmap/ic_dashboard"
-                app:srcCompat="@mipmap/ic_dashboard" />
+                android:src="@drawable/ic_tools"
+                app:srcCompat="@drawable/ic_tools" />
 
             <ImageView
                 android:id="@+id/fleetview_exit"
@@ -279,8 +254,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 android:layout_marginLeft="10dp"
-                android:src="@mipmap/ic_cancel"
-                app:srcCompat="@mipmap/ic_cancel" />
+                android:src="@drawable/ic_cancel"
+                app:srcCompat="@drawable/ic_cancel" />
 
         </LinearLayout>
 
@@ -655,9 +630,9 @@
                     android:alpha="0.6"
                     android:clickable="false"
                     android:focusable="false"
-                    android:src="@mipmap/ic_arrow_up"
+                    android:src="@drawable/ic_arrow_up"
                     android:visibility="gone"
-                    app:srcCompat="@mipmap/ic_arrow_up" />
+                    app:srcCompat="@drawable/ic_arrow_up" />
 
                 <ImageView
                     android:id="@+id/fleetview_menu_down"
@@ -669,8 +644,8 @@
                     android:alpha="0.9"
                     android:clickable="false"
                     android:focusable="false"
-                    android:src="@mipmap/ic_arrow_down"
-                    app:srcCompat="@mipmap/ic_arrow_down" />
+                    android:src="@drawable/ic_arrow_down"
+                    app:srcCompat="@drawable/ic_arrow_down" />
 
             </RelativeLayout>
 

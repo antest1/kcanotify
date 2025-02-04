@@ -30,16 +30,15 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
     private int daihatsu_cnt = 0;
     private boolean is_great_success = false;
     private List<JsonObject> listViewItemList = new ArrayList<>();
-    private Context application_context, base_context;
+    private final Context context;
     private List<Integer> active = new ArrayList<>();
 
-    public KcaExpeditionTableViewAdpater(Context ac, Context bc) {
-        application_context = ac;
-        base_context = bc;
+    public KcaExpeditionTableViewAdpater(Context baseContext) {
+        context = baseContext;
     }
 
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(application_context, base_context, id);
+    public String getStringFromResId(int id) {
+        return context.getString(id);
     }
 
     public void setDaihatsuCount(int val) {
@@ -125,7 +124,7 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
         }
 
         JsonObject item = listViewItemList.get(position);
-        Log.e("KCA", String.valueOf(position) + " " + item.toString() );
+        Log.e("KCA", position + " " + item.toString() );
         final ViewHolder holder = (ViewHolder) v.getTag();
 
         int no = item.get("no").getAsInt();
@@ -269,7 +268,7 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
         boolean has_total_firepower = data.has("total-firepower");
 
         ((TextView) root_view.findViewById(R.id.view_excheck_fleet_total_num))
-                .setText(KcaUtils.format(getStringWithLocale(R.string.excheckview_total_num_format), total_num));
+                .setText(KcaUtils.format(getStringFromResId(R.string.excheckview_total_num_format), total_num));
 
         setItemViewVisibilityById(root_view, R.id.view_excheck_flagship, has_flag_info);
         if (has_flag_info) {
@@ -277,7 +276,7 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
             if (has_flag_lv) {
                 int flag_lv = data.get("flag-lv").getAsInt();
                 setItemTextViewById(root_view, R.id.view_excheck_flagship_lv,
-                        KcaUtils.format(getStringWithLocale(R.string.excheckview_flag_lv_format), flag_lv));
+                        KcaUtils.format(getStringFromResId(R.string.excheckview_flag_lv_format), flag_lv));
             }
             setItemViewVisibilityById(root_view, R.id.view_excheck_flagship_cond, has_flag_cond);
             if (has_flag_cond) {
@@ -294,7 +293,7 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
         if (has_total_lv) {
             int total_lv = data.get("total-lv").getAsInt();
             setItemTextViewById(root_view, R.id.view_excheck_fleet_total_lv,
-                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_lv_format), total_lv));
+                    KcaUtils.format(getStringFromResId(R.string.excheckview_total_lv_format), total_lv));
         }
 
         ((LinearLayout) root_view.findViewById(R.id.view_excheck_fleet_condition)).removeAllViews();
@@ -312,17 +311,17 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
             if (has_drum_ship) {
                 int drum_ship = data.get("drum-ship").getAsInt();
                 setItemTextViewById(root_view, R.id.view_excheck_drum_ship,
-                        KcaUtils.format(getStringWithLocale(R.string.excheckview_drum_ship_format), drum_ship));
+                        KcaUtils.format(getStringFromResId(R.string.excheckview_drum_ship_format), drum_ship));
             }
             setItemViewVisibilityById(root_view, R.id.view_excheck_drum_count, has_drum_num || has_drum_num_optional);
             if (has_drum_num) {
                 int drum_num = data.get("drum-num").getAsInt();
                 setItemTextViewById(root_view, R.id.view_excheck_drum_count,
-                        KcaUtils.format(getStringWithLocale(R.string.excheckview_drum_num_format), drum_num));
+                        KcaUtils.format(getStringFromResId(R.string.excheckview_drum_num_format), drum_num));
             } else if (has_drum_num_optional) {
                 int drum_num = data.get("drum-num-optional").getAsInt();
                 setItemTextViewById(root_view, R.id.view_excheck_drum_count,
-                        KcaUtils.format(getStringWithLocale(R.string.excheckview_drum_num_format), drum_num));
+                        KcaUtils.format(getStringFromResId(R.string.excheckview_drum_num_format), drum_num));
             }
         }
 
@@ -330,28 +329,28 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
         if (has_total_asw) {
             int total_asw = data.get("total-asw").getAsInt();
             setItemTextViewById(root_view, R.id.view_excheck_total_asw,
-                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_asw));
+                    KcaUtils.format(getStringFromResId(R.string.excheckview_total_format), total_asw));
         }
 
         setItemViewVisibilityById(root_view, R.id.view_excheck_fp, has_total_fp);
         if (has_total_fp) {
             int total_fp = data.get("total-fp").getAsInt();
             setItemTextViewById(root_view, R.id.view_excheck_total_fp,
-                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_fp));
+                    KcaUtils.format(getStringFromResId(R.string.excheckview_total_format), total_fp));
         }
 
         setItemViewVisibilityById(root_view, R.id.view_excheck_los, has_total_los);
         if (has_total_los) {
             int total_los = data.get("total-los").getAsInt();
             setItemTextViewById(root_view, R.id.view_excheck_total_los,
-                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_los));
+                    KcaUtils.format(getStringFromResId(R.string.excheckview_total_format), total_los));
         }
 
         setItemViewVisibilityById(root_view, R.id.view_excheck_firepower, has_total_firepower);
         if (has_total_firepower) {
             int total_firepower = data.get("total-firepower").getAsInt();
             setItemTextViewById(root_view, R.id.view_excheck_total_firepower,
-                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_firepower));
+                    KcaUtils.format(getStringFromResId(R.string.excheckview_total_format), total_firepower));
         }
     }
 
@@ -370,8 +369,8 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
         String[] conds = data.split("/");
         for (String cond : conds) {
             List<String> cond_value = new ArrayList<>();
-            TextView cond_tv = new TextView(application_context);
-            cond_tv.setTextColor(ContextCompat.getColor(application_context, R.color.black));
+            TextView cond_tv = new TextView(context);
+            cond_tv.setTextColor(ContextCompat.getColor(context, R.color.black));
             String[] shipcond = cond.split("\\|");
             for (String sc : shipcond) {
                 cond_value.add(convertTotalCond(sc));

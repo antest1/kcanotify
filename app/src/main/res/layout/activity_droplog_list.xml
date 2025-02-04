@@ -20,7 +20,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background"
         android:orientation="vertical"
         android:padding="5dp">
 
@@ -28,11 +27,11 @@
             android:id="@+id/droplog_filter_area"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
             android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="2dp"
             android:background="@color/colorPanelBack"
             android:orientation="vertical">
 
@@ -68,10 +67,10 @@
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
                     android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
                     android:layout_weight="0"
                     android:text="~" />
 
@@ -88,8 +87,8 @@
                     android:id="@+id/droplog_isdesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
                     android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
                     android:layout_weight="0"
                     android:checked="true"
                     android:scaleX="0.75"
@@ -280,13 +279,13 @@
                     android:id="@+id/droplog_search"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginStart="4dp"
                     android:layout_marginLeft="4dp"
                     android:layout_marginTop="2dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginRight="4dp"
                     android:text="@string/droplog_search"
-                    android:layout_alignParentEnd="true"
                     android:textSize="16dp" />
             </RelativeLayout>
 
@@ -306,10 +305,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
             android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
             android:layout_weight="0"
             android:orientation="horizontal">
 
@@ -335,17 +334,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                app:srcCompat="@mipmap/ic_arrow_up" />
+                app:srcCompat="@drawable/ic_arrow_up" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/droplog_item_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
             android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
             android:background="@color/colorAccent"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -409,10 +408,10 @@
             android:id="@+id/droplog_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
             android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
             android:layout_weight="1"
             android:listSelector="@android:color/transparent" />
 

@@ -32,7 +32,7 @@ import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
-public class KcaInspectorDetailActivity extends AppCompatActivity {
+public class KcaInspectorDetailActivity extends BaseActivity {
     final String SPREF_PREFIX = "SPREF ";
     final String PREF_PREFIX = "PREF ";
     final String DB_PREFIX = "DB ";
@@ -65,7 +65,7 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
         } else {
             setContentView(R.layout.activity_inspector_detail);
 
-            toolbar = (Toolbar) findViewById(R.id.toolbar);
+            toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(type_key);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -1,10 +1,7 @@
 package com.antest1.kcanotify;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.app.Service;
-import android.app.usage.UsageEvents;
-import android.app.usage.UsageStatsManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +16,6 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -46,10 +42,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLEINFO;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLENODE;
@@ -74,11 +66,12 @@ import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getOrientationPrefix;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.getWindowLayoutParamsFlags;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
-public class KcaViewButtonService extends Service {
+public class KcaViewButtonService extends BaseService {
     public static final int FAIRY_GLOW_INTERVAL = 800;
 
     public static final String KCA_STATUS_ON = "kca_status_on";
@@ -131,10 +124,6 @@ public class KcaViewButtonService extends Service {
         return clickcount;
     }
 
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -176,11 +165,8 @@ public class KcaViewButtonService extends Service {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     String s = intent.getStringExtra(KCA_MSG_DATA);
-                    if (s.contains("1")) {
-                        taiha_status = true;
-                    } else {
-                        taiha_status = false;
-                    }
+                    if (s == null) return;
+                    taiha_status = s.contains("1");
                     setFairyImage();
                     Log.e("KCA", "KCA_MSG_BATTLE_HDMG Received");
                 }
@@ -189,14 +175,11 @@ public class KcaViewButtonService extends Service {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     String s = intent.getStringExtra(KCA_MSG_DATA);
+                    if (s == null) return;
                     if (s.contains("1")) {
-                        if (!fairy_glow_mode) {
-                            startFairyKira();
-                        }
+                        if (!fairy_glow_mode) startFairyKira();
                     } else {
-                        if (fairy_glow_mode) {
-                            stopFairyKira();
-                        }
+                        if (fairy_glow_mode) stopFairyKira();
                     }
                     Log.e("KCA", "KCA_MSG_QUEST_COMPLETE Received");
                 }
@@ -207,7 +190,7 @@ public class KcaViewButtonService extends Service {
             LocalBroadcastManager.getInstance(this).registerReceiver((battlehdmg_receiver), new IntentFilter(KCA_MSG_BATTLE_HDMG));
             LocalBroadcastManager.getInstance(this).registerReceiver((questcmpl_receiver), new IntentFilter(KCA_MSG_QUEST_COMPLETE));
 
-            LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater mInflater = LayoutInflater.from(this);
             notificationManager = NotificationManagerCompat.from(getApplicationContext());
             buttonView = (DraggableOverlayButtonLayout) mInflater.inflate(R.layout.view_button, null);
 
@@ -255,7 +238,7 @@ public class KcaViewButtonService extends Service {
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     getWindowLayoutType(),
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                    getLayoutParamsFlags(),
                     PixelFormat.TRANSLUCENT);
 
             layoutParams.gravity = Gravity.TOP | Gravity.START;
@@ -568,7 +551,7 @@ public class KcaViewButtonService extends Service {
                 if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_NOTI_LONGCLICK)) {
                     doVibrate(vibrator, 100);
                 }
-                Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.viewbutton_hide), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.viewbutton_hide), Toast.LENGTH_LONG).show();
                 buttonView.setVisibility(View.GONE);
                 recentVisibility = View.GONE;
                 hiddenByUser = true;
@@ -588,7 +571,7 @@ public class KcaViewButtonService extends Service {
         }
     };
 
-    private Runnable mGlowRunner = new Runnable() {
+    private final Runnable mGlowRunner = new Runnable() {
         @Override
         public void run() {
             try {
@@ -623,6 +606,7 @@ public class KcaViewButtonService extends Service {
         if (dbHelper != null) {
             locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
 
+            layoutParams.flags = getLayoutParamsFlags();
             if (locdata != null && !locdata.toString().isEmpty()) {
                 if (locdata.has(ori_prefix.concat("x"))) {
                     layoutParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
@@ -650,5 +634,10 @@ public class KcaViewButtonService extends Service {
             dbHelper.putValue(DB_KEY_FAIRYLOC, locdata.toString());
         }
         super.onConfigurationChanged(newConfig);
+    }
+
+    private int getLayoutParamsFlags() {
+        return getWindowLayoutParamsFlags(getResources().getConfiguration())
+                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
     }
 }

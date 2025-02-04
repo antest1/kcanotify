@@ -23,8 +23,7 @@
         android:focusable="true"
         android:clickable="true"
         android:focusableInTouchMode="true"
-        android:background="@drawable/background"
-        android:orientation="horizontal">
+            android:orientation="horizontal">
 
 
         <RelativeLayout
@@ -282,8 +281,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:src="@mipmap/ic_help"
-                            app:srcCompat="@mipmap/ic_help" />
+                            android:src="@drawable/ic_help"
+                            app:srcCompat="@drawable/ic_help" />
 
                     </LinearLayout>
 
@@ -491,7 +490,7 @@
                 android:baselineAlignBottom="false"
                 android:scaleX="0.8"
                 android:scaleY="0.8"
-                android:src="@mipmap/ic_add"
+                android:src="@drawable/ic_add"
                 app:elevation="0dp" />
 
             <ImageView
@@ -512,9 +511,9 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:background="@color/colorDataArea"
-            android:src="@mipmap/ic_arrow_up"
+            android:src="@drawable/ic_arrow_up"
             android:visibility="gone"
-            app:srcCompat="@mipmap/ic_arrow_up" />
+            app:srcCompat="@drawable/ic_arrow_up" />
 
         <RelativeLayout
             android:layout_width="0dp"

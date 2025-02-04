@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -42,7 +41,7 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 
 
-public class AkashiActivity extends AppCompatActivity {
+public class AkashiActivity extends BaseActivity {
     Toolbar toolbar;
     JsonObject akashiData, akashiDay;
     int akashiDataLoadingFlag = 0;
@@ -62,17 +61,13 @@ public class AkashiActivity extends AppCompatActivity {
     KcaAkashiListViewAdpater adapter;
     UpdateHandler handler;
 
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_akashi_list);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.action_akashi));
+        getSupportActionBar().setTitle(getString(R.string.action_akashi));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
@@ -99,7 +94,7 @@ public class AkashiActivity extends AppCompatActivity {
         SimpleDateFormat date_format = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
         current_date = findViewById(R.id.current_date);
         current_date.setText(KcaUtils.format("%s (%s)", date_format.format(date),
-                getStringWithLocale(getId("akashi_term_day_" + dayOfWeek, R.string.class))));
+                getString(getId("akashi_term_day_" + dayOfWeek, R.string.class))));
 
         dmat_count = findViewById(R.id.count_dmat);
         smat_count = findViewById(R.id.count_smat);
@@ -123,7 +118,7 @@ public class AkashiActivity extends AppCompatActivity {
         if (akashiDataLoadingFlag != 1) {
             Toast.makeText(getApplicationContext(), "Error Loading Akashi Data", Toast.LENGTH_LONG).show();
         } else if (KcaApiData.getKcItemStatusById(2, "name") == null) {
-            Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.kca_toast_get_data_at_settings_2), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.kca_toast_get_data_at_settings_2), Toast.LENGTH_LONG).show();
         } else {
             loadAkashiList(currentClicked, isSafeChecked);
             adapter.setListViewItemList(listViewItemList);
@@ -205,7 +200,7 @@ public class AkashiActivity extends AppCompatActivity {
             return -1;
         }
 
-        showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
+        showDataLoadErrorToast(getApplicationContext(), getString(R.string.download_check_error));
         return 1;
     }
 

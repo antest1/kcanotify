@@ -1,12 +1,14 @@
 package com.antest1.kcanotify;
 
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -57,10 +59,6 @@ public class KcaTimerWidget extends AppWidgetProvider {
         super.onEnabled(context);
     }
 
-    public String getStringWithLocale(Context context, int id) {
-        return KcaUtils.getStringWithLocale(context.getApplicationContext(), context, id);
-    }
-
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
@@ -89,22 +87,23 @@ public class KcaTimerWidget extends AppWidgetProvider {
         int[] menu_list = { R.id.menu_1, R.id.menu_2, R.id.menu_3 };
         int[] menu_text_list = { R.string.viewmenu_excheck, R.string.viewmenu_docking, R.string.viewmenu_construction };
 
-        RemoteViews views = new RemoteViews(context.getPackageName(), layout_id);
+        Context contextWithLocale = getContextWithLocale(context);
+        RemoteViews views = new RemoteViews(contextWithLocale.getPackageName(), layout_id);
         for (int i = 0; i < menu_list.length; i++) {
             int color = status == i + 1 ? R.color.colorAccent : R.color.white;
-            views.setTextColor(menu_list[i], ContextCompat.getColor(context, color));
-            views.setTextViewText(menu_list[i], getStringWithLocale(context, menu_text_list[i]));
+            views.setTextColor(menu_list[i], ContextCompat.getColor(contextWithLocale, color));
+            views.setTextViewText(menu_list[i], contextWithLocale.getString(menu_text_list[i]));
 
-            Intent changeIntent = new Intent(context, KcaTimerWidget.class);
+            Intent changeIntent = new Intent(contextWithLocale, KcaTimerWidget.class);
             changeIntent.setAction(KcaUtils.format(WIDGET_MENU_CHANGE_FORMAT+"%d", i+1));
             changeIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
             changeIntent.putExtra("menu", i + 1);
 
-            PendingIntent changePendingIntent = PendingIntent.getBroadcast(context, widgetId+10, changeIntent, PendingIntent.FLAG_IMMUTABLE);
+            PendingIntent changePendingIntent = PendingIntent.getBroadcast(contextWithLocale, widgetId+10, changeIntent, PendingIntent.FLAG_IMMUTABLE);
             views.setOnClickPendingIntent(menu_list[i], changePendingIntent);
         }
 
-        List<AbstractMap.SimpleEntry<String, String>> data = getTimerData(context, status);
+        List<AbstractMap.SimpleEntry<String, String>> data = getTimerData(contextWithLocale, status);
         for (int i = 0; i < data.size(); i++) {
             int name = KcaUtils.getId(KcaUtils.format("item%d_name", i+1), R.id.class);
             int time = KcaUtils.getId(KcaUtils.format("item%d_time", i+1), R.id.class);
@@ -114,9 +113,9 @@ public class KcaTimerWidget extends AppWidgetProvider {
             views.setTextViewText(name, name_value);
             views.setTextViewText(time, time_value);
             if (time_value.contains(":") && Integer.parseInt(time_value.replace(":", "")) == 0) {
-                views.setTextColor(time, ContextCompat.getColor(context, R.color.colorWidgetAlert));
+                views.setTextColor(time, ContextCompat.getColor(contextWithLocale, R.color.colorWidgetAlert));
             } else {
-                views.setTextColor(time, ContextCompat.getColor(context, R.color.white));
+                views.setTextColor(time, ContextCompat.getColor(contextWithLocale, R.color.white));
             }
         }
         manager.updateAppWidget(widgetId, views);
@@ -129,7 +128,7 @@ public class KcaTimerWidget extends AppWidgetProvider {
         List<AbstractMap.SimpleEntry<String, String>> entries = new ArrayList<>();
         switch (status) {
             case STATE_EXPD:
-                String name_format = getStringWithLocale(context, R.string.fleet_format);
+                String name_format = context.getString(R.string.fleet_format);
                 if (!widgetData.has("deckport") || widgetData.get("deckport").isJsonNull()) {
                     for (int i = 0; i < 4; i++) entries.add(new AbstractMap.SimpleEntry<>("no data", ""));
                 } else {
@@ -263,6 +262,7 @@ public class KcaTimerWidget extends AppWidgetProvider {
         }
     }
 
+    @SuppressLint("DiscouragedApi")
     private void setExecutor(Context context, AppWidgetManager manager) {
         executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleAtFixedRate(() -> {
@@ -323,5 +323,12 @@ public class KcaTimerWidget extends AppWidgetProvider {
         new_data.add("kdock", dbHelper.getJsonArrayValue(DB_KEY_KDOCKDATA));
         widgetData = new_data;
         dbHelper.close();
+    }
+
+    protected Context getContextWithLocale(Context context) {
+        Configuration config = new Configuration();
+        config.locale = LocaleUtils.getLocale();
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+        return context;
     }
 }

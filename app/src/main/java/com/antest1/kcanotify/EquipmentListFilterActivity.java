@@ -4,12 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 
@@ -24,7 +21,7 @@ import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
-public class EquipmentListFilterActivity extends AppCompatActivity {
+public class EquipmentListFilterActivity extends BaseActivity {
     public static final int IMG_SIZE_DP = 36;
     Toolbar toolbar;
     private static Handler sHandler;
@@ -43,7 +40,7 @@ public class EquipmentListFilterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_equipment_list_filter);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.equipinfo_filter));
+        getSupportActionBar().setTitle(getString(R.string.equipinfo_filter));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         List<Integer> equipment_id = new ArrayList<>();

@@ -12,7 +12,7 @@
         />
     <item
         android:id="@+id/tools"
-        android:icon="@mipmap/ic_dashboard"
+        android:icon="@drawable/ic_tools"
         android:title="@string/action_tools"
         app:showAsAction="ifRoom"
         app:iconTint="?attr/colorOnSurface"

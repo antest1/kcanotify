@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 app:iconTint="@color/colorAccent"
-                app:icon="@android:drawable/stat_sys_download" />
+                app:icon="@drawable/ic_download" />
         </LinearLayout>
 
     </LinearLayout>

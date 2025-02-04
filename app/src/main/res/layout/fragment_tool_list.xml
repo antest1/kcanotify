@@ -31,9 +31,9 @@
                     android:layout_height="30sp"
                     android:layout_gravity="center_vertical"
                     android:padding="5dp"
-                    android:src="@mipmap/ic_flag"
-                    app:srcCompat="@mipmap/ic_flag"
-                    app:tint="@color/colorFleetInfoNormal" />
+                    android:src="@drawable/ic_flag"
+                    app:srcCompat="@drawable/ic_flag"
+                    app:tint="@color/colorToolsFleet" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -70,9 +70,9 @@
                     android:layout_height="30sp"
                     android:layout_gravity="center_vertical"
                     android:padding="5dp"
-                    android:src="@mipmap/ic_ship"
-                    app:srcCompat="@mipmap/ic_ship"
-                    app:tint="@color/colorAccent" />
+                    android:src="@drawable/ic_ship"
+                    app:srcCompat="@drawable/ic_ship"
+                    app:tint="@color/colorToolsShip" />
 
                 <TextView
                     android:id="@+id/shiplist_text"
@@ -115,9 +115,9 @@
                     android:layout_height="30sp"
                     android:layout_gravity="center_vertical"
                     android:padding="5dp"
-                    android:src="@mipmap/ic_equip"
-                    app:srcCompat="@mipmap/ic_equip"
-                    app:tint="@color/colorAccent" />
+                    android:src="@drawable/ic_equip"
+                    app:srcCompat="@drawable/ic_equip"
+                    app:tint="@color/colorToolsEquip" />
 
                 <TextView
                     android:id="@+id/equipment_text"
@@ -154,9 +154,10 @@
                     android:layout_height="30sp"
                     android:layout_gravity="center_vertical"
                     android:padding="5dp"
-                    android:src="@mipmap/ic_droplog"
-                    app:srcCompat="@mipmap/ic_droplog"
-                    app:tint="@color/colorFlagship" />
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_droplog"
+                    app:srcCompat="@drawable/ic_droplog"
+                    app:tint="@color/colorToolsDroplog" />
 
                 <TextView
                     android:id="@+id/droplog_text"
@@ -199,9 +200,9 @@
                     android:layout_height="30sp"
                     android:layout_gravity="center_vertical"
                     android:padding="5dp"
-                    android:src="@mipmap/ic_graph"
-                    app:srcCompat="@mipmap/ic_graph"
-                    app:tint="@color/colorResourceFuel" />
+                    android:src="@drawable/ic_graph"
+                    app:srcCompat="@drawable/ic_graph"
+                    app:tint="@color/colorToolsReslog" />
 
                 <TextView
                     android:id="@+id/reslog_text"
@@ -238,8 +239,8 @@
                     android:layout_height="30sp"
                     android:layout_gravity="center_vertical"
                     android:padding="5dp"
-                    android:src="@mipmap/ic_screw"
-                    app:srcCompat="@mipmap/ic_screw"
+                    android:src="@drawable/ic_screw"
+                    app:srcCompat="@drawable/ic_screw"
                     app:tint="@color/colorConsumableScrew" />
 
                 <TextView
@@ -283,9 +284,9 @@
                     android:layout_height="30sp"
                     android:layout_gravity="center_vertical"
                     android:padding="5dp"
-                    android:src="@mipmap/ic_expcalc"
-                    app:srcCompat="@mipmap/ic_expcalc"
-                    app:tint="@color/colorAccent" />
+                    android:src="@drawable/ic_expcalc"
+                    app:srcCompat="@drawable/ic_expcalc"
+                    app:tint="@color/colorToolsExpCalc" />
 
                 <TextView
                     android:id="@+id/expcalc_text"
@@ -322,9 +323,9 @@
                     android:layout_height="30sp"
                     android:layout_gravity="center_vertical"
                     android:padding="5dp"
-                    android:src="@mipmap/ic_expdtable"
-                    app:srcCompat="@mipmap/ic_expdtable"
-                    app:tint="@color/colorResourceAmmo" />
+                    android:src="@drawable/ic_expdtable"
+                    app:srcCompat="@drawable/ic_expdtable"
+                    app:tint="@color/colorToolsExpedTable" />
 
                 <TextView
                     android:id="@+id/expdtable_text"

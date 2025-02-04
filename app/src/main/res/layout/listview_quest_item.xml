@@ -139,8 +139,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:alpha="0.75"
-                    android:src="@mipmap/ic_add_circle"
-                    app:srcCompat="@mipmap/ic_add_circle" />
+                    android:src="@drawable/ic_add_circle"
+                    app:srcCompat="@drawable/ic_add_circle" />
             </RelativeLayout>
 
         </LinearLayout>

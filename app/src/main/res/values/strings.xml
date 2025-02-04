@@ -14,19 +14,20 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="app_brand" translatable="false" traslatable="false">시제 깡들리티</string> <!-- Do not translate here -->
 
     <string name="action_settings">Settings</string>
+    <string name="action_manual">Manual</string>
     <string name="action_errorlog">Error Log</string>
     <string name="action_download">Download</string>
     <string name="action_check">CHECK</string>
     <string name="action_server">CHANGE SERVER</string>
+    <string name="action_perm">Grant Permissions</string>
     <string name="action_downloadall">DL ALL</string>
     <string name="action_inspector" translatable="false">Inspector</string>
     <string name="app_vpn_name">Kcanotify Sniffer</string>
     <string name="app_name_kancolle">KanColle Android (Official)</string>
     <string name="app_name_gotobrowser">GotoBrowser</string>
 
-    <string name="special_message">Merry Christmas!!</string>
+    <string name="special_message">Lucky Jervis!</string>
     <string name="notification_message">Notification and Information</string>
-    <string name="app_notice_link" translatable="false">https://luckyjervis.com/kcanotify/notice</string>
 
     <string name="backpress_msg">Press back one more time to exit</string>
     <string name="notification_appinfo_title">Kcanotify Notification</string>
@@ -514,6 +515,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="akashi_term_day_4">Thu</string>
     <string name="akashi_term_day_5">Fri</string>
     <string name="akashi_term_day_6">Sat</string>
+    <string name="akashi_term_day_none">N/A</string>
 
     <string name="filter_equip_title">Filter by Equipment Type</string>
     <string name="filter_equip_all">ALL</string>
@@ -848,7 +850,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_fleetview_item_select">Target items of the counter (touch to change) at the top right</string>
     <string name="setting_service_running_desc">Cannot change while service is running</string>
     <string name="text_api_houk2">INT</string>
-    <string name="ma_permission_notification_denied">Notification Permission is required for Kcanotify functions. You need to allow when you turn on SERVICE button.</string>
+    <string name="ma_permission_notification_denied">Notification Permission is required for Kcanotify functions.</string>
     <string name="ma_permission_service_restart">Press SERVICE button again to start kcanotify.</string>
     <string name="setting_menu_noti_title_test">Show Test Notification</string>
     <string name="ship_nat_label">Nationality Filter</string>
@@ -884,7 +886,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="tls_decryption">Capture HTTPS traffic</string>
     <string name="tls_decryption_summary">Decrypt the HTTPS(SSL/TLS) traffic by performing mitm. Run the Mitm setup wizard below before using this feature.</string>
-    <string name="mitm_setup_wizard">Mitm setup wizard</string>
+    <string name="mitm_setup_wizard">Mitm Setup Wizard</string>
     <string name="mitm_setup_wizard_intro">This wizard will guide you through the installation of the kcanotify mitm addon and certification authority, which are needed for HTTPS traffic capture.</string>
     <string name="mitm_setup_wizard_done">Kcanotify is now ready to decrypt the HTTPS traffic!</string>
     <string name="install_the_mitm_addon">Install the <a href='%1$s'>kcanotify mitm addon</a></string>
@@ -898,7 +900,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="cert_installed_correctly">The CA certificate is installed</string>
     <string name="cert_reinstall_required">The CA certificate is not installed, run the mitm setup wizard</string>
     <string name="mitm_addon_bad_version">Bad kcanotify mitm addon version. Please install version %1$s and retry</string>
-    <string name="update_available">Update available</string>
+    <string name="update_available">Update Available</string>
     <string name="mitm_addon_update_available">A new mitm addon update is available.</string>
     <string name="mitm_addon_new_version">The kcanotify mitm addon must be updated</string>
     <string name="mitm_doze_notice">Battery optimization may interfere with the mitm addon</string>

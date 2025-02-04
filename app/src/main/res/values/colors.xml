@@ -6,7 +6,7 @@
     <color name="colorAccent">#03A9F4</color>
     <color name="colorActivityBack">#ffffff</color>
     <color name="colorActivityText">#888888</color>
-    <color name="colorMainBtn">#614239</color>
+    <color name="colorMainBtn">#3160D9</color>
     <color name="colorMainBtnText">#ffffff</color>
     <color name="colorToolbarText">#ffffff</color>
     <color name="colorBtn">#d6d6d6</color>
@@ -27,6 +27,7 @@
     <color name="colorWarn">#ffcdd2</color>
     <color name="colorWarnText">#68000a</color>
     <color name="colorMenuBack">#40FFFFFF</color>
+
     <color name="black">#000000</color>
     <color name="lightgray">#d6d6d6</color>
     <color name="grey">#888888</color>
@@ -227,6 +228,14 @@
     <color name="colorStatFighterPower">#16a085</color>
     <color name="colorStatSortCurrentBack">#c0bdbdbd</color>
 
+    <color name="colorToolsFleet">#00897B</color>
+    <color name="colorToolsShip">#1E88E5</color>
+    <color name="colorToolsEquip">#E53935</color>
+    <color name="colorToolsDroplog">#FFB300</color>
+    <color name="colorToolsReslog">#43A047</color>
+    <color name="colorToolsScrew">#808080</color>
+    <color name="colorToolsExpCalc">#00ACC1</color>
+    <color name="colorToolsExpedTable">#785346</color>
 
     <color name="colorListItemBack">#7ff5f5f5</color>
     <color name="colorListItemBackAccent">#7fe1e1e1</color>
@@ -235,6 +244,10 @@
     <color name="colorPanelBack">#7ff5f5f5</color>
     <color name="colorDataArea">#e0e0e0</color>
     <color name="colorPanelWarning">#ff5252</color>
+
+    <color name="colorDangerSwitchA">#FF1744</color>
+    <color name="colorDangerSwitchB">#ff5252</color>
+    <color name="colorDangerSwitchC">#FFCDD2</color>
 
     <color name="colorExpeditionTable1">#607D8B</color>
     <color name="colorExpeditionTable2">#AFB42B</color>

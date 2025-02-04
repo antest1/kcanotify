@@ -46,26 +46,11 @@
                 android:value="com.antest1.kcanotify.MainActivity" />
         </activity>
         <activity
-            android:name="com.antest1.kcanotify.ToolsActivity"
-            android:configChanges="locale|layoutDirection">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.antest1.kcanotify.MainActivity" />
-        </activity>
-        <activity
             android:name="com.antest1.kcanotify.FleetInfoActivity"
-            android:configChanges="locale|layoutDirection|orientation|screenSize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.antest1.kcanotify.ToolsActivity" />
-        </activity>
+            android:configChanges="locale|layoutDirection|orientation|screenSize" />
         <activity
             android:name="com.antest1.kcanotify.ShipInfoActivity"
-            android:configChanges="locale|layoutDirection|orientation|screenSize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.antest1.kcanotify.ToolsActivity" />
-        </activity>
+            android:configChanges="locale|layoutDirection|orientation|screenSize" />
         <activity
             android:name="com.antest1.kcanotify.ShipInfoSortActivity"
             android:configChanges="locale|layoutDirection|orientation|screenSize">
@@ -82,11 +67,7 @@
         </activity>
         <activity
             android:name="com.antest1.kcanotify.EquipmentInfoActivity"
-            android:configChanges="locale|layoutDirection|orientation|screenSize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.antest1.kcanotify.ToolsActivity" />
-        </activity>
+            android:configChanges="locale|layoutDirection|orientation|screenSize" />
         <activity
             android:name="com.antest1.kcanotify.EquipmentListFilterActivity"
             android:configChanges="locale|layoutDirection|orientation|screenSize">
@@ -96,11 +77,7 @@
         </activity>
         <activity
             android:name="com.antest1.kcanotify.AkashiActivity"
-            android:configChanges="locale|layoutDirection|orientation|screenSize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.antest1.kcanotify.ToolsActivity" />
-        </activity>
+            android:configChanges="locale|layoutDirection|orientation|screenSize" />
         <activity
             android:name="com.antest1.kcanotify.AkashiDetailActivity"
             android:configChanges="locale|layoutDirection|orientation|screenSize">
@@ -117,32 +94,16 @@
         </activity>
         <activity
             android:name="com.antest1.kcanotify.ExpCalcActivity"
-            android:configChanges="locale|layoutDirection|orientation|screenSize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.antest1.kcanotify.ToolsActivity" />
-        </activity>
+            android:configChanges="locale|layoutDirection|orientation|screenSize" />
         <activity
             android:name="com.antest1.kcanotify.ExpeditionTableActivity"
-            android:configChanges="locale|layoutDirection|orientation|screenSize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.antest1.kcanotify.ToolsActivity" />
-        </activity>
+            android:configChanges="locale|layoutDirection|orientation|screenSize" />
         <activity
             android:name="com.antest1.kcanotify.DropLogActivity"
-            android:configChanges="locale|layoutDirection|orientation|screenSize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.antest1.kcanotify.ToolsActivity" />
-        </activity>
+            android:configChanges="locale|layoutDirection|orientation|screenSize" />
         <activity
             android:name="com.antest1.kcanotify.ResourceLogActivity"
-            android:configChanges="locale|layoutDirection|orientation|screenSize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.antest1.kcanotify.ToolsActivity" />
-        </activity>
+            android:configChanges="locale|layoutDirection|orientation|screenSize" />
         <activity
             android:name="com.antest1.kcanotify.KcaFairySelectActivity"
             android:configChanges="locale|layoutDirection|orientation|screenSize">
@@ -232,13 +193,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.antest1.kcanotify.KcaNoticeActivity"
-            android:configChanges="locale|layoutDirection">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.antest1.kcanotify.MainActivity" />
-        </activity>
+
         <service
             android:name=".KcaService"
             android:exported="true"

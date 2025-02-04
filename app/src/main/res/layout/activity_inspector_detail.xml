@@ -52,7 +52,7 @@
                 android:layout_marginRight="8dp"
                 android:background="@color/colorBtn"
                 android:padding="5dp"
-                app:srcCompat="@mipmap/ic_delete" />
+                app:srcCompat="@drawable/ic_delete" />
 
             <Button
                 android:id="@+id/inspect_data_format"

@@ -11,7 +11,6 @@ import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 import android.annotation.SuppressLint;
-import android.app.Service;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
@@ -29,7 +28,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class KcaForegroundCheckService extends Service {
+public class KcaForegroundCheckService extends BaseService {
     private static final String TAG = "KCA-FCS";
 
     public static final String FAIRY_FORECHECK_ON = "fairy_forecheck_on";

@@ -29,6 +29,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.antest1.kcanotify.R;
 import com.antest1.kcanotify.remote_capture.interfaces.CaptureStartListener;
 import com.antest1.kcanotify.remote_capture.model.CaptureSettings;
 
@@ -146,22 +147,14 @@ public class CaptureHelper {
 
         Intent vpnPrepareIntent = VpnService.prepare(mContext);
         if(vpnPrepareIntent != null) {
-            if (mLauncher != null)
-                new AlertDialog.Builder(mContext)
-                        .setMessage("vpn_setup_msg")
-                        .setPositiveButton("ok", (dialog, whichButton) -> {
-                            try {
-                                mLauncher.launch(vpnPrepareIntent);
-                            } catch (ActivityNotFoundException e) {
-                                Toast.makeText(mContext, "no_intent_handler_found", Toast.LENGTH_LONG).show();
-                                mListener.onCaptureStartResult(false);
-                            }
-                        })
-                        .setOnCancelListener(dialog -> {
-                            Toast.makeText(mContext, "vpn_setup_failed", Toast.LENGTH_LONG).show();
-                            mListener.onCaptureStartResult(false);
-                        })
-                        .show();
+            if (mLauncher != null) {
+                try {
+                    mLauncher.launch(vpnPrepareIntent);
+                } catch (ActivityNotFoundException e) {
+                    Utils.showToastLong(mContext, R.string.no_intent_handler_found);
+                    mListener.onCaptureStartResult(false);
+                }
+            }
             else if (mListener != null)
                 mListener.onCaptureStartResult(false);
         } else

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -19,75 +18,93 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:titleTextColor="@color/colorToolbarText" />
 
-    <LinearLayout
-        android:id="@+id/fragment_container"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/layout_logo"
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/app_icon"
+            <LinearLayout
+                android:id="@+id/layout_logo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
-                android:src="@mipmap/main_image"
-                app:srcCompat="@mipmap/main_image" />
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="2dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/app_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="4dp"
+                    android:src="@mipmap/main_image"
+                    app:srcCompat="@mipmap/main_image" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/app_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6sp"
+                        android:layout_weight="0"
+                        android:gravity="center"
+                        android:text="@string/app_brand"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/AppVersion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_weight="0"
+                        android:text="@string/app_version"
+                        android:textAlignment="center"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/app_title"
-                android:layout_width="wrap_content"
+                android:id="@+id/AppLicense"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/app_brand"
-                android:textSize="32dp" />
+                android:layout_marginBottom="16dp"
+                android:text="@string/ia_license"
+                android:textAlignment="center" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <TextView
+                    android:id="@+id/app_gpl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="AppGPL" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/AppVersion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/app_version"
-            android:textAlignment="center"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/AppLicense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/ia_license"
-            android:textAlignment="center" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-
-        <TextView
-            android:id="@+id/app_gpl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="AppGPL" />
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </LinearLayout>

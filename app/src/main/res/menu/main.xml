@@ -4,8 +4,15 @@
     tools:context="com.antest1.kcanofity.MainActivity" >
 
     <item
+        android:id="@+id/action_manual"
+        android:icon="@drawable/ic_help"
+        android:orderInCategory="99"
+        android:title="@string/action_manual"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_settings"
-        android:icon="@mipmap/ic_settings"
+        android:icon="@drawable/ic_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="always" />

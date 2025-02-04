@@ -25,8 +25,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/background"
-            android:orientation="vertical"
+                    android:orientation="vertical"
             android:padding="5dp">
 
 
@@ -66,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
-                        app:srcCompat="@mipmap/ic_arrow_down" />
+                        app:srcCompat="@drawable/ic_arrow_down" />
 
                     <TextView
                         android:id="@+id/fleetlist_fp"
@@ -156,7 +155,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:src="@mipmap/ic_cancel" />
+                    android:src="@drawable/ic_cancel" />
             </RelativeLayout>
 
             <ImageView

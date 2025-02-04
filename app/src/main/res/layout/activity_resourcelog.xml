@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -115,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="0"
-                    app:srcCompat="@mipmap/ic_arrow_up" />
+                    app:srcCompat="@drawable/ic_arrow_up" />
 
             </LinearLayout>
 

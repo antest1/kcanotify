@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -44,7 +43,7 @@ import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
-public class ShipInfoActivity extends AppCompatActivity {
+public class ShipInfoActivity extends BaseActivity {
     static final int SHIPINFO_GET_SORT_KEY = 1;
     static final int SHIPINFO_GET_FILTER_RESULT = 2;
     static final int SHIPINFO_SET_QUERY = 3;
@@ -68,18 +67,13 @@ public class ShipInfoActivity extends AppCompatActivity {
     Button export_clipboard_1, export_openpage_1;
     Button export_clipboard_2, export_openpage_2;
 
-
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipinfo_list);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.action_shipinfo));
+        getSupportActionBar().setTitle(getString(R.string.action_shipinfo));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -166,14 +160,14 @@ public class ShipInfoActivity extends AppCompatActivity {
         adapter.setNationality(getNationalityData());
         adapter.setListViewItemList(data, deckdata, sortkey, filtcond, special_equip, ship_status, ship_nat);
 
-        totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_format), adapter.getCount()));
-        totalexpview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_exp_format), adapter.getTotalExp()));
+        totalcountview.setText(KcaUtils.format(getString(R.string.shipinfo_btn_total_format), adapter.getCount()));
+        totalexpview.setText(KcaUtils.format(getString(R.string.shipinfo_btn_total_exp_format), adapter.getTotalExp()));
         setButtonStyle(searchButton, is_search_on);
         findViewById(R.id.shipinfo_search_area).setVisibility(View.GONE);
 
         export_popup = findViewById(R.id.export_popup);
         ((TextView) export_popup.findViewById(R.id.export_title))
-                .setText(getStringWithLocale(R.string.shipinfo_export_title));
+                .setText(getString(R.string.shipinfo_export_title));
         export_popup.setVisibility(View.GONE);
 
         export_exit = export_popup.findViewById(R.id.export_exit);
@@ -186,27 +180,27 @@ public class ShipInfoActivity extends AppCompatActivity {
         });
 
         export_clipboard_1 = export_popup.findViewById(R.id.export_clipboard_1);
-        export_clipboard_1.setText(getStringWithLocale(R.string.shipinfo_export_clipboard));
+        export_clipboard_1.setText(getString(R.string.shipinfo_export_clipboard));
         export_clipboard_1.setOnClickListener(v -> {
             ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             clip.setPrimaryClip(ClipData.newPlainText("text", export_kanmusu_list));
             doVibrate(vibrator, 100);
             Toast.makeText(getApplicationContext(),
-                    getStringWithLocale(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
+                    getString(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
         });
 
         export_clipboard_2 = export_popup.findViewById(R.id.export_clipboard_2);
-        export_clipboard_2.setText(getStringWithLocale(R.string.shipinfo_export_clipboard));
+        export_clipboard_2.setText(getString(R.string.shipinfo_export_clipboard));
         export_clipboard_2.setOnClickListener(v -> {
             ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             clip.setPrimaryClip(ClipData.newPlainText("text", export_seikuuken));
             doVibrate(vibrator, 100);
             Toast.makeText(getApplicationContext(),
-                    getStringWithLocale(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
+                    getString(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
         });
 
         export_openpage_1 = export_popup.findViewById(R.id.export_openpage_1);
-        export_openpage_1.setText(getStringWithLocale(R.string.shipinfo_export_openpage));
+        export_openpage_1.setText(getString(R.string.shipinfo_export_openpage));
         export_openpage_1.setOnClickListener(v -> {
             String encoded = KcaUtils.encode64(export_kanmusu_list);
             Intent bIntent = new Intent(Intent.ACTION_VIEW,
@@ -215,7 +209,7 @@ public class ShipInfoActivity extends AppCompatActivity {
         });
 
         export_openpage_2 = export_popup.findViewById(R.id.export_openpage_2);
-        export_openpage_2.setText(getStringWithLocale(R.string.shipinfo_export_openpage));
+        export_openpage_2.setText(getString(R.string.shipinfo_export_openpage));
         export_openpage_2.setOnClickListener(v -> {
             Intent bIntent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse("https://noro6.github.io/kc-web/#/manager"));
@@ -262,8 +256,8 @@ public class ShipInfoActivity extends AppCompatActivity {
         }
         adapter.notifyDataSetChanged();
         listview.setAdapter(adapter);
-        totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_format), adapter.getCount()));
-        totalexpview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_exp_format), adapter.getTotalExp()));
+        totalcountview.setText(KcaUtils.format(getString(R.string.shipinfo_btn_total_format), adapter.getCount()));
+        totalexpview.setText(KcaUtils.format(getString(R.string.shipinfo_btn_total_exp_format), adapter.getTotalExp()));
     }
 
     private void setSearchResult(String query) {

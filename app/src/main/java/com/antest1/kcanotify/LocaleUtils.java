@@ -19,12 +19,10 @@ public class LocaleUtils {
         sLocale = locale;
         if(sLocale != null) {
             Locale.setDefault(sLocale);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                Resources res = base_context.getResources();
-                Configuration config = new Configuration(res.getConfiguration());
-                config.locale = sLocale;
-                res.updateConfiguration(config, res.getDisplayMetrics());
-            }
+            Resources res = base_context.getResources();
+            Configuration config = new Configuration(res.getConfiguration());
+            config.locale = sLocale;
+            res.updateConfiguration(config, res.getDisplayMetrics());
         }
     }
 

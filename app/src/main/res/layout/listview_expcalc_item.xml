@@ -203,8 +203,8 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_margin="4dp"
-            android:src="@mipmap/ic_cancel"
-            app:srcCompat="@mipmap/ic_cancel" />
+            android:src="@drawable/ic_cancel"
+            app:srcCompat="@drawable/ic_cancel" />
     </LinearLayout>
 
 </LinearLayout>

@@ -39,7 +39,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
-public class KcaFairySelectActivity extends AppCompatActivity {
+public class KcaFairySelectActivity extends BaseActivity {
     public final static String FAIRY_INFO_FILENAME = "icon_info.json";
     public final static boolean FAIRY_SPECIAL_FLAG = false;
     public final static int FAIRY_SPECIAL_PREFIX = 900;
@@ -59,17 +59,13 @@ public class KcaFairySelectActivity extends AppCompatActivity {
         sHandler = h;
     }
 
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_fairy);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.setting_menu_kand_title_fairy_select));
+        getSupportActionBar().setTitle(getString(R.string.setting_menu_kand_title_fairy_select));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -78,7 +74,7 @@ public class KcaFairySelectActivity extends AppCompatActivity {
         PRDownloader.initialize(getApplicationContext());
 
         mProgressDialog = new ProgressDialog(KcaFairySelectActivity.this);
-        mProgressDialog.setMessage(getStringWithLocale(R.string.download_progress));
+        mProgressDialog.setMessage(getString(R.string.download_progress));
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setCancelable(false);
@@ -110,27 +106,24 @@ public class KcaFairySelectActivity extends AppCompatActivity {
             adapter.setPrevActive(Integer.parseInt(pref_value));
         }
 
-        gv = (GridView)findViewById(R.id.fairy_gridview);
+        gv = findViewById(R.id.fairy_gridview);
         gv.setAdapter(adapter);
-        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int value = Integer.parseInt(fairy_id.get(position).replace("noti_icon_", ""));
-                setPreferences(getApplicationContext(), PREF_FAIRY_REV, 0);
-                setPreferences(getApplicationContext(), PREF_FAIRY_ICON, String.valueOf(value));
-                if (KcaService.getServiceStatus()) {
-                    JsonObject data = new JsonObject();
-                    data.addProperty("id", value);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("url", KCA_API_PREF_FAIRY_CHANGED);
-                    bundle.putString("data", data.toString());
-                    Message sMsg = sHandler.obtainMessage();
-                    sMsg.setData(bundle);
-                    sHandler.sendMessage(sMsg);
-                }
-                adapter.setPrevActive(position);
-                gv.invalidateViews();
+        gv.setOnItemClickListener((parent, view, position, id) -> {
+            int value = Integer.parseInt(fairy_id.get(position).replace("noti_icon_", ""));
+            setPreferences(getApplicationContext(), PREF_FAIRY_REV, 0);
+            setPreferences(getApplicationContext(), PREF_FAIRY_ICON, String.valueOf(value));
+            if (KcaService.getServiceStatus()) {
+                JsonObject data = new JsonObject();
+                data.addProperty("id", value);
+                Bundle bundle = new Bundle();
+                bundle.putString("url", KCA_API_PREF_FAIRY_CHANGED);
+                bundle.putString("data", data.toString());
+                Message sMsg = sHandler.obtainMessage();
+                sMsg.setData(bundle);
+                sHandler.sendMessage(sMsg);
             }
+            adapter.setPrevActive(position);
+            gv.invalidateViews();
         });
     }
 

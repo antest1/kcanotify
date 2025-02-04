@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,7 +35,6 @@ import static com.antest1.kcanotify.KcaApiData.isExpeditionDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_NOTI;
-import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_NOTICOUNT_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_UPDATE_FRONTVIEW;
@@ -68,7 +66,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setSoundSetting;
 
-public class KcaAlarmService extends Service {
+public class KcaAlarmService extends BaseService {
     public static final int TYPE_EXPEDITION = 1;
     public static final int TYPE_DOCKING = 2;
     public static final int TYPE_UPDATE = 3;
@@ -116,10 +114,6 @@ public class KcaAlarmService extends Service {
 
     private boolean isAkashiAlarmEnabled() {
         return getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_AKASHI);
-    }
-
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
     public static int getAlarmCount() {
@@ -244,7 +238,7 @@ public class KcaAlarmService extends Service {
                     } else if (type == TYPE_AKASHI) {
                         if (isAkashiAlarmEnabled()) {
                             int nid = getNotificationId(NOTI_AKASHI, 0);
-                            if (KcaAkashiRepairInfo.getAkashiInFlasship()) {
+                            if (KcaAkashiRepairInfo.getAkashiInAnyFlagship()) {
                                 show_notification(nid, createAkashiRepairNotification(nid));
                                 alarm_set.add(nid);
                             }
@@ -297,7 +291,7 @@ public class KcaAlarmService extends Service {
             String channel_name = createAlarmId(uri, soundKind);
             alarmChannelList.add(channel_name);
             NotificationChannel channel = new NotificationChannel(alarmChannelList.peek(),
-                    getStringWithLocale(R.string.notification_appinfo_title), NotificationManager.IMPORTANCE_HIGH);
+                    getString(R.string.notification_appinfo_title), NotificationManager.IMPORTANCE_HIGH);
 
             if (isSound && uri.length() > 0) {
                 AudioAttributes.Builder attrs = new AudioAttributes.Builder();
@@ -342,14 +336,14 @@ public class KcaAlarmService extends Service {
         String content = "";
         String missionNoStr = KcaExpedition2.getExpeditionStr(missionNo);
         if (cancelFlag) {
-            title = KcaUtils.format(getStringWithLocale(R.string.kca_noti_title_exp_canceled), missionNoStr, missionName);
-            content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_exp_canceled), kantaiName, missionNoStr);
+            title = KcaUtils.format(getString(R.string.kca_noti_title_exp_canceled), missionNoStr, missionName);
+            content = KcaUtils.format(getString(R.string.kca_noti_content_exp_canceled), kantaiName, missionNoStr);
         } else {
-            title = KcaUtils.format(getStringWithLocale(R.string.kca_noti_title_exp_finished), missionNoStr, missionName);
+            title = KcaUtils.format(getString(R.string.kca_noti_title_exp_finished), missionNoStr, missionName);
             if (caFlag)
-                content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_canceled), kantaiName, missionNoStr);
+                content = KcaUtils.format(getString(R.string.kca_noti_content_exp_finished_canceled), kantaiName, missionNoStr);
             else
-                content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_normal), kantaiName, missionNoStr);
+                content = KcaUtils.format(getString(R.string.kca_noti_content_exp_finished_normal), kantaiName, missionNoStr);
 
         }
 
@@ -386,12 +380,12 @@ public class KcaAlarmService extends Service {
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
                 new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        String title = KcaUtils.format(getStringWithLocale(R.string.kca_noti_title_dock_finished), dockId + 1);
+        String title = KcaUtils.format(getString(R.string.kca_noti_title_dock_finished), dockId + 1);
         String content = "";
         if (shipName.length() > 0) {
-            content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_dock_finished), dockId + 1, shipName);
+            content = KcaUtils.format(getString(R.string.kca_noti_content_dock_finished), dockId + 1, shipName);
         } else {
-            content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_dock_finished_nodata), dockId + 1);
+            content = KcaUtils.format(getString(R.string.kca_noti_content_dock_finished_nodata), dockId + 1);
         }
 
         Bitmap dockBitmap = KcaUtils.decodeSampledBitmapFromResource(getResources(),  R.mipmap.docking_notify_bigicon, NOTI_ICON_SIZE, NOTI_ICON_SIZE);
@@ -429,8 +423,8 @@ public class KcaAlarmService extends Service {
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
                 new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        String title = KcaUtils.format(getStringWithLocale(R.string.kca_noti_title_morale_recovered), idx + 1);
-        String content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_morale_recovered), kantaiName);
+        String title = KcaUtils.format(getString(R.string.kca_noti_title_morale_recovered), idx + 1);
+        String content = KcaUtils.format(getString(R.string.kca_noti_content_morale_recovered), kantaiName);
 
         Bitmap moraleBitmap = KcaUtils.decodeSampledBitmapFromResource(getResources(),  R.mipmap.morale_notify_bigicon, NOTI_ICON_SIZE, NOTI_ICON_SIZE);
         NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
@@ -467,8 +461,8 @@ public class KcaAlarmService extends Service {
                 new Intent(this, KcaAlarmService.class)
                         .setAction(DELETE_ACTION.concat(String.valueOf(nid))),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        String title = getStringWithLocale(R.string.kca_noti_title_akashirepair_recovered);
-        String content = getStringWithLocale(R.string.kca_noti_content_akashirepair_recovered);
+        String title = getString(R.string.kca_noti_title_akashirepair_recovered);
+        String content = getString(R.string.kca_noti_content_akashirepair_recovered);
 
         Bitmap akashiRepairBitmap = KcaUtils.decodeSampledBitmapFromResource(getResources(),  R.mipmap.docking_akashi_notify_bigicon, NOTI_ICON_SIZE, NOTI_ICON_SIZE);
         NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
@@ -515,7 +509,7 @@ public class KcaAlarmService extends Service {
                 title_text_id = R.string.ma_hasupdate;
                 break;
         }
-        String title = getStringWithLocale(title_text_id).replace("(%s)", "").trim();
+        String title = getString(title_text_id).replace("(%s)", "").trim();
         String content = version;
 
         Bitmap updateBitmap = KcaUtils.decodeSampledBitmapFromResource(getResources(),

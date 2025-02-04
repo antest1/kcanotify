@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.os.Message;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -64,7 +63,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
-public class UpdateCheckActivity extends AppCompatActivity {
+public class UpdateCheckActivity extends BaseActivity {
     public static final int LOAD_DELAY = 500;
 
     Toolbar toolbar;
@@ -90,10 +89,6 @@ public class UpdateCheckActivity extends AppCompatActivity {
     UpdateHandler handler;
     public KcaDownloader downloader;
     Type listType = new TypeToken<ArrayList<JsonObject>>(){}.getType();
-
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
 
     private String getVersionString(int current, int latest) {
         if (current == latest) {
@@ -123,7 +118,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.setting_menu_kand_title_game_data_down));
+        getSupportActionBar().setTitle(getString(R.string.setting_menu_kand_title_game_data_down));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
@@ -148,7 +143,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
             if (isChecked) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(UpdateCheckActivity.this);
                 alertDialog.setMessage(getString(R.string.download_reset_message));
-                alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
+                alertDialog.setPositiveButton(getString(R.string.dialog_ok),
                         (dialog, which) -> {
                             dbHelper.clearResVer();
                             setPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION, 0);
@@ -157,7 +152,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
                             startActivity(mainIntent);
                             finish();
                         });
-                alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel),
+                alertDialog.setNegativeButton(getString(R.string.dialog_cancel),
                         (dialog, which) -> {
                             resource_reset.setChecked(false);
                             dialog.dismiss();
@@ -188,7 +183,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
 
 
         gamedata_server = findViewById(R.id.gamedata_server);
-        gamedata_server.setText(getStringWithLocale(R.string.action_server));
+        gamedata_server.setText(getString(R.string.action_server));
         gamedata_server.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -196,7 +191,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
                 String[] listItems = getResources().getStringArray(R.array.ServerLocation);
                 String[] listEntry = getResources().getStringArray(R.array.ServerLocationValue);
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(UpdateCheckActivity.this);
-                mBuilder.setTitle(getStringWithLocale(R.string.setting_menu_app_title_updatecheckserver));
+                mBuilder.setTitle(getString(R.string.setting_menu_app_title_updatecheckserver));
                 String currentServer = getStringPreferences(getApplicationContext(), PREF_UPDATE_SERVER);
                 for (int i = 0; i < listEntry.length; i++) if (currentServer.equals(listEntry[i])) {
                     checked = i;
@@ -206,14 +201,14 @@ public class UpdateCheckActivity extends AppCompatActivity {
                 mBuilder.setSingleChoiceItems(listItems, checked, (dialog, which) -> {
                     checked = which;
                 });
-                mBuilder.setPositiveButton(getStringWithLocale(R.string.dialog_ok), (dialog, which) -> {
+                mBuilder.setPositiveButton(getString(R.string.dialog_ok), (dialog, which) -> {
                     Log.e("KCA", "selected: " + checked);
                     if (checked != -1) {
                         String selectedServer = listEntry[checked];
                         setPreferences(getApplicationContext(), PREF_UPDATE_SERVER, selectedServer);
                     }
                 });
-                mBuilder.setNegativeButton(getStringWithLocale(R.string.dialog_cancel), ((dialog, which) -> {
+                mBuilder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> {
                     checked = initValue;
                 }));
 
@@ -431,7 +426,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
                             KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, server_kca_version);
                             KcaApiData.setDataLoadTriggered();
                             Toast.makeText(getApplicationContext(),
-                                    getStringWithLocale(R.string.sa_getupdate_finished),
+                                    getString(R.string.sa_getupdate_finished),
                                     Toast.LENGTH_LONG).show();
 
                             JsonObject gamedata = gamedata_info.get(0);
@@ -444,7 +439,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
                             gamedata_adapter.notifyDataSetChanged();
                         } else {
                             Toast.makeText(getApplicationContext(),
-                                    getStringWithLocale(R.string.kca_toast_inconsistent_data),
+                                    getString(R.string.kca_toast_inconsistent_data),
                                     Toast.LENGTH_LONG).show();;
                         }
                     }
@@ -460,7 +455,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
             public void onFailure(Call<String> call, Throwable t) {
                 if (KcaUtils.checkOnline(getApplicationContext())) {
                     Toast.makeText(getApplicationContext(),
-                            KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), t.getMessage()),
+                            KcaUtils.format(getString(R.string.sa_getupdate_servererror), t.getMessage()),
                             Toast.LENGTH_LONG).show();;
                     dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "fairy_queue", "", "", t.getMessage());
                 }
@@ -544,7 +539,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             mProgressDialog = new ProgressDialog(UpdateCheckActivity.this);
-            mProgressDialog.setMessage(getStringWithLocale(R.string.download_progress));
+            mProgressDialog.setMessage(getString(R.string.download_progress));
             mProgressDialog.setIndeterminate(true);
             mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             mProgressDialog.setCancelable(false);

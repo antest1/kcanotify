@@ -3,7 +3,6 @@ package com.antest1.kcanotify;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +24,7 @@ import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 
-public class AkashiFilterActivity extends AppCompatActivity {
+public class AkashiFilterActivity extends BaseActivity {
     Toolbar toolbar;
     private static Handler sHandler;
     static Gson gson = new Gson();
@@ -37,17 +36,13 @@ public class AkashiFilterActivity extends AppCompatActivity {
         sHandler = h;
     }
 
-    private String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_akashi_filter);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.action_akashi_filter));
+        getSupportActionBar().setTitle(getString(R.string.action_akashi_filter));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final String filter = getStringPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST);

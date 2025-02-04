@@ -1,8 +1,8 @@
 package com.antest1.kcanotify;
 
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.IBinder;
@@ -59,7 +59,7 @@ import static com.antest1.kcanotify.KcaUtils.getTimeStr;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 
-public class KcaExpeditionCheckViewService extends Service {
+public class KcaExpeditionCheckViewService extends BaseService {
     public static final String SHOW_EXCHECKVIEW_ACTION = "show_excheckview";
     final int[] expedition_list = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
             21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 35, 36, 37, 38, 39, 40,
@@ -71,16 +71,14 @@ public class KcaExpeditionCheckViewService extends Service {
             {5.4, 5.6, 5.8, 5.9, 6.0}
     };
 
-    public static boolean active;
     static boolean error_flag = false;
-    Context contextWithLocale;
     int displayWidth = 0;
     public KcaDBHelper dbHelper;
-    private View mView, itemView;
-    LayoutInflater mInflater;
-    private WindowManager mManager;
-    WindowManager.LayoutParams mParams;
+    private View layoutView, itemView;
+    private WindowManager windowManager;
+    WindowManager.LayoutParams layoutParams;
 
+    int intentSelection = 1;
     int selected = 1;
     int world = 1;
     int button = 0;
@@ -90,8 +88,9 @@ public class KcaExpeditionCheckViewService extends Service {
     List<Integer> expedition_data = new ArrayList<>();
     Map<String, JsonObject> checkdata;
 
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
+    public static boolean active = false;
+    public static boolean isActive() {
+        return active;
     }
 
     private void updateSelectedView(int idx, int world) {
@@ -99,29 +98,29 @@ public class KcaExpeditionCheckViewService extends Service {
             int view_id = getId("expd_btn_".concat(String.valueOf(i)), R.id.class);
             if (i < expedition_data.size()) {
                 int value = expedition_data.get(i);
-                ((TextView) mView.findViewById(view_id)).setText(KcaExpedition2.getExpeditionStr(value));
-                mView.findViewById(view_id).setVisibility(View.VISIBLE);
+                ((TextView) layoutView.findViewById(view_id)).setText(KcaExpedition2.getExpeditionStr(value));
+                layoutView.findViewById(view_id).setVisibility(View.VISIBLE);
             } else {
-                mView.findViewById(view_id).setVisibility(View.INVISIBLE);
+                layoutView.findViewById(view_id).setVisibility(View.INVISIBLE);
             }
         }
 
         for (int i = 1; i <= 7; i++) {
             int view_id = getId("expd_world_" + i, R.id.class);
             if (world == i) {
-                ((Chip)mView.findViewById(view_id)).setChipBackgroundColorResource(getId("colorExpeditionTable" + i, R.color.class));
+                ((Chip) layoutView.findViewById(view_id)).setChipBackgroundColorResource(getId("colorExpeditionTable" + i, R.color.class));
             } else {
-                ((Chip)mView.findViewById(view_id)).setChipBackgroundColorResource(R.color.transparent);
+                ((Chip) layoutView.findViewById(view_id)).setChipBackgroundColorResource(R.color.transparent);
             }
         }
 
         for (int i = 1; i < 4; i++) {
             int view_id = getId("fleet_".concat(String.valueOf(i + 1)), R.id.class);
             if (idx == i) {
-                mView.findViewById(view_id).setBackgroundColor(
+                layoutView.findViewById(view_id).setBackgroundColor(
                         ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
             } else {
-                mView.findViewById(view_id).setBackgroundColor(
+                layoutView.findViewById(view_id).setBackgroundColor(
                         ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
             }
         }
@@ -136,51 +135,96 @@ public class KcaExpeditionCheckViewService extends Service {
         if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
-        }
-
-        try {
-            active = true;
-            ship_data = new ArrayList<>();
-            checkdata = new HashMap<>();
-            dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-            contextWithLocale = KcaUtils.getContextWithLocale(getApplicationContext(), getBaseContext());
-            contextWithLocale = new ContextThemeWrapper(contextWithLocale, R.style.AppTheme);
-            mInflater = LayoutInflater.from(contextWithLocale);
-            mView = mInflater.inflate(R.layout.view_excheck_list, null);
-            KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
-            mView.setVisibility(View.GONE);
-
-            itemView = mView.findViewById(R.id.view_excheck_detail);
-            mParams = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    getWindowLayoutType(),
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                    PixelFormat.TRANSLUCENT);
-            mParams.gravity = Gravity.CENTER;
-
-            mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-            mManager.addView(mView, mParams);
-
-            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            displayWidth = size.x;
-        } catch (Exception e) {
-            e.printStackTrace();
-            active = false;
-            error_flag = true;
-            stopSelf();
+        } else {
+            try {
+                active = true;
+                ship_data = new ArrayList<>();
+                checkdata = new HashMap<>();
+                windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+                dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+            } catch (Exception e) {
+                e.printStackTrace();
+                active = false;
+                error_flag = true;
+                stopSelf();
+            }
         }
     }
 
     @Override
     public void onDestroy() {
         active = false;
-        if (mView != null) {
-            if (mView.getParent() != null) mManager.removeViewImmediate(mView);
+        if (windowManager != null && checkLayoutExist()) {
+            windowManager.removeViewImmediate(layoutView);
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (windowManager != null && checkLayoutExist()) {
+            windowManager.removeViewImmediate(layoutView);
+        }
+    }
+
+    private boolean checkLayoutExist() {
+        return layoutView != null && layoutView.getParent() != null;
+    }
+
+    private void setViewLayout() {
+        if (checkLayoutExist()) return;
+
+        Context context = new ContextThemeWrapper(this, R.style.AppTheme);
+        LayoutInflater mInflater = LayoutInflater.from(context);
+
+        layoutView = mInflater.inflate(R.layout.view_excheck_list, null);
+        itemView = layoutView.findViewById(R.id.view_excheck_detail);
+        layoutView.findViewById(R.id.excheckview_head).setOnClickListener(mViewClickListener);
+        layoutView.findViewById(R.id.excheck_detail_reward).setOnClickListener(mViewClickListener);
+        KcaUtils.resizeFullWidthView(getApplicationContext(), layoutView);
+        layoutView.setVisibility(View.GONE);
+
+        setPopupContent();
+
+        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        displayWidth = size.x;
+
+        if (layoutParams == null) {
+            layoutParams = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    getWindowLayoutType(),
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    PixelFormat.TRANSLUCENT);
+            layoutParams.gravity = Gravity.CENTER;
+        }
+        windowManager.addView(layoutView, layoutParams);
+    }
+
+    private void setPopupContent() {
+        if (intentSelection < 1) intentSelection = 1;
+        else if (intentSelection > 3) intentSelection = 2;
+        if (intentSelection < deckdata.size()) {
+            selected = intentSelection;
+        }
+
+        clearItemViewLayout();
+        int setViewResult = setView();
+
+        Log.e("KCA", "show_excheckview_action " + setViewResult);
+        for (int i = 1; i < 4; i++) {
+            layoutView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnClickListener(fleetChipOnClickListener);
+        }
+        for (int i = 1; i <= 7; i++) {
+            layoutView.findViewById(getId("expd_world_".concat(String.valueOf(i)), R.id.class)).setOnClickListener(mViewClickListener);
+        }
+        for (int i = 0; i < 15; i++) {
+            layoutView.findViewById(KcaUtils.getId("expd_btn_".concat(String.valueOf(i)), R.id.class)).setOnClickListener(mViewClickListener);
+        }
+        layoutView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -193,36 +237,9 @@ public class KcaExpeditionCheckViewService extends Service {
             if (intent.getAction().startsWith(SHOW_EXCHECKVIEW_ACTION)) {
                 deckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
                 if (deckdata != null && deckdata.size() >= 2) {
-                    int selected_new = Integer.parseInt(intent.getAction().split("/")[1]);
-                    if (selected_new < 1) selected_new = 1;
-                    else if (selected_new > 3) selected_new = 2;
-                    if (selected_new < deckdata.size()) {
-                        selected = selected_new;
-                    }
-                    clearItemViewLayout();
-                    int setViewResult = setView();
-                    if (setViewResult == 0) {
-                        if (mView.getParent() != null) {
-                            mManager.removeViewImmediate(mView);
-                        }
-                        mManager.addView(mView, mParams);
-                    }
-                    Log.e("KCA", "show_excheckview_action " + String.valueOf(setViewResult));
-                    mView.findViewById(R.id.excheckview_head).setOnClickListener(mViewClickListener);
-                    mView.findViewById(R.id.excheck_detail_reward).setOnClickListener(mViewClickListener);
-                    for (int i = 1; i < 4; i++) {
-                        mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnClickListener(fleetChipOnClickListener);
-                    }
-                    for (int i = 1; i <= 7; i++) {
-                        mView.findViewById(getId("expd_world_".concat(String.valueOf(i)), R.id.class)).setOnClickListener(mViewClickListener);
-                    }
-                    for (int i = 0; i < 15; i++) {
-                        mView.findViewById(KcaUtils.getId("expd_btn_".concat(String.valueOf(i)), R.id.class)).setOnClickListener(mViewClickListener);
-                    }
-                    mView.setVisibility(View.VISIBLE);
-                } else {
-                    stopSelf();
-                }
+                    intentSelection = Integer.parseInt(intent.getAction().split("/")[1]);
+                    setViewLayout();
+                } else stopSelf();
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -316,7 +333,7 @@ public class KcaExpeditionCheckViewService extends Service {
 
         result.addProperty("flag-cond", true);
         if (has_flag_cond) {
-            if (ship_data.size() > 0) {
+            if (!ship_data.isEmpty()) {
                 boolean is_flag_passed = false;
                 int flag_ship_id = ship_data.get(0).get("ship_id").getAsInt();
                 int flag_conv_value = ship_data.get(0).get("stype").getAsInt();
@@ -626,7 +643,7 @@ public class KcaExpeditionCheckViewService extends Service {
         String[] ship_count = str.split("\\-");
         String ship_concat;
         if (ship_count[0].equals("7,11,16,18")) {
-            ship_concat = getStringWithLocale(R.string.excheckview_ship_cvs);
+            ship_concat = getString(R.string.excheckview_ship_cvs);
         } else {
             String[] ship = ship_count[0].split(",");
             List<String> ship_list = new ArrayList<>();
@@ -776,7 +793,7 @@ public class KcaExpeditionCheckViewService extends Service {
                 .setText(getTimeStr(time));
 
         ((TextView) itemView.findViewById(R.id.view_excheck_fleet_total_num))
-                .setText(KcaUtils.format(getStringWithLocale(R.string.excheckview_total_num_format), total_num));
+                .setText(KcaUtils.format(getString(R.string.excheckview_total_num_format), total_num));
         setItemTextViewColorById(R.id.view_excheck_fleet_total_num,
                 check.get("total-num").getAsBoolean(), false);
 
@@ -786,7 +803,7 @@ public class KcaExpeditionCheckViewService extends Service {
             if (has_flag_lv) {
                 int flag_lv = data.get("flag-lv").getAsInt();
                 setItemTextViewById(R.id.view_excheck_flagship_lv,
-                        KcaUtils.format(getStringWithLocale(R.string.excheckview_flag_lv_format), flag_lv));
+                        KcaUtils.format(getString(R.string.excheckview_flag_lv_format), flag_lv));
                 setItemTextViewColorById(R.id.view_excheck_flagship_lv,
                         check.get("flag-lv").getAsBoolean(), false);
             }
@@ -808,7 +825,7 @@ public class KcaExpeditionCheckViewService extends Service {
         if (has_total_lv) {
             int total_lv = data.get("total-lv").getAsInt();
             setItemTextViewById(R.id.view_excheck_fleet_total_lv,
-                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_lv_format), total_lv));
+                    KcaUtils.format(getString(R.string.excheckview_total_lv_format), total_lv));
             setItemTextViewColorById(R.id.view_excheck_fleet_total_lv,
                     check.get("total-lv").getAsBoolean(), false);
         }
@@ -827,7 +844,7 @@ public class KcaExpeditionCheckViewService extends Service {
             if (has_drum_ship) {
                 int drum_ship = data.get("drum-ship").getAsInt();
                 setItemTextViewById(R.id.view_excheck_drum_ship,
-                        KcaUtils.format(getStringWithLocale(R.string.excheckview_drum_ship_format), drum_ship));
+                        KcaUtils.format(getString(R.string.excheckview_drum_ship_format), drum_ship));
                 setItemTextViewColorById(R.id.view_excheck_drum_ship,
                         check.get("drum-ship").getAsBoolean(), false);
             }
@@ -835,13 +852,13 @@ public class KcaExpeditionCheckViewService extends Service {
             if (has_drum_num) {
                 int drum_num = data.get("drum-num").getAsInt();
                 setItemTextViewById(R.id.view_excheck_drum_count,
-                        KcaUtils.format(getStringWithLocale(R.string.excheckview_drum_num_format), drum_num));
+                        KcaUtils.format(getString(R.string.excheckview_drum_num_format), drum_num));
                 setItemTextViewColorById(R.id.view_excheck_drum_count,
                         check.get("drum-num").getAsBoolean(), false);
             } else if (has_drum_num_optional) {
                 int drum_num = data.get("drum-num-optional").getAsInt();
                 setItemTextViewById(R.id.view_excheck_drum_count,
-                        KcaUtils.format(getStringWithLocale(R.string.excheckview_drum_num_format), drum_num));
+                        KcaUtils.format(getString(R.string.excheckview_drum_num_format), drum_num));
                 setItemTextViewColorById(R.id.view_excheck_drum_count,
                         check.get("drum-num").getAsBoolean(), true);
             }
@@ -851,7 +868,7 @@ public class KcaExpeditionCheckViewService extends Service {
         if (has_total_asw) {
             int total_asw = data.get("total-asw").getAsInt();
             setItemTextViewById(R.id.view_excheck_total_asw,
-                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_asw));
+                    KcaUtils.format(getString(R.string.excheckview_total_format), total_asw));
             setItemTextViewColorById(R.id.view_excheck_total_asw,
                     check.get("total-asw").getAsBoolean(), false);
         }
@@ -860,7 +877,7 @@ public class KcaExpeditionCheckViewService extends Service {
         if (has_total_fp) {
             int total_fp = data.get("total-fp").getAsInt();
             setItemTextViewById(R.id.view_excheck_total_fp,
-                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_fp));
+                    KcaUtils.format(getString(R.string.excheckview_total_format), total_fp));
             setItemTextViewColorById(R.id.view_excheck_total_fp,
                     check.get("total-fp").getAsBoolean(), false);
         }
@@ -869,7 +886,7 @@ public class KcaExpeditionCheckViewService extends Service {
         if (has_total_los) {
             int total_los = data.get("total-los").getAsInt();
             setItemTextViewById(R.id.view_excheck_total_los,
-                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_los));
+                    KcaUtils.format(getString(R.string.excheckview_total_format), total_los));
             setItemTextViewColorById(R.id.view_excheck_total_los,
                     check.get("total-los").getAsBoolean(), false);
         }
@@ -878,7 +895,7 @@ public class KcaExpeditionCheckViewService extends Service {
         if (has_total_firepower) {
             int total_firepower = data.get("total-firepower").getAsInt();
             setItemTextViewById(R.id.view_excheck_total_firepower,
-                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_firepower));
+                    KcaUtils.format(getString(R.string.excheckview_total_format), total_firepower));
             setItemTextViewColorById(R.id.view_excheck_total_firepower,
                     check.get("total-firepower").getAsBoolean(), false);
         }
@@ -932,14 +949,14 @@ public class KcaExpeditionCheckViewService extends Service {
                         JsonObject check_item = checkdata.get(key);
                         if (check_item != null) {
                             if (check_item.get("pass").getAsBoolean()) {
-                                mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class))
+                                layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class))
                                         .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodBack));
-                                ((TextView) mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
+                                ((TextView) layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
                                         .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodText));
                             } else {
-                                mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class))
+                                layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class))
                                         .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailBack));
-                                ((TextView) mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
+                                ((TextView) layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
                                         .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailText));
                             }
                         }
@@ -952,46 +969,46 @@ public class KcaExpeditionCheckViewService extends Service {
                 List<String> bonus_info_text = new ArrayList<>();
 
                 int total_firepower = bonus_info.get("firepower").getAsInt();
-                bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_firepower), total_firepower));
+                bonus_info_text.add(KcaUtils.format(getString(R.string.excheckview_bonus_firepower), total_firepower));
 
                 int total_asw = bonus_info.get("asw").getAsInt();
-                bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_asw), total_asw));
+                bonus_info_text.add(KcaUtils.format(getString(R.string.excheckview_bonus_asw), total_asw));
 
                 int total_los = bonus_info.get("los").getAsInt();
-                bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_los), total_los));
+                bonus_info_text.add(KcaUtils.format(getString(R.string.excheckview_bonus_los), total_los));
 
                 int drum_count = bonus_info.get("drum").getAsInt();
                 if (drum_count > 0) {
-                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_drum), drum_count));
+                    bonus_info_text.add(KcaUtils.format(getString(R.string.excheckview_bonus_drum), drum_count));
                 } else {
-                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_drum), 0));
+                    bonus_info_text.add(KcaUtils.format(getString(R.string.excheckview_bonus_drum), 0));
                 }
                 if (bonus_info.get("kinu").getAsBoolean())
-                    bonus_info_text.add(getStringWithLocale(R.string.excheckview_bonus_kinu));
+                    bonus_info_text.add(getString(R.string.excheckview_bonus_kinu));
                 int daihatsu_count = bonus_info.get("daihatsu").getAsInt();
                 if (daihatsu_count > 0)
-                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_dlc), daihatsu_count));
+                    bonus_info_text.add(KcaUtils.format(getString(R.string.excheckview_bonus_dlc), daihatsu_count));
                 int tank_count = bonus_info.get("tank").getAsInt();
                 if (tank_count > 0)
-                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_tank), tank_count));
+                    bonus_info_text.add(KcaUtils.format(getString(R.string.excheckview_bonus_tank), tank_count));
                 int amp_count = bonus_info.get("amp").getAsInt();
                 if (amp_count > 0)
-                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_amp), amp_count));
+                    bonus_info_text.add(KcaUtils.format(getString(R.string.excheckview_bonus_amp), amp_count));
                 int toku_count = bonus_info.get("toku").getAsInt();
                 if (toku_count > 0)
-                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_toku), toku_count));
+                    bonus_info_text.add(KcaUtils.format(getString(R.string.excheckview_bonus_toku), toku_count));
                 String bonus_info_content = joinStr(bonus_info_text, " / ");
                 double bonus_value = (double) calculateBonusValue(100, bonus_info, false);
                 if (bonus_value > 100.0) {
-                    bonus_info_content = bonus_info_content.concat(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_result), bonus_value - 100.0));
+                    bonus_info_content = bonus_info_content.concat(KcaUtils.format(getString(R.string.excheckview_bonus_result), bonus_value - 100.0));
                 }
-                ((TextView) mView.findViewById(R.id.excheck_info)).setText(bonus_info_content);
-                mView.findViewById(R.id.excheck_info).setBackgroundColor(
+                ((TextView) layoutView.findViewById(R.id.excheck_info)).setText(bonus_info_content);
+                layoutView.findViewById(R.id.excheck_info).setBackgroundColor(
                         ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpedition));
                 setItemViewLayout(button, bonus_info);
             } else {
-                ((TextView) mView.findViewById(R.id.excheck_info)).setText(getStringWithLocale(R.string.kca_init_content));
-                mView.findViewById(R.id.excheck_info).setBackgroundColor(
+                ((TextView) layoutView.findViewById(R.id.excheck_info)).setText(getString(R.string.kca_init_content));
+                layoutView.findViewById(R.id.excheck_info).setBackgroundColor(
                         ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNoShip));
             }
             return 0;
@@ -1001,22 +1018,22 @@ public class KcaExpeditionCheckViewService extends Service {
         }
     }
 
-    private View.OnClickListener mViewClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mViewClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             int id = v.getId();
-            if (id == mView.findViewById(R.id.excheckview_head).getId()) {
+            if (id == layoutView.findViewById(R.id.excheckview_head).getId()) {
                 stopSelf();
             } else if (checkUserShipDataLoaded()) {
                 JsonObject bonus_info = getBonusInfo();
-                if (id == mView.findViewById(R.id.excheck_detail_reward).getId()) {
+                if (id == layoutView.findViewById(R.id.excheck_detail_reward).getId()) {
                     isGreatSuccess = !isGreatSuccess;
                     setItemViewLayout(button, bonus_info);
                     return;
                 }
 
                 for (int i = 1; i <= 7; i++) {
-                    if (id == mView.findViewById(getId("expd_world_".concat(String.valueOf(i)), R.id.class)).getId()) {
+                    if (id == layoutView.findViewById(getId("expd_world_".concat(String.valueOf(i)), R.id.class)).getId()) {
                         world = i;
                         button = 0;
                         clearItemViewLayout();
@@ -1025,7 +1042,7 @@ public class KcaExpeditionCheckViewService extends Service {
                     }
                 }
                 for (int i = 0; i < 15; i++) {
-                    if (id == mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)).getId()) {
+                    if (id == layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)).getId()) {
                         button = i;
                         setItemViewLayout(button, bonus_info);
                         break;
@@ -1040,7 +1057,7 @@ public class KcaExpeditionCheckViewService extends Service {
         public void onClick(View v) {
             int id = v.getId();
             for (int i = 1; i < 4; i++) {
-                if (id == mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).getId()) {
+                if (id == layoutView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).getId()) {
                     updateFleetChips(i);
                     if (i < deckdata.size()) {
                         selected = i;
@@ -1057,7 +1074,7 @@ public class KcaExpeditionCheckViewService extends Service {
 
     private void updateFleetChips(int newSelected) {
         for (int i = 1; i < 4; i++) {
-            Chip chip = mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class));
+            Chip chip = layoutView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class));
             if (newSelected == i) {
                 chip.setChipStrokeColorResource(R.color.colorAccent);
             } else {

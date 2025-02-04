@@ -1,7 +1,6 @@
 package com.antest1.kcanotify;
 
 import android.content.Context;
-import androidx.annotation.IntegerRes;
 import android.util.Log;
 
 import com.google.common.collect.Collections2;
@@ -38,19 +37,20 @@ public class KcaDeckInfo {
     private static final int SPEEDFLAG_FASTPLUS = 1 << 1;
     private static final int SPEEDFLAG_SUPERFAST = 1 << 0;
     private KcaDBHelper helper;
-    private Context ac, bc;
+    private final Context context;
+    private final Context appContext;
     private static final Gson gson = new Gson();
 
-    public KcaDeckInfo(Context a, Context b) {
-        this.ac = a;
-        this.bc = b;
-        helper = new KcaDBHelper(ac, null, KCANOTIFY_DB_VERSION);
+    public KcaDeckInfo(Context baseContext) {
+        context = baseContext;
+        appContext = baseContext.getApplicationContext();
+        helper = new KcaDBHelper(appContext, null, KCANOTIFY_DB_VERSION);
         KcaApiData.setDBHelper(helper);
-        setDefaultGameData(a, helper);
+        setDefaultGameData(appContext, helper);
     }
 
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(ac, bc, id);
+    public String getStringFromResId(int id) {
+        return context.getString(id);
     }
 
     // Formula 33 (2016.12.26)
@@ -162,12 +162,14 @@ public class KcaDeckInfo {
         }
 
         int deckid = Integer.parseInt(decklist[0]);
-        JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
-        JsonObject seekData = getEachSeekValue(deckShipIdList, deckid, Cn, exclude_flag);
-        pureTotalSeek += seekData.get("pure").getAsDouble();
-        totalEquipSeek += seekData.get("equip").getAsDouble();
-        totalShipSeek += seekData.get("ship").getAsDouble();
-        noShipCount += seekData.get("nscount").getAsInt();
+        if (deckid < deckPortData.size()) {
+            JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
+            JsonObject seekData = getEachSeekValue(deckShipIdList, deckid, Cn, exclude_flag);
+            pureTotalSeek += seekData.get("pure").getAsDouble();
+            totalEquipSeek += seekData.get("equip").getAsDouble();
+            totalShipSeek += seekData.get("ship").getAsDouble();
+            noShipCount += seekData.get("nscount").getAsInt();
+        } // skip for non-existing deck
 
         if (Cn == SEEK_PURE) {
             return pureTotalSeek;
@@ -182,16 +184,16 @@ public class KcaDeckInfo {
         String seekType = "";
         switch (cn) {
             case 1:
-                seekType = getStringWithLocale(R.string.seek_type_1);
+                seekType = getStringFromResId(R.string.seek_type_1);
                 break;
             case 3:
-                seekType = getStringWithLocale(R.string.seek_type_3);
+                seekType = getStringFromResId(R.string.seek_type_3);
                 break;
             case 4:
-                seekType = getStringWithLocale(R.string.seek_type_4);
+                seekType = getStringFromResId(R.string.seek_type_4);
                 break;
             default:
-                seekType = getStringWithLocale(R.string.seek_type_0);
+                seekType = getStringFromResId(R.string.seek_type_0);
                 break;
         }
         return seekType;
@@ -337,7 +339,7 @@ public class KcaDeckInfo {
         String airPowerValue = "";
         int[] airPowerRange = getAirPowerRange(deckPortData, deckid, exclude_flag);
         if (airPowerRange[1] > 0) {
-            airPowerValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
+            airPowerValue = KcaUtils.format(getStringFromResId(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
         }
         return airPowerValue;
     }
@@ -496,7 +498,7 @@ public class KcaDeckInfo {
 
     public String getSpeedString(JsonArray deckPortData, String deckid_list, JsonObject exclude_flag) {
         int speedValue = getSpeed(deckPortData, deckid_list, exclude_flag);
-        return KcaApiData.getSpeedString(bc, speedValue);
+        return KcaApiData.getSpeedString(context, speedValue);
     }
 
     public int[] getTPValue(JsonArray deckPortData, String deckid_list, JsonObject exclude_flag) {
@@ -610,7 +612,7 @@ public class KcaDeckInfo {
 
     public String getTPString(JsonArray deckPortData, String deckid_list, JsonObject exclude_flag) {
         int[] tp = getTPValue(deckPortData, deckid_list, exclude_flag);
-        return KcaUtils.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
+        return KcaUtils.format(getStringFromResId(R.string.kca_view_tpvalue), tp[1], tp[0]);
     }
 
     public int[] getKcShipList(JsonArray deckPortData, int deckid) {
@@ -672,8 +674,8 @@ public class KcaDeckInfo {
 
     public int checkHeavyDamageExist(JsonArray deckPortData, int deckid) {
         int[] status = {0, 0, 0, 0, 0, 0, 0};
-        boolean check_locked = getBooleanPreferences(ac, PREF_HDNOTI_LOCKED);
-        int min_level = Integer.parseInt(getStringPreferences(ac, PREF_HDNOTI_MINLEVEL));
+        boolean check_locked = getBooleanPreferences(appContext, PREF_HDNOTI_LOCKED);
+        int min_level = Integer.parseInt(getStringPreferences(appContext, PREF_HDNOTI_MINLEVEL));
         JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().getAsJsonArray("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
             int shipId = deckShipIdList.get(i).getAsInt();
@@ -729,8 +731,8 @@ public class KcaDeckInfo {
     }
 
     public boolean[] getHeavyDmgCheckStatus(JsonArray deckPortData, int deckid) {
-        boolean check_locked = getBooleanPreferences(ac, PREF_HDNOTI_LOCKED);
-        int min_level = Integer.parseInt(getStringPreferences(ac, PREF_HDNOTI_MINLEVEL));
+        boolean check_locked = getBooleanPreferences(appContext, PREF_HDNOTI_LOCKED);
+        int min_level = Integer.parseInt(getStringPreferences(appContext, PREF_HDNOTI_MINLEVEL));
         boolean[] heavyDmgCheckStatus = {true, true, true, true, true, true, true};
         JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().getAsJsonArray("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
@@ -842,10 +844,28 @@ public class KcaDeckInfo {
             JsonArray deckShipIdList = deckPortData.get(i).getAsJsonObject().getAsJsonArray("api_ship");
             int flagship = deckShipIdList.get(0).getAsInt();
             if (flagship != -1) {
-                JsonObject shipData = getUserShipDataById(flagship, "ship_id");
+                JsonObject shipData = getUserShipDataById(flagship, "ship_id,slot");
                 if (shipData != null) {
                     int kc_ship_id = shipData.get("ship_id").getAsInt();
-                    if (kc_ship_id == 182 || kc_ship_id == 187) deck_id_list.add(i);
+                    if (kc_ship_id == 182 || kc_ship_id == 187 || kc_ship_id == 985) {
+                        int available = 1;
+                        if (kc_ship_id == 182 || kc_ship_id == 187) available += 1;
+
+                        JsonArray shipItem = (JsonArray) shipData.get("slot");
+                        for (int j = 0; j < shipItem.size(); j++) {
+                            int item_id = shipItem.get(j).getAsInt();
+                            if (item_id != -1) {
+                                JsonObject itemData = getUserItemStatusById(item_id, "level", "type");
+                                if (itemData == null) continue;
+                                int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                                if (itemType == T2_REPAIR_INFRA) available += 1;
+                            }
+                        }
+                        JsonObject repairInfo = new JsonObject();
+                        repairInfo.addProperty("id", i);
+                        repairInfo.addProperty("count", available);
+                        deck_id_list.add(repairInfo);
+                    }
                 }
             }
         }

@@ -1,6 +1,5 @@
 package com.antest1.kcanotify;
 
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -36,7 +35,7 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_INFO;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
-public class KcaMapHpPopupService extends Service {
+public class KcaMapHpPopupService extends BaseService {
     public static final String MAPHP_SHOW_ACTION = "maphp_show_action";
     public static final String MAPHP_RESET_ACTION = "maphp_reset_action";
 
@@ -46,25 +45,22 @@ public class KcaMapHpPopupService extends Service {
     private LocalBroadcastManager broadcaster;
     private BroadcastReceiver data_receiver;
 
-    private View mView;
-    private WindowManager mManager;
+    private View popupView;
+    private WindowManager windowManager;
     private int screenWidth, screenHeight;
     private int popupWidth, popupHeight;
     private KcaDBHelper dbHelper;
-    WindowManager.LayoutParams mParams;
+    WindowManager.LayoutParams layoutParams;
     NotificationManagerCompat notificationManager;
 
     TextView hp_info;
+    String hpInfoText;
 
     public static int type;
     public static boolean active = false;
 
     public static boolean isActive() {
         return active;
-    }
-
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
     @Nullable
@@ -81,6 +77,7 @@ public class KcaMapHpPopupService extends Service {
             // Can not draw overlays: pass
             stopSelf();
         } else {
+            windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             broadcaster = LocalBroadcastManager.getInstance(this);
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
             data_receiver = new BroadcastReceiver() {
@@ -94,38 +91,7 @@ public class KcaMapHpPopupService extends Service {
             };
 
             LocalBroadcastManager.getInstance(this).registerReceiver((data_receiver), new IntentFilter(KCA_MSG_BATTLE_INFO));
-
-            LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             notificationManager = NotificationManagerCompat.from(getApplicationContext());
-            mView = mInflater.inflate(R.layout.view_map_hp, null);
-            mView.setOnTouchListener(mViewTouchListener);
-            ((TextView) mView.findViewById(R.id.view_hp_title)).setText(getStringWithLocale(R.string.viewmenu_maphp_title));
-
-            mView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-            popupWidth = mView.getMeasuredWidth();
-            popupHeight = mView.getMeasuredHeight();
-
-            hp_info = mView.findViewById(R.id.hp_info);
-
-            mParams = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    getWindowLayoutType(),
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                    PixelFormat.TRANSLUCENT);
-
-            mParams.gravity = Gravity.TOP | Gravity.START;
-            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            screenWidth = size.x;
-            screenHeight = size.y;
-            Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
-
-            mParams.x = (screenWidth - popupWidth) / 2;
-            mParams.y = (screenHeight - popupHeight) / 2;
-            mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-            mManager.addView(mView, mParams);
         }
     }
 
@@ -137,55 +103,10 @@ public class KcaMapHpPopupService extends Service {
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(MAPHP_RESET_ACTION)) {
-                hp_info.setText("data not loaded");
+                hpInfoText = "data not loaded";
             }
             if (intent.getAction().equals(MAPHP_SHOW_ACTION)) {
-                try {
-                    JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_APIMAPINFO);
-                    if (data != null) {
-                        String content = "";
-                        List<String> eventhp_list = new ArrayList<>();
-                        List<String> maphp_list = new ArrayList<>();
-                        for (int i = 0; i < data.size(); i++) {
-                            JsonObject item = data.get(i).getAsJsonObject();
-                            int id = item.get("api_id").getAsInt();
-                            if (item.has("api_eventmap")) {
-                                JsonObject eventitem = item.getAsJsonObject("api_eventmap");
-                                if (eventitem.has("api_state") && eventitem.get("api_state").getAsInt() != 2) {
-                                    int gauge_type = 0;
-                                    int gauge_num = 0;
-                                    if (eventitem.has("api_gauge_type")) {
-                                        gauge_type = eventitem.get("api_gauge_type").getAsInt();
-                                    }
-                                    if (eventitem.has("api_gauge_num")) {
-                                        gauge_num = eventitem.get("api_gauge_num").getAsInt();
-                                    }
-                                    int now_maphp = eventitem.get("api_now_maphp").getAsInt();
-                                    int max_maphp = eventitem.get("api_max_maphp").getAsInt();
-                                    eventhp_list.add(getMapHpStr(gauge_type, gauge_num, id, now_maphp, max_maphp));
-                                }
-                            } else if (item.has("api_defeat_count")) {
-                                int gauge_type = item.get("api_gauge_type").getAsInt();
-                                int gauge_num = item.get("api_gauge_num").getAsInt();
-                                int defeat_count = item.get("api_defeat_count").getAsInt();
-                                int total_count = item.get("api_required_defeat_count").getAsInt();
-                                maphp_list.add(getMapHpStr(gauge_type, gauge_num, id, total_count - defeat_count, total_count));
-                            }
-                        }
-                        for (String item : eventhp_list) {
-                            content = content.concat(item).concat("\n");
-                        }
-                        for (String item : maphp_list) {
-                            content = content.concat(item).concat("\n");
-                        }
-                        hp_info.setText(content.trim());
-                    } else {
-                        hp_info.setText("data not loaded");
-                    }
-                } catch (Exception e) {
-                    hp_info.setText("error while processing");
-                    dbHelper.putValue(DB_KEY_APIMAPINFO, (new JsonArray()).toString());
-                }
+                setPopupLayout();
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -193,13 +114,13 @@ public class KcaMapHpPopupService extends Service {
 
     @Override
     public void onDestroy() {
+        active = false;
         LocalBroadcastManager.getInstance(this).unregisterReceiver(data_receiver);
-        if (mManager != null) mManager.removeView(mView);
+        if (windowManager != null) windowManager.removeView(popupView);
         super.onDestroy();
     }
 
     private void stopPopup() {
-        active = false;
         stopSelf();
     }
 
@@ -223,12 +144,99 @@ public class KcaMapHpPopupService extends Service {
         }
     }
 
+    private void setPopupLayout() {
+        if (checkPopupExist()) return;
+
+        LayoutInflater mInflater = LayoutInflater.from(this);
+        popupView = mInflater.inflate(R.layout.view_map_hp, null);
+        popupView.setOnTouchListener(mViewTouchListener);
+        popupView.findViewById(R.id.view_hp_head).setOnTouchListener(mViewTouchListener);
+        ((TextView) popupView.findViewById(R.id.view_hp_title)).setText(getString(R.string.viewmenu_maphp_title));
+
+        setPopupContent();
+
+        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        popupWidth = popupView.getMeasuredWidth();
+        popupHeight = popupView.getMeasuredHeight();
+
+        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenWidth = size.x;
+        screenHeight = size.y;
+        Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight + " / " + popupWidth + " " + popupHeight);
+
+        if (layoutParams == null) {
+            layoutParams = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    getWindowLayoutType(),
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    PixelFormat.TRANSLUCENT);
+            layoutParams.gravity = Gravity.TOP | Gravity.START;
+        }
+
+        layoutParams.x = (screenWidth - popupWidth) / 2;
+        layoutParams.y = (screenHeight - popupHeight) / 2;
+        windowManager.addView(popupView, layoutParams);
+    }
+
+    private void setPopupContent() {
+        hp_info = popupView.findViewById(R.id.hp_info);
+        try {
+            JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_APIMAPINFO);
+            if (data != null) {
+                String content = "";
+                List<String> eventhp_list = new ArrayList<>();
+                List<String> maphp_list = new ArrayList<>();
+                for (int i = 0; i < data.size(); i++) {
+                    JsonObject item = data.get(i).getAsJsonObject();
+                    int id = item.get("api_id").getAsInt();
+                    if (item.has("api_eventmap")) {
+                        JsonObject eventitem = item.getAsJsonObject("api_eventmap");
+                        if (eventitem.has("api_state") && eventitem.get("api_state").getAsInt() != 2) {
+                            int gauge_type = 0;
+                            int gauge_num = 0;
+                            if (eventitem.has("api_gauge_type")) {
+                                gauge_type = eventitem.get("api_gauge_type").getAsInt();
+                            }
+                            if (eventitem.has("api_gauge_num")) {
+                                gauge_num = eventitem.get("api_gauge_num").getAsInt();
+                            }
+                            int now_maphp = eventitem.get("api_now_maphp").getAsInt();
+                            int max_maphp = eventitem.get("api_max_maphp").getAsInt();
+                            eventhp_list.add(getMapHpStr(gauge_type, gauge_num, id, now_maphp, max_maphp));
+                        }
+                    } else if (item.has("api_defeat_count")) {
+                        int gauge_type = item.get("api_gauge_type").getAsInt();
+                        int gauge_num = item.get("api_gauge_num").getAsInt();
+                        int defeat_count = item.get("api_defeat_count").getAsInt();
+                        int total_count = item.get("api_required_defeat_count").getAsInt();
+                        maphp_list.add(getMapHpStr(gauge_type, gauge_num, id, total_count - defeat_count, total_count));
+                    }
+                }
+                for (String item : eventhp_list) {
+                    content = content.concat(item).concat("\n");
+                }
+                for (String item : maphp_list) {
+                    content = content.concat(item).concat("\n");
+                }
+                hpInfoText = content.trim();
+            } else {
+                hpInfoText = "data not loaded";
+            }
+        } catch (Exception e) {
+            hpInfoText = "error while processing";
+            dbHelper.putValue(DB_KEY_APIMAPINFO, (new JsonArray()).toString());
+        }
+        hp_info.setText(hpInfoText);
+    }
+
     private float mTouchX, mTouchY;
     private int mViewX, mViewY;
 
-    private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
         private static final int MAX_CLICK_DURATION = 200;
-        private static final int LONG_CLICK_DURATION = 800;
 
         private long startClickTime;
 
@@ -240,8 +248,8 @@ public class KcaMapHpPopupService extends Service {
                 case MotionEvent.ACTION_DOWN:
                     mTouchX = event.getRawX();
                     mTouchY = event.getRawY();
-                    mViewX = mParams.x;
-                    mViewY = mParams.y;
+                    mViewX = layoutParams.x;
+                    mViewY = layoutParams.y;
                     Log.e("KCA", KcaUtils.format("mView: %d %d", mViewX, mViewY));
                     startClickTime = Calendar.getInstance().getTimeInMillis();
                     break;
@@ -250,11 +258,14 @@ public class KcaMapHpPopupService extends Service {
                     Log.e("KCA", "Callback Canceled");
                     long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                     if (clickDuration < MAX_CLICK_DURATION) {
-                        stopPopup();
+                        if (id == R.id.view_hp_head) {
+                            if (popupView != null) popupView.setVisibility(View.GONE);
+                            stopPopup();
+                        }
                     }
 
                     int[] locations = new int[2];
-                    mView.getLocationOnScreen(locations);
+                    popupView.getLocationOnScreen(locations);
                     int xx = locations[0];
                     int yy = locations[1];
                     Log.e("KCA", KcaUtils.format("Coord: %d %d", xx, yy));
@@ -264,38 +275,30 @@ public class KcaMapHpPopupService extends Service {
                     int x = (int) (event.getRawX() - mTouchX);
                     int y = (int) (event.getRawY() - mTouchY);
 
-                    mParams.x = mViewX + x;
-                    mParams.y = mViewY + y;
-                    if (mParams.x < 0) mParams.x = 0;
-                    else if (mParams.x > screenWidth - popupWidth)
-                        mParams.x = screenWidth - popupWidth;
-                    if (mParams.y < 0) mParams.y = 0;
-                    else if (mParams.y > screenHeight - popupHeight)
-                        mParams.y = screenHeight - popupHeight;
-                    mManager.updateViewLayout(mView, mParams);
+                    layoutParams.x = mViewX + x;
+                    layoutParams.y = mViewY + y;
+                    if (layoutParams.x < 0) layoutParams.x = 0;
+                    else if (layoutParams.x > screenWidth - popupWidth)
+                        layoutParams.x = screenWidth - popupWidth;
+                    if (layoutParams.y < 0) layoutParams.y = 0;
+                    else if (layoutParams.y > screenHeight - popupHeight)
+                        layoutParams.y = screenHeight - popupHeight;
+                    windowManager.updateViewLayout(popupView, layoutParams);
                     break;
             }
-
             return true;
         }
     };
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
-        Log.i("KCA", "w/h: " + screenWidth + " " + screenHeight);
-
-        if (mParams != null) {
-            if (mParams.x < 0) mParams.x = 0;
-            else if (mParams.x > screenWidth - popupWidth) mParams.x = screenWidth - popupWidth;
-            if (mParams.y < 0) mParams.y = 0;
-            else if (mParams.y > screenHeight - popupHeight) mParams.y = screenHeight - popupHeight;
-        }
-
         super.onConfigurationChanged(newConfig);
+        if (windowManager != null && checkPopupExist()) {
+            windowManager.removeViewImmediate(popupView);
+        }
+    }
+
+    private boolean checkPopupExist() {
+        return popupView != null && popupView.getParent() != null;
     }
 }

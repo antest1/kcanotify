@@ -42,6 +42,7 @@ void set_log_level(int lvl) {
 /* ******************************************************* */
 
 void log_android(int lvl, const char *fmt, ...) {
+    /*
     if(lvl >= loglevel) {
         char line[1024];
         va_list argptr;
@@ -70,7 +71,7 @@ void log_android(int lvl, const char *fmt, ...) {
 
         if(logcallback != NULL)
             logcallback(lvl, line);
-    }
+    }*/
 }
 
 /* ******************************************************* */
