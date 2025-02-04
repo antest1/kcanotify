@@ -337,7 +337,13 @@ public class AkashiDetailActivity extends BaseActivity {
                         daylist.add(getString(getId("akashi_term_day_".concat(String.valueOf(j)), R.string.class)));
                     }
                 }
-                String daytext = joinStr(daylist, ",");
+
+                String daytext;
+                if (daylist.isEmpty()) {
+                    daytext = getString(R.string.akashi_term_day_none);
+                } else {
+                    daytext = joinStr(daylist, ",");
+                }
 
                 int[] shiplist = removeKai(item.get(1).getAsJsonArray(), exception);
                 for (int j = 0; j < shiplist.length; j++) {

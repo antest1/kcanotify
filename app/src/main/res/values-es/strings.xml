@@ -422,6 +422,7 @@
     <string name="akashi_term_day_2">Mar</string>
     <string name="akashi_term_day_3">Mie</string>
     <string name="akashi_term_day_4">Jue</string>
+    <string name="akashi_term_day_none">N/A</string>
     <string name="filter_equip_title">Filtrar por Tipo de Equipamiento</string>
     <string name="action_akashi_filter">Ajustes de Filtro</string>
     <string name="filter_equip_rev">REVERTIR</string>

@@ -515,6 +515,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="akashi_term_day_4">Thu</string>
     <string name="akashi_term_day_5">Fri</string>
     <string name="akashi_term_day_6">Sat</string>
+    <string name="akashi_term_day_none">N/A</string>
 
     <string name="filter_equip_title">Filter by Equipment Type</string>
     <string name="filter_equip_all">ALL</string>

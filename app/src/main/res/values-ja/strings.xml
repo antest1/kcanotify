@@ -414,6 +414,7 @@
     <string name="akashi_term_day_2">火</string>
     <string name="akashi_term_day_3">水</string>
     <string name="akashi_term_day_4">木</string>
+    <string name="akashi_term_day_none">不可</string>
     <string name="filter_equip_title">装備別フィルタ設定</string>
     <string name="action_akashi_filter">フィルタ設定</string>
     <string name="filter_equip_rev">反転</string>

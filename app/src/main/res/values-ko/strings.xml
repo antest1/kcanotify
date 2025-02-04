@@ -419,6 +419,7 @@
     <string name="akashi_term_day_2">화</string>
     <string name="akashi_term_day_3">수</string>
     <string name="akashi_term_day_4">목</string>
+    <string name="akashi_term_day_none">불가</string>
     <string name="filter_equip_title">장비별 필터 설정</string>
     <string name="action_akashi_filter">필터 설정</string>
     <string name="filter_equip_rev">선택반전</string>

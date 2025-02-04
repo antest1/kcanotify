@@ -442,6 +442,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="akashi_term_day_4">週四</string>
     <string name="akashi_term_day_5">週五</string>
     <string name="akashi_term_day_6">週六</string>
+    <string name="akashi_term_day_none">不可</string>
 
     <string name="filter_equip_title">以装备类型过滤</string>
     <string name="filter_equip_all">全部</string>
