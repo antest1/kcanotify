@@ -1,0 +1,15 @@
+{
+    "version": "1.0.0",
+    "text": {
+        "nav_app_brand": "시제 깡들리티",
+        "sidebar_group_getstarted": "시작하기",
+        "sidebar_group_manual": "사용 방법",
+        "sidebar_group_features": "기능 설명",
+        "sidebar_page_index": "소개",
+        "sidebar_page_installation": "설치 방법",
+        "sidebar_page_initsetting": "초기 설정",
+        "sidebar_page_officialapp": "안드로이드판 칸코레 연동",
+        "sidebar_page_gotobrowser": "고토브라우저 연동",
+        "sidebar_page_wip": "작성중"
+    }
+}

@@ -1,0 +1,118 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+@media (min-width: 768px) {
+    html {
+        width: 100vw;
+        overflow-x: hidden;
+    }
+}
+main {
+    font-family: "Noto Sans KR", "Noto Sans JP", sans-serif;
+    margin-bottom: 30px;
+}
+.bg-custom {
+    background-color: #393850;
+}
+.dropdown-item:active {
+    background-color: #393850;
+}
+.dropdown-item {
+    user-select: none;
+    cursor: pointer;
+}
+.sidebar .page-name {
+    color: #393850;
+    font-size: 1.25em;
+    font-weight: 600;
+    padding: .75rem 1rem;
+    border-radius: 0 0 .5rem .5rem;
+    margin-bottom: .5rem;
+    box-shadow: 0 10px 20px #0000000a, 0 2px 6px #0000000a, 0 0 1px #0000000a;
+    user-select: none;
+    cursor: pointer;         
+}
+.sidebar hr {
+    opacity: 0.1;
+    margin: 0;
+}
+.sidebar .page-name .page-show-icon {
+    font-size: 1rem;
+}
+.sidebar .item {
+    padding: 0.25rem 0.5rem;
+    user-select: none;
+}
+.sidebar .item.lv1 {
+    font-weight: 600;
+    font-size: 1.1em;
+}
+.sidebar .item span {
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+}
+.sidebar .item-group {
+    margin-bottom: 0.5em;
+}
+.sidebar .item.lv2 {
+    padding: 0.25rem 1.5rem;
+    color: rgb(107 114 128);
+    cursor: pointer;
+}
+.sidebar .item.lv2:not(.disabled):hover {
+    color: rgb(31 41 55);
+}
+.sidebar .item.lv2.disabled {
+    color: rgb(211 211 211);
+    cursor: unset;
+}
+.sidebar .item.lv2.active span {
+    background-color: #393850;
+    color: white;
+}
+.dropdown-menu {
+    z-index: 1030;
+}
+
+#rendered-md-content h1, h2 {
+    margin-bottom: 0.5em;
+}
+
+#rendered-md-content h5 {
+    margin-top: 1.5em;
+}
+
+#rendered-md-content h2 + h5 {
+    margin-top: 0.5em;
+}
+
+#rendered-md-content a, #rendered-md-content span.link {
+    color: #62608a;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#rendered-md-content span.inline-icon {
+    font-size: 20px;
+    transform: translateY(4px);
+}
+
+#rendered-md-content h6 {
+    margin-top: 1em;
+}
+
+#rendered-md-content img {
+    max-width: 100%;
+    margin-bottom: 0.5em;
+}
+
+@media (max-width: 767px) {
+    #rendered-md-content h1, h2 {
+        display: none;
+    }
+
+    #rendered-md-content h2 + h5 {
+        margin-top: 0;
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "version": "1.0.0",
+    "text": {
+        "nav_app_brand": "Kcanotify",
+        "sidebar_group_getstarted": "ようこそ",
+        "sidebar_group_manual": "使い方",
+        "sidebar_group_features": "機能説明",
+        "sidebar_page_index": "アプリ紹介",
+        "sidebar_page_installation": "インストール",
+        "sidebar_page_initsetting": "初期設定",
+        "sidebar_page_officialapp": "公式アプリとの連動",
+        "sidebar_page_gotobrowser": "GotoBrowserとの連動",
+        "sidebar_page_wip": "作成中"
+    }
+}

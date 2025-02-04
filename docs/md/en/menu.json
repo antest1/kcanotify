@@ -1,0 +1,15 @@
+{
+    "version": "1.0.0",
+    "text": {
+        "nav_app_brand": "Kcanotify",
+        "sidebar_group_getstarted": "Get Started",
+        "sidebar_group_manual": "Guides",
+        "sidebar_group_features": "Features",
+        "sidebar_page_index": "Welcome",
+        "sidebar_page_installation": "Installation",
+        "sidebar_page_initsetting": "Initial Settings",
+        "sidebar_page_officialapp": "Official App Integration",
+        "sidebar_page_gotobrowser": "GotoBrowser Integration",
+        "sidebar_page_wip": "WIP"
+    }
+}
