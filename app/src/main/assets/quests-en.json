@@ -2121,6 +2121,13 @@
         "rewards": "¶First choice: Either 9 Screws OR three New Model Armament Materials OR an Action Report ¶Second choice: Either two Type 13 Air Radar Kai (Late Model) ★3 OR a Passive Radiolocator (E27) + Type 22 Surface Radar Kai 4 (Late Adjustment Model) OR a 12.7cm Twin Gun Mount Model D Kai 3",
         "resources": [[1944, 1025, 1026, 0], [0, 0, 0, 0]]
     },
+    "1025": {
+        "code": "B208",
+        "name": "Elite DesDiv11 \"Shirayuki Kai Ni\", Set Sail!",
+        "desc": "Assemble a fleet containing Shirayuki Kai Ni as flagship, 1 Fubuki-class, and up to 4 XX, then S rank the boss nodes of [W2-3], [W2-5], [W4-3], and [W5-3].",
+        "rewards": "¶First choice: Either three New Model Gun Mount Improvement Materials OR a 25mm Twin Autocannon Mount ★9 OR an Action Report ¶Second choice: Either two Type 94 Anti-Aircraft Fire Directors OR 4 New Model Armament Materials OR a 10cm Twin High-angle Gun Mount Kai ★8",
+        "resources": [[1943, 2025, 0, 0], [0, 0, 0, 0]]
+    },
     "201": {
         "code": "Bd1",
         "name": "Daily Victory",
@@ -4089,6 +4096,13 @@
         "rewards": "a Type 0 Small Reconnaissance Seaplane and either two Type 0 Small Reconnaissance Seaplanes OR three Late Model Bow Torpedo Mount (6 tubes) OR 4 Submarine Radar & Waterproof Periscopes",
         "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
     },
+    "1148": {
+        "code": "F130",
+        "name": "[Improvement of Anti-Aircraft Armament] Increased Deployment of Type 94 Anti-Aircraft Fire Director",
+        "desc": "Set Fubuki Kai Ni or Shirayuki Kai Ni as Secretary, equipped with 2 Type 91 Anti-Aircraft Fire Director in her 1st and 2nd slots, then, scrap 3 Type 91 Anti-Aircraft Fire Director and 3 Type 13 Air Radar and prepare 16 Development Materials and 4 Improvement Material.",
+        "rewards": "a Type 94 Anti-Aircraft Fire Director and a Type 13 Air Radar Kai",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
     "605": {
         "code": "Fd1",
         "name": "Daily Development 1",
@@ -4532,87 +4546,35 @@
         "rewards": "¶First choice: Either 4 7.7mm Machine Guns OR three 25mm Single Autocannon Mounts OR a Mamiya ¶Second choice: Either 4 Screws OR 4000 Fuels OR two Irako",
         "resources": [[320, 320, 320, 320], [0, 0, 0, 0]]
     },
-    "1024": {
-        "code": "L2412B6",
-        "name": "[New Year Limited] Aircraft Maritime Surveillance Patrol",
-        "desc": "Sortie a CV(L/B) or a BBV as flagship and up to FOUR(!) additional ships to [W1-2], [W1-3], [W1-4] and [W3-1]. A-Rank+ each boss node.",
-        "rewards": "¶First choice: Either two Repair Teams OR a Skilled Crew Member OR 4 Combat Rations ¶Second choice: Either a New Model Aerial Armament Material OR a Medal OR two Ka Type Observation Autogyros",
-        "resources": [[400, 400, 0, 600], [0, 0, 0, 0]]
+    "840": {
+        "code": "L2501B5",
+        "name": "[Setsubun Quest: Beans] Setsubun Operation 2025",
+        "desc": "Assemble a fleet containing as flagship and second ship any 2 of: \"Houshou, Asahi, Akashi, Jingei, Chougei, Oboro, Akebono, Sazanami, or Ushio\"; and up to 4 XX, then A+ rank the boss nodes of [W1-1], [W1-2], and [W1-3], twice each.",
+        "memo": "※Weekly",
+        "rewards": "two Setsubun Beanss and either 6 Development Materials OR two Screws OR a Special Aviation Ration",
+        "resources": [[0, 220, 220, 220], [0, 0, 0, 0]]
     },
-    "990": {
-        "code": "L2412B7",
-        "name": "[New Year Limited] Naval Base Patrol, Strict Vigilance!",
-        "desc": "Sortie any 2 of Akebono, Tsushima, Akigumo, Kazagumo and Salmon, one as flagship, and up to 4 additional ships to [W1-4], [W2-2], [W2-3], [W3-2] and [W4-1]. A-Rank+ each boss node.",
-        "rewards": "¶First choice: Either a Medal OR 8 Buckets OR two Skilled Lookoutss ¶Second choice: Either a Mamiya OR a Furniture Fairy OR a Medal",
-        "resources": [[700, 700, 700, 700], [0, 0, 0, 0]]
-    },
-    "361": {
-        "code": "L2412C1",
-        "name": "[New Year Limited] Maritime Escort Force, Special Exercise!",
-        "desc": "Set secretary with 2 Emergency Repair Personnel in her first and second slot, then secure 4 S-Rank victories in Exercises within the same day using a CVL, 4 DD and up to 1 additional ship, OR 2 DE and up to 4 additional ships in Fleet 1.",
-        "memo": "※You must use fleet 1. Consumes the equipment.",
-        "rewards": "two Repair Godnesses, ¶First choice: Either 4 Combat Rations OR 4 Screws OR a Type 2 Depth Charge ¶Second choice: Either a Repair Godness OR 4 Type 3 Depth Charge Projectors OR 3300 Fuels",
-        "resources": [[700, 300, 300, 300], [0, 0, 0, 0]]
-    },
-    "1121": {
-        "code": "L2412F1",
-        "name": "[New Year Limited] Naval District General Cleaning! Happy New Year!",
-        "desc": "Have 8 Type 96 Fighters, 4 Combat Rations and 2024 Bauxite. Scrap 10 Small Caliber Main Guns, 10 Medium Caliber Main Guns and 10 Reconnaissance Seaplanes.",
-        "memo": "※Consumes the items and resources.",
-        "rewards": "¶First choice: Either 15 Development Materials OR two New Model Aerial Armament Materials OR 2025 Fuels ¶Second choice: Either two Mamiyas OR two New Model Armament Materials OR 6 Screws",
-        "resources": [[1000, 0, 1000, 0], [0, 0, 0, 0]]
-    },
-    "1146": {
-        "code": "L2412F2",
-        "name": "[New Year Limited] Extended Cleaning & Special Resource Export I",
-        "desc": "Have 4 Smoke Generator (Smoke Screen), 20 Furniture Boxes (Small) and 2024 Ammo. Scrap 8 Fighters, 8 Torpedo Bombers and 8 Dive Bombers.",
-        "memo": "※Consumes the items and resources.",
-        "rewards": "¶First choice: Either 3000 Steels OR 3000 Fuels OR 4 Repair Teams ¶Second choice: Either 30 Development Materials OR three Skilled Crew Members OR three New Model Aerial Armament Materials",
-        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
-    },
-    "1147": {
-        "code": "L2412F3",
-        "name": "[New Year Limited] Extended Cleaning & Special Resource Export II",
-        "desc": "Have 4 Type 22 Surface Radars, 4 Searchlights and 2800 Steel. Scrap 10 Medium Caliber Main Guns, 10 Torpedoes and 10 Depth Charges.",
-        "memo": "※Consumes the items and resources.",
-        "rewards": "¶First choice: Either 4800 Ammos OR 2025 Bauxites OR 4800 Fuels ¶Second choice: Either 40 Development Materials OR two Type 22 Surface Radar Kai 4 OR three New Model Armament Materials",
-        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
-    },
-    "1148": {
-        "code": "L2412F4",
-        "name": "[New Year Limited] Aviation Arsenal Additional Prototype Aircraft Festival",
-        "desc": "Have 24 Development Materials, 2 New Model Aviation Armament Materials and 2024 Ammo. Set secretary with a ★2+ Type 99 Dive Bomber on her first slot. Scrap 9 Type 99 Dive Bombers and 4 Suisei.",
-        "memo": "※Consumes the equipment, items and resources.",
-        "rewards": "a Prototype Myoujou (Additional Prototype) ★2, ¶First choice: Either 2025 Bauxites OR a Prototype Myoujou (Additional Prototype) OR 8 Screws ¶Second choice: Either a Prototype Keiun (Carrier-based Reconnaissance Model) OR a Prototype Myoujou (Additional Prototype) ★4 OR a Remodel Blueprint",
-        "resources": [[0, 0, 0, 1000], [0, 0, 0, 0]]
-    },
-    "801": {
-        "code": "L2501B1",
-        "name": "Happy New Year! In 2025, the Fleet Sets Sail!",
-        "desc": "Assemble a fleet containing 1 CL(T)/CT as flagship, 2 DD, and up to 3 XX, then A+ rank the boss nodes of 1-1, 1-2, 1-3, and 1-4.",
-        "rewards": "¶First choice: Either 10 Development Materials OR a Mamiya OR a Furniture Fairy ¶Second choice: Either three Submarine Supply Materials OR 6 Screws OR three Irako",
+    "841": {
+        "code": "L2501B6",
+        "name": "[Setsubun Quest: Demon] Southwestern Setsubun Operation 2025",
+        "desc": "Assemble a fleet containing as flagship and second ship any 2 of: \"Gloire, Ranger, Johnston, Shinyou, Ooyodo, Yuubari, Hayashimo, Asashimo, or Kazagumo\"; and up to 4 XX, then A+ rank the boss nodes of [W1-4], [W2-1], and [W2-2], twice each.",
+        "memo": "※Weekly",
+        "rewards": "three Setsubun Beanss and either an Underway Replenishment OR three Screws OR 6 Buckets",
         "resources": [[2025, 0, 0, 0], [0, 0, 0, 0]]
     },
-    "802": {
-        "code": "L2501B2",
-        "name": "Happy New Year! In Reiwa 7th, the Aircraft Carrier Task Force Sets Out!",
-        "desc": "Assemble a fleet containing 1 CV(B/L) as flagship, 1 DD, and up to 4 XX, then S rank the boss nodes of 1-5, 2-1, 2-2, and 2-3.",
-        "rewards": "¶First choice: Either two New Model Aerial Armament Materials OR three Emergency Repair Materials OR 5 Screws ¶Second choice: Either two Suisei ★3 OR three Skilled Crew Members OR 7 12cm 30-tube Rocket Launchers",
+    "843": {
+        "code": "L2501B7",
+        "name": "[Setsubun Quest: Holly] Setsubun Extra Operation 2025 - Plentiful Harvest!",
+        "desc": "Assemble a fleet containing 1 CVL, 2 CA, and up to 3 XX, then S rank the boss nodes of [W2-3], [W4-1], [W7-5-T], and [W5-1].",
+        "rewards": "4 Setsubun Beanss and either three Screws OR two Special Aviation Rations OR 50 Ranking Points",
         "resources": [[0, 0, 0, 2025], [0, 0, 0, 0]]
     },
-    "803": {
-        "code": "L2501B3",
-        "name": "Happy New Year 2025! Elite Heavy Cruiser Squadron, Heading North! To the West!",
-        "desc": "Assemble a fleet containing 2 CA and up to 4 XX, then S rank the boss nodes of 3-1, 3-3, 4-1, and 4-2.",
-        "rewards": "¶First choice: Either two New Model Armament Materials OR two New Model Gun Mount Improvement Materials OR a Medal ¶Second choice: Either two 20.3cm (No.3) Twin Gun Mounts OR a Remodel Blueprint OR an Action Report",
-        "resources": [[2025, 2025, 0, 0], [0, 0, 0, 0]]
-    },
-    "804": {
-        "code": "L2501B4",
-        "name": "New Year [Expanded Operation] Elite Japanese and American Aircraft Carriers Launch Joint New Year Operation!",
-        "desc": "Assemble a fleet containing any 2 of: \"Intrepid, Hornet, Ranger, Akagi, Kaga, Shoukaku, or Zuikaku\"; and up to 4 XX, then S rank the boss nodes of 2-5, 7-2 (Part 2), 4-5, 5-2, and 5-5.",
-        "rewards": "a Furniture: Happy New Year! Heian Hanging Scroll and either two Skilled Deck Personnels OR a Prototype Flight Deck Catapult OR two Night Battle Operation Aviation Personnel ★2",
-        "resources": [[0, 0, 2025, 2025], [0, 0, 0, 0]]
+    "882": {
+        "code": "L2501B8",
+        "name": "[Setsubun Quest: Final Extra Operation] Setsubun 2025 - Pray for Peace!",
+        "desc": "Assemble a fleet containing any 4 of: \"Agano, Sakawa, Mizuho, Miyuki, Uranami, Amagiri, Sagiri, and Minegumo\"; and up to 2 XX, then S rank the boss nodes of [W1-5], [W3-2], and [W6-3], twice each.",
+        "rewards": "an AR Akashi and either a Furniture Fairy OR 250 Ranking Points OR 4 Screws",
+        "resources": [[0, 2025, 2025, 0], [0, 0, 0, 0]]
     },
     "378": {
         "code": "L2501C1",
@@ -4621,5 +4583,28 @@
         "memo": "※Weekly",
         "rewards": "¶First choice: Either 4 Buckets OR a Submarine Radar & Waterproof Periscope OR a Submarine Supply Material ¶Second choice: Either 8 Development Materials OR three Screws OR a Submarine Supply Material",
         "resources": [[500, 200, 200, 0], [0, 0, 0, 0]]
+    },
+    "329": {
+        "code": "L2501C2",
+        "name": "[Setsubun Quest: Masu] Setsubun Exercise! 2025",
+        "desc": "Assemble a fleet containing 1 CVL/AS as flagship, and 4 DD/2 DE/2 SS(V), and up to 1-3 XX, then score 3 B+ ranks in PVP within the same day.",
+        "memo": "※Daily",
+        "rewards": "a Setsubun Beans and either 11 Ranking Points OR a Flamethrower",
+        "resources": [[220, 220, 0, 0], [0, 0, 0, 0]]
+    },
+    "379": {
+        "code": "L2501C3",
+        "name": "[Limited Time Quest] \"Elite DesDiv11\" Special Exercises!",
+        "desc": "Assemble a fleet containing any two of: \"Fubuki Kai Ni, Shirayuki Kai Ni, Miyuki Kai Ni, or Hatsuyuki Kai\"; and up to 4 XX, then score 4 S ranks in PVP within the same day.",
+        "memo": "※Weekly",
+        "rewards": "¶First choice: Either two 25mm Twin Autocannon Mounts OR a Type 91 Anti-Aircraft Fire Director OR 4 Development Materials ¶Second choice: Either 4 Buckets OR two Screws OR an Irako",
+        "resources": [[110, 110, 110, 110], [0, 0, 0, 0]]
+    },
+    "441": {
+        "code": "L2501D1",
+        "name": "[Setsubun Quest: Eho] Reiwa 7th Year Setsubun Expeditions",
+        "desc": "Complete expeditions 05, A1, 19, 23, and 39.",
+        "rewards": "¶First choice: Either two New Model Gun Mount Improvement Materials OR 4 Setsubun Beanss OR 2025 Fuels ¶Second choice: Either 5 Screws OR a Medal OR three Special Aviation Rations",
+        "resources": [[880, 880, 880, 880], [0, 0, 0, 0]]
     }
 }
