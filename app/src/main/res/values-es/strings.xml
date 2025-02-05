@@ -177,6 +177,7 @@
     <string name="setting_menu_kand_title_fairy_select">Elegir Ayudante</string>
     <string name="setting_menu_kand_desc_fairy_select">Elegir el Ayudante que será mostrado en pantalla</string>
     <string name="setting_menu_kand_title_fairy_size">Tamaño Ayudante</string>
+    <string name="setting_menu_kand_title_fairy_opacity">Opacidad de Ayudante (%)</string>
     <string name="setting_menu_kand_title_fairy_random">Ayudante al azar</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">Mostrar Ayudante solo en Kancolle</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">Hay un pequeño retraso en mostrar/ocultar el ayudante.</string>

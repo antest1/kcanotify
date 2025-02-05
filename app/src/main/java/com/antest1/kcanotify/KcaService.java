@@ -2375,6 +2375,11 @@ public class KcaService extends BaseService {
                         .setAction(KcaViewButtonService.FAIRY_SIZE_CHANGE));
             }
 
+            if (url.startsWith(KCA_API_PREF_FAIRYALPHA_CHANGED)) {
+                startService(new Intent(this, KcaViewButtonService.class)
+                        .setAction(KcaViewButtonService.FAIRY_ALPHA_CHANGE));
+            }
+
             if (url.startsWith(KCA_API_PROCESS_BATTLE_FAILED)) {
                 String api_data = jsonDataObj.get("api_data").getAsString();
                 String api_url = jsonDataObj.get("api_url").getAsString();

@@ -56,6 +56,7 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_COMPLETE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_OPACITY;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_RANDOM;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_REV;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_SIZE;
@@ -81,6 +82,7 @@ public class KcaViewButtonService extends BaseService {
     public static final String FAIRY_INVISIBLE = "fairy_invisible";
     public static final String FAIRY_CHANGE = "fairy_change";
     public static final String FAIRY_SIZE_CHANGE = "fairy_size_change";
+    public static final String FAIRY_ALPHA_CHANGE = "fairy_alpha_change";
     public static final String RETURN_FAIRY_ACTION = "return_fairy_action";
     public static final String RESET_FAIRY_STATUS_ACTION = "reset_fairy_status_action";
     public static final String REMOVE_FAIRY_ACTION = "remove_fairy_action";
@@ -199,6 +201,7 @@ public class KcaViewButtonService extends BaseService {
             icon_info = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "icon_info.json", dbHelper);
             button = buttonView.findViewById(R.id.viewbutton);
             setFairySize();
+            setFairyAlpha();
 
             String fairyIdValue;
             boolean random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
@@ -327,6 +330,9 @@ public class KcaViewButtonService extends BaseService {
             if (intent.getAction().equals(FAIRY_SIZE_CHANGE)) {
                 setFairySize();
             }
+            if (intent.getAction().equals(FAIRY_ALPHA_CHANGE)) {
+                setFairyAlpha();
+            }
             if (intent.getAction().equals(FAIRY_CHANGE)) {
                 String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
                 viewBitmapId = "noti_icon_".concat(fairyIdValue);
@@ -404,6 +410,15 @@ public class KcaViewButtonService extends BaseService {
             params.width = size_dp;
             params.height = size_dp;
             button.setLayoutParams(params);
+        }
+    }
+
+    private void setFairyAlpha() {
+        if (button != null) {
+            int fairy_opacity = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_OPACITY));
+            float alpha = fairy_opacity / 100f;
+            Log.d(TAG, "opacity: " + fairy_opacity);
+            button.setAlpha(alpha);
         }
     }
 

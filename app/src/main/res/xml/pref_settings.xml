@@ -111,6 +111,14 @@
             android:positiveButtonText="@null"
             android:title="@string/setting_menu_kand_title_fairy_size" />
 
+        <EditTextPreference
+            android:defaultValue="90"
+            app:iconSpaceReserved="false"
+            android:key="fairy_opacity"
+            android:inputType="phone"
+            android:digits="0123456789"
+            android:title="@string/setting_menu_kand_title_fairy_opacity" />
+
         <CheckBoxPreference
             android:defaultValue="false"
             app:iconSpaceReserved="false"

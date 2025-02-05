@@ -397,6 +397,9 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                 case PREF_FAIRY_SIZE:
                     kca_url = KCA_API_PREF_FAIRYSIZE_CHANGED;
                     break;
+                case PREF_FAIRY_OPACITY:
+                    kca_url = KCA_API_PREF_FAIRYALPHA_CHANGED;
+                    break;
                 default:
                     break;
             }
@@ -499,13 +502,23 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
         if (PREF_KCA_MORALE_MIN.equals(key)) {
             String valueString = ((String) newValue);
-            if (valueString.length() == 0 || !TextUtils.isDigitsOnly(valueString)) return false;
+            if (valueString.isEmpty() || !TextUtils.isDigitsOnly(valueString)) return false;
             int value = Integer.parseInt(valueString);
             if (value > 100) {
                 showToast(getActivity(), "value must be in 0~100", Toast.LENGTH_LONG);
                 return false;
             }
             KcaMoraleInfo.setMinMorale(value);
+        }
+
+        if (PREF_FAIRY_OPACITY.equals(key)) {
+            String valueString = ((String) newValue);
+            if (valueString.isEmpty() || !TextUtils.isDigitsOnly(valueString)) return false;
+            int value = Integer.parseInt(valueString);
+            if (value < 10 || value > 100) {
+                showToast(getActivity(), "value must be in 10~100", Toast.LENGTH_LONG);
+                return false;
+            }
         }
 
         if (PREF_USE_TLS_DECRYPTION.equals(key)) {

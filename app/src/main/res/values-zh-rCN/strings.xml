@@ -186,6 +186,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_fairy_select">选择你想要携带的妖精</string>
     <string name="setting_menu_kand_title_fairy_select">选择辅助妖精</string>
     <string name="setting_menu_kand_title_fairy_size">选择妖精大小</string>
+    <string name="setting_menu_kand_title_fairy_opacity">设置妖精不透明度(%)</string>
     <string name="setting_menu_kand_title_fairy_random">使用随机妖精</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">让妖精只显示在舰これ萤幕上</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">启用显示/隐藏妖精时的短暂延迟</string>
