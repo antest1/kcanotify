@@ -1,7 +1,6 @@
 package com.antest1.kcanotify;
 
 import android.annotation.SuppressLint;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -72,7 +71,9 @@ import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
 public class KcaViewButtonService extends BaseService {
-    public static final int FAIRY_GLOW_INTERVAL = 800;
+    private static final String TAG = "KcaViewButtonService";
+    private static final int FAIRY_GLOW_INTERVAL = 800;
+    private static final int FAIRY_DIST_THRESHOLD = 2500;
 
     public static final String KCA_STATUS_ON = "kca_status_on";
     public static final String KCA_STATUS_OFF = "kca_status_off";
@@ -481,10 +482,17 @@ public class KcaViewButtonService extends BaseService {
                     float finalX = max(buttonView.getPaddingLeft(), Math.min(finalXUncap, screenWidth - buttonView.getWidth() - buttonView.getPaddingRight()));
                     float finalY = max(buttonView.getPaddingTop(), Math.min(finalYUncap, screenHeight - buttonView.getHeight() - buttonView.getPaddingBottom()));
 
-                    buttonView.animateTo(layoutParams.x, layoutParams.y,
-                            (int) finalX, (int) finalY,
-                            finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
-                            500, windowManager, layoutParams);
+                    float tensionX = finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f);
+                    float tensionY = finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f);
+                    if (tensionX > 0 || tensionY > 0) { // animate only when fairy has tension
+                        buttonView.animateTo(layoutParams.x, layoutParams.y,
+                                (int) finalX, (int) finalY,
+                                tensionX, tensionY,
+                                500, windowManager, layoutParams);
+                    } else {
+                        finalX = event.getRawX();
+                        finalY = event.getRawY();
+                    }
 
                     JsonObject locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
                     String ori_prefix = getOrientationPrefix(getResources().getConfiguration().orientation);
