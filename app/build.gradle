@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
+//apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     defaultConfig {
@@ -55,6 +55,10 @@ android {
     ndkVersion '26.1.10909125'
     namespace 'com.antest1.kcanotify'
     compileSdk 33
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {

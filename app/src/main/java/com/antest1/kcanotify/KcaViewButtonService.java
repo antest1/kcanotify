@@ -477,8 +477,8 @@ public class KcaViewButtonService extends BaseService {
                 case MotionEvent.ACTION_DOWN:
                     startX = event.getRawX();
                     startY = event.getRawY();
-                    lastX[curr] = startX;
-                    lastY[curr] = startY;
+                    lastX[0] = lastX[1] = lastX[2] = startX;
+                    lastY[0] = lastY[1] = lastY[2] = startY;
                     lastT[curr] = Calendar.getInstance().getTimeInMillis();
                     curr = (curr + 1) % 3;
                     startViewX = layoutParams.x;
@@ -497,17 +497,10 @@ public class KcaViewButtonService extends BaseService {
                     float finalX = max(buttonView.getPaddingLeft(), Math.min(finalXUncap, screenWidth - buttonView.getWidth() - buttonView.getPaddingRight()));
                     float finalY = max(buttonView.getPaddingTop(), Math.min(finalYUncap, screenHeight - buttonView.getHeight() - buttonView.getPaddingBottom()));
 
-                    float tensionX = finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f);
-                    float tensionY = finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f);
-                    if (tensionX > 0 || tensionY > 0) { // animate only when fairy has tension
-                        buttonView.animateTo(layoutParams.x, layoutParams.y,
-                                (int) finalX, (int) finalY,
-                                tensionX, tensionY,
-                                500, windowManager, layoutParams);
-                    } else {
-                        finalX = event.getRawX();
-                        finalY = event.getRawY();
-                    }
+                    buttonView.animateTo(layoutParams.x, layoutParams.y,
+                            (int) finalX, (int) finalY,
+                            finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
+                            500, windowManager, layoutParams);
 
                     JsonObject locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
                     String ori_prefix = getOrientationPrefix(getResources().getConfiguration().orientation);
