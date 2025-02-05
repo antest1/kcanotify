@@ -37,6 +37,8 @@ import static com.antest1.kcanotify.KcaConstants.LAB_STATUS_STANDBY;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
+import java.util.Calendar;
+
 public class KcaLandAirBasePopupService extends BaseService {
     public final static String LAB_DATA_ACTION = "lab_data_action";
 
@@ -368,14 +370,15 @@ public class KcaLandAirBasePopupService extends BaseService {
     private final View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
         private static final int MAX_CLICK_DURATION = 200;
         private long startClickTime;
-
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            int id = v.getId();
             int xmargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
             int ymargin = (int) getResources().getDimension(R.dimen.item_popup_ymargin);
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    startClickTime = Calendar.getInstance().getTimeInMillis();
                     int tag = -1;
                     if (v.getTag() instanceof Integer) {
                         tag = (Integer) v.getTag();
@@ -394,6 +397,12 @@ public class KcaLandAirBasePopupService extends BaseService {
                     break;
                 case MotionEvent.ACTION_UP:
                     Log.e("KCA", "Callback Canceled");
+                    long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                    if (clickDuration < MAX_CLICK_DURATION) {
+                        if (id == R.id.view_lab_head) {
+                            stopPopup();
+                        }
+                    }
                     itemView.setVisibility(View.GONE);
                     break;
                 case MotionEvent.ACTION_MOVE:
