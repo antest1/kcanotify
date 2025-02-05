@@ -263,6 +263,16 @@
         </service>
 
         <receiver
+            android:name=".GotoForegroundReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="GotoBrowser Foreground Check Receiver">
+            <intent-filter>
+                <action android:name="com.antest1.gotobrowser.foreground" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
             android:name=".KcaAutomationReceiver"
             android:enabled="true"
             android:exported="true"
