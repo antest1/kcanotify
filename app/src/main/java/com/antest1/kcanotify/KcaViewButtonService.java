@@ -494,12 +494,6 @@ public class KcaViewButtonService extends BaseService {
                 case MotionEvent.ACTION_DOWN:
                     startX = event.getRawX();
                     startY = event.getRawY();
-
-                    int[] location = new int[2];
-                    v.getLocationOnScreen(location);
-                    int xx = location[0];
-                    int yy = location[1];
-
                     lastX[0] = lastX[1] = lastX[2] = startX;
                     lastY[0] = lastY[1] = lastY[2] = startY;
                     lastT[curr] = Calendar.getInstance().getTimeInMillis();
