@@ -10,11 +10,14 @@ import android.graphics.Bitmap;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Insets;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -28,7 +31,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.view.WindowMetrics;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -74,7 +79,6 @@ import static java.lang.Math.max;
 public class KcaViewButtonService extends BaseService {
     private static final String TAG = "KcaViewButtonService";
     private static final int FAIRY_GLOW_INTERVAL = 800;
-    private static final int FAIRY_DIST_THRESHOLD = 2500;
 
     public static final String KCA_STATUS_ON = "kca_status_on";
     public static final String KCA_STATUS_OFF = "kca_status_off";
@@ -101,7 +105,7 @@ public class KcaViewButtonService extends BaseService {
     private Handler mHandler;
     private Vibrator vibrator;
     private ImageView button;
-    private int screenWidth, screenHeight;
+    private int screenWidth, screenHeight, screenPaddingLeft = 0, screenPaddingTop = 0;
     private int buttonWidth, buttonHeight;
     private KcaDBHelper dbHelper;
     private JsonArray icon_info;
@@ -133,6 +137,7 @@ public class KcaViewButtonService extends BaseService {
         return null;
     }
 
+    @SuppressLint("RtlHardcoded")
     @Override
     public void onCreate() {
         super.onCreate();
@@ -242,10 +247,10 @@ public class KcaViewButtonService extends BaseService {
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     getWindowLayoutType(),
-                    getLayoutParamsFlags(),
+                    getWindowLayoutParamsFlags(),
                     PixelFormat.TRANSLUCENT);
 
-            layoutParams.gravity = Gravity.TOP | Gravity.START;
+            layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             updateScreenSize();
             Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
@@ -278,14 +283,6 @@ public class KcaViewButtonService extends BaseService {
             battleviewEnabled = false;
             questviewEnabled = false;
         }
-    }
-
-    private void updateScreenSize() {
-        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
     }
 
     @Override
@@ -477,9 +474,9 @@ public class KcaViewButtonService extends BaseService {
                 case MotionEvent.ACTION_DOWN:
                     startX = event.getRawX();
                     startY = event.getRawY();
-                    lastX[curr] = startX;
-                    lastY[curr] = startY;
-                    lastT[curr] = Calendar.getInstance().getTimeInMillis();
+                    lastX[0] = lastX[1] = lastX[2] = startX;
+                    lastY[0] = lastY[1] = lastY[2] = startY;
+                    lastT[0] = lastT[1] = lastT[2] = Calendar.getInstance().getTimeInMillis();
                     curr = (curr + 1) % 3;
                     startViewX = layoutParams.x;
                     startViewY = layoutParams.y;
@@ -494,19 +491,20 @@ public class KcaViewButtonService extends BaseService {
                     long dt = Calendar.getInstance().getTimeInMillis() - lastT[(curr + 1) % 3];
                     float finalXUncap = layoutParams.x + dx / dt * 400;
                     float finalYUncap = layoutParams.y + dy / dt * 400;
-                    float finalX = max(buttonView.getPaddingLeft(), Math.min(finalXUncap, screenWidth - buttonView.getWidth() - buttonView.getPaddingRight()));
-                    float finalY = max(buttonView.getPaddingTop(), Math.min(finalYUncap, screenHeight - buttonView.getHeight() - buttonView.getPaddingBottom()));
-
-                    float tensionX = finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f);
-                    float tensionY = finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f);
-                    if (tensionX > 0 || tensionY > 0) { // animate only when fairy has tension
+                    float finalX = max(screenPaddingLeft, Math.min(finalXUncap, screenPaddingLeft + screenWidth - buttonView.getWidth()));
+                    float finalY = max(screenPaddingTop, Math.min(finalYUncap, screenPaddingTop + screenHeight - buttonView.getHeight()));
+                    if (dt < 50 || finalXUncap != finalX || finalYUncap != finalY) {
+                        // Animate if user fling the fairy or the finger is outside draggable area
                         buttonView.animateTo(layoutParams.x, layoutParams.y,
                                 (int) finalX, (int) finalY,
-                                tensionX, tensionY,
+                                finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
                                 500, windowManager, layoutParams);
                     } else {
-                        finalX = event.getRawX();
-                        finalY = event.getRawY();
+                        finalX = max(screenPaddingLeft, Math.min(layoutParams.x, screenPaddingLeft + screenWidth - buttonView.getWidth()));
+                        finalY = max(screenPaddingTop, Math.min(layoutParams.y, screenPaddingTop + screenHeight - buttonView.getHeight()));
+                        layoutParams.x = (int) finalX;
+                        layoutParams.y = (int) finalY;
+                        windowManager.updateViewLayout(buttonView, layoutParams);
                     }
 
                     JsonObject locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
@@ -629,7 +627,7 @@ public class KcaViewButtonService extends BaseService {
         if (dbHelper != null) {
             locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
 
-            layoutParams.flags = getLayoutParamsFlags();
+            layoutParams.flags = getWindowLayoutParamsFlags();
             if (locdata != null && !locdata.toString().isEmpty()) {
                 if (locdata.has(ori_prefix.concat("x"))) {
                     layoutParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
@@ -659,8 +657,23 @@ public class KcaViewButtonService extends BaseService {
         super.onConfigurationChanged(newConfig);
     }
 
-    private int getLayoutParamsFlags() {
-        return getWindowLayoutParamsFlags(getResources().getConfiguration())
-                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+    private void updateScreenSize() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowMetrics windowMetrics = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getCurrentWindowMetrics();
+            WindowInsets insets = windowMetrics.getWindowInsets();
+            // Not allow fairy to stay on cutout or navigation bar
+            Insets safeInsets = insets.getInsets(WindowInsets.Type.displayCutout() | WindowInsets.Type.navigationBars());
+            screenPaddingLeft = safeInsets.left;
+            screenPaddingTop = safeInsets.top;
+            Rect bounds = windowMetrics.getBounds();
+            screenWidth = bounds.width() - safeInsets.left - safeInsets.right;
+            screenHeight = bounds.height() - safeInsets.top - safeInsets.bottom;
+        } else {
+            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            screenWidth = size.x;
+            screenHeight = size.y;
+        }
     }
 }

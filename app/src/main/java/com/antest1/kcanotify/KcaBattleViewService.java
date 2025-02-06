@@ -8,9 +8,12 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.graphics.Insets;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -25,7 +28,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.view.WindowMetrics;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -72,7 +77,6 @@ import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 import static java.lang.Math.abs;
-import static java.lang.Math.max;
 
 
 public class KcaBattleViewService extends BaseService {
@@ -80,7 +84,9 @@ public class KcaBattleViewService extends BaseService {
     public static final String HIDE_BATTLEVIEW_ACTION = "hide_battleview";
 
     public static final int[] contact_bonus = {112, 112, 117, 120};
-    
+
+    private int screenWidth, screenHeight, screenPaddingLeft = 0, screenPaddingTop = 0;
+
     KcaDBHelper dbHelper;
     KcaDeckInfo deckInfoCalc;
     LayoutInflater mInflater;
@@ -1408,23 +1414,24 @@ public class KcaBattleViewService extends BaseService {
                 menuView.findViewById(R.id.view_item2).setOnClickListener(battleViewMenuListener);
                 ((TextView) menuView.findViewById(R.id.view_bm_title)).setText(getString(R.string.battleview_menu_head));
 
+                updateScreenSize();
                 layoutParams = new WindowManager.LayoutParams(
-                        WindowManager.LayoutParams.MATCH_PARENT,
+                        screenWidth,
                         WindowManager.LayoutParams.WRAP_CONTENT,
                         getWindowLayoutType(),
-                        getWindowLayoutParamsFlags(getResources().getConfiguration()),
+                        getWindowLayoutParamsFlags(),
                         PixelFormat.TRANSLUCENT);
-                layoutParams.gravity = Gravity.TOP;
+                layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
                 // Hide at bottom before the fleetView is first rendered
-                updateScreenSize();
-                layoutParams.y = screenHeight;
+                layoutParams.x = screenPaddingLeft;
+                layoutParams.y = screenPaddingTop + screenHeight;
                 setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
 
                 battleViewLayout.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
                     if (bottom - top == oldBottom - oldTop) return;
                     fleetViewHeight = bottom - top;
                     updateScreenSize();
-                    layoutParams.y = (screenHeight - fleetViewHeight) * (view_status + 1) / 2;
+                    layoutParams.y = screenPaddingTop + (screenHeight - fleetViewHeight) * (view_status + 1) / 2;
                     if ((battleViewLayout.getParent() != null)) {
                         windowManager.updateViewLayout(battleViewLayout, layoutParams);
                     }
@@ -1778,7 +1785,6 @@ public class KcaBattleViewService extends BaseService {
     private int startViewX, startViewY; // Starting view x y
     private final View.OnTouchListener draggableLayoutTouchListener = new View.OnTouchListener() {
         private float startRawX, startRawY; // Starting finger x y
-        private final float[] lastX = new float[3];
         private final float[] lastY = new float[3];
         private final long[] lastT = new long[3];
         private int curr = 0;
@@ -1793,41 +1799,35 @@ public class KcaBattleViewService extends BaseService {
                 case MotionEvent.ACTION_DOWN:
                     startRawX = event.getRawX();
                     startRawY = event.getRawY();
-                    lastX[curr] = startRawX;
-                    lastY[curr] = startRawY;
-                    lastT[curr] = Calendar.getInstance().getTimeInMillis();
+                    lastY[0] = lastY[1] = lastY[2] = startRawY;
+                    lastT[0] = lastT[1] = lastT[2] = Calendar.getInstance().getTimeInMillis();
                     curr = (curr + 1) % 3;
                     startViewX = layoutParams.x;
                     startViewY = layoutParams.y;
                     Log.e("KCA", KcaUtils.format("mView: %d %d", startViewX, startViewY));
                     if (!isViewLocked) {
-                        snapIndicator.show(layoutParams.y, maxY, fleetViewHeight);
+                        snapIndicator.show(layoutParams.y, maxY, screenWidth, fleetViewHeight, screenPaddingLeft, screenPaddingTop);
                         battleViewLayout.cancelAnimations();
                     }
                     break;
                 case MotionEvent.ACTION_UP:
                     if (!isViewLocked) {
-                        float dx = event.getRawX() - lastX[(curr + 1) % 3];
                         float dy = event.getRawY() - lastY[(curr + 1) % 3];
                         long dt = Calendar.getInstance().getTimeInMillis() - lastT[(curr + 1) % 3];
-                        float finalXUncap = layoutParams.x + dx / dt * 400;
                         float finalYUncap = layoutParams.y + dy / dt * 400;
-                        finalX = 0f;
+                        finalX = screenPaddingLeft;
                         // Snap to either top, center, or bottom
-                        if (finalYUncap < maxY / 4f) {
-                            finalY = 0;
+                        if (finalYUncap < screenPaddingTop + maxY / 4f) {
+                            finalY = screenPaddingTop;
                             view_status = -1;
-                        } else if (finalYUncap < maxY / 4f * 3f) {
-                            finalY = maxY / 2f;
+                        } else if (finalYUncap < screenPaddingTop + maxY / 4f * 3f) {
+                            finalY = screenPaddingTop + maxY / 2f;
                             view_status = 0;
                         } else {
-                            finalY = maxY;
+                            finalY = screenPaddingTop + maxY;
                             view_status = 1;
                         }
-                        battleViewLayout.animateTo(layoutParams.x, layoutParams.y,
-                                0, (int) finalY,
-                                finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
-                                500, windowManager, layoutParams);
+                        battleViewLayout.animateTo(layoutParams.x, layoutParams.y, (int) finalX, (int) finalY, 0, 0, 500, windowManager, layoutParams);
                         snapIndicator.remove();
                     }
 
@@ -1840,7 +1840,6 @@ public class KcaBattleViewService extends BaseService {
                         int y = (int) (event.getRawY() - startRawY);
                         Log.e("KCA", KcaUtils.format("Coord: %d %d", x, y));
 
-                        lastX[curr] = event.getRawX();
                         lastY[curr] = event.getRawY();
                         lastT[curr] = Calendar.getInstance().getTimeInMillis();
                         curr = (curr + 1) % 3;
@@ -1851,7 +1850,7 @@ public class KcaBattleViewService extends BaseService {
                         layoutParams.y = (int) finalY;
 
                         windowManager.updateViewLayout(battleViewLayout, layoutParams);
-                        snapIndicator.update(finalY, maxY);
+                        snapIndicator.update(finalY, maxY, screenPaddingTop);
                     }
                     break;
                 case MotionEvent.ACTION_CANCEL:
@@ -1880,7 +1879,6 @@ public class KcaBattleViewService extends BaseService {
         }
     };
 
-    private int screenWidth, screenHeight;
     private int popupWidth, popupHeight;
     private float acTouchX, acTouchY;
     private int acViewX, acViewY;
@@ -2190,17 +2188,17 @@ public class KcaBattleViewService extends BaseService {
         if (battleViewLayout != null) {
             battleViewLayout.cancelAnimations();
             snapIndicator.remove();
-            layoutParams.x = 0;
+            layoutParams.x = screenPaddingLeft;
             // Snap to either top, center, or bottom
             if (view_status == -1) {
-                layoutParams.y = 0;
+                layoutParams.y = screenPaddingTop;
             } else if (view_status == 0) {
-                layoutParams.y = maxY / 2;
+                layoutParams.y = screenPaddingTop + maxY / 2;
             } else {
-                layoutParams.y = maxY;
+                layoutParams.y = screenPaddingTop + maxY;
             }
-            layoutParams.flags = getWindowLayoutParamsFlags(newConfig);
             snapIndicator = new SnapIndicator(getApplicationContext(), windowManager, mInflater);
+            layoutParams.width = screenWidth;
             windowManager.updateViewLayout(battleViewLayout, layoutParams);
         }
     }
@@ -2218,11 +2216,22 @@ public class KcaBattleViewService extends BaseService {
     }
 
     private void updateScreenSize() {
-        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
-        Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowMetrics windowMetrics = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getCurrentWindowMetrics();
+            WindowInsets insets = windowMetrics.getWindowInsets();
+            // Not allow window to stay on cutout or navigation bar or status bar
+            Insets safeInsets = insets.getInsets(WindowInsets.Type.displayCutout() | WindowInsets.Type.navigationBars() | WindowInsets.Type.statusBars());
+            screenPaddingLeft = safeInsets.left;
+            screenPaddingTop = safeInsets.top;
+            Rect bounds = windowMetrics.getBounds();
+            screenWidth = bounds.width() - safeInsets.left - safeInsets.right;
+            screenHeight = bounds.height() - safeInsets.top - safeInsets.bottom;
+        } else {
+            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            screenWidth = size.x;
+            screenHeight = size.y;
+        }
     }
 }

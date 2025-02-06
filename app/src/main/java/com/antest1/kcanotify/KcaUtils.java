@@ -977,9 +977,10 @@ public class KcaUtils {
         }
     }
 
-    public static int getWindowLayoutParamsFlags(Configuration config) {
-        int flag = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+    public static int getWindowLayoutParamsFlags() {
+        int flag = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             flag |= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         }
         return flag;
