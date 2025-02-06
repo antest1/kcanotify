@@ -137,6 +137,7 @@ public class KcaViewButtonService extends BaseService {
         return null;
     }
 
+    @SuppressLint("RtlHardcoded")
     @Override
     public void onCreate() {
         super.onCreate();
@@ -249,7 +250,7 @@ public class KcaViewButtonService extends BaseService {
                     getLayoutParamsFlags(),
                     PixelFormat.TRANSLUCENT);
 
-            layoutParams.gravity = Gravity.TOP | Gravity.START;
+            layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             updateScreenSize();
             Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
@@ -496,7 +497,7 @@ public class KcaViewButtonService extends BaseService {
                     startY = event.getRawY();
                     lastX[0] = lastX[1] = lastX[2] = startX;
                     lastY[0] = lastY[1] = lastY[2] = startY;
-                    lastT[curr] = Calendar.getInstance().getTimeInMillis();
+                    lastT[0] = lastT[1] = lastT[2] = Calendar.getInstance().getTimeInMillis();
                     curr = (curr + 1) % 3;
                     startViewX = layoutParams.x;
                     startViewY = layoutParams.y;

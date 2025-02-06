@@ -8,9 +8,12 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.graphics.Insets;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -25,7 +28,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.view.WindowMetrics;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -1801,7 +1806,7 @@ public class KcaBattleViewService extends BaseService {
                     startViewY = layoutParams.y;
                     Log.e("KCA", KcaUtils.format("mView: %d %d", startViewX, startViewY));
                     if (!isViewLocked) {
-                        snapIndicator.show(layoutParams.y, maxY, fleetViewHeight);
+                        snapIndicator.show(layoutParams.y, maxY, screenWidth, fleetViewHeight, screenPaddingLeft, screenPaddingTop);
                         battleViewLayout.cancelAnimations();
                     }
                     break;
@@ -1851,7 +1856,7 @@ public class KcaBattleViewService extends BaseService {
                         layoutParams.y = (int) finalY;
 
                         windowManager.updateViewLayout(battleViewLayout, layoutParams);
-                        snapIndicator.update(finalY, maxY);
+                        snapIndicator.update(finalY, maxY, screenPaddingTop);
                     }
                     break;
                 case MotionEvent.ACTION_CANCEL:
@@ -1880,7 +1885,7 @@ public class KcaBattleViewService extends BaseService {
         }
     };
 
-    private int screenWidth, screenHeight;
+    private int screenWidth, screenHeight, screenPaddingLeft = 0, screenPaddingTop = 0;
     private int popupWidth, popupHeight;
     private float acTouchX, acTouchY;
     private int acViewX, acViewY;
@@ -2219,10 +2224,22 @@ public class KcaBattleViewService extends BaseService {
 
     private void updateScreenSize() {
         Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
-        Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowMetrics windowMetrics = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getCurrentWindowMetrics();
+            WindowInsets insets = windowMetrics.getWindowInsets();
+            // Not allow fairy to stay on cutout or navigation bar
+            Insets safeInsets = insets.getInsets(WindowInsets.Type.displayCutout() | WindowInsets.Type.navigationBars());
+            screenPaddingLeft = safeInsets.left;
+            screenPaddingTop = safeInsets.top;
+            Rect bounds = windowMetrics.getBounds();
+            screenWidth = bounds.width() - safeInsets.left - safeInsets.right;
+            screenHeight = bounds.height() - safeInsets.top - safeInsets.bottom;
+        } else {
+            Point size = new Point();
+            display.getSize(size);
+            screenWidth = size.x;
+            screenHeight = size.y;
+        }
     }
 }

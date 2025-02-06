@@ -1,6 +1,5 @@
 package com.antest1.kcanotify;
 
-import static com.antest1.kcanotify.KcaUtils.getWindowLayoutParamsFlags;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
 import android.content.Context;
@@ -12,27 +11,27 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 public class SnapIndicator {
-    private Context context;
     private final View snapIndicatorLayout;
     private final WindowManager.LayoutParams snapLayoutParams;
     private final WindowManager windowManager;
 
     public SnapIndicator(Context context, WindowManager windowManager, LayoutInflater inflater) {
-        this.context = context;
         this.windowManager = windowManager;
         snapLayoutParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 getWindowLayoutType(),
-                getParamsFlag(),
+                getParamsFlags(),
                 PixelFormat.TRANSLUCENT);
-        snapLayoutParams.gravity = Gravity.TOP;
+        snapLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
         snapIndicatorLayout = inflater.inflate(R.layout.view_snap_indicator, null);
     }
 
-    private int getParamsFlag() {
-        int flag = getWindowLayoutParamsFlags(context.getResources().getConfiguration());
-        return flag | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+    private int getParamsFlags() {
+        return WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
     }
 
     public void remove() {
@@ -40,31 +39,28 @@ public class SnapIndicator {
             windowManager.removeViewImmediate(snapIndicatorLayout);
     }
 
-    public void update(float y, int maxY) {
-        if (y < maxY / 4f) {
-            snapLayoutParams.y = 0;
-        } else if (y < maxY / 4f * 3f) {
-            snapLayoutParams.y = maxY / 2;
+    public void update(float y, int maxY, int paddingTop) {
+        if (y < paddingTop + maxY / 4f) {
+            snapLayoutParams.y = paddingTop;
+        } else if (y < paddingTop + maxY / 4f * 3f) {
+            snapLayoutParams.y = paddingTop + maxY / 2;
         } else {
-            snapLayoutParams.y = maxY;
+            snapLayoutParams.y = paddingTop + maxY;
         }
         windowManager.updateViewLayout(snapIndicatorLayout, snapLayoutParams);
     }
 
-    public void show(int y, int maxY, int height) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                height
-        );
+    public void show(int y, int maxY, int w, int h, int paddingLeft, int paddingTop) {
+        snapLayoutParams.width = w;
+        snapLayoutParams.height = h;
         View outline = snapIndicatorLayout.findViewById(R.id.indicator_outline);
-        outline.setLayoutParams(params);
-        outline.requestLayout();
-        if (y < maxY / 4f) {
-            snapLayoutParams.y = 0;
-        } else if (y < maxY / 4f * 3f) {
-            snapLayoutParams.y = maxY / 2;
+        snapLayoutParams.x = paddingLeft;
+        if (y < paddingTop + maxY / 4f) {
+            snapLayoutParams.y = paddingTop;
+        } else if (y < paddingTop + maxY / 4f * 3f) {
+            snapLayoutParams.y = paddingTop + maxY / 2;
         } else {
-            snapLayoutParams.y = maxY;
+            snapLayoutParams.y = paddingTop + maxY;
         }
         windowManager.addView(snapIndicatorLayout, snapLayoutParams);
     }
