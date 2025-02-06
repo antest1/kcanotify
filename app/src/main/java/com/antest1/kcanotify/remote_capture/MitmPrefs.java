@@ -21,7 +21,7 @@ package com.antest1.kcanotify.remote_capture;
 
 import android.content.SharedPreferences;
 
-public class Prefs {
+public class MitmPrefs {
     public static final String PREF_TLS_DECRYPTION_SETUP_DONE = "tls_decryption_setup_ok";
     public static final String PREF_CA_INSTALLATION_SKIPPED = "ca_install_skipped";
     public static final String PREF_IGNORED_MITM_VERSION = "ignored_mitm_version";

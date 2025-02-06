@@ -102,7 +102,6 @@ public class MainActivity extends BaseActivity {
     MenuItem fairyButton;
     public static Handler sHandler;
     TextView textDescription;
-    TextView textMaintenance;
     Button textMainUpdate, textSpecial, textSpecial2;
     BottomAppBar bottomAppBar;
     FrameLayout bottomSheet;
@@ -272,41 +271,6 @@ public class MainActivity extends BaseActivity {
         textDescription.setText(fromHtml);
 
         backPressCloseHandler = new BackPressCloseHandler();
-
-        textMaintenance = findViewById(R.id.textMaintenance);
-        String maintenanceInfo = dbHelper.getValue(DB_KEY_KCMAINTNC);
-        if (maintenanceInfo != null && !maintenanceInfo.trim().isEmpty()) {
-            try {
-                JsonArray maintenance_data = (JsonParser.parseString(maintenanceInfo)).getAsJsonArray();
-                String mt_start = maintenance_data.get(0).getAsString();
-                String mt_end = maintenance_data.get(1).getAsString();
-                if (!mt_start.isEmpty()) {
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z", Locale.US);
-                    Date start_date = df.parse(mt_start);
-                    Date end_date = df.parse(mt_end);
-
-                    SimpleDateFormat out_df;
-                    out_df = new SimpleDateFormat(DateFormat.getBestDateTimePattern(Locale.getDefault(), "EEE, dd MMM yyyy HH:mm Z"), Locale.getDefault());
-
-                    boolean is_passed = end_date.getTime() < System.currentTimeMillis();
-                    boolean before_maintenance = System.currentTimeMillis() < start_date.getTime();
-
-                    if (before_maintenance) {
-                        textMaintenance.setText(KcaUtils.format(getString(R.string.ma_nextmaintenance), out_df.format(start_date)));
-                    } else if (!is_passed) {
-                        textMaintenance.setText(KcaUtils.format(getString(R.string.ma_endmaintenance), out_df.format(end_date)));
-                    }
-                    textMaintenance.setVisibility(View.VISIBLE);
-                } else {
-                    textMaintenance.setVisibility(View.GONE);
-                }
-            } catch (ParseException | IllegalStateException e) {
-                textMaintenance.setText(getStringFromException(e));
-                textMaintenance.setVisibility(View.VISIBLE);
-            }
-        } else {
-            textMaintenance.setVisibility(View.GONE);
-        }
 
         ImageView specialImage = findViewById(R.id.special_image);
         specialImage.setImageResource(R.mipmap.special_image);

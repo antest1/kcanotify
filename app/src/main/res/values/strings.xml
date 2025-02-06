@@ -128,8 +128,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_toast_overay_diabled">Screen Overlay Permission is required for BattleView.</string>
     <string name="ma_hasupdate" formatted="false">An update is available. (%s)</string>
     <string name="ma_hasdataupdate" formatted="false">New game data is available. (%s)</string>
-    <string name="ma_nextmaintenance" formatted="false">Next Maintenance:\n%s</string>
-    <string name="ma_endmaintenance" formatted="false">Maintenance End Time:\n%s</string>
     <string name="description"><b>Help</b>\nTurn on VPN and SVC then run Kancolle\n\n※ VPN is required for detecting game data. \n\n<b>Main Features</b>\n - Expedition/Docking notifications \n - Heavy Damage Alert (prior to/during combat)\n - LoS/FP/Fatigue indicators\n - Node tracking during sorties\n - BattleView / QuestView\n - Improvement Arsenal Chart\n - Send statistics to poi-statistics (optional)</string>
 
     <!-- SettingActivity Strings -->

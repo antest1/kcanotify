@@ -113,7 +113,7 @@ public class KcaVpnData {
         if (type == REQUEST) {
             if (prefixCheckList.contains(taddrstr)) {
                 return 1;
-            } else if (head != null) { // detect kcs host from request header
+            } else if (head != null) { // detect kcs host from request header (as backup)
                 String headstr = (new String(head)).split("\r\n\r\n")[0];
                 if (headstr.contains("Host: ") && headstr.contains(kcHostPostfix + "\r\n")) {
                     Log.e("KCAV", "kcs detected: " + taddrstr);

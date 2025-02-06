@@ -95,8 +95,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_toast_overay_diabled">戰鬥劇透需要取得懸浮視窗權限</string>
     <string name="ma_hasupdate" formatted="false">已推出新版本。 (%s)</string>
     <string name="ma_hasdataupdate" formatted="false">有新的遊戲資料更新。 (%s)</string>
-    <string name="ma_nextmaintenance" formatted="false">次伺服器維護還有:\n%s</string>
-    <string name="ma_endmaintenance" formatted="false">伺服器維護預定的結束時間:\n%s</string>
     <string name="description"><b>Help</b>\n請啟用VPN與SVC服務後再開啟艦これ\n\n※ VPN是為了監測遊戲資料 \n\n<b>主要功能</b>\n - 遠征/入渠通知 \n - 大破警告\n - 索敵/制空/士氣值顯示\n - 羅盤預測\n - 戰鬥劇透 / 任務翻譯\n - 裝備改修表</string>
 
     <!-- SettingActivity Strings -->

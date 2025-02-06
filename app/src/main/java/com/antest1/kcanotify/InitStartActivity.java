@@ -35,7 +35,6 @@ import java.util.Locale;
 import retrofit2.Call;
 
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_KCMAINTNC;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_MAIN;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -190,10 +189,6 @@ public class InitStartActivity extends BaseActivity {
                 }
 
                 Log.e("KCA", response_data.toString());
-                if (response_data.has("kc_maintenance")) {
-                    dbHelper.putValue(DB_KEY_KCMAINTNC, response_data.get("kc_maintenance").toString());
-                }
-
                 if (response_data.has("version")) {
                     String recentVersion = response_data.get("version").getAsString();
                     if (!compareVersion(currentVersion, recentVersion)) { // True if latest

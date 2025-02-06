@@ -494,7 +494,7 @@ public class KcaViewButtonService extends BaseService {
                     float finalX = max(screenPaddingLeft, Math.min(finalXUncap, screenPaddingLeft + screenWidth - buttonView.getWidth()));
                     float finalY = max(screenPaddingTop, Math.min(finalYUncap, screenPaddingTop + screenHeight - buttonView.getHeight()));
 
-                    // detech user fling by dt and latest xy movement
+                    // detect user fling by dt and latest xy movement
                     float finalXDiff = getMinMaxDiff(lastX);
                     float finalYDiff = getMinMaxDiff(lastY);
                     boolean isFling = dt < 50 && (finalXDiff >= 2 || finalYDiff >= 2);

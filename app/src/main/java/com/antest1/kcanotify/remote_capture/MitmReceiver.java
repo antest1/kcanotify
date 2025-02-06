@@ -142,7 +142,7 @@ public class MitmReceiver implements Runnable, MitmListener {
 
         ParcelFileDescriptor fd = mSocketFd;
         mSocketFd = null;
-        Utils.safeClose(fd); // possibly wake mThread
+        MitmUtils.safeClose(fd); // possibly wake mThread
 
         // send explicit stop message, as the addon may not be waked when the fd is closed
         mAddon.stopProxy();
@@ -247,7 +247,7 @@ public class MitmReceiver implements Runnable, MitmListener {
             if(mSocketFd != null) // ignore termination
                 e.printStackTrace();
         } finally {
-            Utils.safeClose(mKeylog);
+            MitmUtils.safeClose(mKeylog);
             mKeylog = null;
         }
 
@@ -337,9 +337,9 @@ public class MitmReceiver implements Runnable, MitmListener {
 
     @Override
     public void onMitmGetCaCertificateResult(@Nullable String ca_pem) {
-        if(!MitmAddon.isCAInstallationSkipped(mContext) && !Utils.isCAInstalled(ca_pem)) {
+        if(!MitmAddon.isCAInstallationSkipped(mContext) && !MitmUtils.isCAInstalled(ca_pem)) {
             // The certificate has been uninstalled from the system
-            Utils.showToastLong(mContext, R.string.cert_reinstall_required);
+            MitmUtils.showToastLong(mContext, R.string.cert_reinstall_required);
             MitmAddon.setDecryptionSetupDone(mContext, false);
             // TODO stop Service
             return;
@@ -353,7 +353,7 @@ public class MitmReceiver implements Runnable, MitmListener {
         }
 
         if (MitmAddon.isDozeEnabled(mContext)) {
-            Utils.showToastLong(mContext, R.string.mitm_doze_notice);
+            MitmUtils.showToastLong(mContext, R.string.mitm_doze_notice);
             mAddon.disableDoze();
         }
 

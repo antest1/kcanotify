@@ -53,7 +53,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
-public class Utils {
+public class MitmUtils {
     static final String TAG = "Utils";
 
     public static void showToast(Context context, int id, Object... args) {
@@ -74,14 +74,14 @@ public class Utils {
     }
 
     public static boolean launchFileDialog(Context context, Intent intent, ActivityResultLauncher<Intent> launcher) {
-        if(Utils.supportsFileDialog(context, intent)) {
+        if(MitmUtils.supportsFileDialog(context, intent)) {
             try {
                 launcher.launch(intent);
                 return true;
             } catch (ActivityNotFoundException ignored) {}
         }
 
-        Utils.showToastLong(context, R.string.no_activity_file_selection);
+        MitmUtils.showToastLong(context, R.string.no_activity_file_selection);
         return false;
     }
 

@@ -65,7 +65,6 @@ public final class KcaConstants {
     public static final String DB_KEY_EXPCALTRK = "key_expcaltrk";
     public static final String DB_KEY_QUESTNCHK = "key_questnchk";
     public static final String DB_KEY_MATERIALS = "key_materials";
-    public static final String DB_KEY_KCMAINTNC = "key_kcmaintnc";
 
     public static final String[] DB_KEY_ARRAY = {
             DB_KEY_STARTDATA,
