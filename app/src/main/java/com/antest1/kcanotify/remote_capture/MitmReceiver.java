@@ -71,7 +71,7 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
     private static final String TAG = "MitmReceiver";
     public static final int TLS_DECRYPTION_PROXY_PORT = 7780;
     private Thread mThread;
-    private final ConnectionsRegister mReg;
+    // private final ConnectionsRegister mReg;
     private final Context mContext;
     private final MitmAddon mAddon;
     private final MitmAPI.MitmConfig mConfig;
@@ -126,7 +126,7 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
 
     public MitmReceiver(Context ctx, CaptureSettings settings, String proxyAuth) {
         mContext = ctx;
-        mReg = CaptureService.requireConnsRegister();
+        // mReg = CaptureService.requireConnsRegister();
         mAddon = new MitmAddon(mContext, this);
 
         mConfig = new MitmAPI.MitmConfig();
@@ -161,14 +161,14 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
             return false;
         }
 
-        mReg.addListener(this);
+        // mReg.addListener(this);
         return true;
     }
 
     public void stop() throws IOException {
         Log.d(TAG, "stopping");
 
-        mReg.removeListener(this);
+        // mReg.removeListener(this);
 
         ParcelFileDescriptor fd = mSocketFd;
         mSocketFd = null;
@@ -214,7 +214,7 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
 
                 if(header == null) {
                     // received when the addon is stopped
-                    CaptureService.stopService();
+                    // TODO stop Service
                     break;
                 }
 
@@ -232,8 +232,8 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
                     port = Integer.parseInt(tk_port);
                     msg_len = Integer.parseInt(tk_len);
                 } catch (NoSuchElementException | NumberFormatException e) {
-                    CaptureService.requireInstance().reportError("[BUG] Invalid header received from the mitm plugin");
-                    CaptureService.stopService();
+                    // CaptureService.requireInstance().reportError("[BUG] Invalid header received from the mitm plugin");
+                    // TODO stop Service
                     break;
                 }
 
@@ -271,14 +271,6 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
                         int dport = (type == MsgType.HTTP_REQUEST) ? 443 : port;
                         getDataFromNative(msg, msg.length, pkt_type, null, null, sport, dport);
                     }
-
-                    ConnectionDescriptor conn = getConnByLocalPort(port);
-
-                    if(conn != null)
-                        handleMessage(conn, type, msg, tstamp);
-                    else
-                        // We may receive a message before seeing the connection in connectionsAdded
-                        addPendingMessage(new PendingMessage(type, msg, port, tstamp));
                 }
             }
         } catch (IOException e) {
@@ -476,7 +468,7 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
             // The certificate has been uninstalled from the system
             Utils.showToastLong(mContext, R.string.cert_reinstall_required);
             MitmAddon.setDecryptionSetupDone(mContext, false);
-            CaptureService.stopService();
+            // TODO stop Service
             return;
         }
 
@@ -502,23 +494,6 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
     @Override
     public void onMitmServiceDisconnect() {
         // Stop the capture if running, CaptureService will call MitmReceiver::stop
-        CaptureService.stopService();
-    }
-
-    ConnectionDescriptor getConnByLocalPort(int local_port) {
-        Integer conn_id;
-
-        synchronized(this) {
-            conn_id = mPortToConnId.get(local_port);
-        }
-        if(conn_id == null)
-            return null;
-
-        ConnectionDescriptor conn = mReg.getConnById(conn_id);
-        if((conn == null) || (conn.local_port != local_port))
-            return null;
-
-        // success
-        return conn;
+        // TODO stop Service
     }
 }

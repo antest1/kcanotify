@@ -158,6 +158,9 @@
 -keep class com.antest1.kcanotify.** { *; }
 -keepnames class com.antest1.kcanotify.** { *; }
 
+#NetGuard
+-keepnames class eu.faircode.netguard.** { *; }
+
 #JNI
 -keepclasseswithmembernames class * {
     native <methods>;

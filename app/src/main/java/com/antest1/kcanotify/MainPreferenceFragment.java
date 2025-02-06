@@ -41,7 +41,6 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
-import com.antest1.kcanotify.remote_capture.CaptureService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -457,7 +456,10 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         if (PREF_SNIFFER_MODE.equals(key)) {
             String val = (String) newValue;
             if (Integer.parseInt(val) == SNIFFER_PASSIVE) {
-                if (CaptureService.isServiceActive()) CaptureService.stopService();
+                if (prefs.getBoolean(PREF_VPN_ENABLED, false)) {
+                    KcaVpnService.stop(VPN_STOP_REASON, getActivity());
+                    prefs.edit().putBoolean(PREF_VPN_ENABLED, false).commit();
+                }
                 setActiveSnifferSettingEnabled(false);
             } else if (Integer.parseInt(val) == SNIFFER_ACTIVE) {
                 setActiveSnifferSettingEnabled(true);

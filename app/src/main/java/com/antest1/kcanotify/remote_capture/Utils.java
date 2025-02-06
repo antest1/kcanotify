@@ -346,11 +346,7 @@ public class Utils {
     }
 
     public static String[] getL7Protocols() {
-        if(l7Protocols == null) {
-            List<String> protos = CaptureService.getL7Protocols();
-            Collections.sort(protos, String.CASE_INSENSITIVE_ORDER);
-            l7Protocols = protos.toArray(new String[0]);
-        }
+
 
         return l7Protocols;
     }
@@ -409,44 +405,6 @@ public class Utils {
     }
 
     public static String getLocalIPAddress(Context context) {
-        InetAddress vpn_ip;
-
-        try {
-            vpn_ip = InetAddress.getByName(CaptureService.VPN_IP_ADDRESS);
-        } catch (UnknownHostException e) {
-            return "";
-        }
-
-        // try to get the WiFi IP address first
-        String wifi_ip = getLocalWifiIpAddress(context);
-
-        if((wifi_ip != null) && (!wifi_ip.equals("0.0.0.0"))) {
-            Log.d("getLocalIPAddress", "Using WiFi IP: " + wifi_ip);
-            return wifi_ip;
-        }
-
-        // otherwise search for other network interfaces
-        // https://stackoverflow.com/questions/6064510/how-to-get-ip-address-of-the-device-from-code
-        try {
-            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface intf : interfaces) {
-                if(!intf.isVirtual()) {
-                    List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
-                    for (InetAddress addr : addrs) {
-                        if (!addr.isLoopbackAddress()
-                                && addr.isSiteLocalAddress() /* Exclude public IPs */
-                                && !addr.equals(vpn_ip)) {
-                            String sAddr = addr.getHostAddress();
-
-                            if ((sAddr != null) && (addr instanceof Inet4Address) && !sAddr.equals("0.0.0.0")) {
-                                Log.d("getLocalIPAddress", "Using interface '" + intf.getName() + "' IP: " + sAddr);
-                                return sAddr;
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception ignored) { }
 
         // Fallback
         Log.d("getLocalIPAddress", "Using fallback IP");
@@ -1220,14 +1178,6 @@ public class Utils {
         tv.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    public static int getPCAPdroidUid(Context context) {
-        // NOTE: when called from a work profile, it correctly returns the work profile UID
-        AppDescriptor app = AppsResolver.resolveInstalledApp(context.getPackageManager(), BuildConfig.APPLICATION_ID, 0);
-        if(app != null)
-            return app.getUid();
-        return Utils.UID_UNKNOWN;
-    }
-
     // returns the user ID of a given app uid
     public static int getUserId(int uid) {
         return  uid / PER_USER_RANGE;
@@ -1235,7 +1185,7 @@ public class Utils {
 
     @SuppressLint("DefaultLocale")
     public static boolean rootGrantPermission(Context context, String perm) {
-        return CaptureService.rootCmd("pm", String.format("grant --user %d %s %s", getUserId(getPCAPdroidUid(context)), BuildConfig.APPLICATION_ID, perm)) == 0;
+        return true;
     }
 
     // Returns the available dalvik vm heap size for this app. Exceeding this size will result into
