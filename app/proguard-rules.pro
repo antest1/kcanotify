@@ -158,17 +158,28 @@
 -keep class com.antest1.kcanotify.** { *; }
 -keepnames class com.antest1.kcanotify.** { *; }
 
-#NetGuard
--keepnames class eu.faircode.netguard.** { *; }
-
 #JNI
 -keepclasseswithmembernames class * {
     native <methods>;
 }
 
+#NetGuard
+-keepnames class eu.faircode.netguard.** { *; }
+
+-keep class eu.faircode.netguard.** { *; }
+-keep class eu.faircode.netguard.IPUtil { *; }
+-keep class eu.faircode.netguard.Packet { *; }
+-keep class eu.faircode.netguard.Util { *; }
+
+-keep class com.antest1.kcanotify.KcaVpnService {
+    void nativeExit(java.lang.String);
+    void nativeError(int, java.lang.String);
+}
+
 -keep class com.antest1.kcanotify.KcaVpnData {
     int containsKcaServer(int, byte[], byte[], byte[]);
     void getDataFromNative(byte[], int, int, byte[], byte[], int, int);
+    void registerKcaServer(byte[], byte[]);
 }
 
 -assumenosideeffects class android.util.Log {

@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import com.antest1.kcanotify.remote_capture.MitmAddon;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
@@ -579,22 +580,24 @@ public class MainActivity extends BaseActivity {
     }
 
     public void startVpnService() {
-        JsonObject statProperties = new JsonObject();
-        try {
-            final Intent prepare = VpnService.prepare(MainActivity.this);
-            if (prepare == null) {
-                //Log.i(TAG, "Prepare done");
-                startActivityResultCallback(REQUEST_VPN, RESULT_OK);
-            } else {
-                vpnPrepareLauncher.launch(prepare);
+        if (checkMitmSetting()) {
+            JsonObject statProperties = new JsonObject();
+            try {
+                final Intent prepare = VpnService.prepare(MainActivity.this);
+                if (prepare == null) {
+                    //Log.i(TAG, "Prepare done");
+                    startActivityResultCallback(REQUEST_VPN, RESULT_OK);
+                } else {
+                    vpnPrepareLauncher.launch(prepare);
+                }
+                statProperties.addProperty("is_success", true);
+            } catch (Throwable ex) {
+                // Prepare failed
+                statProperties.addProperty("is_success", false);
+                Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
             }
-            statProperties.addProperty("is_success", true);
-        } catch (Throwable ex) {
-            // Prepare failed
-            statProperties.addProperty("is_success", false);
-            Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
+            sendUserAnalytics(getApplicationContext(), START_SNIFFER, statProperties);
         }
-        sendUserAnalytics(getApplicationContext(), START_SNIFFER, statProperties);
     }
 
     public void stopVpnService() {
@@ -615,6 +618,35 @@ public class MainActivity extends BaseActivity {
         AlertDialog dialog = alert.create();
         dialog.show();
         ((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private boolean checkMitmSetting() {
+        if (getBooleanPreferences(this, PREF_USE_TLS_DECRYPTION)) {
+            MitmAddon.setCAInstallationSkipped(this, false);
+            if (MitmAddon.needsSetup(this)) {
+                Intent intent = new Intent(this, MitmSetupWizardActivity.class);
+                startActivity(intent);
+                return false;
+            }
+
+            if (!MitmAddon.getNewVersionAvailable(this).isEmpty()) {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.update_available)
+                        .setMessage(R.string.mitm_addon_update_available)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.update_action, (dialog, whichButton) -> {
+                            Intent intent = new Intent(this, MitmSetupWizardActivity.class);
+                            startActivity(intent);
+                        })
+                        .setNegativeButton(R.string.cancel_action, (dialog, whichButton) -> {
+                            MitmAddon.ignoreNewVersion(this);
+                            startVpnService();
+                        })
+                        .show();
+                return false;
+            }
+        }
+        return true;
     }
 
     private void handleOpenToolIntent(Intent intent) {

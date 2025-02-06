@@ -290,7 +290,6 @@ void handle_ip(const struct arguments *args,
         if (get_sni(data, datalen, server_name)) {
             log_android(ANDROID_LOG_INFO, "TLS server name: %s", server_name);
             uid = get_uid(version, protocol, saddr, sport, daddr, dport);
-            dns_resolved(args, server_name, server_name, dest, -1, uid);
         }
     }
 
@@ -313,14 +312,12 @@ void handle_ip(const struct arguments *args,
 
     // Allow all packets
     int allowed = 1;
-    struct allowed *redirect = NULL;
-
     if (protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6)
         handle_icmp(args, pkt, length, payload, uid, epoll_fd);
     else if (protocol == IPPROTO_UDP)
-        handle_udp(args, pkt, length, payload, uid, redirect, epoll_fd);
+        handle_udp(args, pkt, length, payload, uid, NULL, epoll_fd);
     else if (protocol == IPPROTO_TCP)
-        handle_tcp(args, pkt, length, payload, uid, allowed, redirect, epoll_fd);
+        handle_tcp(args, pkt, length, payload, uid, allowed, NULL, epoll_fd);
 }
 
 jint get_uid(const int version, const int protocol,

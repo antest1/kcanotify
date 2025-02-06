@@ -21,10 +21,7 @@ package com.antest1.kcanotify.remote_capture;
 
 import android.content.Context;
 import android.os.ParcelFileDescriptor;
-import android.os.SystemClock;
 import android.util.Log;
-import android.util.LruCache;
-import android.util.SparseArray;
 import android.widget.Toast;
 
 import androidx.lifecycle.LifecycleOwner;
@@ -32,12 +29,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.antest1.kcanotify.R;
-import com.antest1.kcanotify.remote_capture.interfaces.ConnectionsListener;
 import com.antest1.kcanotify.remote_capture.interfaces.MitmListener;
-import com.antest1.kcanotify.remote_capture.model.CaptureSettings;
-import com.antest1.kcanotify.remote_capture.model.ConnectionDescriptor;
-import com.antest1.kcanotify.remote_capture.model.PayloadChunk;
-import com.antest1.kcanotify.remote_capture.model.PayloadChunk.ChunkType;
 import com.antest1.kcanotify.mitm.MitmAPI;
 
 import com.antest1.kcanotify.KcaVpnData;
@@ -50,7 +42,6 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
@@ -67,21 +58,16 @@ import java.util.StringTokenizer;
  *
  * The raw message data follows the header.
  */
-public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener {
+public class MitmReceiver implements Runnable, MitmListener {
     private static final String TAG = "MitmReceiver";
     public static final int TLS_DECRYPTION_PROXY_PORT = 7780;
     private Thread mThread;
-    // private final ConnectionsRegister mReg;
     private final Context mContext;
     private final MitmAddon mAddon;
     private final MitmAPI.MitmConfig mConfig;
     private static final MutableLiveData<Status> proxyStatus = new MutableLiveData<>(Status.NOT_STARTED);
     private ParcelFileDescriptor mSocketFd;
     private BufferedOutputStream mKeylog;
-
-    // Shared state
-    private final LruCache<Integer, Integer> mPortToConnId = new LruCache<>(64);
-    private final SparseArray<ArrayList<PendingMessage>> mPendingMessages = new SparseArray<>();
 
     private enum MsgType {
         UNKNOWN,
@@ -101,22 +87,6 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
         JS_INJECTED
     }
 
-    private static class PendingMessage {
-        MsgType type;
-        byte[] msg;
-        int port;
-        long pendingSince;
-        long when;
-
-        PendingMessage(MsgType _type, byte[] _msg, int _port, long _now) {
-            type = _type;
-            msg = _msg;
-            port = _port;
-            pendingSince = SystemClock.elapsedRealtime();
-            when = _now;
-        }
-    }
-
     public enum Status {
         NOT_STARTED,
         STARTING,
@@ -124,7 +94,7 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
         RUNNING
     }
 
-    public MitmReceiver(Context ctx, CaptureSettings settings, String proxyAuth) {
+    public MitmReceiver(Context ctx, String proxyAuth) {
         mContext = ctx;
         // mReg = CaptureService.requireConnsRegister();
         mAddon = new MitmAddon(mContext, this);
@@ -132,7 +102,7 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
         mConfig = new MitmAPI.MitmConfig();
         mConfig.proxyPort = TLS_DECRYPTION_PROXY_PORT;
         mConfig.proxyAuth = proxyAuth;
-        mConfig.additionalOptions = settings.mitmproxy_opts;
+        mConfig.additionalOptions = "";
         mConfig.dumpMasterSecrets = false;
         mConfig.shortPayload = false;
 
@@ -289,73 +259,6 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
         Log.i(TAG, "End receiving data");
     }
 
-    private boolean isSent(MsgType type) {
-        switch (type) {
-            case HTTP_REQUEST:
-            case TCP_CLIENT_MSG:
-            case WEBSOCKET_CLIENT_MSG:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    private ChunkType getChunkType(MsgType type) {
-        switch (type) {
-            case HTTP_REQUEST:
-            case HTTP_REPLY:
-                return ChunkType.HTTP;
-            case WEBSOCKET_CLIENT_MSG:
-            case WEBSOCKET_SERVER_MSG:
-                return ChunkType.WEBSOCKET;
-            default:
-                return ChunkType.RAW;
-        }
-    }
-
-    private void handleMessage(ConnectionDescriptor conn, MsgType type, byte[] message, long tstamp) {
-        // NOTE: we are possibly accessing the conn concurrently
-        if((type == MsgType.TLS_ERROR) || (type == MsgType.HTTP_ERROR) || (type == MsgType.TCP_ERROR)) {
-            conn.decryption_error = new String(message, StandardCharsets.US_ASCII);
-
-            // see ConnectionDescriptor.processUpdate
-            if(conn.status == ConnectionDescriptor.CONN_STATUS_CLOSED)
-                conn.status = ConnectionDescriptor.CONN_STATUS_CLIENT_ERROR;
-        } else if(type == MsgType.DATA_TRUNCATED) {
-            conn.setPayloadTruncatedByAddon();
-        } else if(type == MsgType.JS_INJECTED) {
-            conn.js_injected_scripts = new String(message, StandardCharsets.US_ASCII);
-        } else
-            conn.addPayloadChunkMitm(new PayloadChunk(message, getChunkType(type), isSent(type), tstamp));
-    }
-
-    private synchronized void addPendingMessage(PendingMessage pending) {
-        // Purge unresolved connections (should not happen, just in case)
-        if(mPendingMessages.size() > 32) {
-            long now = SystemClock.elapsedRealtime();
-
-            for(int i = mPendingMessages.size()-1; i>=0; i--) {
-                ArrayList<PendingMessage> pp = mPendingMessages.valueAt(i);
-
-                if((now - pp.get(0).pendingSince) > 5000 /* 5 sec */) {
-                    Log.w(TAG, "Dropping " + pp.size() + " old messages");
-                    mPendingMessages.remove(mPendingMessages.keyAt(i));
-                }
-            }
-        }
-
-        int idx = mPendingMessages.indexOfKey(pending.port);
-        ArrayList<PendingMessage> pp;
-
-        if(idx < 0) {
-            pp = new ArrayList<>();
-            mPendingMessages.put(pending.port, pp);
-        } else
-            pp = mPendingMessages.valueAt(idx);
-
-        pp.add(pending);
-    }
-
     private static MsgType parseMsgType(String str) {
         switch (str) {
             case "running":
@@ -419,36 +322,6 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
 
     public static void observeStatus(LifecycleOwner lifecycleOwner, Observer<Status> observer) {
         proxyStatus.observe(lifecycleOwner, observer);
-    }
-
-    @Override
-    public void connectionsChanges(int num_connetions) {}
-    @Override
-    public void connectionsRemoved(int start, ConnectionDescriptor[] conns) {}
-    @Override
-    public void connectionsUpdated(int[] positions) {}
-
-    @Override
-    public void connectionsAdded(int start, ConnectionDescriptor[] conns) {
-        synchronized(this) {
-            // Save the latest port->ID mapping
-            for(ConnectionDescriptor conn: conns) {
-                //Log.d(TAG, "[+] port " + conn.local_port);
-                mPortToConnId.put(conn.local_port, conn.incr_id);
-
-                // Check if the message has already been received
-                int pending_idx = mPendingMessages.indexOfKey(conn.local_port);
-                if(pending_idx >= 0) {
-                    ArrayList<PendingMessage> pp = mPendingMessages.valueAt(pending_idx);
-                    mPendingMessages.removeAt(pending_idx);
-
-                    for(PendingMessage pending: pp) {
-                        //Log.d(TAG, "(pending) MSG." + pending.type.name() + "[" + pending.message.length + " B]: port=" + pending.port);
-                        handleMessage(conn, pending.type, pending.msg, pending.when);
-                    }
-                }
-            }
-        }
     }
 
     @Override

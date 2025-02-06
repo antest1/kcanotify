@@ -43,7 +43,6 @@ import androidx.core.content.pm.PackageInfoCompat;
 import androidx.preference.PreferenceManager;
 
 import com.antest1.kcanotify.remote_capture.interfaces.MitmListener;
-import com.antest1.kcanotify.remote_capture.model.Prefs;
 import com.antest1.kcanotify.mitm.MitmAPI;
 
 import java.io.IOException;
@@ -116,14 +115,6 @@ public class MitmAddon {
             return pInfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             return "";
-        }
-    }
-
-    public static int getUid(Context ctx) {
-        try {
-            return Utils.getPackageUid(ctx.getPackageManager(), MitmAPI.PACKAGE_NAME, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            return -1;
         }
     }
 

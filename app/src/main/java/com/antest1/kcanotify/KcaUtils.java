@@ -89,6 +89,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
@@ -1123,6 +1124,17 @@ public class KcaUtils {
             }
         }
         return dataString.toString();
+    }
+
+    public static String genRandomString(int length) {
+        String charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        StringBuilder sb = new StringBuilder(length);
+        Random rnd = new Random();
+
+        for(int i = 0; i < length; i++)
+            sb.append(charset.charAt(rnd.nextInt(charset.length())));
+
+        return sb.toString();
     }
 
     public static void copyFile(FileInputStream src, FileOutputStream dst) throws IOException {

@@ -27,6 +27,7 @@ import android.util.Log;
 import android.os.Process;
 import android.util.Pair;
 
+import com.antest1.kcanotify.remote_capture.MitmReceiver;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -41,13 +42,13 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
 import eu.faircode.netguard.IPUtil;
-import eu.faircode.netguard.ResourceRecord;
 import eu.faircode.netguard.Util;
 
 import static com.antest1.kcanotify.KcaConstants.DMMLOGIN_PACKAGE_NAME;
@@ -55,6 +56,7 @@ import static com.antest1.kcanotify.KcaConstants.GOTO_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.KC_WV_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_PACKAGE_ALLOW;
+import static com.antest1.kcanotify.KcaConstants.PREF_USE_TLS_DECRYPTION;
 import static com.antest1.kcanotify.KcaConstants.VPN_STOP_REASON;
 
 public class KcaVpnService extends VpnService implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -66,6 +68,7 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
     private static long jni_context = 0;
     private Thread tunnelThread = null;
     private KcaVpnService.Builder last_builder = null;
+    private MitmReceiver mMitmReceiver;
     private static ParcelFileDescriptor vpn = null;
 
     @Override
@@ -81,7 +84,7 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
 
     private native void jni_start(long context, int loglevel);
 
-    private native void jni_run(long context, int tun, boolean fwd53, int rcode);
+    private native void jni_run(long context, int tun, boolean fwd53, int rcode, boolean use_tls);
 
     private native void jni_stop(long context);
 
@@ -110,6 +113,10 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
     private boolean phone_state = false;
     private boolean last_interactive = false;
     private static final String ACTION_SCREEN_OFF_DELAYED = "com.antest1.kcanotify.SCREEN_OFF_DELAYED";
+    private static List<String> KC_PACKAGES = Arrays.asList(KC_PACKAGE_NAME, KC_WV_PACKAGE_NAME, GOTO_PACKAGE_NAME);
+
+    private static String mitmUsername = "";
+    private static String mitmPassword = "";
 
     public enum Command {run, start, reload, stop, stats, set, householding, watchdog}
 
@@ -445,6 +452,7 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
 
         boolean socks5_enable = prefs.getBoolean("socks5_enable", false);
         boolean socks5_allapps = prefs.getBoolean("socks5_allapps", false);
+        boolean tls_enable = prefs.getBoolean(PREF_USE_TLS_DECRYPTION, false);
 
         JsonArray allowed_apps = JsonParser.parseString(KcaUtils.getStringPreferences(
                 getApplicationContext(), PREF_PACKAGE_ALLOW)).getAsJsonArray();
@@ -456,20 +464,20 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
             builder.setMetered(Util.isMeteredNetwork(this));
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            try {
-                if (!socks5_enable || !socks5_allapps) {
-                    builder.addAllowedApplication(KC_PACKAGE_NAME);
-                    builder.addAllowedApplication(KC_WV_PACKAGE_NAME);
-                    builder.addAllowedApplication(GOTO_PACKAGE_NAME);
-                    if (socks5_enable) builder.addAllowedApplication(DMMLOGIN_PACKAGE_NAME);
-                    for (JsonElement pkg : allowed_apps) {
-                        builder.addAllowedApplication(pkg.getAsString());
-                    }
+        try {
+            if (tls_enable || !(socks5_enable && socks5_allapps)) {
+                for (String pkg: KC_PACKAGES) {
+                    builder.addAllowedApplication(pkg);
                 }
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
+                for (JsonElement pkg: allowed_apps) {
+                    builder.addAllowedApplication(pkg.getAsString());
+                }
+                if (!tls_enable && socks5_enable) {
+                    builder.addAllowedApplication(DMMLOGIN_PACKAGE_NAME);
+                }
             }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
 
         // VPN address
@@ -694,20 +702,46 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
         }
     }
 
+    private void startMitmReceiver() {
+        mitmUsername = KcaUtils.genRandomString(8);
+        mitmPassword = KcaUtils.genRandomString(8);
+        mMitmReceiver = new MitmReceiver(this, mitmUsername + ":" + mitmPassword);
+        try {
+            if (!mMitmReceiver.start()) stopSelf();
+        } catch (IOException e) {
+            e.printStackTrace();
+            stopSelf();
+        }
+    }
+
     private void startNative(ParcelFileDescriptor vpn) {
         // Prepare rules
-        int prio = Log.ERROR;
+        int prio = Log.WARN; // Log.ERROR;
         int rcode = 3;
+
         SharedPreferences prefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
-        boolean enable = prefs.getBoolean("socks5_enable", false);
-        String addr = prefs.getString("socks5_address", "");
-        String portNum = prefs.getString("socks5_port", "0");
-        String username = prefs.getString("socks5_name", "");
-        String password = prefs.getString("socks5_pass", "");
+        boolean socks5_enable = prefs.getBoolean("socks5_enable", false);
+        boolean tls_enabled = prefs.getBoolean(PREF_USE_TLS_DECRYPTION, false);
+        if (tls_enabled) startMitmReceiver();
+
         int port = 0;
-        if (!portNum.equals(""))
-            port = Integer.parseInt(portNum);
-        if (enable && !(addr.equals("") || port == 0)) {
+        String addr, username, password;
+
+        if (tls_enabled) {
+            addr = "127.0.0.1";
+            username = mitmUsername;
+            password = mitmPassword;
+            port = MitmReceiver.TLS_DECRYPTION_PROXY_PORT;
+        } else {
+            addr = prefs.getString("socks5_address", "");
+            username = prefs.getString("socks5_name", "");
+            password = prefs.getString("socks5_pass", "");
+            String portNum = prefs.getString("socks5_port", "0");
+            if (!portNum.equals(""))
+                port = Integer.parseInt(portNum);
+        }
+
+        if ((socks5_enable || tls_enabled) && !(addr.equals("") || port == 0)) {
             Log.i(TAG, String.format("Proxy enabled, with address %s and port %d, Auth with %s %s", addr, port, username, password));
             // Resolve proxy address
             try {
@@ -718,7 +752,7 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
             }
             jni_socks5(addr, port, username, password);
         } else {
-            Log.i(TAG, "Proxy disabled");
+            Log.i(TAG, "Proxy    disabled");
             jni_socks5("", 0, "", "");
         }
 
@@ -726,14 +760,11 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
             Log.i(TAG, "Starting tunnel thread context=" + jni_context);
             jni_start(jni_context, prio);
 
-            tunnelThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.i(TAG, "Running tunnel context=" + jni_context);
-                    jni_run(jni_context, vpn.getFd(), true, rcode);
-                    Log.i(TAG, "Tunnel exited");
-                    tunnelThread = null;
-                }
+            tunnelThread = new Thread(() -> {
+                Log.i(TAG, "Running tunnel context=" + jni_context);
+                jni_run(jni_context, vpn.getFd(), true, rcode, tls_enabled);
+                Log.i(TAG, "Tunnel exited");
+                tunnelThread = null;
             });
             //tunnelThread.setPriority(Thread.MAX_PRIORITY);
             tunnelThread.start();
@@ -775,6 +806,15 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
 
             Log.i(TAG, "Stopped tunnel thread");
         }
+
+        if(mMitmReceiver != null) {
+            try {
+                mMitmReceiver.stop();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mMitmReceiver = null;
+        }
     }
 
     private void unprepare() {
@@ -795,15 +835,6 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
     // Called from native code
     private void nativeError(int error, String message) {
         Log.w(TAG, "Native error " + error + ": " + message);
-    }
-
-    // Called from native code
-    private void dnsResolved(ResourceRecord rr) {
-        /*
-        if (DatabaseHelper.getInstance(KcaVpnService.this).insertDns(rr)) {
-            Log.i(TAG, "New IP " + rr);
-            prepareUidIPFilters(rr.QName);
-        }*/
     }
 
     // Called from native code
@@ -866,9 +897,8 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
         }
     };
 
-    private BroadcastReceiver idleStateReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver idleStateReceiver = new BroadcastReceiver() {
         @Override
-        @TargetApi(Build.VERSION_CODES.M)
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "Received " + intent);
             Util.logExtras(intent);
@@ -882,15 +912,13 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
         }
     };
 
-    private BroadcastReceiver connectivityChangedReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver connectivityChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Filter VPN connectivity changes
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                int networkType = intent.getIntExtra(ConnectivityManager.EXTRA_NETWORK_TYPE, ConnectivityManager.TYPE_DUMMY);
-                if (networkType == ConnectivityManager.TYPE_VPN)
-                    return;
-            }
+            int networkType = intent.getIntExtra(ConnectivityManager.EXTRA_NETWORK_TYPE, ConnectivityManager.TYPE_DUMMY);
+            if (networkType == ConnectivityManager.TYPE_VPN)
+                return;
 
             // Reload rules
             Log.i(TAG, "Received " + intent);

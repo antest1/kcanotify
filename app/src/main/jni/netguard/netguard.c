@@ -38,7 +38,6 @@ extern struct uid_cache_entry *uid_cache;
 // JNI
 
 jclass clsPacket;
-jclass clsRR;
 jclass clsData;
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved) {
@@ -53,10 +52,6 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     const char *packet = "eu/faircode/netguard/Packet";
     clsPacket = jniGlobalRef(env, jniFindClass(env, packet));
     ng_add_alloc(clsPacket, "clsPacket");
-
-    const char *rr = "eu/faircode/netguard/ResourceRecord";
-    clsRR = jniGlobalRef(env, jniFindClass(env, rr));
-    ng_add_alloc(clsRR, "clsRR");
 
     const char *vpndata = "com/antest1/kcanotify/KcaVpnData";
     clsData = jniGlobalRef(env, jniFindClass(env, vpndata));
@@ -85,9 +80,7 @@ void JNI_OnUnload(JavaVM *vm, void *reserved) {
         log_android(ANDROID_LOG_INFO, "JNI load GetEnv failed");
     else {
         (*env)->DeleteGlobalRef(env, clsPacket);
-        (*env)->DeleteGlobalRef(env, clsRR);
         ng_delete_alloc(clsPacket, __FILE__, __LINE__);
-        ng_delete_alloc(clsRR, __FILE__, __LINE__);
     }
 }
 
@@ -98,8 +91,6 @@ Java_com_antest1_kcanotify_KcaVpnService_jni_1init(
         JNIEnv *env, jobject instance, jint sdk) {
     struct context *ctx = ng_calloc(1, sizeof(struct context), "init");
     ctx->sdk = sdk;
-
-    loglevel = ANDROID_LOG_WARN;
 
     *socks5_addr = 0;
     socks5_port = 0;
@@ -138,7 +129,7 @@ Java_com_antest1_kcanotify_KcaVpnService_jni_1start(
 
 JNIEXPORT void JNICALL
 Java_com_antest1_kcanotify_KcaVpnService_jni_1run(
-        JNIEnv *env, jobject instance, jlong context, jint tun, jboolean fwd53, jint rcode) {
+        JNIEnv *env, jobject instance, jlong context, jint tun, jboolean fwd53, jint rcode, jboolean use_tls) {
     struct context *ctx = (struct context *) context;
 
     log_android(ANDROID_LOG_WARN, "Running tun %d fwd53 %d level %d", tun, fwd53, loglevel);
@@ -156,6 +147,7 @@ Java_com_antest1_kcanotify_KcaVpnService_jni_1run(
     args->tun = tun;
     args->fwd53 = fwd53;
     args->rcode = rcode;
+    args->use_tls = use_tls;
     args->ctx = ctx;
     handle_events(args);
 }
@@ -500,7 +492,6 @@ void log_packet(const struct arguments *args, jobject jpacket) {
 #endif
 }
 
-static jmethodID midDnsResolved = NULL;
 static jmethodID midInitRR = NULL;
 jfieldID fidQTime = NULL;
 jfieldID fidQName = NULL;
@@ -508,76 +499,6 @@ jfieldID fidAName = NULL;
 jfieldID fidResource = NULL;
 jfieldID fidTTL = NULL;
 jfieldID fidDnsUid = NULL;
-
-void dns_resolved(const struct arguments *args,
-                  const char *qname, const char *aname, const char *resource, int ttl, jint uid) {
-#ifdef PROFILE_JNI
-    float mselapsed;
-    struct timeval start, end;
-    gettimeofday(&start, NULL);
-#endif
-
-    jclass clsService = (*args->env)->GetObjectClass(args->env, args->instance);
-    ng_add_alloc(clsService, "clsService");
-
-    const char *signature = "(Leu/faircode/netguard/ResourceRecord;)V";
-    if (midDnsResolved == NULL)
-        midDnsResolved = jniGetMethodID(args->env, clsService, "dnsResolved", signature);
-
-    const char *rr = "eu/faircode/netguard/ResourceRecord";
-    if (midInitRR == NULL)
-        midInitRR = jniGetMethodID(args->env, clsRR, "<init>", "()V");
-
-    jobject jrr = jniNewObject(args->env, clsRR, midInitRR, rr);
-    ng_add_alloc(jrr, "jrr");
-
-    if (fidQTime == NULL) {
-        const char *string = "Ljava/lang/String;";
-        fidQTime = jniGetFieldID(args->env, clsRR, "Time", "J");
-        fidQName = jniGetFieldID(args->env, clsRR, "QName", string);
-        fidAName = jniGetFieldID(args->env, clsRR, "AName", string);
-        fidResource = jniGetFieldID(args->env, clsRR, "Resource", string);
-        fidTTL = jniGetFieldID(args->env, clsRR, "TTL", "I");
-        fidDnsUid = jniGetFieldID(args->env, clsRR, "uid", "I");
-    }
-
-    jlong jtime = time(NULL) * 1000LL;
-    jstring jqname = (*args->env)->NewStringUTF(args->env, qname);
-    jstring janame = (*args->env)->NewStringUTF(args->env, aname);
-    jstring jresource = (*args->env)->NewStringUTF(args->env, resource);
-    ng_add_alloc(jqname, "jqname");
-    ng_add_alloc(janame, "janame");
-    ng_add_alloc(jresource, "jresource");
-
-    (*args->env)->SetLongField(args->env, jrr, fidQTime, jtime);
-    (*args->env)->SetObjectField(args->env, jrr, fidQName, jqname);
-    (*args->env)->SetObjectField(args->env, jrr, fidAName, janame);
-    (*args->env)->SetObjectField(args->env, jrr, fidResource, jresource);
-    (*args->env)->SetIntField(args->env, jrr, fidTTL, ttl);
-    (*args->env)->SetIntField(args->env, jrr, fidDnsUid, uid);
-
-    (*args->env)->CallVoidMethod(args->env, args->instance, midDnsResolved, jrr);
-    jniCheckException(args->env);
-
-    (*args->env)->DeleteLocalRef(args->env, jresource);
-    (*args->env)->DeleteLocalRef(args->env, janame);
-    (*args->env)->DeleteLocalRef(args->env, jqname);
-    (*args->env)->DeleteLocalRef(args->env, jrr);
-    (*args->env)->DeleteLocalRef(args->env, clsService);
-    ng_delete_alloc(jresource, __FILE__, __LINE__);
-    ng_delete_alloc(janame, __FILE__, __LINE__);
-    ng_delete_alloc(jqname, __FILE__, __LINE__);
-    ng_delete_alloc(jrr, __FILE__, __LINE__);
-    ng_delete_alloc(clsService, __FILE__, __LINE__);
-
-#ifdef PROFILE_JNI
-    gettimeofday(&end, NULL);
-    mselapsed = (end.tv_sec - start.tv_sec) * 1000.0 +
-                (end.tv_usec - start.tv_usec) / 1000.0;
-    if (mselapsed > PROFILE_JNI)
-        log_android(ANDROID_LOG_WARN, "log_packet %f", mselapsed);
-#endif
-}
 
 static jmethodID midGetUidQ = NULL;
 
@@ -873,6 +794,7 @@ jbyteArray cstr2jbyteArray( JNIEnv *env, const char *nativeStr, int size)
 }
 
 void get_packet_data(const struct arguments *args, char* data, int size, int type, char* saddr, char* taddr, int sport, int tport) {
+    log_android(ANDROID_LOG_INFO, "[C] get_packet_data: %s %s", saddr, taddr);
     if (sport != 80 && tport != 80) return; // do not capture non-HTTP data
 
     jmethodID method_callback = NULL;
@@ -898,4 +820,34 @@ void get_packet_data(const struct arguments *args, char* data, int size, int typ
     }
     (*env)->DeleteLocalRef(env, s);
     (*env)->DeleteLocalRef(env, t);
+}
+
+void register_kca_server(const struct arguments *args, char* qname, char* addr) {
+    log_android(ANDROID_LOG_INFO, "[C] register_kca_server: %s %s", qname, addr);
+    jmethodID method_callback = NULL;
+    JNIEnv *env = args->env;
+
+    jbyteArray q = cstr2jbyteArray(env, qname, -1);
+    jbyteArray a = cstr2jbyteArray(env, addr, -1);
+
+    method_callback = (*env)->GetStaticMethodID(env, clsData, "registerKcaServer", "([B[B)V");
+    (*env)->CallStaticIntMethod(env, clsData, method_callback, q, a);
+
+    (*env)->DeleteLocalRef(env, q);
+    (*env)->DeleteLocalRef(env, a);
+}
+
+int check_packet_addr(const struct arguments *args, int type, char* saddr, char* taddr) {
+    jmethodID method_callback = NULL;
+    JNIEnv *env = args->env;
+
+    jbyteArray s = cstr2jbyteArray(env, saddr, -1);
+    jbyteArray t = cstr2jbyteArray(env, taddr, -1);
+
+    method_callback = (*env)->GetStaticMethodID(env, clsData, "containsKcaServer", "(I[B[B[B)I");
+    int result = (*env)->CallStaticIntMethod(env, clsData, method_callback, type, s, t, NULL);
+    (*env)->DeleteLocalRef(env, s);
+    (*env)->DeleteLocalRef(env, t);
+
+    return result;
 }

@@ -17,13 +17,16 @@
  * Copyright 2020-21 - Emanuele Faranda
  */
 
-package com.antest1.kcanotify.remote_capture.interfaces;
+package com.antest1.kcanotify.remote_capture;
 
-import com.antest1.kcanotify.remote_capture.model.ConnectionDescriptor;
+import android.content.SharedPreferences;
 
-public interface ConnectionsListener {
-    void connectionsChanges(int num_connetions);
-    void connectionsAdded(int start, ConnectionDescriptor []conns);
-    void connectionsRemoved(int start, ConnectionDescriptor []conns);
-    void connectionsUpdated(int[] positions);
+public class Prefs {
+    public static final String PREF_TLS_DECRYPTION_SETUP_DONE = "tls_decryption_setup_ok";
+    public static final String PREF_CA_INSTALLATION_SKIPPED = "ca_install_skipped";
+    public static final String PREF_IGNORED_MITM_VERSION = "ignored_mitm_version";
+
+    /* Prefs with defaults */
+    public static boolean isTLSDecryptionSetupDone(SharedPreferences p)     { return(p.getBoolean(PREF_TLS_DECRYPTION_SETUP_DONE, false)); }
+    public static boolean isIgnoredMitmVersion(SharedPreferences p, String v) { return p.getString(PREF_IGNORED_MITM_VERSION, "").equals(v); }
 }

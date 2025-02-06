@@ -306,10 +306,18 @@ void check_tcp_socket(const struct arguments *args,
                 if (ev->events & EPOLLOUT) {
                     log_android(ANDROID_LOG_INFO, "%s connected", session);
 
+                    int socks5_flag = *socks5_addr && socks5_port;
+                    if (args->use_tls) {
+                        int kca_check = check_packet_addr(args, KCA_REQUEST, source, dest);
+                        socks5_flag = socks5_flag && kca_check;
+                    }
+                    log_android(ANDROID_LOG_INFO, "[C] check_tcp_socket: %s -> %s: %d %d",
+                                source, dest, args->use_tls, socks5_flag);
+
                     // https://tools.ietf.org/html/rfc1928
                     // https://tools.ietf.org/html/rfc1929
                     // https://en.wikipedia.org/wiki/SOCKS#SOCKS5
-                    if (*socks5_addr && socks5_port)
+                    if (socks5_flag)
                         s->tcp.socks5 = SOCKS5_HELLO;
                     else
                         s->tcp.socks5 = SOCKS5_CONNECTED;
@@ -461,7 +469,6 @@ void check_tcp_socket(const struct arguments *args,
                 }
             }
         } else {
-
             // Always forward data
             int fwd = 0;
             if (ev->events & EPOLLOUT) {
@@ -475,7 +482,10 @@ void check_tcp_socket(const struct arguments *args,
                                 s->tcp.forward->seq - s->tcp.remote_start,
                                 s->tcp.forward->seq + s->tcp.forward->len - s->tcp.remote_start,
                                 s->tcp.forward->sent);
-                    get_packet_data(args, s->tcp.forward->data, s->tcp.forward->len, KCA_REQUEST, source, dest, ntohs(s->tcp.source), ntohs(s->tcp.dest));
+
+                    if (!args->use_tls)
+                        get_packet_data(args, s->tcp.forward->data, s->tcp.forward->len, KCA_REQUEST, source, dest, ntohs(s->tcp.source), ntohs(s->tcp.dest));
+
                     ssize_t sent = send(s->socket,
                                         s->tcp.forward->data + s->tcp.forward->sent,
                                         s->tcp.forward->len - s->tcp.forward->sent,
@@ -594,13 +604,14 @@ void check_tcp_socket(const struct arguments *args,
                         log_android(ANDROID_LOG_DEBUG, "%s recv bytes %d", session, bytes);
                         s->tcp.received += bytes;
 
-                        get_packet_data(args, buffer, (size_t) bytes, KCA_RESPONSE, dest, source, ntohs(s->tcp.dest), ntohs(s->tcp.source));
-
                         // Process DNS response
                         if (ntohs(s->tcp.dest) == 53 && bytes > 2) {
                             ssize_t dlen = bytes - 2;
-                            // parse_dns_response(args, s, buffer + 2, (size_t *) &dlen);
+                            parse_dns_response(args, s, buffer + 2, (size_t *) &dlen);
                         }
+
+                        if (!args->use_tls)
+                            get_packet_data(args, buffer, (size_t) bytes, KCA_RESPONSE, dest, source, ntohs(s->tcp.dest), ntohs(s->tcp.source));
 
                         // Forward to tun
                         if (write_data(args, &s->tcp, buffer, (size_t) bytes) >= 0) {
@@ -1038,13 +1049,28 @@ int open_tcp_socket(const struct arguments *args,
                     const struct tcp_session *cur, const struct allowed *redirect) {
     int sock;
     int version;
-    if (redirect == NULL) {
-        if (*socks5_addr && socks5_port)
-            version = (strstr(socks5_addr, ":") == NULL ? 4 : 6);
-        else
-            version = cur->version;
-    } else
-        version = (strstr(redirect->raddr, ":") == NULL ? 4 : 6);
+    char source[INET6_ADDRSTRLEN + 1];
+    char dest[INET6_ADDRSTRLEN + 1];
+
+    inet_ntop(cur->version == 4 ? AF_INET : AF_INET6,
+              cur->version == 4 ? (const void *) &cur->saddr.ip4 : (const void *) &cur->saddr.ip6,
+              source, sizeof(source));
+    inet_ntop(cur->version == 4 ? AF_INET : AF_INET6,
+              cur->version == 4 ? (const void *) &cur->daddr.ip4 : (const void *) &cur->daddr.ip6,
+              dest, sizeof(dest));
+
+    int socks5_flag = *socks5_addr && socks5_port;
+    if (args->use_tls) {
+        int kca_check = check_packet_addr(args, KCA_REQUEST, source, dest);
+        socks5_flag = socks5_flag && kca_check;
+    }
+    log_android(ANDROID_LOG_INFO, "[C] open_tcp_socket: %s -> %s: %d %d",
+                source, dest, args->use_tls, socks5_flag);
+
+    if (socks5_flag)
+        version = (strstr(socks5_addr, ":") == NULL ? 4 : 6);
+    else
+        version = cur->version;
 
     // Get TCP socket
     if ((sock = socket(version == 4 ? PF_INET : PF_INET6, SOCK_STREAM, 0)) < 0) {
@@ -1072,43 +1098,29 @@ int open_tcp_socket(const struct arguments *args,
     // Build target address
     struct sockaddr_in addr4;
     struct sockaddr_in6 addr6;
-    if (redirect == NULL) {
-        if (*socks5_addr && socks5_port) {
-            log_android(ANDROID_LOG_WARN, "TCP%d SOCKS5 to %s/%u",
-                        version, socks5_addr, socks5_port);
 
-            if (version == 4) {
-                addr4.sin_family = AF_INET;
-                inet_pton(AF_INET, socks5_addr, &addr4.sin_addr);
-                addr4.sin_port = htons(socks5_port);
-            } else {
-                addr6.sin6_family = AF_INET6;
-                inet_pton(AF_INET6, socks5_addr, &addr6.sin6_addr);
-                addr6.sin6_port = htons(socks5_port);
-            }
-        } else {
-            if (version == 4) {
-                addr4.sin_family = AF_INET;
-                addr4.sin_addr.s_addr = (__be32) cur->daddr.ip4;
-                addr4.sin_port = cur->dest;
-            } else {
-                addr6.sin6_family = AF_INET6;
-                memcpy(&addr6.sin6_addr, &cur->daddr.ip6, 16);
-                addr6.sin6_port = cur->dest;
-            }
-        }
-    } else {
-        log_android(ANDROID_LOG_WARN, "TCP%d redirect to %s/%u",
-                    version, redirect->raddr, redirect->rport);
+    if (socks5_flag) {
+        log_android(ANDROID_LOG_WARN, "TCP%d SOCKS5 to %s/%u",
+                    version, socks5_addr, socks5_port);
 
         if (version == 4) {
             addr4.sin_family = AF_INET;
-            inet_pton(AF_INET, redirect->raddr, &addr4.sin_addr);
-            addr4.sin_port = htons(redirect->rport);
+            inet_pton(AF_INET, socks5_addr, &addr4.sin_addr);
+            addr4.sin_port = htons(socks5_port);
         } else {
             addr6.sin6_family = AF_INET6;
-            inet_pton(AF_INET6, redirect->raddr, &addr6.sin6_addr);
-            addr6.sin6_port = htons(redirect->rport);
+            inet_pton(AF_INET6, socks5_addr, &addr6.sin6_addr);
+            addr6.sin6_port = htons(socks5_port);
+        }
+    } else {
+        if (version == 4) {
+            addr4.sin_family = AF_INET;
+            addr4.sin_addr.s_addr = (__be32) cur->daddr.ip4;
+            addr4.sin_port = cur->dest;
+        } else {
+            addr6.sin6_family = AF_INET6;
+            memcpy(&addr6.sin6_addr, &cur->daddr.ip6, 16);
+            addr6.sin6_port = cur->dest;
         }
     }
 
