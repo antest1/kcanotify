@@ -7,11 +7,10 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.io.ByteStreams;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
@@ -42,7 +41,6 @@ import androidx.core.text.HtmlCompat;
 
 import android.text.Html;
 import android.text.Spanned;
-import android.text.format.DateFormat;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -56,12 +54,8 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUseStatConstant.END_APP;
@@ -74,7 +68,6 @@ import static com.antest1.kcanotify.KcaUseStatConstant.START_SERVICE;
 import static com.antest1.kcanotify.KcaUseStatConstant.START_SNIFFER;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
-import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
@@ -338,9 +331,14 @@ public class MainActivity extends BaseActivity {
         setWarning();
     }
 
+    @SuppressLint("ApplySharedPref")
     @Override
     protected void onResume() {
         super.onResume();
+        if (getSnifferMode() == SNIFFER_ACTIVE) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            prefs.edit().putBoolean(PREF_VPN_ENABLED, KcaVpnService.checkOn()).commit();
+        }
         setVpnBtn();
         setCheckBtn();
     }
@@ -567,6 +565,7 @@ public class MainActivity extends BaseActivity {
     public void stopVpnService() {
         KcaVpnService.stop(VPN_STOP_REASON, MainActivity.this);
         prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+        vpnbtn.setChecked(false);
         sendUserAnalytics(getApplicationContext(), END_SNIFFER, null);
     }
 
@@ -577,7 +576,7 @@ public class MainActivity extends BaseActivity {
             startVpnService();
         }).setNegativeButton(getString(R.string.dialog_cancel), (dialog, which) -> {
             stopVpnService();
-        });
+        }).setCancelable(false);
         alert.setMessage(Html.fromHtml(getString(R.string.ma_dialog_vpn_usage)));
         AlertDialog dialog = alert.create();
         dialog.show();
