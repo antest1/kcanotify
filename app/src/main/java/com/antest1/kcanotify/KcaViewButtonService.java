@@ -489,13 +489,12 @@ public class KcaViewButtonService extends BaseService {
                     float dx = event.getRawX() - lastX[(curr + 1) % 3];
                     float dy = event.getRawY() - lastY[(curr + 1) % 3];
                     long dt = Calendar.getInstance().getTimeInMillis() - lastT[(curr + 1) % 3];
-                    float finalX, finalY;
-                    if (dt < 50) {
-                        float finalXUncap = layoutParams.x + dx / dt * 400;
-                        float finalYUncap = layoutParams.y + dy / dt * 400;
-                        finalX = max(screenPaddingLeft, Math.min(finalXUncap, screenPaddingLeft + screenWidth - buttonView.getWidth()));
-                        finalY = max(screenPaddingTop, Math.min(finalYUncap, screenPaddingTop + screenHeight - buttonView.getHeight()));
-
+                    float finalXUncap = layoutParams.x + dx / dt * 400;
+                    float finalYUncap = layoutParams.y + dy / dt * 400;
+                    float finalX = max(screenPaddingLeft, Math.min(finalXUncap, screenPaddingLeft + screenWidth - buttonView.getWidth()));
+                    float finalY = max(screenPaddingTop, Math.min(finalYUncap, screenPaddingTop + screenHeight - buttonView.getHeight()));
+                    if (dt < 50 || finalXUncap != finalX || finalYUncap != finalY) {
+                        // Animate if user fling the fairy or the finger is outside draggable area
                         buttonView.animateTo(layoutParams.x, layoutParams.y,
                                 (int) finalX, (int) finalY,
                                 finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
