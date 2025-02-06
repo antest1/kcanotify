@@ -28,11 +28,15 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.antest1.kcanotify.KcaVpnService;
+import com.antest1.kcanotify.MainActivity;
 import com.antest1.kcanotify.R;
 import com.antest1.kcanotify.remote_capture.interfaces.MitmListener;
 import com.antest1.kcanotify.mitm.MitmAPI;
 
 import com.antest1.kcanotify.KcaVpnData;
+
+import static com.antest1.kcanotify.KcaConstants.VPN_STOP_REASON;
 import static com.antest1.kcanotify.KcaVpnData.getDataFromNative;
 
 import org.jetbrains.annotations.Nullable;
@@ -184,7 +188,7 @@ public class MitmReceiver implements Runnable, MitmListener {
 
                 if(header == null) {
                     // received when the addon is stopped
-                    // TODO stop Service
+                    KcaVpnService.stop(VPN_STOP_REASON, mContext);
                     break;
                 }
 
@@ -203,7 +207,7 @@ public class MitmReceiver implements Runnable, MitmListener {
                     msg_len = Integer.parseInt(tk_len);
                 } catch (NoSuchElementException | NumberFormatException e) {
                     // CaptureService.requireInstance().reportError("[BUG] Invalid header received from the mitm plugin");
-                    // TODO stop Service
+                    KcaVpnService.stop(VPN_STOP_REASON, mContext);
                     break;
                 }
 
@@ -341,7 +345,7 @@ public class MitmReceiver implements Runnable, MitmListener {
             // The certificate has been uninstalled from the system
             MitmUtils.showToastLong(mContext, R.string.cert_reinstall_required);
             MitmAddon.setDecryptionSetupDone(mContext, false);
-            // TODO stop Service
+            KcaVpnService.stop(VPN_STOP_REASON, mContext);
             return;
         }
 
@@ -367,6 +371,6 @@ public class MitmReceiver implements Runnable, MitmListener {
     @Override
     public void onMitmServiceDisconnect() {
         // Stop the capture if running, CaptureService will call MitmReceiver::stop
-        // TODO stop Service
+        KcaVpnService.stop(VPN_STOP_REASON, mContext);
     }
 }
