@@ -1424,6 +1424,7 @@ public class KcaBattleViewService extends BaseService {
                         PixelFormat.TRANSLUCENT);
                 layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
                 // Hide at bottom before the fleetView is first rendered
+                layoutParams.x = screenPaddingLeft;
                 layoutParams.y = screenPaddingTop + screenHeight;
                 setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
 
