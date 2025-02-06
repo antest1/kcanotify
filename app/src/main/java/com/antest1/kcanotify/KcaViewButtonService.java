@@ -71,6 +71,7 @@ import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getOrientationPrefix;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.getWindowLayoutParamsFlags;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
@@ -246,7 +247,7 @@ public class KcaViewButtonService extends BaseService {
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     getWindowLayoutType(),
-                    getLayoutParamsFlags(),
+                    getWindowLayoutParamsFlags(),
                     PixelFormat.TRANSLUCENT);
 
             layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
@@ -627,7 +628,7 @@ public class KcaViewButtonService extends BaseService {
         if (dbHelper != null) {
             locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
 
-            layoutParams.flags = getLayoutParamsFlags();
+            layoutParams.flags = getWindowLayoutParamsFlags();
             if (locdata != null && !locdata.toString().isEmpty()) {
                 if (locdata.has(ori_prefix.concat("x"))) {
                     layoutParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
@@ -655,11 +656,6 @@ public class KcaViewButtonService extends BaseService {
             dbHelper.putValue(DB_KEY_FAIRYLOC, locdata.toString());
         }
         super.onConfigurationChanged(newConfig);
-    }
-
-    private int getLayoutParamsFlags() {
-        return WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
     }
 
     private void updateScreenSize() {

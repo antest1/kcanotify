@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import static com.antest1.kcanotify.KcaUtils.getWindowLayoutParamsFlags;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
 import android.content.Context;
@@ -29,8 +30,7 @@ public class SnapIndicator {
 
     private int getParamsFlags() {
         return WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+                | getWindowLayoutParamsFlags();
     }
 
     public void remove() {

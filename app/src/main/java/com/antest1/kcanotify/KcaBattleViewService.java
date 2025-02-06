@@ -71,6 +71,7 @@ import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.getWindowLayoutParamsFlags;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
@@ -1418,8 +1419,7 @@ public class KcaBattleViewService extends BaseService {
                         screenWidth,
                         WindowManager.LayoutParams.WRAP_CONTENT,
                         getWindowLayoutType(),
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                        getWindowLayoutParamsFlags(),
                         PixelFormat.TRANSLUCENT);
                 layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
                 // Hide at bottom before the fleetView is first rendered
