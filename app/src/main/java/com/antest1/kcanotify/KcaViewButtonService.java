@@ -493,7 +493,13 @@ public class KcaViewButtonService extends BaseService {
                     float finalYUncap = layoutParams.y + dy / dt * 400;
                     float finalX = max(screenPaddingLeft, Math.min(finalXUncap, screenPaddingLeft + screenWidth - buttonView.getWidth()));
                     float finalY = max(screenPaddingTop, Math.min(finalYUncap, screenPaddingTop + screenHeight - buttonView.getHeight()));
-                    if (dt < 50 || finalXUncap != finalX || finalYUncap != finalY) {
+
+                    // detech user fling by dt and latest xy movement
+                    float finalXDiff = getMinMaxDiff(lastX);
+                    float finalYDiff = getMinMaxDiff(lastY);
+                    boolean isFling = dt < 50 && (finalXDiff >= 2 || finalYDiff >= 2);
+
+                    if (isFling || finalXUncap != finalX || finalYUncap != finalY) {
                         // Animate if user fling the fairy or the finger is outside draggable area
                         buttonView.animateTo(layoutParams.x, layoutParams.y,
                                 (int) finalX, (int) finalY,
@@ -540,6 +546,18 @@ public class KcaViewButtonService extends BaseService {
                 break;
             }
             return false;
+        }
+
+        private float getMinMaxDiff(float[] arr) {
+            if (arr == null || arr.length == 0)
+                throw new IllegalArgumentException("arr size must be positive");
+            float maxValue = arr[0];
+            float minValue = arr[0];
+            for (int i = 1 ; i < arr.length; i++) {
+                maxValue = Math.max(maxValue, arr[i]);
+                minValue = Math.min(minValue, arr[i]);
+            }
+            return Math.abs(maxValue - minValue);
         }
     };
 
