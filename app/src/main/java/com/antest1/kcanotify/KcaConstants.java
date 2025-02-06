@@ -591,6 +591,7 @@ public final class KcaConstants {
             PREF_HDNOTI_MINLEVEL,
             PREF_DEFAULT_APIVER,
             PREF_FAIRY_SIZE,
+            PREF_FAIRY_OPACITY,
             PREF_FAIRY_RANDOM,
             PREF_NOTICE_CHK_FLAG,
             PREF_FV_ITEM_1,
