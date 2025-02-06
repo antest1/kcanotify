@@ -976,14 +976,6 @@ public class KcaUtils {
         }
     }
 
-    public static int getWindowLayoutParamsFlags(Configuration config) {
-        int flag = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            flag |= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-        }
-        return flag;
-    }
-
     public static String[] getIpAddress(String host) {
         List<String> addresses = new ArrayList<>();
         InetAddress[] machines;

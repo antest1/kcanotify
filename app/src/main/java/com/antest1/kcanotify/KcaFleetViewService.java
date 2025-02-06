@@ -475,7 +475,7 @@ public class KcaFleetViewService extends BaseService {
 
         setFleetMenu();
         layoutParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
+                screenWidth,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 getWindowLayoutType(),
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
@@ -489,7 +489,6 @@ public class KcaFleetViewService extends BaseService {
             fleetViewHeight = bottom - top;
             layoutParams.y = screenPaddingTop + (screenHeight - fleetViewHeight) * (view_status + 1) / 2;
             layoutParams.x = screenPaddingLeft;
-            layoutParams.width = screenWidth;
             if ((fleetView.getParent() != null)) {
                 windowManager.updateViewLayout(fleetView, layoutParams);
             }
@@ -1292,9 +1291,7 @@ public class KcaFleetViewService extends BaseService {
             if (windowManager != null) {
                 if (fleetView.getParent() != null) windowManager.removeViewImmediate(fleetView);
                 initView();
-                layoutParams.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+                layoutParams.width = screenWidth;
                 windowManager.addView(fleetView, layoutParams);
 
                 if (setView()) {
@@ -1345,7 +1342,7 @@ public class KcaFleetViewService extends BaseService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             WindowMetrics windowMetrics = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getCurrentWindowMetrics();
             WindowInsets insets = windowMetrics.getWindowInsets();
-            // Not allow fairy to stay on cutout or navigation bar
+            // Not allow window to stay on cutout or navigation bar or status bar
             Insets safeInsets = insets.getInsets(WindowInsets.Type.displayCutout() | WindowInsets.Type.navigationBars() | WindowInsets.Type.statusBars());
             screenPaddingLeft = safeInsets.left;
             screenPaddingTop = safeInsets.top;
