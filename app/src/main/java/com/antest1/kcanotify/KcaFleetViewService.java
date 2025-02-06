@@ -479,8 +479,7 @@ public class KcaFleetViewService extends BaseService {
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 getWindowLayoutType(),
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
         layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
 
@@ -1337,8 +1336,6 @@ public class KcaFleetViewService extends BaseService {
     }
 
     private void updateScreenSize() {
-        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             WindowMetrics windowMetrics = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getCurrentWindowMetrics();
             WindowInsets insets = windowMetrics.getWindowInsets();
@@ -1350,6 +1347,7 @@ public class KcaFleetViewService extends BaseService {
             screenWidth = bounds.width() - safeInsets.left - safeInsets.right;
             screenHeight = bounds.height() - safeInsets.top - safeInsets.bottom;
         } else {
+            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
             screenWidth = size.x;

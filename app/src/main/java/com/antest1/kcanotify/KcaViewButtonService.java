@@ -284,27 +284,6 @@ public class KcaViewButtonService extends BaseService {
         }
     }
 
-    private void updateScreenSize() {
-        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            WindowMetrics windowMetrics = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getCurrentWindowMetrics();
-            WindowInsets insets = windowMetrics.getWindowInsets();
-            // Not allow fairy to stay on cutout or navigation bar
-            Insets safeInsets = insets.getInsets(WindowInsets.Type.displayCutout() | WindowInsets.Type.navigationBars());
-            screenPaddingLeft = safeInsets.left;
-            screenPaddingTop = safeInsets.top;
-            Rect bounds = windowMetrics.getBounds();
-            screenWidth = bounds.width() - safeInsets.left - safeInsets.right;
-            screenHeight = bounds.height() - safeInsets.top - safeInsets.bottom;
-        } else {
-            Point size = new Point();
-            display.getSize(size);
-            screenWidth = size.x;
-            screenHeight = size.y;
-        }
-    }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (!Settings.canDrawOverlays(getApplicationContext())) {
@@ -671,7 +650,26 @@ public class KcaViewButtonService extends BaseService {
 
     private int getLayoutParamsFlags() {
         return WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-                | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+    }
+
+    private void updateScreenSize() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowMetrics windowMetrics = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getCurrentWindowMetrics();
+            WindowInsets insets = windowMetrics.getWindowInsets();
+            // Not allow fairy to stay on cutout or navigation bar
+            Insets safeInsets = insets.getInsets(WindowInsets.Type.displayCutout() | WindowInsets.Type.navigationBars());
+            screenPaddingLeft = safeInsets.left;
+            screenPaddingTop = safeInsets.top;
+            Rect bounds = windowMetrics.getBounds();
+            screenWidth = bounds.width() - safeInsets.left - safeInsets.right;
+            screenHeight = bounds.height() - safeInsets.top - safeInsets.bottom;
+        } else {
+            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            screenWidth = size.x;
+            screenHeight = size.y;
+        }
     }
 }
