@@ -488,15 +488,24 @@ public class KcaViewButtonService extends BaseService {
                     float dx = event.getRawX() - lastX[(curr + 1) % 3];
                     float dy = event.getRawY() - lastY[(curr + 1) % 3];
                     long dt = Calendar.getInstance().getTimeInMillis() - lastT[(curr + 1) % 3];
-                    float finalXUncap = layoutParams.x + dx / dt * 400;
-                    float finalYUncap = layoutParams.y + dy / dt * 400;
-                    float finalX = max(screenPaddingLeft + buttonView.getPaddingLeft(), Math.min(finalXUncap, screenPaddingLeft + screenWidth - buttonView.getWidth() - buttonView.getPaddingRight()));
-                    float finalY = max(screenPaddingTop + buttonView.getPaddingTop(), Math.min(finalYUncap, screenPaddingTop + screenHeight - buttonView.getHeight() - buttonView.getPaddingBottom()));
+                    float finalX, finalY;
+                    if (dt < 50) {
+                        float finalXUncap = layoutParams.x + dx / dt * 400;
+                        float finalYUncap = layoutParams.y + dy / dt * 400;
+                        finalX = max(screenPaddingLeft, Math.min(finalXUncap, screenPaddingLeft + screenWidth - buttonView.getWidth()));
+                        finalY = max(screenPaddingTop, Math.min(finalYUncap, screenPaddingTop + screenHeight - buttonView.getHeight()));
 
-                    buttonView.animateTo(layoutParams.x, layoutParams.y,
-                            (int) finalX, (int) finalY,
-                            finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
-                            500, windowManager, layoutParams);
+                        buttonView.animateTo(layoutParams.x, layoutParams.y,
+                                (int) finalX, (int) finalY,
+                                finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
+                                500, windowManager, layoutParams);
+                    } else {
+                        finalX = max(screenPaddingLeft, Math.min(layoutParams.x, screenPaddingLeft + screenWidth - buttonView.getWidth()));
+                        finalY = max(screenPaddingTop, Math.min(layoutParams.y, screenPaddingTop + screenHeight - buttonView.getHeight()));
+                        layoutParams.x = (int) finalX;
+                        layoutParams.y = (int) finalY;
+                        windowManager.updateViewLayout(buttonView, layoutParams);
+                    }
 
                     JsonObject locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
                     String ori_prefix = getOrientationPrefix(getResources().getConfiguration().orientation);
