@@ -65,7 +65,6 @@ public final class KcaConstants {
     public static final String DB_KEY_EXPCALTRK = "key_expcaltrk";
     public static final String DB_KEY_QUESTNCHK = "key_questnchk";
     public static final String DB_KEY_MATERIALS = "key_materials";
-    public static final String DB_KEY_KCMAINTNC = "key_kcmaintnc";
 
     public static final String[] DB_KEY_ARRAY = {
             DB_KEY_STARTDATA,
@@ -304,6 +303,7 @@ public final class KcaConstants {
     public static final String KCA_API_PREF_LANGUAGE_CHANGED = "/kca_api/pref_language_changed";
     public static final String KCA_API_PREF_ALARMDELAY_CHANGED = "/kca_api/pref_alarmdelay_changed";
     public static final String KCA_API_PREF_FAIRYSIZE_CHANGED = "/kca_api/pref_fairysize_changed";
+    public static final String KCA_API_PREF_FAIRYALPHA_CHANGED = "/kca_api/pref_fairyalpha_changed";
 
     public static final String KCA_MSG_FAIRY_CHANGED = "com.antest1.kcanotify.KcaFairySelectActivity.KCA_MSG_FAIRY_CHANGED";
     public static final String KCA_MSG_BATTLE_NODE = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_NODE";
@@ -498,6 +498,7 @@ public final class KcaConstants {
     public static final String PREF_HDNOTI_MINLEVEL = "hdnoti_minlevel";
     public static final String PREF_DEFAULT_APIVER = "default_apiver";
     public static final String PREF_FAIRY_SIZE = "fairy_size";
+    public static final String PREF_FAIRY_OPACITY = "fairy_opacity";
     public static final String PREF_FAIRY_RANDOM = "fairy_random";
     public static final String PREF_NOTICE_CHK_FLAG = "kr_notice_chk";
     public static final String PREF_FLEETVIEW_ITEMSELECT = "fleetview_item_select";
@@ -589,6 +590,7 @@ public final class KcaConstants {
             PREF_HDNOTI_MINLEVEL,
             PREF_DEFAULT_APIVER,
             PREF_FAIRY_SIZE,
+            PREF_FAIRY_OPACITY,
             PREF_FAIRY_RANDOM,
             PREF_NOTICE_CHK_FLAG,
             PREF_FV_ITEM_1,

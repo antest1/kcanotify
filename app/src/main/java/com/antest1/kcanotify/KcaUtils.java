@@ -89,6 +89,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
@@ -959,26 +960,27 @@ public class KcaUtils {
     // Reference: https://stackoverflow.com/questions/53579164/check-if-device-has-notch-in-service
     public static void resizeFullWidthView(Context context, View v) {
         if (v == null) return;
-        int statusBarHeight = 0;
         int defaultHeight = 24;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
-            statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+            int statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
             Log.e("KCA", "" + statusBarHeight + " " + convertDpToPixel(defaultHeight));
             if (statusBarHeight > convertDpToPixel(defaultHeight)) {
                 int orientation = context.getResources().getConfiguration().orientation;
                 if (orientation == ORIENTATION_LANDSCAPE) {
                     final float scale = context.getResources().getDisplayMetrics().density;
                     int padding_px_width = (int) (28 * scale + 0.5f);
-                    v.setPadding(padding_px_width, 0, padding_px_width, 0);
+                    v.setPadding(v.getPaddingLeft() + padding_px_width, v.getPaddingTop(),
+                            v.getPaddingRight() + padding_px_width, v.getPaddingBottom());
                 }
             }
         }
     }
 
-    public static int getWindowLayoutParamsFlags(Configuration config) {
-        int flag = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+    public static int getWindowLayoutParamsFlags() {
+        int flag = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             flag |= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         }
         return flag;
@@ -1123,6 +1125,17 @@ public class KcaUtils {
             }
         }
         return dataString.toString();
+    }
+
+    public static String genRandomString(int length) {
+        String charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        StringBuilder sb = new StringBuilder(length);
+        Random rnd = new Random();
+
+        for(int i = 0; i < length; i++)
+            sb.append(charset.charAt(rnd.nextInt(charset.length())));
+
+        return sb.toString();
     }
 
     public static void copyFile(FileInputStream src, FileOutputStream dst) throws IOException {

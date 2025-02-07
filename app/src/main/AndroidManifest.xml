@@ -208,17 +208,17 @@
         <service
             android:name=".KcaViewButtonService"
             android:exported="true"
-            android:configChanges="locale|layoutDirection">
+            android:configChanges="locale|layoutDirection|screenSize|screenLayout">
             <intent-filter>
                 <action android:name="com.antest1.gotobrowser.foreground"/>
             </intent-filter>
         </service>
         <service
             android:name=".KcaBattleViewService"
-            android:configChanges="layoutDirection" />
+            android:configChanges="layoutDirection|screenSize|screenLayout" />
         <service
             android:name=".KcaFleetViewService"
-            android:configChanges="locale|layoutDirection" />
+            android:configChanges="locale|layoutDirection|screenSize|screenLayout" />
         <service
             android:name=".KcaQuestViewService" />
         <service
@@ -241,7 +241,7 @@
             android:name=".KcaCustomToastService" />
         <service
             android:name=".KcaForegroundCheckService" />
-        <!--
+
         <service
             android:name=".KcaVpnService"
             android:label="@string/app_vpn_name"
@@ -251,16 +251,16 @@
                 <action android:name="android.net.VpnService" />
             </intent-filter>
         </service>
-        -->
-        <service
-            android:name=".remote_capture.CaptureService"
-            android:label="@string/app_vpn_name"
-            android:permission="android.permission.BIND_VPN_SERVICE"
-            android:exported="true">
+
+        <receiver
+            android:name=".GotoForegroundReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="GotoBrowser Foreground Check Receiver">
             <intent-filter>
-                <action android:name="android.net.VpnService" />
+                <action android:name="com.antest1.gotobrowser.foreground" />
             </intent-filter>
-        </service>
+        </receiver>
 
         <receiver
             android:name=".KcaAutomationReceiver"

@@ -26,7 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.antest1.kcanotify.R;
-import com.antest1.kcanotify.remote_capture.Utils;
+import com.antest1.kcanotify.remote_capture.MitmUtils;
 
 public class Intro extends StepFragment {
 
@@ -34,7 +34,7 @@ public class Intro extends StepFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mStepIcon.setVisibility(View.GONE);
-        Utils.setTextUrls(mStepLabel, R.string.mitm_setup_wizard_intro);
+        MitmUtils.setTextUrls(mStepLabel, R.string.mitm_setup_wizard_intro);
 
         nextStep(R.id.navto_install_addon);
     }

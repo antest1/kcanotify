@@ -86,8 +86,6 @@
     <string name="ma_toast_overay_diabled">戦闘予報などに必要な画面オーバーレイ権限が設定されていません。</string>
     <string name="ma_hasupdate" formatted="false">アップデートがあります。 (%s)</string>
     <string name="ma_hasdataupdate" formatted="false">新しいゲームデータがあります。 (%s)</string>
-    <string name="ma_nextmaintenance" formatted="false">次回メンテナンス:\n%s</string>
-    <string name="ma_endmaintenance" formatted="false">メンテナンス予定終了時刻:\n%s</string>
     <string name="description">See main_jp.html</string>
 
     <!-- SettingActivity Strings -->
@@ -423,6 +421,7 @@
     <string name="setting_menu_kand_title_fairy_select">妖精選択</string>
     <string name="setting_menu_kand_desc_fairy_select">共にする妖精さんを選択</string>
     <string name="setting_menu_kand_title_fairy_size">妖精のサイズ</string>
+    <string name="setting_menu_kand_title_fairy_opacity">妖精の不透明度(%)</string>
     <string name="setting_menu_kand_title_fairy_random">妖精をランダムに選択</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">妖精を艦これ画面でのみ表示する</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">妖精の表示/隠しに時間がかかります。</string>

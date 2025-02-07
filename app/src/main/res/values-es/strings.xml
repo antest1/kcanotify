@@ -88,8 +88,6 @@
     <string name="ma_toast_overay_diabled">Permiso de superposición de pantalla necesario para Predicción de Batalla.</string>
     <string name="ma_hasupdate" formatted="false">Actualización disponible. (%s)</string>
     <string name="ma_hasdataupdate" formatted="false">Nuevos datos del juego disponibles. (%s)</string>
-    <string name="ma_nextmaintenance" formatted="false">Siguiente mantenimiento:\n%s</string>
-    <string name="ma_endmaintenance" formatted="false">Tiempo de finalización de mantenimiento:\n%s</string>
     <string name="description"><b>Help</b>\nActivar ambos botones (Sniffer y Servicio) y luego iniciar Kancolle\n\n※ La VPN es necesaria para detectar datos del juego. \n\n<b>Características Principales</b>\n - Notificaciones de Expediciones/Reparaciones\n - Alerta de Daños Graves (Antes y durante el combate)\n - LoS/FP/Indicadores de Fatiga\n - Rastreo de nodo durante combate\n - Predicción de Batalla / Visualizador de Misiones\n - Tabla de Arsenal de Mejoras</string>
 
     <!-- SettingActivity Strings -->
@@ -177,6 +175,7 @@
     <string name="setting_menu_kand_title_fairy_select">Elegir Ayudante</string>
     <string name="setting_menu_kand_desc_fairy_select">Elegir el Ayudante que será mostrado en pantalla</string>
     <string name="setting_menu_kand_title_fairy_size">Tamaño Ayudante</string>
+    <string name="setting_menu_kand_title_fairy_opacity">Opacidad de Ayudante (%)</string>
     <string name="setting_menu_kand_title_fairy_random">Ayudante al azar</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">Mostrar Ayudante solo en Kancolle</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">Hay un pequeño retraso en mostrar/ocultar el ayudante.</string>

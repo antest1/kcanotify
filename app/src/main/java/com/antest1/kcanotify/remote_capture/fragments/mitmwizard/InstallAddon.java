@@ -29,13 +29,13 @@ import android.view.View;
 
 import com.antest1.kcanotify.R;
 import com.antest1.kcanotify.remote_capture.MitmAddon;
-import com.antest1.kcanotify.remote_capture.Utils;
+import com.antest1.kcanotify.remote_capture.MitmUtils;
 
 public class InstallAddon extends StepFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Utils.setTextUrls(mStepLabel, R.string.install_the_mitm_addon, MitmAddon.REPOSITORY);
+        MitmUtils.setTextUrls(mStepLabel, R.string.install_the_mitm_addon, MitmAddon.REPOSITORY);
 
         String new_ver = MitmAddon.getNewVersionAvailable(requireContext());
         if(new_ver.isEmpty() && MitmAddon.isInstalled(requireContext()))
@@ -63,7 +63,7 @@ public class InstallAddon extends StepFragment {
         if(installed_ver.isEmpty()) {
             mStepLabel.setText(R.string.install_the_mitm_addon);
             mStepButton.setText(R.string.install_action);
-        } else if(Utils.isSemanticVersionCompatible(installed_ver, new_ver)) {
+        } else if(MitmUtils.isSemanticVersionCompatible(installed_ver, new_ver)) {
             mStepLabel.setText(R.string.mitm_addon_update_available);
             mStepButton.setText(R.string.update_action);
             showSkipButton(view -> gotoStep(R.id.navto_install_cert));
@@ -83,7 +83,7 @@ public class InstallAddon extends StepFragment {
 
             Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse(MitmAddon.getGithubReleaseUrl(target_ver)));
-            Utils.startActivity(requireContext(), browserIntent);
+            MitmUtils.startActivity(requireContext(), browserIntent);
         });
     }
 }

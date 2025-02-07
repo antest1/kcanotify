@@ -43,7 +43,6 @@ import androidx.core.content.pm.PackageInfoCompat;
 import androidx.preference.PreferenceManager;
 
 import com.antest1.kcanotify.remote_capture.interfaces.MitmListener;
-import com.antest1.kcanotify.remote_capture.model.Prefs;
 import com.antest1.kcanotify.mitm.MitmAPI;
 
 import java.io.IOException;
@@ -103,7 +102,7 @@ public class MitmAddon {
 
     public static long getInstalledVersion(Context ctx) {
         try {
-            PackageInfo pInfo = Utils.getPackageInfo(ctx.getPackageManager(), MitmAPI.PACKAGE_NAME, 0);
+            PackageInfo pInfo = MitmUtils.getPackageInfo(ctx.getPackageManager(), MitmAPI.PACKAGE_NAME, 0);
             return PackageInfoCompat.getLongVersionCode(pInfo);
         } catch (PackageManager.NameNotFoundException e) {
             return -1;
@@ -112,18 +111,10 @@ public class MitmAddon {
 
     public static @NonNull String getInstalledVersionName(Context ctx) {
         try {
-            PackageInfo pInfo = Utils.getPackageInfo(ctx.getPackageManager(), MitmAPI.PACKAGE_NAME, 0);
+            PackageInfo pInfo = MitmUtils.getPackageInfo(ctx.getPackageManager(), MitmAPI.PACKAGE_NAME, 0);
             return pInfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             return "";
-        }
-    }
-
-    public static int getUid(Context ctx) {
-        try {
-            return Utils.getPackageUid(ctx.getPackageManager(), MitmAPI.PACKAGE_NAME, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            return -1;
         }
     }
 
@@ -132,20 +123,20 @@ public class MitmAddon {
     public static @NonNull String getNewVersionAvailable(Context ctx) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 
-        if (Prefs.isIgnoredMitmVersion(prefs, PACKAGE_VERSION_NAME))
+        if (MitmPrefs.isIgnoredMitmVersion(prefs, PACKAGE_VERSION_NAME))
             // update was ignored by the user
             return "";
 
         // NOTE: currently for the update check we only rely on the addon version hard-coded
         // in the source
         try {
-            PackageInfo pInfo = Utils.getPackageInfo(ctx.getPackageManager(), MitmAPI.PACKAGE_NAME, 0);
+            PackageInfo pInfo = MitmUtils.getPackageInfo(ctx.getPackageManager(), MitmAPI.PACKAGE_NAME, 0);
 
             if (PackageInfoCompat.getLongVersionCode(pInfo) >= PACKAGE_VERSION_CODE)
                 // same version or better installed
                 return "";
 
-            if (Utils.isSemanticVersionCompatible(PACKAGE_VERSION_NAME, pInfo.versionName))
+            if (MitmUtils.isSemanticVersionCompatible(PACKAGE_VERSION_NAME, pInfo.versionName))
                 return PACKAGE_VERSION_NAME;
         } catch (PackageManager.NameNotFoundException ignored) {}
 
@@ -155,15 +146,15 @@ public class MitmAddon {
     public static void ignoreNewVersion(Context ctx) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         prefs.edit()
-                .putString(Prefs.PREF_IGNORED_MITM_VERSION, PACKAGE_VERSION_NAME)
+                .putString(MitmPrefs.PREF_IGNORED_MITM_VERSION, PACKAGE_VERSION_NAME)
                 .apply();
     }
 
     // returns true only if a compatible addon version is installed
     public static boolean isInstalled(Context ctx) {
         try {
-            PackageInfo pInfo = Utils.getPackageInfo(ctx.getPackageManager(), MitmAPI.PACKAGE_NAME, 0);
-            return Utils.isSemanticVersionCompatible(PACKAGE_VERSION_NAME, pInfo.versionName);
+            PackageInfo pInfo = MitmUtils.getPackageInfo(ctx.getPackageManager(), MitmAPI.PACKAGE_NAME, 0);
+            return MitmUtils.isSemanticVersionCompatible(PACKAGE_VERSION_NAME, pInfo.versionName);
         } catch (PackageManager.NameNotFoundException ignored) {
             return false;
         }
@@ -177,26 +168,26 @@ public class MitmAddon {
     public static void setCAInstallationSkipped(Context ctx, boolean skipped) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         prefs.edit()
-                .putBoolean(Prefs.PREF_CA_INSTALLATION_SKIPPED, skipped)
+                .putBoolean(MitmPrefs.PREF_CA_INSTALLATION_SKIPPED, skipped)
                 .apply();
     }
 
     public static boolean isCAInstallationSkipped(Context ctx) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return prefs.getBoolean(Prefs.PREF_CA_INSTALLATION_SKIPPED, false);
+        return prefs.getBoolean(MitmPrefs.PREF_CA_INSTALLATION_SKIPPED, false);
     }
 
     public static void setDecryptionSetupDone(Context ctx, boolean done) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         prefs.edit()
-                .putBoolean(Prefs.PREF_TLS_DECRYPTION_SETUP_DONE, done)
+                .putBoolean(MitmPrefs.PREF_TLS_DECRYPTION_SETUP_DONE, done)
                 .apply();
     }
 
     public static boolean needsSetup(Context ctx) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 
-        if(!Prefs.isTLSDecryptionSetupDone(prefs))
+        if(!MitmPrefs.isTLSDecryptionSetupDone(prefs))
             return true;
 
         // Perform some other quick checks just in case the env has changed
@@ -320,13 +311,13 @@ public class MitmAddon {
             mService.send(msg);
         } catch (RemoteException | NullPointerException e) {
             e.printStackTrace();
-            Utils.safeClose(pair[0]);
-            Utils.safeClose(pair[1]);
+            MitmUtils.safeClose(pair[0]);
+            MitmUtils.safeClose(pair[1]);
             return null;
         }
 
         // The other end of the pipe is sent, close it locally
-        Utils.safeClose(pair[0]);
+        MitmUtils.safeClose(pair[0]);
 
         return pair[1];
     }

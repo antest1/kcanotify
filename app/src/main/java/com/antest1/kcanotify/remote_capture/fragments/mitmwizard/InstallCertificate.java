@@ -39,7 +39,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.antest1.kcanotify.R;
-import com.antest1.kcanotify.remote_capture.Utils;
+import com.antest1.kcanotify.remote_capture.MitmUtils;
 import com.antest1.kcanotify.remote_capture.interfaces.MitmListener;
 import com.antest1.kcanotify.remote_capture.MitmAddon;
 import com.antest1.kcanotify.mitm.MitmAPI;
@@ -88,7 +88,7 @@ public class InstallCertificate extends StepFragment implements MitmListener {
 
     @Override
     public void onResume() {
-        if(!Utils.isCAInstalled(mCaCert)) {
+        if(!MitmUtils.isCAInstalled(mCaCert)) {
             if(!mAddon.isConnected()) {
                 if (!mAddon.connect(0)) {
                     new AlertDialog.Builder(requireContext())
@@ -102,7 +102,7 @@ public class InstallCertificate extends StepFragment implements MitmListener {
                                 Context ctx = requireContext();
                                 Intent launchIntent = ctx.getPackageManager().getLaunchIntentForPackage(MitmAPI.PACKAGE_NAME);
                                 if (launchIntent != null)
-                                    Utils.startActivity(ctx, launchIntent);
+                                    MitmUtils.startActivity(ctx, launchIntent);
                                 else {
                                     Toast.makeText(requireContext(), "addon connect failed", Toast.LENGTH_LONG).show();
                                     certFail();
@@ -124,7 +124,7 @@ public class InstallCertificate extends StepFragment implements MitmListener {
 
     private void certFail() {
         mStepLabel.setText(R.string.ca_cert_export_failed);
-        Utils.setTextUrls(mStepLabel, R.string.ca_cert_export_failed, "https://dontkillmyapp.com/xiaomi#app-battery-saver");
+        MitmUtils.setTextUrls(mStepLabel, R.string.ca_cert_export_failed, "https://dontkillmyapp.com/xiaomi#app-battery-saver");
         mStepIcon.setColorFilter(mDangerColor);
         MitmAddon.setDecryptionSetupDone(requireContext(), false);
     }
@@ -148,7 +148,7 @@ public class InstallCertificate extends StepFragment implements MitmListener {
         intent.setType("application/x-x509-ca-cert");
         intent.putExtra(Intent.EXTRA_TITLE, fname);
 
-        if(!Utils.launchFileDialog(requireContext(), intent, certExportLauncher))
+        if(!MitmUtils.launchFileDialog(requireContext(), intent, certExportLauncher))
             certFail();
     }
 
@@ -160,7 +160,7 @@ public class InstallCertificate extends StepFragment implements MitmListener {
         try {
             certInstallLauncher.launch(intent);
         } catch (ActivityNotFoundException e) {
-            Utils.showToastLong(requireContext(), R.string.no_intent_handler_found);
+            MitmUtils.showToastLong(requireContext(), R.string.no_intent_handler_found);
             fallbackToCertExport();
         }
     }
@@ -179,12 +179,12 @@ public class InstallCertificate extends StepFragment implements MitmListener {
             }
 
             if(written)
-                Utils.showToastLong(ctx, R.string.cert_exported_now_installed);
+                MitmUtils.showToastLong(ctx, R.string.cert_exported_now_installed);
         }
     }
 
     private void certInstallResult(final ActivityResult result) {
-        if((result.getResultCode() == Activity.RESULT_OK) && Utils.isCAInstalled(mCaCert))
+        if((result.getResultCode() == Activity.RESULT_OK) && MitmUtils.isCAInstalled(mCaCert))
             certOk();
         else
             fallbackToCertExport();
@@ -209,10 +209,10 @@ public class InstallCertificate extends StepFragment implements MitmListener {
         if(mCaPem != null) {
             Log.d(TAG, "Got certificate");
             //Log.d(TAG, "certificate: " + cert_str);
-            mCaCert = Utils.x509FromPem(mCaPem);
+            mCaCert = MitmUtils.x509FromPem(mCaPem);
 
             if(mCaCert != null) {
-                if(Utils.isCAInstalled(mCaCert))
+                if(MitmUtils.isCAInstalled(mCaCert))
                     certOk();
                 else {
                     // Cert not installed

@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.graphics.Insets;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -26,7 +29,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.view.WindowMetrics;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -82,7 +87,6 @@ import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 import static java.lang.Math.abs;
-import static java.lang.Math.max;
 
 public class KcaFleetViewService extends BaseService {
     public static final String SHOW_FLEETVIEW_ACTION = "show_fleetview_action";
@@ -103,8 +107,7 @@ public class KcaFleetViewService extends BaseService {
     private static final int HQINFO_ITEMCNT3 = 4;
     private static final int HQINFO_ITEMCNT4 = 5;
 
-    private int screenWidth;
-    private int screenHeight;
+    private int screenWidth, screenHeight, screenPaddingLeft = 0, screenPaddingTop = 0;
 
     Context contextWithTheme;
     LayoutInflater mInflater;
@@ -312,6 +315,7 @@ public class KcaFleetViewService extends BaseService {
             timer = this::updateFleetInfoLine;
             runTimer();
 
+            layoutParams.width = screenWidth;
             windowManager.addView(fleetView, layoutParams);
             Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
             Point size = new Point();
@@ -369,7 +373,7 @@ public class KcaFleetViewService extends BaseService {
     private void initView() {
         fleetView = (DraggableOverlayLayout) mInflater.inflate(R.layout.view_fleet_list, null);
         fleetView.setVisibility(GONE);
-        KcaUtils.resizeFullWidthView(getApplicationContext(), fleetView);
+        KcaUtils.resizeFullWidthView(getApplicationContext(), fleetView.findViewById(R.id.fleetviewpanel));
 
         snapIndicator = new SnapIndicator(this, windowManager, mInflater);
 
@@ -472,23 +476,25 @@ public class KcaFleetViewService extends BaseService {
 
         setFleetMenu();
         layoutParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
+                screenWidth,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 getWindowLayoutType(),
-                getWindowLayoutParamsFlags(getResources().getConfiguration()),
+                getWindowLayoutParamsFlags(),
                 PixelFormat.TRANSLUCENT);
-        layoutParams.gravity = Gravity.TOP;
+        layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
 
         fleetView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             if (bottom - top == oldBottom - oldTop) return;
             fleetViewHeight = bottom - top;
-            layoutParams.y = (screenHeight - fleetViewHeight) * (view_status + 1) / 2;
+            layoutParams.y = screenPaddingTop + (screenHeight - fleetViewHeight) * (view_status + 1) / 2;
+            layoutParams.x = screenPaddingLeft;
             if ((fleetView.getParent() != null)) {
                 windowManager.updateViewLayout(fleetView, layoutParams);
             }
         });
         // Hide at bottom before the fleetView is first rendered
-        layoutParams.y = screenHeight;
+        layoutParams.y = screenPaddingTop + screenHeight;
+        layoutParams.x = screenPaddingLeft;
         setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
 
         fleetInfoLine = fleetView.findViewById(R.id.fleetview_infoline);
@@ -545,6 +551,7 @@ public class KcaFleetViewService extends BaseService {
                         if (fleetView.getParent() != null) {
                             windowManager.removeViewImmediate(fleetView);
                         }
+                        layoutParams.width = screenWidth;
                         windowManager.addView(fleetView, layoutParams);
                     }
                     sendUserAnalytics(getApplicationContext(), OPEN_FLEETVIEW, null);
@@ -553,6 +560,7 @@ public class KcaFleetViewService extends BaseService {
             if (intent.getAction().equals(REFRESH_FLEETVIEW_ACTION)) {
                 if (setView()) {
                     if (fleetView != null && fleetView.getParent() != null) {
+                        layoutParams.width = screenWidth;
                         fleetView.invalidate();
                         windowManager.updateViewLayout(fleetView, layoutParams);
                     }
@@ -578,11 +586,9 @@ public class KcaFleetViewService extends BaseService {
         return super.onStartCommand(intent, flags, startId);
     }
 
-
     private int startViewX, startViewY; // Starting view x y
     private final View.OnTouchListener draggableLayoutTouchListener = new View.OnTouchListener() {
         private float startRawX, startRawY; // Starting finger x y
-        private final float[] lastX = new float[3];
         private final float[] lastY = new float[3];
         private final long[] lastT = new long[3];
         private int curr = 0;
@@ -596,41 +602,35 @@ public class KcaFleetViewService extends BaseService {
                 case MotionEvent.ACTION_DOWN:
                     startRawX = event.getRawX();
                     startRawY = event.getRawY();
-                    lastX[curr] = startRawX;
-                    lastY[curr] = startRawY;
-                    lastT[curr] = Calendar.getInstance().getTimeInMillis();
+                    lastY[0] = lastY[1] = lastY[2] = startRawY;
+                    lastT[0] = lastT[1] = lastT[2] = Calendar.getInstance().getTimeInMillis();
                     curr = (curr + 1) % 3;
                     startViewX = layoutParams.x;
                     startViewY = layoutParams.y;
                     Log.e("KCA", KcaUtils.format("mView: %d %d", startViewX, startViewY));
                     if (!isViewLocked) {
-                        snapIndicator.show(layoutParams.y, maxY, fleetViewHeight);
+                        snapIndicator.show(layoutParams.y, maxY, screenWidth, fleetViewHeight, screenPaddingLeft, screenPaddingTop);
                         fleetView.cancelAnimations();
                     }
                     break;
                 case MotionEvent.ACTION_UP:
                     if (!isViewLocked) {
-                        float dx = event.getRawX() - lastX[(curr + 1) % 3];
                         float dy = event.getRawY() - lastY[(curr + 1) % 3];
                         long dt = Calendar.getInstance().getTimeInMillis() - lastT[(curr + 1) % 3];
-                        float finalXUncap = layoutParams.x + dx / dt * 400;
                         float finalYUncap = layoutParams.y + dy / dt * 400;
-                        finalX = 0f;
+                        finalX = screenPaddingLeft;
                         // Snap to either top, center, or bottom
-                        if (finalYUncap < maxY / 4f) {
-                            finalY = 0;
+                        if (finalYUncap < screenPaddingTop + maxY / 4f) {
+                            finalY = screenPaddingTop;
                             view_status = -1;
-                        } else if (finalYUncap < maxY / 4f * 3f) {
-                            finalY = maxY / 2f;
+                        } else if (finalYUncap < screenPaddingTop + maxY / 4f * 3f) {
+                            finalY = screenPaddingTop + maxY / 2f;
                             view_status = 0;
                         } else {
-                            finalY = maxY;
+                            finalY = screenPaddingTop + maxY;
                             view_status = 1;
                         }
-                        fleetView.animateTo(layoutParams.x, layoutParams.y,
-                                0, (int) finalY,
-                                finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
-                                500, windowManager, layoutParams);
+                        fleetView.animateTo(layoutParams.x, layoutParams.y, (int) finalX, (int) finalY, 0, 0, 500, windowManager, layoutParams);
                         snapIndicator.remove();
                     }
 
@@ -643,7 +643,6 @@ public class KcaFleetViewService extends BaseService {
                         int y = (int) (event.getRawY() - startRawY);
                         Log.e("KCA", KcaUtils.format("Coord: %d %d", x, y));
 
-                        lastX[curr] = event.getRawX();
                         lastY[curr] = event.getRawY();
                         lastT[curr] = Calendar.getInstance().getTimeInMillis();
                         curr = (curr + 1) % 3;
@@ -654,7 +653,7 @@ public class KcaFleetViewService extends BaseService {
                         layoutParams.y = (int) finalY;
 
                         windowManager.updateViewLayout(fleetView, layoutParams);
-                        snapIndicator.update(finalY, maxY);
+                        snapIndicator.update(finalY, maxY, screenPaddingTop);
                     }
                     break;
                 case MotionEvent.ACTION_CANCEL:
@@ -745,7 +744,7 @@ public class KcaFleetViewService extends BaseService {
                                 itemViewParams.x = (int) (event.getRawX() + xmargin);
                             }
                             itemViewParams.y = (int) (event.getRawY() - ymargin - itemView.getHeight());
-                            itemViewParams.gravity = Gravity.TOP | Gravity.START;
+                            itemViewParams.gravity = Gravity.TOP | Gravity.LEFT;
 
                             if (itemView.getParent() != null) {
                                 if (selected == -1 || selected != i) {
@@ -1291,7 +1290,7 @@ public class KcaFleetViewService extends BaseService {
             if (windowManager != null) {
                 if (fleetView.getParent() != null) windowManager.removeViewImmediate(fleetView);
                 initView();
-                layoutParams.flags = getWindowLayoutParamsFlags(newConfig);
+                layoutParams.width = screenWidth;
                 windowManager.addView(fleetView, layoutParams);
 
                 if (setView()) {
@@ -1337,10 +1336,22 @@ public class KcaFleetViewService extends BaseService {
     }
 
     private void updateScreenSize() {
-        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowMetrics windowMetrics = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getCurrentWindowMetrics();
+            WindowInsets insets = windowMetrics.getWindowInsets();
+            // Not allow window to stay on cutout or navigation bar or status bar
+            Insets safeInsets = insets.getInsets(WindowInsets.Type.displayCutout() | WindowInsets.Type.navigationBars() | WindowInsets.Type.statusBars());
+            screenPaddingLeft = safeInsets.left;
+            screenPaddingTop = safeInsets.top;
+            Rect bounds = windowMetrics.getBounds();
+            screenWidth = bounds.width() - safeInsets.left - safeInsets.right;
+            screenHeight = bounds.height() - safeInsets.top - safeInsets.bottom;
+        } else {
+            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            screenWidth = size.x;
+            screenHeight = size.y;
+        }
     }
 }

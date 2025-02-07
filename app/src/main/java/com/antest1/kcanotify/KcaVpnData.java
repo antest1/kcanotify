@@ -28,6 +28,8 @@ import static com.antest1.kcanotify.KcaUtils.gzipdecompress;
 import static com.antest1.kcanotify.KcaUtils.unchunkdata;
 
 public class KcaVpnData {
+    private static final String kcHostPostfix = ".kancolle-server.com";
+
     public static KcaDBHelper helper;
     public static Handler handler;
 
@@ -94,6 +96,16 @@ public class KcaVpnData {
     }
 
     // Called from native code
+    public static void registerKcaServer(byte[] host, byte[] addr) {
+        String hoststr = new String(host);
+        String addrstr = new String(addr);
+        Log.e("KCAV", "registerKcaServer "+ hoststr + ": " + addrstr + " - " + hoststr.contains(kcHostPostfix));
+        if (hoststr.contains(kcHostPostfix)) {
+            prefixCheckList.add(addrstr);
+        }
+    }
+
+    // Called from native code
     public static int containsKcaServer(int type, byte[] source, byte[] target, byte[] head) {
         String saddrstr = new String(source);
         String taddrstr = new String(target);
@@ -101,9 +113,9 @@ public class KcaVpnData {
         if (type == REQUEST) {
             if (prefixCheckList.contains(taddrstr)) {
                 return 1;
-            } else if (head != null) { // detect kcs host from request header
+            } else if (head != null) { // detect kcs host from request header (as backup)
                 String headstr = (new String(head)).split("\r\n\r\n")[0];
-                if (headstr.contains("Host: ") && headstr.contains(".kancolle-server.com\r\n")) {
+                if (headstr.contains("Host: ") && headstr.contains(kcHostPostfix + "\r\n")) {
                     Log.e("KCAV", "kcs detected: " + taddrstr);
                     prefixCheckList.add(taddrstr);
                     return 1;

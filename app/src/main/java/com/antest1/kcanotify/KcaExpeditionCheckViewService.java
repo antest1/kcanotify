@@ -182,7 +182,7 @@ public class KcaExpeditionCheckViewService extends BaseService {
         itemView = layoutView.findViewById(R.id.view_excheck_detail);
         layoutView.findViewById(R.id.excheckview_head).setOnClickListener(mViewClickListener);
         layoutView.findViewById(R.id.excheck_detail_reward).setOnClickListener(mViewClickListener);
-        KcaUtils.resizeFullWidthView(getApplicationContext(), layoutView);
+        KcaUtils.resizeFullWidthView(getApplicationContext(), layoutView.findViewById(R.id.excheckviewpanel));
         layoutView.setVisibility(View.GONE);
 
         setPopupContent();
@@ -781,13 +781,21 @@ public class KcaExpeditionCheckViewService extends BaseService {
 
         ((TextView) itemView.findViewById(R.id.view_excheck_title))
                 .setText(title);
+
+        initExpeditionButtonStyle();
         if (check.get("pass").getAsBoolean()) {
             ((TextView) itemView.findViewById(R.id.view_excheck_title))
                     .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodBack));
+            ((Chip) layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(index)), R.id.class)))
+                    .setChipBackgroundColorResource(R.color.colorExpeditionBtnGoodBack);
         } else {
             ((TextView) itemView.findViewById(R.id.view_excheck_title))
                     .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailBack));
+            ((Chip) layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(index)), R.id.class)))
+                    .setChipBackgroundColorResource(R.color.colorExpeditionBtnFailBack);
         }
+        ((Chip) layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(index)), R.id.class)))
+                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
         ((TextView) itemView.findViewById(R.id.view_excheck_time))
                 .setText(getTimeStr(time));
@@ -944,25 +952,10 @@ public class KcaExpeditionCheckViewService extends BaseService {
                 for (int i = 0; i < 15; i++) {
                     if (i < expedition_data.size()) {
                         int expd = expedition_data.get(i);
-                        String key = String.valueOf(expd);
-                        checkdata.put(key, checkCondition(expd));
-                        JsonObject check_item = checkdata.get(key);
-                        if (check_item != null) {
-                            if (check_item.get("pass").getAsBoolean()) {
-                                layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class))
-                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodBack));
-                                ((TextView) layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
-                                        .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodText));
-                            } else {
-                                layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class))
-                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailBack));
-                                ((TextView) layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
-                                        .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailText));
-                            }
-                        }
+                        checkdata.put(String.valueOf(expd), checkCondition(expd));
                     }
                 }
-
+                initExpeditionButtonStyle();
                 updateSelectedView(selected, world);
 
                 JsonObject bonus_info = getBonusInfo();
@@ -1015,6 +1008,31 @@ public class KcaExpeditionCheckViewService extends BaseService {
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), getStringFromException(e), Toast.LENGTH_LONG).show();
             return 1;
+        }
+    }
+
+    private void initExpeditionButtonStyle() {
+        for (int i = 0; i < 15; i++) {
+            if (i < expedition_data.size()) {
+                int expd = expedition_data.get(i);
+                String key = String.valueOf(expd);
+                JsonObject check_item = checkdata.get(key);
+                if (check_item != null) {
+                    ((Chip) layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
+                            .setChipBackgroundColorResource(R.color.transparent);
+                    if (check_item.get("pass").getAsBoolean()) {
+                        ((Chip) layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
+                                .setChipStrokeColorResource(R.color.colorExpeditionBtnGoodBack);
+                        ((TextView) layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodText));
+                    } else {
+                        ((Chip) layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
+                                .setChipStrokeColorResource(R.color.colorExpeditionBtnFailBack);
+                        ((TextView) layoutView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailText));
+                    }
+                }
+            }
         }
     }
 

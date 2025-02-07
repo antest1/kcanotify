@@ -131,6 +131,8 @@ public class SettingActivity extends BaseActivity implements MainPreferenceFragm
                 return "40";
             case PREF_FAIRY_SIZE:
                 return "3";
+            case PREF_FAIRY_OPACITY:
+                return "90";
             case PREF_EQUIPINFO_FILTCOND:
                 return "all";
             case PREF_KCA_DATA_VERSION:

@@ -41,6 +41,7 @@ public class KcaForegroundCheckService extends BaseService {
     private GotoForegroundReceiver gotoFgReceiver;
 
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @Override
     public void onCreate() {
         super.onCreate();
@@ -50,7 +51,7 @@ public class KcaForegroundCheckService extends BaseService {
         IntentFilter filter = new IntentFilter();
         filter.addAction(GOTO_FOREGROUND_ACTION);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(gotoFgReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+            registerReceiver(gotoFgReceiver, filter, Context.RECEIVER_EXPORTED);
         } else {
             registerReceiver(gotoFgReceiver, filter);
         }
@@ -106,18 +107,13 @@ public class KcaForegroundCheckService extends BaseService {
         }
     }
 
-    @SuppressLint("WrongConstant")
     public String checkForegroundPackage() {
         String classByUsageStats = null;
         String recentPackageName = "";
 
         UsageStatsManager mUsageStatsManager;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        } else {
-            //noinspection ResourceType
-            mUsageStatsManager = (UsageStatsManager) getSystemService("usagestats");
-        }
+        mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
+
         final long INTERVAL = 5000;
         final long end = System.currentTimeMillis();
         final long begin = end - INTERVAL;

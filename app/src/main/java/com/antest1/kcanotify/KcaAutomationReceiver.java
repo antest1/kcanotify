@@ -4,18 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.VpnService;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import static com.antest1.kcanotify.KcaConstants.BROADCAST_ACTION;
-import static com.antest1.kcanotify.KcaConstants.CONTENT_URI;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.VPN_STOP_REASON;
 
@@ -29,7 +21,6 @@ public class KcaAutomationReceiver extends BroadcastReceiver {
         if (action != null) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             switch (action) {
-                /*
                 case SNIFFER_ON_ACTION:
                     try {
                         VpnService.prepare(context);
@@ -45,7 +36,7 @@ public class KcaAutomationReceiver extends BroadcastReceiver {
                     KcaVpnService.stop(VPN_STOP_REASON, context);
                     prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
                     break;
-                */
+
                 default:
                     break;
             }

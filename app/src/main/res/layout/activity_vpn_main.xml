@@ -102,26 +102,6 @@
                         app:srcCompat="@mipmap/_background" />
                 </LinearLayout>
 
-
-                <TextView
-                    android:id="@+id/textMaintenance"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignWithParentIfMissing="true"
-                    android:layout_above="@id/chipGroup"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="6dp"
-                    android:background="@color/colorDataUpdate"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:minLines="2"
-                    android:padding="4dp"
-                    android:text="Next Maintenance:\n%s"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorDataUpdateText"
-                    android:textSize="14dp"
-                    android:visibility="gone" />
-
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/chipGroup"
                     android:layout_width="wrap_content"
