@@ -182,7 +182,7 @@ public class KcaExpeditionCheckViewService extends BaseService {
         itemView = layoutView.findViewById(R.id.view_excheck_detail);
         layoutView.findViewById(R.id.excheckview_head).setOnClickListener(mViewClickListener);
         layoutView.findViewById(R.id.excheck_detail_reward).setOnClickListener(mViewClickListener);
-        KcaUtils.resizeFullWidthView(getApplicationContext(), layoutView);
+        KcaUtils.resizeFullWidthView(getApplicationContext(), layoutView.findViewById(R.id.excheckviewpanel));
         layoutView.setVisibility(View.GONE);
 
         setPopupContent();

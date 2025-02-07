@@ -960,18 +960,18 @@ public class KcaUtils {
     // Reference: https://stackoverflow.com/questions/53579164/check-if-device-has-notch-in-service
     public static void resizeFullWidthView(Context context, View v) {
         if (v == null) return;
-        int statusBarHeight = 0;
         int defaultHeight = 24;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
-            statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+            int statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
             Log.e("KCA", "" + statusBarHeight + " " + convertDpToPixel(defaultHeight));
             if (statusBarHeight > convertDpToPixel(defaultHeight)) {
                 int orientation = context.getResources().getConfiguration().orientation;
                 if (orientation == ORIENTATION_LANDSCAPE) {
                     final float scale = context.getResources().getDisplayMetrics().density;
                     int padding_px_width = (int) (28 * scale + 0.5f);
-                    v.setPadding(padding_px_width, 0, padding_px_width, 0);
+                    v.setPadding(v.getPaddingLeft() + padding_px_width, v.getPaddingTop(),
+                            v.getPaddingRight() + padding_px_width, v.getPaddingBottom());
                 }
             }
         }

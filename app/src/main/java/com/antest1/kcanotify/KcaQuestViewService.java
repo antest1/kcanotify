@@ -166,7 +166,7 @@ public class KcaQuestViewService extends BaseService {
                 broadcaster = LocalBroadcastManager.getInstance(this);
                 mInflater = LayoutInflater.from(contextWithTheme);
                 layoutView = mInflater.inflate(R.layout.view_quest_list_v2, null);
-                KcaUtils.resizeFullWidthView(getApplicationContext(), layoutView);
+                KcaUtils.resizeFullWidthView(getApplicationContext(), layoutView.findViewById(R.id.questviewpanel));
                 layoutView.setVisibility(View.GONE);
 
                 questView = layoutView.findViewById(R.id.questview);

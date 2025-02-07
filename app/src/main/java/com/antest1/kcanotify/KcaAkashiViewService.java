@@ -54,13 +54,12 @@ public class KcaAkashiViewService extends BaseService {
 
     static boolean error_flag = false;
 
-    private View layoutView;
+    private View akashiLayoutView;
     private WindowManager windowManager;
 
     int displayWidth = 0;
 
     WindowManager.LayoutParams mParams;
-    View akashiview;
     TextView akashiview_gtd, akashiview_star;
     ListView akashiview_list;
     KcaAkashiListViewAdpater2 adapter;
@@ -81,7 +80,7 @@ public class KcaAkashiViewService extends BaseService {
         try {
             Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"));
             int day = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 0(Sun) ~ 6(Sat)
-            ((TextView) akashiview.findViewById(R.id.akashiview_day))
+            ((TextView) akashiLayoutView.findViewById(R.id.akashiview_day))
                     .setText(getString(getId("akashi_term_day_".concat(String.valueOf(day)), R.string.class)));
             listViewItemList = new ArrayList<>();
             int akashiDataLoadingFlag = getAkashiDataFromStorage();
@@ -113,23 +112,21 @@ public class KcaAkashiViewService extends BaseService {
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
 
             mInflater = LayoutInflater.from(this);
-            layoutView = mInflater.inflate(R.layout.view_akashi_list, null);
-            KcaUtils.resizeFullWidthView(getApplicationContext(), layoutView);
-            layoutView.setVisibility(View.GONE);
+            akashiLayoutView = mInflater.inflate(R.layout.view_akashi_list, null);
+            KcaUtils.resizeFullWidthView(getApplicationContext(), akashiLayoutView.findViewById(R.id.akashiviewpanel));
+            akashiLayoutView.setVisibility(View.GONE);
+            akashiLayoutView.findViewById(R.id.akashiview_head).setOnTouchListener(mViewTouchListener);
 
-            akashiview = layoutView.findViewById(R.id.akashiviewlayout);
-            akashiview.findViewById(R.id.akashiview_head).setOnTouchListener(mViewTouchListener);
-
-            akashiview_gtd = akashiview.findViewById(R.id.akashiview_gtd);
+            akashiview_gtd = akashiLayoutView.findViewById(R.id.akashiview_gtd);
             akashiview_gtd.setOnTouchListener(mViewTouchListener);
             akashiview_gtd.setText(getString(R.string.aa_btn_safe_state0));
             akashiview_gtd.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
-            akashiview_star = akashiview.findViewById(R.id.akashiview_star);
+            akashiview_star = akashiLayoutView.findViewById(R.id.akashiview_star);
             akashiview_star.setText(getString(R.string.aa_btn_star0));
             akashiview_star.setOnTouchListener(mViewTouchListener);
 
-            akashiview_list = akashiview.findViewById(R.id.akashiview_list);
+            akashiview_list = akashiLayoutView.findViewById(R.id.akashiview_list);
 
             adapter = new KcaAkashiListViewAdpater2();
             mParams = new WindowManager.LayoutParams(
@@ -158,7 +155,7 @@ public class KcaAkashiViewService extends BaseService {
     @Override
     public void onDestroy() {
         active = false;
-        layoutView.setVisibility(View.GONE);
+        akashiLayoutView.setVisibility(View.GONE);
         super.onDestroy();
     }
 
@@ -166,12 +163,12 @@ public class KcaAkashiViewService extends BaseService {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (windowManager != null && checkLayoutExist()) {
-            windowManager.removeViewImmediate(layoutView);
+            windowManager.removeViewImmediate(akashiLayoutView);
         }
     }
 
     private boolean checkLayoutExist() {
-        return layoutView != null && layoutView.getParent() != null;
+        return akashiLayoutView != null && akashiLayoutView.getParent() != null;
     }
 
     @Override
@@ -184,13 +181,13 @@ public class KcaAkashiViewService extends BaseService {
                 active = true;
                 int setViewResult = setView();
                 if (setViewResult == 0) {
-                    if (layoutView.getParent() != null) {
-                        windowManager.removeViewImmediate(layoutView);
+                    if (akashiLayoutView.getParent() != null) {
+                        windowManager.removeViewImmediate(akashiLayoutView);
                     }
-                    windowManager.addView(layoutView, mParams);
+                    windowManager.addView(akashiLayoutView, mParams);
                 }
                 Log.e("KCA", "show_akashiview_action " + String.valueOf(setViewResult));
-                layoutView.setVisibility(View.VISIBLE);
+                akashiLayoutView.setVisibility(View.VISIBLE);
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -211,17 +208,17 @@ public class KcaAkashiViewService extends BaseService {
                     clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                     if (clickDuration < MAX_CLICK_DURATION) {
                         int id = v.getId();
-                        if (id == akashiview.findViewById(R.id.akashiview_head).getId()) {
+                        if (id == akashiLayoutView.findViewById(R.id.akashiview_head).getId()) {
                             active = false;
-                            layoutView.setVisibility(View.GONE);
-                            windowManager.removeViewImmediate(layoutView);
-                        } else if (id == akashiview.findViewById(R.id.akashiview_star).getId()) {
+                            akashiLayoutView.setVisibility(View.GONE);
+                            windowManager.removeViewImmediate(akashiLayoutView);
+                        } else if (id == akashiLayoutView.findViewById(R.id.akashiview_star).getId()) {
                             if (isStarChecked) akashiview_star.setText(getString(R.string.aa_btn_star0));
                             else akashiview_star.setText(getString(R.string.aa_btn_star1));
                             isStarChecked = !isStarChecked;
                             loadTodayAkashiList(isSafeChecked);
                             resetListView(true);
-                        } else if (id == akashiview.findViewById(R.id.akashiview_gtd).getId()) {
+                        } else if (id == akashiLayoutView.findViewById(R.id.akashiview_gtd).getId()) {
                             if (isSafeChecked) {
                                 akashiview_gtd.setText(getString(R.string.aa_btn_safe_state0));
                                 akashiview_gtd.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));

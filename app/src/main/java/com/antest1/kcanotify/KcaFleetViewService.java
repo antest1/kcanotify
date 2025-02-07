@@ -373,7 +373,7 @@ public class KcaFleetViewService extends BaseService {
     private void initView() {
         fleetView = (DraggableOverlayLayout) mInflater.inflate(R.layout.view_fleet_list, null);
         fleetView.setVisibility(GONE);
-        KcaUtils.resizeFullWidthView(getApplicationContext(), fleetView);
+        KcaUtils.resizeFullWidthView(getApplicationContext(), fleetView.findViewById(R.id.fleetviewpanel));
 
         snapIndicator = new SnapIndicator(this, windowManager, mInflater);
 

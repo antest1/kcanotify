@@ -1392,7 +1392,7 @@ public class KcaBattleViewService extends BaseService {
                 battleViewLayout = (DraggableOverlayLayout) mInflater.inflate(R.layout.view_sortie_battle, null);
                 snapIndicator = new SnapIndicator(this, windowManager, mInflater);
 
-                KcaUtils.resizeFullWidthView(getApplicationContext(), battleViewLayout);
+                KcaUtils.resizeFullWidthView(getApplicationContext(), battleViewLayout.findViewById(R.id.battleviewpanel));
                 battleViewLayout.setVisibility(View.GONE);
                 battleview = battleViewLayout.findViewById(R.id.battleview);
                 battleview.findViewById(R.id.battleviewpanel).setOnTouchListener(draggableLayoutTouchListener);
