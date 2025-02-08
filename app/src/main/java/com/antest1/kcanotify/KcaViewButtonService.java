@@ -641,34 +641,43 @@ public class KcaViewButtonService extends BaseService {
         updateScreenSize();
         Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
-        JsonObject locdata = null;
         if (dbHelper != null) {
-            locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
-
-            layoutParams.flags = getWindowLayoutParamsFlags();
-            if (locdata != null && !locdata.toString().isEmpty()) {
-                if (locdata.has(ori_prefix.concat("x"))) {
-                    layoutParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
-                }
-                if (locdata.has(ori_prefix.concat("y"))) {
-                    layoutParams.y = locdata.get(ori_prefix.concat("y")).getAsInt();
-                }
+            JsonObject locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
+            if (locdata == null || locdata.toString().isEmpty()) {
+                locdata = new JsonObject();
             }
 
             if (windowManager != null && layoutParams != null) {
+                layoutParams.flags = getWindowLayoutParamsFlags();
+
+                if (!locdata.toString().isEmpty()) {
+                    if (locdata.has(ori_prefix.concat("x"))) {
+                        try {
+                            layoutParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
+                        } catch (NumberFormatException e) {
+                            layoutParams.x = 0;
+                        }
+                    }
+                    if (locdata.has(ori_prefix.concat("y"))) {
+                        try {
+                            layoutParams.y = locdata.get(ori_prefix.concat("y")).getAsInt();
+                        } catch (NumberFormatException e) {
+                            layoutParams.y = 0;
+                        }
+                    }
+                }
+
                 if (layoutParams.x < 0) layoutParams.x = 0;
                 else if (layoutParams.x > screenWidth - buttonWidth / 2) layoutParams.x = screenWidth - buttonWidth / 2;
                 if (layoutParams.y < 0) layoutParams.y = 0;
                 else if (layoutParams.y > screenHeight - buttonHeight / 2) layoutParams.y = screenHeight - buttonHeight / 2;
 
                 windowManager.updateViewLayout(buttonView, layoutParams);
-            }
 
-            if (locdata != null && !locdata.toString().isEmpty()) {
-                locdata.addProperty(ori_prefix.concat("x"), layoutParams.x);
-                locdata.addProperty(ori_prefix.concat("y"), layoutParams.y);
-            } else {
-                locdata = new JsonObject();
+                if (!locdata.toString().isEmpty()) {
+                    locdata.addProperty(ori_prefix.concat("x"), layoutParams.x);
+                    locdata.addProperty(ori_prefix.concat("y"), layoutParams.y);
+                }
             }
             dbHelper.putValue(DB_KEY_FAIRYLOC, locdata.toString());
         }
