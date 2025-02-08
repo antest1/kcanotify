@@ -59,6 +59,7 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_NODE;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_COMPLETE;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_OPACITY;
@@ -90,6 +91,8 @@ public class KcaViewButtonService extends BaseService {
     public static final String RETURN_FAIRY_ACTION = "return_fairy_action";
     public static final String RESET_FAIRY_STATUS_ACTION = "reset_fairy_status_action";
     public static final String REMOVE_FAIRY_ACTION = "remove_fairy_action";
+    public static final String PREF_CHANGE_ON_ACTION = "pref_change_on_action";
+    public static final String PREF_CHANGE_OFF_ACTION = "pref_change_off_action";
     public static final String ACTIVATE_BATTLEVIEW_ACTION = "activate_battleview";
     public static final String DEACTIVATE_BATTLEVIEW_ACTION = "deactivate_battleview";
     public static final String ACTIVATE_QUESTVIEW_ACTION = "activate_questview";
@@ -101,6 +104,7 @@ public class KcaViewButtonService extends BaseService {
     private BroadcastReceiver battlenode_receiver;
     private BroadcastReceiver questcmpl_receiver;
     private DraggableOverlayButtonLayout buttonView;
+    private KcaForegroundCheck foregroundCheck;
     private WindowManager windowManager;
     private Handler mHandler;
     private Vibrator vibrator;
@@ -111,6 +115,7 @@ public class KcaViewButtonService extends BaseService {
     private JsonArray icon_info;
     private boolean battleviewEnabled = false;
     private boolean questviewEnabled = false;
+
     public String viewBitmapId;
     WindowManager.LayoutParams layoutParams;
     NotificationManagerCompat notificationManager;
@@ -280,6 +285,11 @@ public class KcaViewButtonService extends BaseService {
             windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             windowManager.addView(buttonView, layoutParams);
 
+            if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_AUTOHIDE)) {
+                foregroundCheck = new KcaForegroundCheck(this);
+                foregroundCheck.command(KcaForegroundCheck.FAIRY_FORECHECK_ON);
+            }
+
             battleviewEnabled = false;
             questviewEnabled = false;
         }
@@ -302,10 +312,7 @@ public class KcaViewButtonService extends BaseService {
                 if (buttonView != null) buttonView.setVisibility(View.GONE);
             }
             if (intent.getAction().equals(FAIRY_VISIBLE) || intent.getAction().equals(RETURN_FAIRY_ACTION)) {
-                if (buttonView != null) {
-                    buttonView.setVisibility(View.VISIBLE);
-                    recentVisibility = View.VISIBLE;
-                }
+                showFairy();
             }
             if (intent.getAction().equals(RETURN_FAIRY_ACTION) || intent.getAction().equals(REMOVE_FAIRY_ACTION)) {
                 if (sHandler != null) {
@@ -319,10 +326,7 @@ public class KcaViewButtonService extends BaseService {
                 }
             }
             if (intent.getAction().equals(FAIRY_INVISIBLE)) {
-                if (buttonView != null) {
-                    buttonView.setVisibility(View.GONE);
-                    recentVisibility = View.GONE;
-                }
+                hideFairy();
             }
             if (intent.getAction().equals(FAIRY_SIZE_CHANGE)) {
                 setFairySize();
@@ -353,6 +357,18 @@ public class KcaViewButtonService extends BaseService {
                 taiha_status = false;
                 setFairyImage();
             }
+            if (intent.getAction().equals(PREF_CHANGE_ON_ACTION)) {
+                if (foregroundCheck != null) {
+                    foregroundCheck = new KcaForegroundCheck(this);
+                    foregroundCheck.command(KcaForegroundCheck.FAIRY_FORECHECK_ON);
+                }
+            }
+            if (intent.getAction().equals(PREF_CHANGE_OFF_ACTION)) {
+                if (foregroundCheck != null) {
+                    foregroundCheck.command(KcaForegroundCheck.FAIRY_FORECHECK_OFF);
+                    foregroundCheck = null;
+                }
+            }
             if (intent.getAction().equals(ACTIVATE_BATTLEVIEW_ACTION)) {
                 Intent qintent = new Intent(getBaseContext(), KcaFleetViewService.class);
                 qintent.setAction(KcaFleetViewService.CLOSE_FLEETVIEW_ACTION);
@@ -375,6 +391,20 @@ public class KcaViewButtonService extends BaseService {
 
         }
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    public void showFairy() {
+        if (buttonView != null) {
+            buttonView.setVisibility(View.VISIBLE);
+            recentVisibility = View.VISIBLE;
+        }
+    }
+
+    public void hideFairy() {
+        if (buttonView != null) {
+            buttonView.setVisibility(View.GONE);
+            recentVisibility = View.GONE;
+        }
     }
 
     private boolean isBattleViewEnabled() {
@@ -457,6 +487,7 @@ public class KcaViewButtonService extends BaseService {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(questcmpl_receiver);
 
         if (windowManager != null) windowManager.removeView(buttonView);
+        if (foregroundCheck != null) foregroundCheck.exit();
         super.onDestroy();
     }
 
@@ -591,8 +622,7 @@ public class KcaViewButtonService extends BaseService {
                     doVibrate(vibrator, 100);
                 }
                 Toast.makeText(getApplicationContext(), getString(R.string.viewbutton_hide), Toast.LENGTH_LONG).show();
-                buttonView.setVisibility(View.GONE);
-                recentVisibility = View.GONE;
+                hideFairy();
                 hiddenByUser = true;
                 if (sHandler != null) {
                     Bundle bundle = new Bundle();

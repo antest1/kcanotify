@@ -210,7 +210,7 @@ public class KcaDevelopPopupService extends BaseService {
     public void onDestroy() {
         active = false;
         LocalBroadcastManager.getInstance(this).unregisterReceiver(data_receiver);
-        if (windowManager != null) windowManager.removeView(popupView);
+        if (windowManager != null && popupView != null) windowManager.removeView(popupView);
         super.onDestroy();
     }
 

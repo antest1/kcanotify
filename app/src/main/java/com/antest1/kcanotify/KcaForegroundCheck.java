@@ -10,78 +10,60 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KC_PACKAGE;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
-import android.annotation.SuppressLint;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
-import android.os.IBinder;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import java.util.Date;
-import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class KcaForegroundCheckService extends BaseService {
+public class KcaForegroundCheck {
     private static final String TAG = "KCA-FCS";
 
     public static final String FAIRY_FORECHECK_ON = "fairy_forecheck_on";
     public static final String FAIRY_FORECHECK_OFF = "fairy_forecheck_off";
     public static final int FOREGROUND_CHECK_INTERVAL = 500;
 
+    private KcaViewButtonService service;
     ScheduledExecutorService checkForegroundScheduler;
     private boolean is_kc_foreground;
     private boolean is_login_done;
     private GotoForegroundReceiver gotoFgReceiver;
-
-
-    @SuppressLint("UnspecifiedRegisterReceiverFlag")
-    @Override
-    public void onCreate() {
-        super.onCreate();
+    
+    public KcaForegroundCheck(KcaViewButtonService service) {
+        this.service = service;
         is_kc_foreground = true;
         is_login_done = false;
         gotoFgReceiver = new GotoForegroundReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(GOTO_FOREGROUND_ACTION);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(gotoFgReceiver, filter, Context.RECEIVER_EXPORTED);
+            this.service.registerReceiver(gotoFgReceiver, filter, Context.RECEIVER_EXPORTED);
         } else {
-            registerReceiver(gotoFgReceiver, filter);
+            this.service.registerReceiver(gotoFgReceiver, filter);
         }
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getAction() != null) {
-            Log.d(TAG, "onStartCommand " + intent.getAction());
-            if (Objects.equals(intent.getAction(), FAIRY_FORECHECK_ON)) {
-                runForegroundCheck();
-            } else if (Objects.equals(intent.getAction(), FAIRY_FORECHECK_OFF)) {
-                stopForegroundCheck();
-            }
+    public void command(String action) {
+        Log.d(TAG, "Command: " + action);
+        if (FAIRY_FORECHECK_ON.equals(action)) {
+            runForegroundCheck();
+        } else if (FAIRY_FORECHECK_OFF.equals(action)) {
+            stopForegroundCheck();
         }
-        return START_REDELIVER_INTENT;
     }
 
-    @Override
-    public void onDestroy() {
-        if (gotoFgReceiver != null) unregisterReceiver(gotoFgReceiver);
+    public void exit() {
+        if (gotoFgReceiver != null) service.unregisterReceiver(gotoFgReceiver);
         if (checkForegroundScheduler != null && !checkForegroundScheduler.isShutdown()) {
             checkForegroundScheduler.shutdown();
         }
-        super.onDestroy();
     }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) { return null; }
 
     public void runForegroundCheck() {
         checkForegroundScheduler = Executors.newSingleThreadScheduledExecutor();
@@ -93,9 +75,7 @@ public class KcaForegroundCheckService extends BaseService {
         if (checkForegroundScheduler != null) {
             checkForegroundScheduler.shutdown();
         }
-        Intent intent = new Intent(getApplicationContext(), KcaViewButtonService.class);
-        intent.setAction(KcaViewButtonService.RETURN_FAIRY_ACTION);
-        startService(intent);
+        service.showFairy();
     }
 
     private static boolean isForeGroundEvent(UsageEvents.Event event) {
@@ -112,7 +92,7 @@ public class KcaForegroundCheckService extends BaseService {
         String recentPackageName = "";
 
         UsageStatsManager mUsageStatsManager;
-        mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
+        mUsageStatsManager = (UsageStatsManager) service.getSystemService(Context.USAGE_STATS_SERVICE);
 
         final long INTERVAL = 5000;
         final long end = System.currentTimeMillis();
@@ -131,11 +111,11 @@ public class KcaForegroundCheckService extends BaseService {
         return recentPackageName;
     }
 
-    private Runnable mForegroundCheckRunnable = () -> {
+    private final Runnable mForegroundCheckRunnable = () -> {
         try {
             boolean current_foreground_status = false;
             byte current_login_status = -1;
-            String kcApp = getStringPreferences(getApplicationContext(), PREF_KC_PACKAGE);
+            String kcApp = getStringPreferences(service.getApplicationContext(), PREF_KC_PACKAGE);
             String foregroundPackage = "";
 
             if (kcApp.equals(GOTO_PACKAGE_NAME)) {
@@ -166,15 +146,13 @@ public class KcaForegroundCheckService extends BaseService {
 
             if (current_foreground_status != is_kc_foreground) {
                 is_kc_foreground = current_foreground_status;
-                Intent intent = new Intent(getApplicationContext(), KcaViewButtonService.class);
                 if (is_kc_foreground) {
-                    intent.setAction(KcaViewButtonService.KCA_STATUS_ON);
+                    service.showFairy();
                     Log.e(TAG, "kancolle detected: " + foregroundPackage);
                 } else {
-                    intent.setAction(KcaViewButtonService.KCA_STATUS_OFF);
+                    service.hideFairy();
                     Log.e(TAG, "kancolle not detected: " + foregroundPackage);
                 }
-                startService(intent);
             }
 
             boolean current_login_flag = (current_login_status == 1);
