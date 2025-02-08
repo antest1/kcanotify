@@ -64,7 +64,7 @@ public class FleetInfoActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.action_fleetlist));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator = KcaUtils.getVibrator(this);
 
         deckInfoCalc = new KcaDeckInfo(this);
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);

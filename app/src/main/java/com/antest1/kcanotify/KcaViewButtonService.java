@@ -256,7 +256,7 @@ public class KcaViewButtonService extends BaseService {
                     PixelFormat.TRANSLUCENT);
 
             layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
-            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator = KcaUtils.getVibrator(this);
             updateScreenSize();
             Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 

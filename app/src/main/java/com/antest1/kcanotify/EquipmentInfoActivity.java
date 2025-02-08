@@ -75,7 +75,7 @@ public class EquipmentInfoActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.action_equipmentinfo));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator = KcaUtils.getVibrator(this);
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         KcaApiData.setDBHelper(dbHelper);

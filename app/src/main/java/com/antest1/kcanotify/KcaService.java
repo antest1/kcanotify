@@ -22,7 +22,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.provider.Settings;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
@@ -252,7 +252,7 @@ public class KcaService extends BaseService {
                     mp.stop();
                     mp.reset();
                 });
-                vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                vibrator = KcaUtils.getVibrator(this);
 
                 alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);

@@ -8,7 +8,7 @@ import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import android.util.Log;

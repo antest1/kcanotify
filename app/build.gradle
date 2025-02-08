@@ -34,13 +34,6 @@ android {
         buildConfig = true
     }
 
-    packagingOptions {
-        jniLibs {
-            // NOTE: needed to unpack libpcapd.so when installed as app bundle
-            useLegacyPackaging = true
-        }
-    }
-
     externalNativeBuild {
         cmake {
             path file('CMakeLists.txt')
