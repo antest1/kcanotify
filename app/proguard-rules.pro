@@ -119,6 +119,7 @@
 
 -dontwarn android.test.**
 -dontwarn java.lang.invoke.**
+-dontwarn android.adservices.measurement.**
 # -keep public class android.widget.** { *; }
 
 #Support library
