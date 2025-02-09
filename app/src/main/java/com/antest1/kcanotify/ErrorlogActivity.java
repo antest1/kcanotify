@@ -41,7 +41,7 @@ public class ErrorlogActivity extends BaseActivity {
         getSupportActionBar().setTitle(R.string.action_errorlog);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator = KcaUtils.getVibrator(this);
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
 
         text = findViewById(R.id.errorlogview);

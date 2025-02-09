@@ -25,7 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.provider.Settings;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -105,6 +105,7 @@ public class MainActivity extends BaseActivity {
     SharedPreferences prefs;
     private BackPressCloseHandler backPressCloseHandler;
     private boolean mToolOpened = false;
+    private boolean vpnFirstPrepared = false;
 
     public static void setHandler(Handler h) {
         sHandler = h;
@@ -335,7 +336,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (getSnifferMode() == SNIFFER_ACTIVE) {
+        if (!vpnFirstPrepared && getSnifferMode() == SNIFFER_ACTIVE) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             prefs.edit().putBoolean(PREF_VPN_ENABLED, KcaVpnService.checkOn()).commit();
         }
@@ -505,6 +506,7 @@ public class MainActivity extends BaseActivity {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             prefs.edit().putBoolean(PREF_VPN_ENABLED, resultCode == RESULT_OK).apply();
             if (resultCode == RESULT_OK) {
+                vpnFirstPrepared = true;
                 KcaVpnService.start("prepared", this);
             } else if (resultCode == RESULT_CANCELED) {
                 // Canceled

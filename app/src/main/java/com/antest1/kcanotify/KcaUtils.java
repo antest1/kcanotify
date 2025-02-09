@@ -20,12 +20,14 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.os.VibratorManager;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -481,6 +483,7 @@ public class KcaUtils {
         return false;
     }
 
+    /** @noinspection deprecation*/
     public static int getWindowLayoutType() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             return WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
@@ -858,8 +861,12 @@ public class KcaUtils {
 
     public static boolean checkOnline(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-        return (netInfo != null && netInfo.isConnected());
+        Network actNw = connectivityManager.getActiveNetwork();
+        if (actNw == null) return false;
+        NetworkCapabilities nwCap = connectivityManager.getNetworkCapabilities(actNw);
+        return nwCap != null && (nwCap.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                || nwCap.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                || nwCap.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
     }
 
     public static int getGravity(int status) {
@@ -1155,6 +1162,15 @@ public class KcaUtils {
                     toChannel.close();
                 }
             }
+        }
+    }
+
+    public static Vibrator getVibrator(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            VibratorManager vibratorManager = (VibratorManager) context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
+            return vibratorManager.getDefaultVibrator();
+        } else {
+            return (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         }
     }
 

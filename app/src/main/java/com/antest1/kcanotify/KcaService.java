@@ -22,7 +22,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.provider.Settings;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
@@ -252,7 +252,7 @@ public class KcaService extends BaseService {
                     mp.stop();
                     mp.reset();
                 });
-                vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                vibrator = KcaUtils.getVibrator(this);
 
                 alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -273,11 +273,6 @@ public class KcaService extends BaseService {
                     KcaReceiver.setHandler(handler);
                 } else {
                     stopSelf();
-                }
-
-                if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_AUTOHIDE)) {
-                    startService(new Intent(this, KcaForegroundCheckService.class)
-                            .setAction(KcaForegroundCheckService.FAIRY_FORECHECK_ON));
                 }
 
                 KcaBattle.setHandler(nHandler);
@@ -345,7 +340,6 @@ public class KcaService extends BaseService {
                 stopService(new Intent(this, KcaCustomToastService.class));
                 stopService(new Intent(this, KcaFleetCheckPopupService.class));
                 stopService(new Intent(this, KcaDockingPopupService.class));
-                stopService(new Intent(this, KcaForegroundCheckService.class));
                 setServiceDown();
                 KcaAlarmService.clearAlarmCount();
                 stopSelfResult(startId);

@@ -15,7 +15,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
