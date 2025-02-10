@@ -110,6 +110,7 @@ public class KcaService extends BaseService {
     KcaPacketLogger packetLogger;
 
     KcaDeckInfo deckInfoCalc;
+    KcaForegroundCheck foregroundCheck;
 
     AlarmManager alarmManager;
     AudioManager mAudioManager;
@@ -306,6 +307,11 @@ public class KcaService extends BaseService {
                 toForegroundHandler.postDelayed(() ->
                         startForeground(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build()), 24);
 
+                if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_AUTOHIDE)) {
+                    foregroundCheck = new KcaForegroundCheck(this);
+                    foregroundCheck.command(KcaForegroundCheck.FAIRY_FORECHECK_ON);
+                }
+
                 notificationTimeCounter = -1;
                 timer = () -> {
                     if (isMissionTimerViewEnabled()) {
@@ -367,6 +373,8 @@ public class KcaService extends BaseService {
     public void onDestroy() {
         if (receiver != null) unregisterReceiver(receiver);
         receiver = null;
+        if (foregroundCheck != null) foregroundCheck.exit();
+        foregroundCheck = null;
         if (notifiManager != null) {
             notifiManager.cancelAll();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -2199,6 +2207,19 @@ public class KcaService extends BaseService {
                 updateNotification(false);
                 startService(new Intent(this, KcaViewButtonService.class)
                         .setAction(KcaViewButtonService.FAIRY_CHANGE));
+            }
+
+            if (url.equals(KCA_API_PREF_CHANGE_ON_ACTION)) {
+                if (foregroundCheck == null) {
+                    foregroundCheck = new KcaForegroundCheck(this);
+                    foregroundCheck.command(KcaForegroundCheck.FAIRY_FORECHECK_ON);
+                }
+            }
+            if (url.equals(KCA_API_PREF_CHANGE_OFF_ACTION)) {
+                if (foregroundCheck != null) {
+                    foregroundCheck.command(KcaForegroundCheck.FAIRY_FORECHECK_OFF);
+                    foregroundCheck = null;
+                }
             }
 
             if (url.startsWith(KCA_API_PREF_NOTICOUNT_CHANGED)) {

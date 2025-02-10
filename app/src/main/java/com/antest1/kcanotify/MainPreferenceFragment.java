@@ -62,8 +62,6 @@ import static com.antest1.kcanotify.KcaUtils.getContentUri;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setSoundSetting;
-import static com.antest1.kcanotify.KcaViewButtonService.PREF_CHANGE_OFF_ACTION;
-import static com.antest1.kcanotify.KcaViewButtonService.PREF_CHANGE_ON_ACTION;
 import static com.antest1.kcanotify.SettingActivity.REQUEST_ALERT_RINGTONE;
 import static com.antest1.kcanotify.SettingActivity.REQUEST_BATOPTIM_PERMISSION;
 import static com.antest1.kcanotify.SettingActivity.REQUEST_OVERLAY_PERMISSION;
@@ -478,12 +476,19 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                             (dialogInterface, i) -> {
                     })
                     .setIcon(R.mipmap.ic_launcher);
-                if (!getActivity().isFinishing()) alertDialog.show();
+                if (getActivity() != null && !getActivity().isFinishing())
+                    alertDialog.show();
                 return false;
             } else if (KcaService.getServiceStatus()) {
-                Intent intent = new Intent(getActivity(), KcaViewButtonService.class);
-                intent.setAction(isTrue ? PREF_CHANGE_ON_ACTION : PREF_CHANGE_OFF_ACTION);
-                getActivity().startService(intent);
+                if (sHandler != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("url", isTrue ?
+                            KCA_API_PREF_CHANGE_ON_ACTION : KCA_API_PREF_CHANGE_OFF_ACTION);
+                    bundle.putString("data", "");
+                    Message sMsg = sHandler.obtainMessage();
+                    sMsg.setData(bundle);
+                    sHandler.sendMessage(sMsg);
+                }
             }
         }
 

@@ -91,8 +91,6 @@ public class KcaViewButtonService extends BaseService {
     public static final String RETURN_FAIRY_ACTION = "return_fairy_action";
     public static final String RESET_FAIRY_STATUS_ACTION = "reset_fairy_status_action";
     public static final String REMOVE_FAIRY_ACTION = "remove_fairy_action";
-    public static final String PREF_CHANGE_ON_ACTION = "pref_change_on_action";
-    public static final String PREF_CHANGE_OFF_ACTION = "pref_change_off_action";
     public static final String ACTIVATE_BATTLEVIEW_ACTION = "activate_battleview";
     public static final String DEACTIVATE_BATTLEVIEW_ACTION = "deactivate_battleview";
     public static final String ACTIVATE_QUESTVIEW_ACTION = "activate_questview";
@@ -104,7 +102,6 @@ public class KcaViewButtonService extends BaseService {
     private BroadcastReceiver battlenode_receiver;
     private BroadcastReceiver questcmpl_receiver;
     private DraggableOverlayButtonLayout buttonView;
-    private KcaForegroundCheck foregroundCheck;
     private WindowManager windowManager;
     private Handler mHandler;
     private Vibrator vibrator;
@@ -284,12 +281,6 @@ public class KcaViewButtonService extends BaseService {
 
             windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             windowManager.addView(buttonView, layoutParams);
-
-            if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_AUTOHIDE)) {
-                foregroundCheck = new KcaForegroundCheck(this);
-                foregroundCheck.command(KcaForegroundCheck.FAIRY_FORECHECK_ON);
-            }
-
             battleviewEnabled = false;
             questviewEnabled = false;
         }
@@ -356,18 +347,6 @@ public class KcaViewButtonService extends BaseService {
             if (intent.getAction().equals(RESET_FAIRY_STATUS_ACTION)) {
                 taiha_status = false;
                 setFairyImage();
-            }
-            if (intent.getAction().equals(PREF_CHANGE_ON_ACTION)) {
-                if (foregroundCheck != null) {
-                    foregroundCheck = new KcaForegroundCheck(this);
-                    foregroundCheck.command(KcaForegroundCheck.FAIRY_FORECHECK_ON);
-                }
-            }
-            if (intent.getAction().equals(PREF_CHANGE_OFF_ACTION)) {
-                if (foregroundCheck != null) {
-                    foregroundCheck.command(KcaForegroundCheck.FAIRY_FORECHECK_OFF);
-                    foregroundCheck = null;
-                }
             }
             if (intent.getAction().equals(ACTIVATE_BATTLEVIEW_ACTION)) {
                 Intent qintent = new Intent(getBaseContext(), KcaFleetViewService.class);
@@ -459,8 +438,7 @@ public class KcaViewButtonService extends BaseService {
         int margin = 14;
         Bitmap bmp = Bitmap.createBitmap(src.getWidth() + margin,
                 src.getHeight() + margin, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bmp);
-        int halfMargin = margin / 2;
+        Canvas canvas = new Canvas(bmp);        int halfMargin = margin / 2;
         if (glow_available) {
             Paint glow_paint = new Paint();
             glow_paint.setColor(glowColor);
@@ -487,7 +465,6 @@ public class KcaViewButtonService extends BaseService {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(questcmpl_receiver);
 
         if (windowManager != null) windowManager.removeView(buttonView);
-        if (foregroundCheck != null) foregroundCheck.exit();
         super.onDestroy();
     }
 

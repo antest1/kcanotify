@@ -304,6 +304,8 @@ public final class KcaConstants {
     public static final String KCA_API_PREF_ALARMDELAY_CHANGED = "/kca_api/pref_alarmdelay_changed";
     public static final String KCA_API_PREF_FAIRYSIZE_CHANGED = "/kca_api/pref_fairysize_changed";
     public static final String KCA_API_PREF_FAIRYALPHA_CHANGED = "/kca_api/pref_fairyalpha_changed";
+    public static final String KCA_API_PREF_CHANGE_ON_ACTION = "/kca_api/pref_change_on_action";
+    public static final String KCA_API_PREF_CHANGE_OFF_ACTION = "/kca_api/pref_change_off_action";
 
     public static final String KCA_MSG_FAIRY_CHANGED = "com.antest1.kcanotify.KcaFairySelectActivity.KCA_MSG_FAIRY_CHANGED";
     public static final String KCA_MSG_BATTLE_NODE = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_NODE";
