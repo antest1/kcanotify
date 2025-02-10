@@ -2,11 +2,9 @@ package com.antest1.kcanotify;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -14,7 +12,6 @@ import android.provider.Settings;
 import androidx.annotation.Nullable;
 
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -80,12 +77,10 @@ public class KcaCustomToastService extends BaseService {
                     PixelFormat.TRANSLUCENT);
 
             mParams.gravity = Gravity.TOP | Gravity.START;
-            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            screenWidth = size.x;
-            screenHeight = size.y;
-            Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+            SizeInsets screenSize = KcaUtils.getDefaultDisplaySizeInsets(this);
+            screenWidth = screenSize.size.x;
+            screenHeight = screenSize.size.y;
+            Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
             mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             mManager.addView(mView, mParams);
         }
@@ -164,18 +159,16 @@ public class KcaCustomToastService extends BaseService {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
-        Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
-
+        SizeInsets screenSize = KcaUtils.getDefaultDisplaySizeInsets(this);
+        screenWidth = screenSize.size.x;
+        screenHeight = screenSize.size.y;
+        Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
         if (mParams != null) {
             mParams.x = (screenWidth - popupWidth) / 2;
             mParams.y = (int)((screenHeight - popupHeight) * 0.8);
+            if (mManager != null && mView != null)
+                mManager.updateViewLayout(mView, mParams);
         }
-
         super.onConfigurationChanged(newConfig);
     }
 }

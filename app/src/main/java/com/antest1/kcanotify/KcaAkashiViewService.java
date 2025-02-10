@@ -1,16 +1,13 @@
 package com.antest1.kcanotify;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
 import android.os.IBinder;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -138,12 +135,7 @@ public class KcaAkashiViewService extends BaseService {
             mParams.gravity = Gravity.CENTER;
 
             windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-
-            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            displayWidth = size.x;
-
+            displayWidth = KcaUtils.getDefaultDisplaySizeInsets(this).size.x;
         } catch (Exception e) {
             active = false;
             error_flag = true;

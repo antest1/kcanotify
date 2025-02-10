@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Vibrator;
 import androidx.preference.PreferenceManager;
@@ -590,7 +591,8 @@ public class KcaService extends BaseService {
         private final WeakReference<KcaService> mService;
 
         kcaServiceHandler(KcaService service) {
-            mService = new WeakReference<KcaService>(service);
+            super(Looper.getMainLooper());
+            mService = new WeakReference<>(service);
         }
 
         @Override
@@ -614,7 +616,7 @@ public class KcaService extends BaseService {
         Reader data = new InputStreamReader(new ByteArrayInputStream(raw));
         String request = msg.getData().getString("request");
 
-        if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url.length() == 0) {
+        if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url.isEmpty()) {
             return;
         }
 
@@ -2138,6 +2140,7 @@ public class KcaService extends BaseService {
         private final WeakReference<KcaService> mService;
 
         kcaNotificationHandler(KcaService service) {
+            super(Looper.getMainLooper());
             mService = new WeakReference<>(service);
         }
 

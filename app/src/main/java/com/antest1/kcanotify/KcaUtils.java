@@ -14,7 +14,10 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Insets;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.hardware.display.DisplayManager;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -37,10 +40,13 @@ import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.view.WindowMetrics;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -125,7 +131,6 @@ import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_FLAG;
 import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_PREFIX;
 import static com.mariten.kanatools.KanaConverter.OP_ZEN_KATA_TO_ZEN_HIRA;
-
 
 public class KcaUtils {
     public static String getStringFromException(Exception ex) {
@@ -1163,6 +1168,37 @@ public class KcaUtils {
                 }
             }
         }
+    }
+
+    public static Display getDefaultDisplay(Context context) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            DisplayManager displayManager = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
+            return displayManager.getDisplay(Display.DEFAULT_DISPLAY);
+        } else {
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            return windowManager.getDefaultDisplay();
+        }
+    }
+
+    public static SizeInsets getDefaultDisplaySizeInsets(Context context) {
+        SizeInsets measured = new SizeInsets();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowMetrics windowMetrics = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getCurrentWindowMetrics();
+            WindowInsets insets = windowMetrics.getWindowInsets();
+            // Not allow window to stay on cutout or navigation bar or status bar
+            Insets safeInsets = insets.getInsets(WindowInsets.Type.displayCutout() | WindowInsets.Type.navigationBars() | WindowInsets.Type.statusBars());
+            measured.insets.x = safeInsets.left;
+            measured.insets.y = safeInsets.top;
+            Rect bounds = windowMetrics.getBounds();
+            measured.size.x = bounds.width() - safeInsets.left - safeInsets.right;
+            measured.size.y = bounds.height() - safeInsets.top - safeInsets.bottom;
+        } else {
+            Display display = getDefaultDisplay(context);
+            display.getSize(measured.size);
+            measured.insets.x = 0;
+            measured.insets.y = 0;
+        }
+        return measured;
     }
 
     public static Vibrator getVibrator(Context context) {

@@ -11,6 +11,8 @@ import android.os.Handler;
 import androidx.preference.PreferenceManager;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+
+import android.os.Looper;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -64,8 +66,7 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 public class InitStartActivity extends BaseActivity {
     public static final String ACTION_RESET = "ACTION_RESET";
 
-    Handler handler = new Handler();
-
+    Handler handler = new Handler(Looper.getMainLooper());
     KcaDBHelper dbHelper;
     KcaDownloader downloader;
     TextView appname, appversion, appmessage;

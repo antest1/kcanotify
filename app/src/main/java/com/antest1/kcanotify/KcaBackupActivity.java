@@ -4,6 +4,7 @@ import static com.antest1.kcanotify.KcaBackupItemAdpater.BACKUP_KEY;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
@@ -14,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.Gson;
@@ -248,6 +248,7 @@ public class KcaBackupActivity extends BaseActivity {
         private final WeakReference<KcaBackupActivity> mActivity;
 
         UpdateHandler(KcaBackupActivity activity) {
+            super(Looper.getMainLooper());
             mActivity = new WeakReference<>(activity);
         }
 

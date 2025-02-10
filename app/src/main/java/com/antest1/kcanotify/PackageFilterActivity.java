@@ -3,6 +3,7 @@ package com.antest1.kcanotify;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 
 import androidx.appcompat.widget.Toolbar;
@@ -74,7 +75,8 @@ public class PackageFilterActivity extends BaseActivity {
         private final WeakReference<PackageFilterActivity> mActivity;
 
         UpdateHandler(PackageFilterActivity activity) {
-            mActivity = new WeakReference<PackageFilterActivity>(activity);
+            super(Looper.getMainLooper());
+            mActivity = new WeakReference<>(activity);
         }
 
         @Override
