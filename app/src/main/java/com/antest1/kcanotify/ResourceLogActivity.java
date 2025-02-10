@@ -3,13 +3,15 @@ package com.antest1.kcanotify;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import com.google.android.material.tabs.TabLayout;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +36,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.antest1.kcanotify.DropLogActivity.convertMillsToDate;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_RESLOG;
@@ -281,7 +285,7 @@ public class ResourceLogActivity extends BaseActivity {
                 alert.show();
                 return true;
             case R.id.action_reslog_export:
-                new LogSaveTask().execute();
+                saveLogData();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -342,18 +346,17 @@ public class ResourceLogActivity extends BaseActivity {
         }
     }
 
-    private class LogSaveTask extends AsyncTask<String, String, Integer> {
-        File file;
+    private void saveLogData() {
+        Handler handler = new Handler(Looper.getMainLooper());
 
-        @Override
-        protected void onPreExecute() {
-            is_exporting = true;
-            export_msg.setText(getString(R.string.action_save_msg));
-            export_msg.setVisibility(View.VISIBLE);
-        }
+        final File[] file = new File[1];
+        is_exporting = true;
+        export_msg.setText(getString(R.string.action_save_msg));
+        export_msg.setVisibility(View.VISIBLE);
 
-        @Override
-        protected Integer doInBackground(String[] params) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            int result;
             File savedir = new File(getExternalFilesDir(null), FILE_PATH);
             if (!savedir.exists()) savedir.mkdirs();
             String exportPath = savedir.getPath();
@@ -372,14 +375,14 @@ public class ResourceLogActivity extends BaseActivity {
                     label_date, label_1, label_2, label_3, label_4, label_5, label_6, label_7, label_8);
 
             List<String> loglist = resourceLogger.getFullStringResourceLog();
-            if (loglist.size() > 0) {
+            if (!loglist.isEmpty()) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
                 String timetext = dateFormat.format(new Date());
 
                 String filename = KcaUtils.format("/kca_resourcelog_%s.csv", timetext);
-                file = new File(exportPath.concat(filename));
+                file[0] = new File(exportPath.concat(filename));
                 try {
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(file[0], false));
                     bw.write(label_line);
                     bw.write("\r\n");
                     for (String line : loglist) {
@@ -387,39 +390,39 @@ public class ResourceLogActivity extends BaseActivity {
                         bw.write("\r\n");
                     }
                     bw.close();
-                    return 0;
+                    result = 0;
                 } catch (IOException e) {
                     e.printStackTrace();
-                    return 2;
+                    result = 2;
                 }
             } else {
-                return 1;
+                result = 1;
             }
-        }
 
-        @Override
-        protected void onPostExecute(Integer result) {
-            is_exporting = false;
-            export_msg.setVisibility(View.GONE);
-            switch (result) {
-                case 0:
-                    Toast.makeText(getApplicationContext(), "Exported to ".concat(file.getPath()), Toast.LENGTH_LONG).show();
-                    break;
-                case 1:
-                    Toast.makeText(getApplicationContext(), "No log to export.", Toast.LENGTH_LONG).show();
-                    break;
-                case 2:
-                    Toast.makeText(getApplicationContext(), "An error occurred when exporting drop log.", Toast.LENGTH_LONG).show();
-                    break;
-                default:
-                    break;
-            }
-        }
+            final int resultFinal = result;
+            handler.post(() -> {
+                is_exporting = false;
+                export_msg.setVisibility(View.GONE);
+                switch (resultFinal) {
+                    case 0:
+                        Toast.makeText(getApplicationContext(), "Exported to ".concat(file[0].getPath()), Toast.LENGTH_LONG).show();
+                        break;
+                    case 1:
+                        Toast.makeText(getApplicationContext(), "No log to export.", Toast.LENGTH_LONG).show();
+                        break;
+                    case 2:
+                        Toast.makeText(getApplicationContext(), "An error occurred when exporting drop log.", Toast.LENGTH_LONG).show();
+                        break;
+                    default:
+                        break;
+                }
+            });
+        });
     }
 
     public List<JsonObject> convertData(List<JsonObject> data) {
         List<JsonObject> new_data = new ArrayList<>();
-        if (data.size() == 0) return new_data;
+        if (data.isEmpty()) return new_data;
 
         List<Long> timestamp_list = new ArrayList<>();
         long start = KcaUtils.getCurrentDateTimestamp(start_timestamp);

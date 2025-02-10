@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.provider.Settings;
@@ -291,8 +292,18 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     private static boolean hasUsageStatPermission(Context context) {
         AppOpsManager appOps = (AppOpsManager)
                 context.getSystemService(Context.APP_OPS_SERVICE);
-        int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
-                android.os.Process.myUid(), context.getPackageName());
+        int mode;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            mode = appOps.unsafeCheckOpNoThrow(
+                    AppOpsManager.OPSTR_GET_USAGE_STATS,
+                    android.os.Process.myUid(), context.getPackageName()
+            );
+        } else {
+            mode = appOps.checkOpNoThrow(
+                    AppOpsManager.OPSTR_GET_USAGE_STATS,
+                    android.os.Process.myUid(), context.getPackageName()
+            );
+        }
         return mode == AppOpsManager.MODE_ALLOWED;
     }
 
@@ -305,7 +316,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     private void showOverlayPermissionResult() {
         if (checkActivityValid()) {
             int delay = Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 1000;
-            new Handler().postDelayed(() -> {
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 Context context = getContext();
                 if (context != null) {
                     if (Settings.canDrawOverlays(getContext())) {
@@ -321,7 +332,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     private void showBatteryOptimizationPermissionResult() {
         if (checkActivityValid()) {
             int delay = Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 1000;
-            new Handler().postDelayed(() -> {
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 Context context = getContext();
                 if (context != null) {
                     PowerManager manager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -347,11 +358,17 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
     @SuppressLint("ApplySharedPref")
     private void callbackAlertRingtoneResult(ActivityResult result) {
+        Preference pref = findPreference(PREF_KCA_NOTI_RINGTONE);
         Intent alarmService = new Intent(requireContext(), KcaAlarmService.class);
         alarmService.setAction(REFRESH_CHANNEL);
         if (result != null && result.getData() != null) {
-            Preference pref = findPreference(PREF_KCA_NOTI_RINGTONE);
-            Uri ringtoneUri = result.getData().getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+            Uri ringtoneUri;
+            Intent intentResult = result.getData();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ringtoneUri = intentResult.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, Uri.class);
+            } else {
+                ringtoneUri = intentResult.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+            }
             String ringtoneTitle = getRingtoneTitle(ringtoneUri);
             if (pref != null) pref.setSummary(ringtoneTitle);
             if (ringtoneUri != null) {

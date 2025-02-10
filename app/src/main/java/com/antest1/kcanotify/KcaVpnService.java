@@ -1,6 +1,7 @@
 package com.antest1.kcanotify;
 
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -184,6 +185,7 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
             }
         }
 
+        @SuppressLint("UnspecifiedRegisterReceiverFlag")
         private void handleIntent(Intent intent) {
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(KcaVpnService.this);
 
@@ -199,7 +201,11 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
                     ifInteractive.addAction(Intent.ACTION_SCREEN_ON);
                     ifInteractive.addAction(Intent.ACTION_SCREEN_OFF);
                     ifInteractive.addAction(ACTION_SCREEN_OFF_DELAYED);
-                    registerReceiver(interactiveStateReceiver, ifInteractive);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        registerReceiver(interactiveStateReceiver, ifInteractive, RECEIVER_NOT_EXPORTED);
+                    } else {
+                        registerReceiver(interactiveStateReceiver, ifInteractive);
+                    }
                     registeredInteractiveState = true;
                 }
             } else {

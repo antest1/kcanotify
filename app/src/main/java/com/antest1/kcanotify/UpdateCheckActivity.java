@@ -7,9 +7,9 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -40,6 +40,8 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -474,7 +476,7 @@ public class UpdateCheckActivity extends BaseActivity {
                 .start(new OnDownloadListener() {
                     @Override
                     public void onDownloadComplete() {
-                        new DataSaveTask(UpdateCheckActivity.this).execute(name, String.valueOf(version));
+                        saveAssetData(UpdateCheckActivity.this, name, version);
                         if (name.equals("icon_info.json")) {
                             Toast.makeText(getApplicationContext(), "Download Completed: " + name + "\nRetrieving Fairy Images..", Toast.LENGTH_LONG).show();
                             final Handler handler1 = new Handler();
@@ -630,50 +632,25 @@ public class UpdateCheckActivity extends BaseActivity {
         }
     }
 
-    static class DataSaveTask extends AsyncTask<String, Void, Boolean> {
-        private final WeakReference<Activity> weakReference;
-        String name = "";
-
-        DataSaveTask(Activity myActivity) {
-            this.weakReference = new WeakReference<>(myActivity);
-        }
-
-        @Override
-        public Boolean doInBackground(String... params) {
-            Activity activity = this.weakReference.get();
-            if (activity == null || activity.isFinishing()
-                    || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed())) {
-                // weakReference is no longer valid, don't do anything!
-                return false;
-            }
-            name = params[0];
-            KcaDBHelper dbHelper = new KcaDBHelper(activity.getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-            dbHelper.putResVer(params[0], Long.parseLong(params[1]));
-            dbHelper.close();
-            return true;
-        }
-
-        @Override
-        public void onPostExecute(Boolean result) {
-            // Re-acquire a strong reference to the weakReference, and verify
-            // that it still exists and is active.
-            Activity activity = this.weakReference.get();
-            if (activity == null || activity.isFinishing()
-                    || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed())) {
-                return;
-            }
-            Context context = activity.getApplicationContext();
-            if (result) {
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(context, "Download Completed: " + name, Toast.LENGTH_LONG).show();
-                    }
-                }, LOAD_DELAY);
+    private void saveAssetData(Activity mActivity, String name, int version) {
+        final WeakReference<Activity> weakReference = new WeakReference<>(mActivity);
+        Handler handler = new Handler(Looper.getMainLooper());
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            Activity activity = weakReference.get();
+            if (activity == null || activity.isFinishing() || activity.isDestroyed()) {
+                // do nothing
             } else {
-                Toast.makeText(context, "failed to read data", Toast.LENGTH_SHORT).show();
+                Context context = activity.getApplicationContext();
+                try {
+                    KcaDBHelper dbHelper = new KcaDBHelper(activity.getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+                    dbHelper.putResVer(name, version);
+                    dbHelper.close();
+                    handler.postDelayed(() -> Toast.makeText(context, "Download Completed: " + name, Toast.LENGTH_LONG).show(), LOAD_DELAY);
+                } catch (Exception e) {
+                    handler.post(() -> Toast.makeText(context, "failed to read data", Toast.LENGTH_SHORT).show());
+                }
             }
-        }
+        });
     }
 }

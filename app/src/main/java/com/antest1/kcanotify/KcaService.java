@@ -109,6 +109,7 @@ public class KcaService extends BaseService {
     KcaDropLogger dropLogger;
     KcaResourceLogger resourceLogger;
     KcaPacketLogger packetLogger;
+    KcaPoiDBAPI poiApiClient;
 
     KcaDeckInfo deckInfoCalc;
     KcaForegroundCheck foregroundCheck;
@@ -276,6 +277,8 @@ public class KcaService extends BaseService {
                 } else {
                     stopSelf();
                 }
+
+                if (isPoiDBEnabled()) poiApiClient = new KcaPoiDBAPI(handler);
 
                 KcaBattle.setHandler(nHandler);
                 KcaApiData.setHandler(nHandler);
@@ -1536,7 +1539,11 @@ public class KcaService extends BaseService {
                                 boolean createFlag = dev_instance.get("api_id").getAsInt() > 0;
                                 int itemKcId = dev_instance.get("api_slotitem_id").getAsInt();
                                 int itemFailKcId = 0;
-                                if (isPoiDBEnabled()) KcaPoiDBAPI.sendEquipDevData(Arrays.toString(materials), flagship, createFlag ? itemKcId : itemFailKcId, getAdmiralLevel(), createFlag);
+                                if (isPoiDBEnabled() && poiApiClient != null) {
+                                    poiApiClient.sendEquipDevData(Arrays.toString(materials),
+                                            flagship, createFlag ? itemKcId : itemFailKcId,
+                                            getAdmiralLevel(), createFlag);
+                                }
                             }
                             updateQuestView();
 
@@ -1749,7 +1756,11 @@ public class KcaService extends BaseService {
                                     materials[i] = api_kdock_item.get(KcaUtils.format("api_item%d", i + 1)).getAsInt();
                                 }
                                 int created_ship_id = api_kdock_item.get("api_created_ship_id").getAsInt();
-                                if (isPoiDBEnabled()) KcaPoiDBAPI.sendShipDevData(Arrays.toString(materials), checkKdockId, flagship, created_ship_id, checkHighSpeed, getAdmiralLevel(), checkLargeFlag);
+                                if (isPoiDBEnabled() && poiApiClient != null) {
+                                    poiApiClient.sendShipDevData(Arrays.toString(materials),
+                                            checkKdockId, flagship, created_ship_id,
+                                            checkHighSpeed, getAdmiralLevel(), checkLargeFlag);
+                                }
 
                                 checkKdockId = -1;
                                 checkLargeFlag = -1;
@@ -2328,7 +2339,10 @@ public class KcaService extends BaseService {
                 String enemy_name = jsonDataObj.get("enemy_name").getAsString();
                 int result = jsonDataObj.get("result").getAsInt();
 
-                if (isPoiDBEnabled()) KcaPoiDBAPI.sendShipDropData(result, world * 10 + map, quest_name, node, enemy_name, rank, isboss, getAdmiralLevel(), maprank, enemy);
+                if (isPoiDBEnabled() && poiApiClient != null) {
+                    poiApiClient.sendShipDropData(result, world * 10 + map, quest_name,
+                            node, enemy_name, rank, isboss, getAdmiralLevel(), maprank, enemy);
+                }
                 recordDropLog(jsonDataObj, !KcaApiData.checkUserPortEnough());
                 if (result > 0) {
                     KcaApiData.addShipCountInBattle();
