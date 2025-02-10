@@ -604,11 +604,6 @@ public class KcaService extends BaseService {
         }
     }
 
-    private void makeToast(String message, int length, int color) {
-        KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
-        showCustomToast(customToast, message, length, color);
-    }
-
     public void handleServiceMessage(Message msg) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String url = msg.getData().getString("url");
@@ -663,7 +658,7 @@ public class KcaService extends BaseService {
                     e1.printStackTrace();
                 }
 
-                makeToast(getString(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                showCustomToast(getString(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 dbHelper.recordErrorLog(ERROR_TYPE_VPN, api_url, api_request, api_response, api_error);
                 return;
             }
@@ -687,7 +682,7 @@ public class KcaService extends BaseService {
             }
 
             if (url.startsWith(API_WORLD_GET_WORLDINFO)) {
-                makeToast(getString(R.string.kca_toast_server_select), Toast.LENGTH_LONG,
+                showCustomToast(getString(R.string.kca_toast_server_select), Toast.LENGTH_LONG,
                         ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 return;
             }
@@ -901,7 +896,7 @@ public class KcaService extends BaseService {
                     int api_event_id = api_data.get("api_event_id").getAsInt();
                     int api_color_no = api_data.get("api_color_no").getAsInt();
                     currentNodeInfo = KcaApiData.getNodeFullInfo(this, currentNodeAlphabet, api_event_id, api_event_kind, api_color_no, false);
-                    makeToast(currentNodeInfo, Toast.LENGTH_LONG, getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
+                    showCustomToast(currentNodeInfo, Toast.LENGTH_LONG, getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
                 }
             }
 
@@ -976,10 +971,10 @@ public class KcaService extends BaseService {
 
             // Game Data Dependent Tasks
             if (restartFlag) {
-                makeToast(getString(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                showCustomToast(getString(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
             }
             else if (!checkDataLoadTriggered()) {
-                makeToast(getString(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                showCustomToast(getString(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 //new retrieveApiStartData().execute("", "down", "");
             }
             else {
@@ -1143,7 +1138,7 @@ public class KcaService extends BaseService {
                             int toastColor;
                             if (hcondition) toastColor = R.color.colorHeavyDmgStatePanel;
                             else toastColor = R.color.colorWarningPanel;
-                            makeToast(message.trim(), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), toastColor));
+                            showCustomToast(message.trim(), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), toastColor));
                         }
                     }
                 }
@@ -2157,7 +2152,6 @@ public class KcaService extends BaseService {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String url = msg.getData().getString("url");
         String data = msg.getData().getString("data");
-        KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
 
         if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url.length() == 0) {
             Log.e("KCA", "url: " + url);
@@ -2360,13 +2354,13 @@ public class KcaService extends BaseService {
                 }
 
                 if (heavyDamagedMode == HD_DANGER) {
-                    makeToast(getString(R.string.heavy_damaged), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
+                    showCustomToast(getString(R.string.heavy_damaged), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
                     Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
                     intent.putExtra(KCA_MSG_DATA, "1");
                     broadcaster.sendBroadcast(intent);
                 } else {
                     if (heavyDamagedMode == HD_DAMECON) {
-                        makeToast(getString(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
+                        showCustomToast(getString(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
                     }
                     Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
                     intent.putExtra(KCA_MSG_DATA, "0");
@@ -2403,7 +2397,7 @@ public class KcaService extends BaseService {
                 String api_url = jsonDataObj.get("api_url").getAsString();
                 String api_node = jsonDataObj.get("api_node").getAsString();
                 String api_error = jsonDataObj.get("api_error").getAsString();
-                makeToast(getString(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+                showCustomToast(getString(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
                 dbHelper.recordErrorLog(ERROR_TYPE_BATTLE, api_url, api_node, api_data, api_error);
             }
 
@@ -2413,7 +2407,7 @@ public class KcaService extends BaseService {
             makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
-            makeToast(getString(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+            showCustomToast(getString(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
             dbHelper.recordErrorLog(ERROR_TYPE_NOTI, url, "notification", data, getStringFromException(e));
         }
     }
@@ -2665,8 +2659,7 @@ public class KcaService extends BaseService {
     private boolean isCurrentPortDeckDataReady() {
         JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         if (data == null) {
-            KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
-            makeToast(getString(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+            showCustomToast(getString(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorPrimaryDark));
             Log.e("KCA", KcaUtils.format("currentPortDeckData is null"));
             return false;
         } else {
@@ -2720,7 +2713,7 @@ public class KcaService extends BaseService {
         }
     }
 
-    public void showCustomToast(KcaCustomToast toast, String body, int duration, int color) {
-        KcaUtils.showCustomToast(getApplicationContext(), getBaseContext(), toast, body, duration, color);
+    public void showCustomToast(String body, int duration, int color) {
+        KcaUtils.showCustomToast(this, body, duration, color);
     }
 }

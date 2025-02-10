@@ -569,15 +569,15 @@ public class KcaUtils {
         }
     }
 
-    public static void showCustomToast(Context a, Context b, KcaCustomToast toast, String body, int duration, int color) {
+    public static void showCustomToast(Context context, String body, int duration, int color) {
         JsonObject data = new JsonObject();
         data.addProperty("text", body);
         data.addProperty("duration", duration);
         data.addProperty("color", color);
-        Intent toastIntent = new Intent(b, KcaCustomToastService.class);
+        Intent toastIntent = new Intent(context, KcaCustomToastService.class);
         toastIntent.setAction(KcaCustomToastService.TOAST_SHOW_ACTION);
         toastIntent.putExtra("data", data.toString());
-        a.startService(toastIntent);
+        context.startService(toastIntent);
     }
 
     public static String getOrientationPrefix(int value) {

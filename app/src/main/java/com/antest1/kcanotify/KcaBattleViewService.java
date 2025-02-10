@@ -127,7 +127,6 @@ public class KcaBattleViewService extends BaseService {
     private DraggableOverlayLayout battleViewLayout;
     private View itemView, acView, menuView;
     private WindowManager windowManager;
-    KcaCustomToast customToast;
 
     private SnapIndicator snapIndicator;
 
@@ -1377,7 +1376,6 @@ public class KcaBattleViewService extends BaseService {
                 view_status = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_VIEW_YLOC));
                 dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
                 deckInfoCalc = new KcaDeckInfo(getBaseContext());
-                customToast = new KcaCustomToast(getApplicationContext());
                 prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
                 windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -1943,7 +1941,7 @@ public class KcaBattleViewService extends BaseService {
             } else if (v instanceof TextView){
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     String val = (String) ((TextView) v).getText();
-                    showCustomToast(customToast, val, Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                    showCustomToast(val, Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 }
             }
             return true;
@@ -2196,8 +2194,8 @@ public class KcaBattleViewService extends BaseService {
         }
     }
 
-    public void showCustomToast(KcaCustomToast toast, String body, int duration, int color) {
-        KcaUtils.showCustomToast(getApplicationContext(), getBaseContext(), toast, body, duration, color);
+    public void showCustomToast(String body, int duration, int color) {
+        KcaUtils.showCustomToast(this, body, duration, color);
     }
 
     private boolean checkStart(String url) {
