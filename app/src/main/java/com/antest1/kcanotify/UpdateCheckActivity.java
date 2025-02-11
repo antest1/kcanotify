@@ -1,12 +1,9 @@
 package com.antest1.kcanotify;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,7 +25,6 @@ import com.downloader.PRDownloader;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -53,7 +49,6 @@ import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE_START;
-import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_DOWN_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
@@ -83,13 +78,13 @@ public class UpdateCheckActivity extends BaseActivity {
     MaterialSwitch checkstart_chkbox;
     MaterialSwitch resource_reset;
 
-    JsonArray fairy_queue = new JsonArray();
     boolean main_flag = false;
     int checked = -1;
 
     KcaDBHelper dbHelper;
     UpdateHandler handler;
-    public KcaDownloader downloader;
+    KcaDownloader downloader;
+    KcaFairyDownloader fairyDownloader;
     Type listType = new TypeToken<ArrayList<JsonObject>>(){}.getType();
 
     private String getVersionString(int current, int latest) {
@@ -127,6 +122,7 @@ public class UpdateCheckActivity extends BaseActivity {
         KcaApiData.setDBHelper(dbHelper);
 
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
+        fairyDownloader = new KcaFairyDownloader(this);
         PRDownloader.initialize(getApplicationContext());
 
         handler = new UpdateHandler(this);
@@ -479,8 +475,8 @@ public class UpdateCheckActivity extends BaseActivity {
                         saveAssetData(UpdateCheckActivity.this, name, version);
                         if (name.equals("icon_info.json")) {
                             Toast.makeText(getApplicationContext(), "Download Completed: " + name + "\nRetrieving Fairy Images..", Toast.LENGTH_LONG).show();
-                            final Handler handler1 = new Handler();
-                            handler1.postDelayed(() -> new KcaFairyDownloader().execute(), LOAD_DELAY);
+                            final Handler handler1 = new Handler(Looper.getMainLooper());
+                            handler1.postDelayed(() -> fairyDownloader.run(false), LOAD_DELAY);
                         }
                         int num_count = 0;
                         for (int i = 0; i < resource_info.size(); i++) {
@@ -524,112 +520,7 @@ public class UpdateCheckActivity extends BaseActivity {
     }
 
     public boolean isInResourcesFilter(String key) {
-        return resource_target.size() > 0 && resource_target.contains(key);
-    }
-
-    private class KcaFairyDownloader extends AsyncTask<Integer, Integer, Integer> {
-        boolean fairy_wait = false;
-        int totalFiles = 0;
-        int successedFiles = 0;
-        int failedFiles = 0;
-        int download_result = 0;
-
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        ProgressDialog mProgressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mProgressDialog = new ProgressDialog(UpdateCheckActivity.this);
-            mProgressDialog.setMessage(getString(R.string.download_progress));
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.setProgressNumberFormat("%1d file(s)");
-
-            if (!isFinishing()) {
-                mProgressDialog.show();
-            }
-        }
-
-        private void workFinished()  {
-            if (isFinishing()) return;
-            if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                mProgressDialog.dismiss();
-            }
-            if (totalFiles == 0) {
-                Toast.makeText(getApplicationContext(), "No file to download", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getApplicationContext(), KcaUtils.format("Download Completed: %d", successedFiles), Toast.LENGTH_LONG).show();
-                setPreferences(getApplicationContext(), PREF_FAIRY_DOWN_FLAG, true);
-            }
-        }
-
-        private void downloadFile(String folder, String url, String name, int version) {
-            final File root_dir = cw.getDir(folder, Context.MODE_PRIVATE);
-            final File data = new File(root_dir, name);
-            if (data.exists()) data.delete();
-
-            PRDownloader.download(url, root_dir.getPath(), name)
-                    .build()
-                    .start(new OnDownloadListener() {
-                        @Override
-                        public void onDownloadComplete() {
-                            successedFiles += 1;
-                            if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
-                            dbHelper.putResVer(name, version);
-                        }
-
-                        @Override
-                        public void onError(Error error) {
-                            failedFiles += 1;
-                            if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
-                        }
-                    });
-        }
-
-        private void startDownloadProgress() {
-            fairy_wait = true;
-            publishProgress(0);
-            totalFiles = fairy_queue.size();
-            mProgressDialog.setMax(totalFiles);
-            for (int i = 0; i < fairy_queue.size(); i++) {
-                JsonObject item = fairy_queue.get(i).getAsJsonObject();
-                String name = item.get("name").getAsString();
-                String url = item.get("url").getAsString();
-                downloadFile("fairy", url, name, 0);
-            }
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress) {
-            super.onProgressUpdate(progress);
-            mProgressDialog.setIndeterminate(!fairy_wait);
-            mProgressDialog.setMax(totalFiles);
-            mProgressDialog.setProgress(progress[0]);
-            if (totalFiles == 0 || progress[0] == totalFiles) {
-                workFinished();
-            }
-        }
-
-        @Override
-        protected Integer doInBackground(Integer... params) {
-            JsonArray fairy_data = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "icon_info.json", dbHelper);
-            for (int i = 0; i < fairy_data.size(); i++) {
-                JsonObject fairy_item = fairy_data.get(i).getAsJsonObject();
-                if (!KcaUtils.checkFairyImageFileFromStorage(getApplicationContext(), fairy_item.get("name").getAsString())) {
-                    fairy_queue.add(fairy_item);
-                }
-            }
-            startDownloadProgress();
-            return download_result;
-        }
-
-        @Override
-        protected void onPostExecute(Integer s) {
-            super.onPostExecute(s);
-
-        }
+        return !resource_target.isEmpty() && resource_target.contains(key);
     }
 
     private void saveAssetData(Activity mActivity, String name, int version) {
