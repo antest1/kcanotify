@@ -361,7 +361,7 @@ public class KcaService extends BaseService {
     public void setServiceDown() {
         isPortAccessed = false;
         stopTimer();
-        stopForeground(true);
+        stopForeground(STOP_FOREGROUND_REMOVE);
 
         handler = null;
         nHandler = null;

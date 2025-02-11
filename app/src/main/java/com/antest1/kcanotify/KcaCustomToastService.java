@@ -8,6 +8,7 @@ import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
 
@@ -59,7 +60,7 @@ public class KcaCustomToastService extends BaseService {
             // Can not draw overlays: pass
             stopSelf();
         } else {
-            mHandler = new Handler();
+            mHandler = new Handler(Looper.getMainLooper());
             LayoutInflater mInflater = LayoutInflater.from(this);
             mView = mInflater.inflate(R.layout.toast_layout, null);
             mView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);

@@ -51,7 +51,7 @@ public class KcaDevelopPopupService extends BaseService {
     WindowManager.LayoutParams layoutParams;
     NotificationManagerCompat notificationManager;
 
-    List<View> ed_items = new ArrayList();
+    List<View> ed_items = new ArrayList<>();
     ImageView ed_icon;
     TextView ed_name, ed_count, ed_ship, ed_time;
 
