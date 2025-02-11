@@ -1129,7 +1129,7 @@ public class KcaService extends BaseService {
                                 String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
                                 if (soundKind.equals(NOTI_SOUND_KIND_NORMAL) || soundKind.equals(NOTI_SOUND_KIND_MIXED)) {
                                     if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                                        Uri notificationUri = KcaUtils.getContentUri(getApplicationContext(),
+                                        Uri notificationUri = KcaUtils.getUriFromContent(
                                                 Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
                                         Log.e("KCA", getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
                                         KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
@@ -2357,7 +2357,7 @@ public class KcaService extends BaseService {
                         String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
                         if (soundKind.equals(NOTI_SOUND_KIND_NORMAL) || soundKind.equals(NOTI_SOUND_KIND_MIXED)) {
                             if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                                Uri notificationUri = KcaUtils.getContentUri(getApplicationContext(),
+                                Uri notificationUri = KcaUtils.getUriFromContent(
                                         Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
                                 Log.e("KCA", getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
                                 KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);

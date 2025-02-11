@@ -59,7 +59,7 @@ import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.checkContentUri;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.createBuilder;
-import static com.antest1.kcanotify.KcaUtils.getContentUri;
+import static com.antest1.kcanotify.KcaUtils.getUriFromContent;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setSoundSetting;
@@ -704,13 +704,13 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             NotificationChannel channel = new NotificationChannel(notification_id,
                     KcaUtils.format("[Test] %s %s", soundKind, uri.hashCode()), NotificationManager.IMPORTANCE_HIGH);
 
-            if (isSound && uri.length() > 0) {
+            if (isSound && !uri.isEmpty()) {
                 AudioAttributes.Builder attrs = new AudioAttributes.Builder();
                 attrs.setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION);
                 attrs.setUsage(AudioAttributes.USAGE_NOTIFICATION);
 
                 try {
-                    Uri content_uri = getContentUri(context, Uri.parse(uri));
+                    Uri content_uri = getUriFromContent(Uri.parse(uri));
                     if (DEFAULT_NOTIFICATION_URI.equals(content_uri)) {
                         channel.setSound(DEFAULT_NOTIFICATION_URI, attrs.build());
                     } else if (checkContentUri(context, content_uri)) {

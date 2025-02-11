@@ -31,11 +31,7 @@ public class KcaInfoActivity extends BaseActivity {
         TextView app_license = findViewById(R.id.AppLicense);
         app_license.setText(KcaUtils.format(getString(R.string.ia_license), year));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            app_gpl.setText(Html.fromHtml(KcaUtils.format(getString(R.string.ia_gpl), getString(R.string.app_brand)), Html.FROM_HTML_MODE_LEGACY));
-        } else {
-            app_gpl.setText(Html.fromHtml((KcaUtils.format(getString(R.string.ia_gpl), getString(R.string.app_brand)))));
-        }
+        app_gpl.setText(Html.fromHtml(KcaUtils.format(getString(R.string.ia_gpl), getString(R.string.app_brand)), Html.FROM_HTML_MODE_LEGACY));
         app_gpl.setMovementMethod(LinkMovementMethod.getInstance());
     }
 

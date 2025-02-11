@@ -345,16 +345,13 @@ public class KcaUtils {
         }
     }
 
-    public static Uri getContentUri(@NonNull Context context, @NonNull Uri uri) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            if (uri.getPath() != null && uri.toString().startsWith("file")) {
-                File file = new File(uri.getPath());
-                return MediaStore.Audio.Media.getContentUriForPath(file.getAbsolutePath());
-            } else {
-                return uri;
-            }
+    public static Uri getUriFromContent(@NonNull Uri uri) {
+        if (uri.getPath() != null && uri.toString().startsWith("file")) {
+            File file = new File(uri.getPath());
+            return MediaStore.Audio.Media.getContentUriForPath(file.getAbsolutePath());
+        } else {
+            return uri;
         }
-        return uri;
     }
 
     public static boolean checkContentUri(Context context, Uri contentUri)  {
@@ -397,7 +394,7 @@ public class KcaUtils {
                         builder.setDefaults(Notification.DEFAULT_VIBRATE);
                     }
                     try {
-                        Uri content_uri = getContentUri(context, Uri.parse(getStringPreferences(context, PREF_KCA_NOTI_RINGTONE)));
+                        Uri content_uri = getUriFromContent(Uri.parse(getStringPreferences(context, PREF_KCA_NOTI_RINGTONE)));
                         if (DEFAULT_NOTIFICATION_URI.equals(content_uri)) {
                             builder.setSound(DEFAULT_NOTIFICATION_URI);
                         } else if (checkContentUri(context, content_uri)) {
