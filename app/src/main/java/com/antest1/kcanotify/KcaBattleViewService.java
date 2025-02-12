@@ -215,6 +215,8 @@ public class KcaBattleViewService extends BaseService {
                 int api_color_no = api_data.get("api_color_no").getAsInt();
                 currentNodeInfo = getNodeFullInfo(this, current_node, api_event_id, api_event_kind, api_color_no, true);
                 currentNodeInfo = currentNodeInfo.replaceAll("[()]", "");
+                enemyShipData = new JsonArray();
+                enemyCombinedShipData = new JsonArray();
 
                 // View Settings
                 fc_flag = KcaBattle.isCombinedFleetInSortie();
