@@ -589,6 +589,9 @@
     <string name="reslog_interval_day">1일</string>
     <string name="reslog_interval_week">1주</string>
     <string name="reslog_interval_month">1개월</string>
+    <string name="reslog_interval_day_initial">일</string>
+    <string name="reslog_interval_week_initial">주</string>
+    <string name="reslog_interval_month_initial">월</string>
     <string name="reslog_label_resource">자원</string>
     <string name="reslog_label_consumable">아이템</string>
     <string name="reslog_clear_dialog_message">자원 기록을 모두 삭제하시겠습니까?</string>

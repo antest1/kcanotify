@@ -592,6 +592,9 @@
     <string name="reslog_interval_day">Día</string>
     <string name="reslog_interval_week">Semana</string>
     <string name="reslog_interval_month">Mes</string>
+    <string name="reslog_interval_day_initial">D</string>
+    <string name="reslog_interval_week_initial">S</string>
+    <string name="reslog_interval_month_initial">M</string>
     <string name="reslog_label_resource">Recurso</string>
     <string name="reslog_label_consumable">Consumible</string>
     <string name="reslog_clear_dialog_message">Quiere limpiar toda la vitácora de recursos?</string>

@@ -596,6 +596,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="reslog_interval_day">日</string>
     <string name="reslog_interval_week">週</string>
     <string name="reslog_interval_month">月</string>
+    <string name="reslog_interval_day_initial">日</string>
+    <string name="reslog_interval_week_initial">週</string>
+    <string name="reslog_interval_month_initial">月</string>
     <string name="reslog_label_resource">資源</string>
     <string name="reslog_label_consumable">消耗品</string>
     <string name="reslog_clear_dialog_message">你想清空所有資源紀錄嗎？</string>
