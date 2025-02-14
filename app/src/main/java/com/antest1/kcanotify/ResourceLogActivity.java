@@ -92,7 +92,7 @@ public class ResourceLogActivity extends BaseActivity {
         resourceLogger = new KcaResourceLogger(getApplicationContext(), null, KCANOTIFY_RESOURCELOG_VERSION);
         KcaApiData.setDBHelper(dbHelper);
         setCurrentTimestamp();
-        setUI();
+        setUI(getResources().getConfiguration().orientation);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class ResourceLogActivity extends BaseActivity {
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        setUI();
+        setUI(newConfig.orientation);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class ResourceLogActivity extends BaseActivity {
         end_timestamp = current_time + DAY_MILLISECOND - 1;
     }
 
-    private void setUI() {
+    private void setUI(int orientation) {
         setContentView(R.layout.activity_resourcelog);
 
         toolbar = findViewById(R.id.toolbar);
@@ -158,8 +158,17 @@ public class ResourceLogActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         tabLayout = findViewById(R.id.reslog_tab);
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.reslog_label_resource)));
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.reslog_label_consumable)));
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            tabLayout.addTab(tabLayout.newTab()
+                    .setText(getString(R.string.reslog_label_resource_initial)));
+            tabLayout.addTab(tabLayout.newTab()
+                    .setText(getString(R.string.reslog_label_consumable_initial)));
+        } else {
+            tabLayout.addTab(tabLayout.newTab()
+                    .setText(getString(R.string.reslog_label_resource)));
+            tabLayout.addTab(tabLayout.newTab()
+                    .setText(getString(R.string.reslog_label_consumable)));
+        }
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

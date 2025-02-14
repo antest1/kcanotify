@@ -597,6 +597,8 @@
     <string name="reslog_interval_month_initial">M</string>
     <string name="reslog_label_resource">Recurso</string>
     <string name="reslog_label_consumable">Consumible</string>
+    <string name="reslog_label_resource_initial">Rec.</string>
+    <string name="reslog_label_consumable_initial">Con.</string>
     <string name="reslog_clear_dialog_message">Quiere limpiar toda la vitácora de recursos?</string>
 
     <string name="action_datasync">Sincronizar Datos</string>

@@ -601,6 +601,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="reslog_interval_month_initial">月</string>
     <string name="reslog_label_resource">资源</string>
     <string name="reslog_label_consumable">消耗品</string>
+    <string name="reslog_label_resource_initial">资源</string>
+    <string name="reslog_label_consumable_initial">消耗品</string>
     <string name="reslog_clear_dialog_message">你想清空所有资源记录吗？</string>
 
     <string name="action_datasync">数据同步</string>
