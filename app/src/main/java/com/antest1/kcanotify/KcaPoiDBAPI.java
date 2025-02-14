@@ -1,8 +1,8 @@
 package com.antest1.kcanotify;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
@@ -12,7 +12,8 @@ import com.google.gson.JsonObject;
 
 import org.apache.commons.httpclient.HttpStatus;
 
-import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -35,18 +36,17 @@ public class KcaPoiDBAPI {
 
     public static final String USER_AGENT = KcaUtils.format("Kcanotify/%s", BuildConfig.VERSION_NAME);
 
-    public static Handler sHandler;
-    private static Gson gson = new Gson();
+    public Handler sHandler;
 
-    public static void setHandler(Handler h) {
+    public KcaPoiDBAPI(Handler h) {
         sHandler = h;
     }
 
-    public static void sendEquipDevData(String items, int secretary, int itemId, int teitokuLv, boolean successful) {
+    public void sendEquipDevData(String items, int secretary, int itemId, int teitokuLv, boolean successful) {
         if (teitokuLv < 1 || secretary < 0 || itemId < 0) return;
 
         JsonObject payload = new JsonObject();
-        payload.add("items", gson.fromJson(items, JsonArray.class));
+        payload.add("items", new Gson().fromJson(items, JsonArray.class));
         payload.addProperty("secretary", secretary);
         payload.addProperty("itemId", itemId);
         payload.addProperty("teitokuLv", teitokuLv);
@@ -55,14 +55,14 @@ public class KcaPoiDBAPI {
 
         JsonObject body = new JsonObject();
         body.add("data", payload);
-        new poiDbRequest().execute(REQ_EQUIP_DEV, body.toString());
+        requestApi(REQ_EQUIP_DEV, body.toString());
     }
 
-    public static void sendShipDevData(String items, int kdockId, int secretary, int shipId, int highpeed, int teitokuLv, int largeFlag) {
+    public void sendShipDevData(String items, int kdockId, int secretary, int shipId, int highpeed, int teitokuLv, int largeFlag) {
         if (teitokuLv < 1 || kdockId < 0 || secretary < 0 || shipId < 0 || highpeed < 0 || largeFlag < 0) return;
 
         JsonObject payload = new JsonObject();
-        payload.add("items", gson.fromJson(items, JsonArray.class));
+        payload.add("items", new Gson().fromJson(items, JsonArray.class));
         payload.addProperty("kdockId", kdockId);
         payload.addProperty("secretary", secretary);
         payload.addProperty("shipId", shipId);
@@ -73,10 +73,10 @@ public class KcaPoiDBAPI {
 
         JsonObject body = new JsonObject();
         body.add("data", payload);
-        new poiDbRequest().execute(REQ_SHIP_DEV, body.toString());
+        requestApi(REQ_SHIP_DEV, body.toString());
     }
 
-    public static void sendShipDropData(int shipId, int mapId, String quest, int cellId, String enemy, String rank, boolean isBoss, int teitokuLv, int mapLv, JsonObject enemyInfo) {
+    public void sendShipDropData(int shipId, int mapId, String quest, int cellId, String enemy, String rank, boolean isBoss, int teitokuLv, int mapLv, JsonObject enemyInfo) {
         if (teitokuLv < 1 || mapId < 0 || cellId < 0 || mapLv < 0) return;
 
         JsonObject payload = new JsonObject();
@@ -96,71 +96,68 @@ public class KcaPoiDBAPI {
 
         JsonObject body = new JsonObject();
         body.add("data", payload);
-        new poiDbRequest().execute(REQ_SHIP_DROP, body.toString());
+        requestApi(REQ_SHIP_DROP, body.toString());
     }
 
-    public static class poiDbRequest extends AsyncTask<String, Void, String> {
-        final MediaType MEDIA_TYPE = MediaType.parse("application/json");
-        OkHttpClient client = new OkHttpClient.Builder().build();
-
-        @Override
-        protected String doInBackground(String... params) {
+    private void requestApi(String endpoint, String body) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
             String content = "";
             try {
-                Log.e("KCA", KcaUtils.format("Poi Request %s %s", params[0], params[1]));
-                content = Request(params[0], params[1]);
+                Log.e("KCA", KcaUtils.format("Poi Request %s %s", endpoint, body));
+                content = request(endpoint, body);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             if (content.equals(ERROR_CODE)) {
-                Log.e("KCA", "KcaRequest Error: "+params[0]);
+                Log.e("KCA", "KcaRequest Error: "+endpoint);
             } else {
                 Log.e("KCA", "KcaRequest Responsed " + content);
             }
-            return content;
-        }
 
-        @Override
-        protected void onPostExecute(String s) {
-            if (s.equals(FAILED_CODE)) {
-                if (sHandler != null) {
-                    JsonObject dmpData = new JsonObject();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("url", KCA_API_POIDB_FAILED);
-                    bundle.putString("data", gson.toJson(dmpData));
-                    Message sMsg = sHandler.obtainMessage();
-                    sMsg.setData(bundle);
-                    sHandler.sendMessage(sMsg);
+            final String contentFinal = content;
+            handler.post(() -> {
+                if (contentFinal.equals(FAILED_CODE)) {
+                    if (sHandler != null) {
+                        JsonObject dmpData = new JsonObject();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("url", KCA_API_POIDB_FAILED);
+                        bundle.putString("data", new Gson().toJson(dmpData));
+                        Message sMsg = sHandler.obtainMessage();
+                        sMsg.setData(bundle);
+                        sHandler.sendMessage(sMsg);
+                    }
                 }
+            });
+        });
+    }
+
+    public String request(String uri, String data) {
+        final MediaType MEDIA_TYPE = MediaType.parse("application/json");
+        OkHttpClient client = new OkHttpClient.Builder().build();
+
+        String url = "https://api.poi.moe".concat(uri);
+        RequestBody body;
+        try {
+            body = RequestBody.create(data, MEDIA_TYPE);
+            Request.Builder builder = new Request.Builder().url(url).post(body);
+            builder.addHeader("User-Agent", USER_AGENT);
+            builder.addHeader("Referer", "app:/KCA/");
+            builder.addHeader("X-Reporter", USER_AGENT);
+            builder.addHeader("Content-Type", "application/json");
+            Request request = builder.build();
+            Response response = client.newCall(request).execute();
+
+            int code = response.code();
+            if (code == HttpStatus.SC_OK) {
+                return SUCCESSED_CODE;
+            } else {
+                return FAILED_CODE;
             }
-        }
-
-        public String Request(String uri, String data) throws Exception {
-            String url = "https://api.poi.moe".concat(uri);
-
-            RequestBody body;
-            try {
-                body = RequestBody.create(MEDIA_TYPE, data);
-                Request.Builder builder = new Request.Builder().url(url).post(body);
-                builder.addHeader("User-Agent", USER_AGENT);
-                builder.addHeader("Referer", "app:/KCA/");
-                builder.addHeader("X-Reporter", USER_AGENT);
-                builder.addHeader("Content-Type", "application/json");
-                Request request = builder.build();
-
-                Response response = client.newCall(request).execute();
-
-                int code = response.code();
-                if (code == HttpStatus.SC_OK) {
-                    return SUCCESSED_CODE;
-                } else {
-                    return FAILED_CODE;
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "IOException_POIDB";
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Exception_POIDB";
         }
     }
 }

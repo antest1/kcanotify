@@ -2,11 +2,13 @@ package com.antest1.kcanotify;
 
 import android.app.DatePickerDialog;
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -36,6 +37,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DROPLOG_VERSION;
@@ -237,25 +240,24 @@ public class DropLogActivity extends BaseActivity {
                 alert.show();
                 return true;
             case R.id.action_droplog_export:
-                new LogSaveTask().execute();
+                saveLogData();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private class LogSaveTask extends AsyncTask<String, String, Integer> {
-        File file;
+    private void saveLogData() {
+        Handler handler = new Handler(Looper.getMainLooper());
 
-        @Override
-        protected void onPreExecute() {
-            is_exporting = true;
-            row_count.setText(getString(R.string.action_save_msg));
-            row_count.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPanelWarning));
-        }
+        final File[] file = new File[1];
+        is_exporting = true;
+        row_count.setText(getString(R.string.action_save_msg));
+        row_count.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPanelWarning));
 
-        @Override
-        protected Integer doInBackground(String[] params) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            int result;
             File savedir = new File(getExternalFilesDir(null), "export_data");
             if (!savedir.exists()) savedir.mkdirs();
             String exportPath = savedir.getPath();
@@ -269,14 +271,14 @@ public class DropLogActivity extends BaseActivity {
             String label_line = KcaUtils.format("%s,%s,%s,%s,%s", label_date, label_area, label_isboss, label_rank, label_name);
 
             List<String> loglist = dropLogger.getFullStringDropLog();
-            if (loglist.size() > 0) {
+            if (!loglist.isEmpty()) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
                 String timetext = dateFormat.format(new Date());
 
                 String filename = KcaUtils.format("/kca_droplog_%s.csv", timetext);
-                file = new File(exportPath.concat(filename));
+                file[0] = new File(exportPath.concat(filename));
                 try {
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(file[0], false));
                     bw.write(label_line);
                     bw.write("\r\n");
                     for(String line: loglist) {
@@ -284,35 +286,35 @@ public class DropLogActivity extends BaseActivity {
                         bw.write("\r\n");
                     }
                     bw.close();
-                    return 0;
+                    result = 0;
                 } catch (IOException e) {
                     e.printStackTrace();
-                    return 2;
+                    result = 2;
                 }
             } else {
-                return 1;
+                result = 1;
             }
-        }
 
-        @Override
-        protected void onPostExecute(Integer result) {
-            is_exporting = false;
-            row_count.setText(KcaUtils.format(getString(R.string.droplog_total_format), adapter.getCount()));
-            row_count.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
-            switch (result) {
-                case 0:
-                    Toast.makeText(getApplicationContext(), "Exported to ".concat(file.getPath()), Toast.LENGTH_LONG).show();
-                    break;
-                case 1:
-                    Toast.makeText(getApplicationContext(), "No log to export.", Toast.LENGTH_LONG).show();
-                    break;
-                case 2:
-                    Toast.makeText(getApplicationContext(), "An error occurred when exporting drop log.", Toast.LENGTH_LONG).show();
-                    break;
-                default:
-                    break;
-            }
-        }
+            final int resultFinal = result;
+            handler.post(() -> {
+                is_exporting = false;
+                row_count.setText(KcaUtils.format(getString(R.string.droplog_total_format), adapter.getCount()));
+                row_count.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+                switch (resultFinal) {
+                    case 0:
+                        Toast.makeText(getApplicationContext(), "Exported to ".concat(file[0].getPath()), Toast.LENGTH_LONG).show();
+                        break;
+                    case 1:
+                        Toast.makeText(getApplicationContext(), "No log to export.", Toast.LENGTH_LONG).show();
+                        break;
+                    case 2:
+                        Toast.makeText(getApplicationContext(), "An error occurred when exporting drop log.", Toast.LENGTH_LONG).show();
+                        break;
+                    default:
+                        break;
+                }
+            });
+        });
     }
 
     public void setListView() {

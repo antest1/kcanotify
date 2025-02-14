@@ -10,30 +10,24 @@ import android.graphics.Bitmap;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Insets;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowInsets;
 import android.view.WindowManager;
-import android.view.WindowMetrics;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -59,7 +53,6 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_NODE;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_COMPLETE;
-import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_OPACITY;
@@ -91,8 +84,6 @@ public class KcaViewButtonService extends BaseService {
     public static final String RETURN_FAIRY_ACTION = "return_fairy_action";
     public static final String RESET_FAIRY_STATUS_ACTION = "reset_fairy_status_action";
     public static final String REMOVE_FAIRY_ACTION = "remove_fairy_action";
-    public static final String PREF_CHANGE_ON_ACTION = "pref_change_on_action";
-    public static final String PREF_CHANGE_OFF_ACTION = "pref_change_off_action";
     public static final String ACTIVATE_BATTLEVIEW_ACTION = "activate_battleview";
     public static final String DEACTIVATE_BATTLEVIEW_ACTION = "deactivate_battleview";
     public static final String ACTIVATE_QUESTVIEW_ACTION = "activate_questview";
@@ -104,7 +95,6 @@ public class KcaViewButtonService extends BaseService {
     private BroadcastReceiver battlenode_receiver;
     private BroadcastReceiver questcmpl_receiver;
     private DraggableOverlayButtonLayout buttonView;
-    private KcaForegroundCheck foregroundCheck;
     private WindowManager windowManager;
     private Handler mHandler;
     private Vibrator vibrator;
@@ -153,7 +143,7 @@ public class KcaViewButtonService extends BaseService {
             stopSelf();
         } else {
             clickcount = 0;
-            mHandler = new Handler();
+            mHandler = new Handler(Looper.getMainLooper());
             broadcaster = LocalBroadcastManager.getInstance(this);
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
             battleinfo_receiver = new BroadcastReceiver() {
@@ -284,12 +274,6 @@ public class KcaViewButtonService extends BaseService {
 
             windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             windowManager.addView(buttonView, layoutParams);
-
-            if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_AUTOHIDE)) {
-                foregroundCheck = new KcaForegroundCheck(this);
-                foregroundCheck.command(KcaForegroundCheck.FAIRY_FORECHECK_ON);
-            }
-
             battleviewEnabled = false;
             questviewEnabled = false;
         }
@@ -356,18 +340,6 @@ public class KcaViewButtonService extends BaseService {
             if (intent.getAction().equals(RESET_FAIRY_STATUS_ACTION)) {
                 taiha_status = false;
                 setFairyImage();
-            }
-            if (intent.getAction().equals(PREF_CHANGE_ON_ACTION)) {
-                if (foregroundCheck != null) {
-                    foregroundCheck = new KcaForegroundCheck(this);
-                    foregroundCheck.command(KcaForegroundCheck.FAIRY_FORECHECK_ON);
-                }
-            }
-            if (intent.getAction().equals(PREF_CHANGE_OFF_ACTION)) {
-                if (foregroundCheck != null) {
-                    foregroundCheck.command(KcaForegroundCheck.FAIRY_FORECHECK_OFF);
-                    foregroundCheck = null;
-                }
             }
             if (intent.getAction().equals(ACTIVATE_BATTLEVIEW_ACTION)) {
                 Intent qintent = new Intent(getBaseContext(), KcaFleetViewService.class);
@@ -459,8 +431,7 @@ public class KcaViewButtonService extends BaseService {
         int margin = 14;
         Bitmap bmp = Bitmap.createBitmap(src.getWidth() + margin,
                 src.getHeight() + margin, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bmp);
-        int halfMargin = margin / 2;
+        Canvas canvas = new Canvas(bmp);        int halfMargin = margin / 2;
         if (glow_available) {
             Paint glow_paint = new Paint();
             glow_paint.setColor(glowColor);
@@ -487,7 +458,6 @@ public class KcaViewButtonService extends BaseService {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(questcmpl_receiver);
 
         if (windowManager != null) windowManager.removeView(buttonView);
-        if (foregroundCheck != null) foregroundCheck.exit();
         super.onDestroy();
     }
 
@@ -715,22 +685,10 @@ public class KcaViewButtonService extends BaseService {
     }
 
     private void updateScreenSize() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            WindowMetrics windowMetrics = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getCurrentWindowMetrics();
-            WindowInsets insets = windowMetrics.getWindowInsets();
-            // Not allow fairy to stay on cutout or navigation bar
-            Insets safeInsets = insets.getInsets(WindowInsets.Type.displayCutout() | WindowInsets.Type.navigationBars());
-            screenPaddingLeft = safeInsets.left;
-            screenPaddingTop = safeInsets.top;
-            Rect bounds = windowMetrics.getBounds();
-            screenWidth = bounds.width() - safeInsets.left - safeInsets.right;
-            screenHeight = bounds.height() - safeInsets.top - safeInsets.bottom;
-        } else {
-            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            screenWidth = size.x;
-            screenHeight = size.y;
-        }
+        SizeInsets screenSize = KcaUtils.getDefaultDisplaySizeInsets(this);
+        screenWidth = screenSize.size.x;
+        screenHeight = screenSize.size.y;
+        screenPaddingLeft = screenSize.insets.x;
+        screenPaddingTop = screenSize.insets.y;
     }
 }

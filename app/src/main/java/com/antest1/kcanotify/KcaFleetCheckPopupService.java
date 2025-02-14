@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
 import android.os.IBinder;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
@@ -12,7 +11,6 @@ import androidx.core.app.NotificationManagerCompat;
 
 import android.util.Log;
 import android.view.ContextThemeWrapper;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -111,11 +109,9 @@ public class KcaFleetCheckPopupService extends BaseService {
         popupWidth = popupView.getMeasuredWidth();
         popupHeight = popupView.getMeasuredHeight();
 
-        Display display = windowManager.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
+        SizeInsets screenSize = KcaUtils.getDefaultDisplaySizeInsets(this);
+        screenWidth = screenSize.size.x;
+        screenHeight = screenSize.size.y;
         Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
         if (layoutParams == null) {

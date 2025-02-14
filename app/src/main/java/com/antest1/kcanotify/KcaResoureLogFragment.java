@@ -8,12 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -25,13 +23,14 @@ import com.google.gson.JsonObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import static android.view.View.GONE;
+import static com.antest1.kcanotify.DropLogActivity.convertMillsToDate;
 import static com.antest1.kcanotify.KcaResourcelogItemAdpater.resourceData;
 
 public class KcaResoureLogFragment extends Fragment {
@@ -47,8 +46,9 @@ public class KcaResoureLogFragment extends Fragment {
 
     final static int[] maximum = {300000, 3000};
 
-    boolean[] is_draw_enabled = { true, true, true, true };
+    static boolean[][] is_draw_enabled = {{true, true, true, true}, {true, true, true, true}};
     static int[] interval = {5000, 100};
+    static String start_date, end_date;
     static long xaxis_interval = DAY_MILLISECOND;
     static String xaxis_format = "MM/dd";
     KcaResourcelogItemAdpater adapter = new KcaResourcelogItemAdpater();
@@ -61,6 +61,16 @@ public class KcaResoureLogFragment extends Fragment {
         b.putInt("position", pos);
         fragment.setArguments(b);
         return fragment;
+    }
+
+    public static int getStateId() {
+        return (ResourceLogActivity.getChartHiddenState() + Arrays.toString(interval)
+                + xaxis_interval + xaxis_format + start_date + end_date).hashCode();
+    }
+
+    public static void setDateInfo(long start, long end) {
+        start_date = convertMillsToDate(start);
+        end_date = convertMillsToDate(end);
     }
 
     public static void setChartInfo(int res, int con, long xint, String xfmt) {
@@ -94,14 +104,11 @@ public class KcaResoureLogFragment extends Fragment {
         for (int i = 0; i < 4; i++) {
             final int k = i;
             AppCompatCheckBox box = v.findViewById(KcaUtils.getId(KcaUtils.format("reslog_chart_filter_%d_%d", position, i), R.id.class));
-            box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    is_draw_enabled[k] = b;
-                    setChartDataVisibility(v, k);
-                }
+            box.setOnCheckedChangeListener((compoundButton, b) -> {
+                is_draw_enabled[position][k] = b;
+                setChartDataVisibility(v, k);
             });
-            box.setChecked(is_draw_enabled[k]);
+            box.setChecked(is_draw_enabled[position][k]);
         }
 
         ((TextView) v.findViewById(R.id.reslog_item_label_0)).setText(getString(R.string.reslog_label_date));
@@ -133,7 +140,7 @@ public class KcaResoureLogFragment extends Fragment {
             chart_area.setVisibility(View.VISIBLE);
         }
 
-        if (resourceData.size() <= 0) return;
+        if (resourceData.isEmpty()) return;
 
         LineChart chart = v.findViewById(R.id.reslog_chart);
         final int[] color_table = color_data[position];
@@ -161,7 +168,7 @@ public class KcaResoureLogFragment extends Fragment {
             int color = ContextCompat.getColor(getContext(), color_table[k]);
             dataset.setColor(color);
             dataset.setCircleColor(color);
-            dataset.setVisible(is_draw_enabled[k]);
+            dataset.setVisible(is_draw_enabled[position][k]);
             dataset.setHighlightEnabled(false);
             lines.add(dataset);
         }
@@ -174,12 +181,9 @@ public class KcaResoureLogFragment extends Fragment {
 
         Log.e("KCA", KcaUtils.format("%d~%d / %d", min_value, max_value, range));
 
-        IAxisValueFormatter formatter = new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat(xaxis_format, Locale.US);
-                return dateFormat.format(new Date((long)value));
-            }
+        IAxisValueFormatter formatter = (value, axis) -> {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(xaxis_format, Locale.US);
+            return dateFormat.format(new Date((long)value));
         };
 
         LineData data = new LineData(lines);
@@ -217,11 +221,11 @@ public class KcaResoureLogFragment extends Fragment {
         LineChart chart = v.findViewById(R.id.reslog_chart);
         if (chart != null && chart.getLineData() != null) {
             ILineDataSet data = chart.getLineData().getDataSetByIndex(k);
-            data.setVisible(is_draw_enabled[k]);
+            data.setVisible(is_draw_enabled[position][k]);
             int max_value = 0;
             int min_value = maximum[position];
             for (int i = 0; i < 4; i++) {
-                if (is_draw_enabled[i]) {
+                if (is_draw_enabled[position][i]) {
                     max_value = Math.max((int) chart.getLineData().getDataSetByIndex(i).getYMax(), max_value);
                     min_value = Math.min((int) chart.getLineData().getDataSetByIndex(i).getYMin(), min_value);
                 }

@@ -1,15 +1,19 @@
 package com.antest1.kcanotify;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import com.google.android.material.tabs.TabLayout;
+
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.widget.ViewPager2;
+
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +38,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.antest1.kcanotify.DropLogActivity.convertMillsToDate;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_RESLOG;
@@ -59,7 +65,7 @@ public class ResourceLogActivity extends BaseActivity {
     boolean is_exporting = false;
 
     private TabLayout tabLayout;
-    private ViewPager viewPager;
+    private ViewPager2 viewPager;
     KcaResourceLogPageAdapter pageAdapter;
 
     KcaDBHelper dbHelper;
@@ -67,7 +73,6 @@ public class ResourceLogActivity extends BaseActivity {
     List<JsonObject> resourceLog;
     TextView start_date, end_date;
     TextView interval_d, interval_w, interval_m;
-    TextView export_msg;
     Spinner interval_select;
     ImageView showhide_btn;
     int tab_position = 0;
@@ -82,46 +87,89 @@ public class ResourceLogActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        resourceLogger = new KcaResourceLogger(getApplicationContext(), null, KCANOTIFY_RESOURCELOG_VERSION);
+        KcaApiData.setDBHelper(dbHelper);
+        setCurrentTimestamp();
+        setUI(getResources().getConfiguration().orientation);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        pageAdapter.notifyItemChanged(tab_position);
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        setUI(newConfig.orientation);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.reslog, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.action_reslog_clear:
+                AlertDialog.Builder alert = new AlertDialog.Builder(ResourceLogActivity.this);
+                alert.setPositiveButton(getString(R.string.dialog_ok), (dialog, which) -> {
+                    resourceLogger.clearResoureLog();
+                    updateSelectedDate(start_timestamp, end_timestamp);
+                    dialog.dismiss();
+                }).setNegativeButton(getString(R.string.dialog_cancel), (dialog, which) -> dialog.cancel());
+                alert.setMessage(getString(R.string.reslog_clear_dialog_message));
+                alert.show();
+                return true;
+            case R.id.action_reslog_export:
+                saveLogData();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setCurrentTimestamp() {
+        long current_time = System.currentTimeMillis();
+        current_time = KcaUtils.getCurrentDateTimestamp(current_time);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
+        String[] time_list = dateFormat.format(new Date(current_time)).split("\\-");
+        int year = Integer.parseInt(time_list[2]);
+        int month = Integer.parseInt(time_list[0]);
+        start_timestamp = current_time - DAY_MILLISECOND * KcaUtils.getLastDay(year, month == 1 ? 12 : month - 1);
+        end_timestamp = current_time + DAY_MILLISECOND - 1;
+    }
+
+    private void setUI(int orientation) {
         setContentView(R.layout.activity_resourcelog);
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.action_reslog));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-        resourceLogger = new KcaResourceLogger(getApplicationContext(), null, KCANOTIFY_RESOURCELOG_VERSION);
-        KcaApiData.setDBHelper(dbHelper);
-
         tabLayout = findViewById(R.id.reslog_tab);
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.reslog_label_resource)));
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.reslog_label_consumable)));
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            tabLayout.addTab(tabLayout.newTab()
+                    .setText(getString(R.string.reslog_label_resource_initial)));
+            tabLayout.addTab(tabLayout.newTab()
+                    .setText(getString(R.string.reslog_label_consumable_initial)));
+        } else {
+            tabLayout.addTab(tabLayout.newTab()
+                    .setText(getString(R.string.reslog_label_resource)));
+            tabLayout.addTab(tabLayout.newTab()
+                    .setText(getString(R.string.reslog_label_consumable)));
+        }
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        export_msg = findViewById(R.id.export_msg);
-        viewPager = findViewById(R.id.reslog_pager);
-
-        pageAdapter = new KcaResourceLogPageAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pageAdapter);
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                tab_position = position;
-                tabLayout.setScrollPosition(position, positionOffset, true);
-                Log.e("KCA", "onPageScrolled " + position);
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -141,21 +189,31 @@ public class ResourceLogActivity extends BaseActivity {
             }
         });
 
+        pageAdapter = new KcaResourceLogPageAdapter(getSupportFragmentManager(), getLifecycle());
+        viewPager = findViewById(R.id.reslog_pager);
+        viewPager.setAdapter(pageAdapter);
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                tab_position = position;
+                tabLayout.setScrollPosition(position, positionOffset, true);
+                Log.e("KCA", "onPageScrolled " + position);
+            }
+        });
+
         showhide_btn = findViewById(R.id.reslog_showhide);
         showhide_btn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.black), PorterDuff.Mode.MULTIPLY);
         showhide_btn.setImageResource(R.drawable.ic_arrow_down);
-        showhide_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                is_hidden = !is_hidden;
-                if (is_hidden) {
-                    showhide_btn.setImageResource(R.drawable.ic_arrow_up);
-                } else {
-                    showhide_btn.setImageResource(R.drawable.ic_arrow_down);
-                }
-                pageAdapter.notifyDataSetChanged();
+        showhide_btn.setOnClickListener(view -> {
+            is_hidden = !is_hidden;
+            if (is_hidden) {
+                showhide_btn.setImageResource(R.drawable.ic_arrow_up);
+            } else {
+                showhide_btn.setImageResource(R.drawable.ic_arrow_down);
             }
+            pageAdapter.notifyItemChanged(tab_position);
         });
 
         start_date = findViewById(R.id.reslog_date_start);
@@ -164,42 +222,33 @@ public class ResourceLogActivity extends BaseActivity {
         end_date.setOnClickListener(dateViewListener);
 
         interval_d = findViewById(R.id.reslog_interval_day);
-        interval_d.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (interval_value != INTERVAL_1D) {
-                    interval_value = INTERVAL_1D;
-                    setFragmentChartInfo(interval_value);
-                    interval_select.setSelection(INTERVAL_1D);
-                } else {
-                    pageAdapter.notifyDataSetChanged();
-                }
+        interval_d.setOnClickListener(view -> {
+            if (interval_value != INTERVAL_1D) {
+                interval_value = INTERVAL_1D;
+                setFragmentChartInfo(interval_value);
+                interval_select.setSelection(INTERVAL_1D);
+            } else {
+                pageAdapter.notifyItemChanged(tab_position);
             }
         });
         interval_w = findViewById(R.id.reslog_interval_week);
-        interval_w.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (interval_value != INTERVAL_1W) {
-                    interval_value = INTERVAL_1W;
-                    setFragmentChartInfo(interval_value);
-                    interval_select.setSelection(INTERVAL_1W);
-                } else {
-                    pageAdapter.notifyDataSetChanged();
-                }
+        interval_w.setOnClickListener(view -> {
+            if (interval_value != INTERVAL_1W) {
+                interval_value = INTERVAL_1W;
+                setFragmentChartInfo(interval_value);
+                interval_select.setSelection(INTERVAL_1W);
+            } else {
+                pageAdapter.notifyItemChanged(tab_position);
             }
         });
         interval_m = findViewById(R.id.reslog_interval_month);
-        interval_m.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (interval_value != INTERVAL_1M) {
-                    interval_value = INTERVAL_1M;
-                    setFragmentChartInfo(interval_value);
-                    interval_select.setSelection(INTERVAL_1M);
-                } else {
-                    pageAdapter.notifyDataSetChanged();
-                }
+        interval_m.setOnClickListener(view -> {
+            if (interval_value != INTERVAL_1M) {
+                interval_value = INTERVAL_1M;
+                setFragmentChartInfo(interval_value);
+                interval_select.setSelection(INTERVAL_1M);
+            } else {
+                pageAdapter.notifyItemChanged(tab_position);
             }
         });
 
@@ -208,7 +257,7 @@ public class ResourceLogActivity extends BaseActivity {
                 R.array.time_interval_array, R.layout.spinner_item_14dp);
         interval_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_14dp);
         interval_select.setAdapter(interval_adapter);
-        interval_select.setSelection(INTERVAL_1D);
+        interval_select.setSelection(interval_value);
         interval_select.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
@@ -216,7 +265,7 @@ public class ResourceLogActivity extends BaseActivity {
                 interval_value = position;
                 setFragmentChartInfo(interval_value);
                 KcaResourcelogItemAdpater.setListViewItemList(convertData(resourceLog));
-                pageAdapter.notifyDataSetChanged();
+                pageAdapter.notifyItemChanged(tab_position);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -224,67 +273,17 @@ public class ResourceLogActivity extends BaseActivity {
             }
         });
 
-        long current_time = System.currentTimeMillis();
-        current_time = KcaUtils.getCurrentDateTimestamp(current_time);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
-        String[] time_list = dateFormat.format(new Date(current_time)).split("\\-");
-        int year = Integer.parseInt(time_list[2]);
-        int month = Integer.parseInt(time_list[0]);
-        start_timestamp = current_time - DAY_MILLISECOND * KcaUtils.getLastDay(year, month == 1 ? 12 : month - 1);
-        end_timestamp = current_time + DAY_MILLISECOND - 1;
-
         start_date.setText(convertMillsToDate(start_timestamp));
         end_date.setText(convertMillsToDate(end_timestamp));
-
-        resourceLog = resourceLogger.getResourceLogInRange(start_timestamp, end_timestamp);
-        KcaResourcelogItemAdpater.setListViewItemList(convertData(resourceLog));
-        pageAdapter.notifyDataSetChanged();
+        updateSelectedDate(start_timestamp, end_timestamp);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        pageAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.reslog, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            case R.id.action_reslog_clear:
-                AlertDialog.Builder alert = new AlertDialog.Builder(ResourceLogActivity.this);
-                alert.setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        resourceLogger.clearResoureLog();
-                        resourceLog = resourceLogger.getResourceLogInRange(start_timestamp, end_timestamp);
-                        KcaResourcelogItemAdpater.setListViewItemList(convertData(resourceLog));
-                        pageAdapter.notifyDataSetChanged();
-                        dialog.dismiss();
-                    }
-                }).setNegativeButton(getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                alert.setMessage(getString(R.string.reslog_clear_dialog_message));
-                alert.show();
-                return true;
-            case R.id.action_reslog_export:
-                new LogSaveTask().execute();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+    private void updateSelectedDate(long start_timestamp, long end_timestamp) {
+        if (resourceLogger != null && pageAdapter != null) {
+            resourceLog = resourceLogger.getResourceLogInRange(start_timestamp, end_timestamp);
+            KcaResoureLogFragment.setDateInfo(start_timestamp, end_timestamp);
+            KcaResourcelogItemAdpater.setListViewItemList(convertData(resourceLog));
+            pageAdapter.notifyItemChanged(tab_position);
         }
     }
 
@@ -342,18 +341,18 @@ public class ResourceLogActivity extends BaseActivity {
         }
     }
 
-    private class LogSaveTask extends AsyncTask<String, String, Integer> {
-        File file;
+    private void saveLogData() {
+        Handler handler = new Handler(Looper.getMainLooper());
+        TextView export_msg = findViewById(R.id.export_msg);
 
-        @Override
-        protected void onPreExecute() {
-            is_exporting = true;
-            export_msg.setText(getString(R.string.action_save_msg));
-            export_msg.setVisibility(View.VISIBLE);
-        }
+        final File[] file = new File[1];
+        is_exporting = true;
+        export_msg.setText(getString(R.string.action_save_msg));
+        export_msg.setVisibility(View.VISIBLE);
 
-        @Override
-        protected Integer doInBackground(String[] params) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            int result;
             File savedir = new File(getExternalFilesDir(null), FILE_PATH);
             if (!savedir.exists()) savedir.mkdirs();
             String exportPath = savedir.getPath();
@@ -372,14 +371,14 @@ public class ResourceLogActivity extends BaseActivity {
                     label_date, label_1, label_2, label_3, label_4, label_5, label_6, label_7, label_8);
 
             List<String> loglist = resourceLogger.getFullStringResourceLog();
-            if (loglist.size() > 0) {
+            if (!loglist.isEmpty()) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
                 String timetext = dateFormat.format(new Date());
 
                 String filename = KcaUtils.format("/kca_resourcelog_%s.csv", timetext);
-                file = new File(exportPath.concat(filename));
+                file[0] = new File(exportPath.concat(filename));
                 try {
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(file[0], false));
                     bw.write(label_line);
                     bw.write("\r\n");
                     for (String line : loglist) {
@@ -387,39 +386,39 @@ public class ResourceLogActivity extends BaseActivity {
                         bw.write("\r\n");
                     }
                     bw.close();
-                    return 0;
+                    result = 0;
                 } catch (IOException e) {
                     e.printStackTrace();
-                    return 2;
+                    result = 2;
                 }
             } else {
-                return 1;
+                result = 1;
             }
-        }
 
-        @Override
-        protected void onPostExecute(Integer result) {
-            is_exporting = false;
-            export_msg.setVisibility(View.GONE);
-            switch (result) {
-                case 0:
-                    Toast.makeText(getApplicationContext(), "Exported to ".concat(file.getPath()), Toast.LENGTH_LONG).show();
-                    break;
-                case 1:
-                    Toast.makeText(getApplicationContext(), "No log to export.", Toast.LENGTH_LONG).show();
-                    break;
-                case 2:
-                    Toast.makeText(getApplicationContext(), "An error occurred when exporting drop log.", Toast.LENGTH_LONG).show();
-                    break;
-                default:
-                    break;
-            }
-        }
+            final int resultFinal = result;
+            handler.post(() -> {
+                is_exporting = false;
+                export_msg.setVisibility(View.GONE);
+                switch (resultFinal) {
+                    case 0:
+                        Toast.makeText(getApplicationContext(), "Exported to ".concat(file[0].getPath()), Toast.LENGTH_LONG).show();
+                        break;
+                    case 1:
+                        Toast.makeText(getApplicationContext(), "No log to export.", Toast.LENGTH_LONG).show();
+                        break;
+                    case 2:
+                        Toast.makeText(getApplicationContext(), "An error occurred when exporting drop log.", Toast.LENGTH_LONG).show();
+                        break;
+                    default:
+                        break;
+                }
+            });
+        });
     }
 
     public List<JsonObject> convertData(List<JsonObject> data) {
         List<JsonObject> new_data = new ArrayList<>();
-        if (data.size() == 0) return new_data;
+        if (data.isEmpty()) return new_data;
 
         List<Long> timestamp_list = new ArrayList<>();
         long start = KcaUtils.getCurrentDateTimestamp(start_timestamp);
@@ -480,9 +479,7 @@ public class ResourceLogActivity extends BaseActivity {
                     }
                     if (valid_flag) {
                         ((TextView) view).setText(convertMillsToDate(timestamp));
-                        resourceLog = resourceLogger.getResourceLogInRange(start_timestamp, end_timestamp);
-                        KcaResourcelogItemAdpater.setListViewItemList(convertData(resourceLog));
-                        pageAdapter.notifyDataSetChanged();
+                        updateSelectedDate(start_timestamp, end_timestamp);
                     }
                 } catch (ParseException e) {
                     dbHelper.recordErrorLog(ERROR_TYPE_RESLOG, "", "", "", KcaUtils.getStringFromException(e));

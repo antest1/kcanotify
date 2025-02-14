@@ -590,8 +590,13 @@
     <string name="reslog_interval_day">1日</string>
     <string name="reslog_interval_week">1週</string>
     <string name="reslog_interval_month">1ヶ月</string>
+    <string name="reslog_interval_day_initial">日</string>
+    <string name="reslog_interval_week_initial">週</string>
+    <string name="reslog_interval_month_initial">月</string>
     <string name="reslog_label_resource">資源</string>
     <string name="reslog_label_consumable">アイテム</string>
+    <string name="reslog_label_resource_initial">資源</string>
+    <string name="reslog_label_consumable_initial">アイテム</string>
     <string name="reslog_clear_dialog_message">全体記録を削除しますか？</string>
 
     <string name="action_datasync">データ同期</string>

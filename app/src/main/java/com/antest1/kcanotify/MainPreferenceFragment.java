@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.provider.Settings;
@@ -58,12 +59,10 @@ import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.checkContentUri;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.createBuilder;
-import static com.antest1.kcanotify.KcaUtils.getContentUri;
+import static com.antest1.kcanotify.KcaUtils.getUriFromContent;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setSoundSetting;
-import static com.antest1.kcanotify.KcaViewButtonService.PREF_CHANGE_OFF_ACTION;
-import static com.antest1.kcanotify.KcaViewButtonService.PREF_CHANGE_ON_ACTION;
 import static com.antest1.kcanotify.SettingActivity.REQUEST_ALERT_RINGTONE;
 import static com.antest1.kcanotify.SettingActivity.REQUEST_BATOPTIM_PERMISSION;
 import static com.antest1.kcanotify.SettingActivity.REQUEST_OVERLAY_PERMISSION;
@@ -293,8 +292,18 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     private static boolean hasUsageStatPermission(Context context) {
         AppOpsManager appOps = (AppOpsManager)
                 context.getSystemService(Context.APP_OPS_SERVICE);
-        int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
-                android.os.Process.myUid(), context.getPackageName());
+        int mode;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            mode = appOps.unsafeCheckOpNoThrow(
+                    AppOpsManager.OPSTR_GET_USAGE_STATS,
+                    android.os.Process.myUid(), context.getPackageName()
+            );
+        } else {
+            mode = appOps.checkOpNoThrow(
+                    AppOpsManager.OPSTR_GET_USAGE_STATS,
+                    android.os.Process.myUid(), context.getPackageName()
+            );
+        }
         return mode == AppOpsManager.MODE_ALLOWED;
     }
 
@@ -307,7 +316,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     private void showOverlayPermissionResult() {
         if (checkActivityValid()) {
             int delay = Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 1000;
-            new Handler().postDelayed(() -> {
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 Context context = getContext();
                 if (context != null) {
                     if (Settings.canDrawOverlays(getContext())) {
@@ -323,7 +332,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     private void showBatteryOptimizationPermissionResult() {
         if (checkActivityValid()) {
             int delay = Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 1000;
-            new Handler().postDelayed(() -> {
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 Context context = getContext();
                 if (context != null) {
                     PowerManager manager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -349,11 +358,17 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
     @SuppressLint("ApplySharedPref")
     private void callbackAlertRingtoneResult(ActivityResult result) {
+        Preference pref = findPreference(PREF_KCA_NOTI_RINGTONE);
         Intent alarmService = new Intent(requireContext(), KcaAlarmService.class);
         alarmService.setAction(REFRESH_CHANNEL);
         if (result != null && result.getData() != null) {
-            Preference pref = findPreference(PREF_KCA_NOTI_RINGTONE);
-            Uri ringtoneUri = result.getData().getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+            Uri ringtoneUri;
+            Intent intentResult = result.getData();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ringtoneUri = intentResult.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, Uri.class);
+            } else {
+                ringtoneUri = intentResult.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+            }
             String ringtoneTitle = getRingtoneTitle(ringtoneUri);
             if (pref != null) pref.setSummary(ringtoneTitle);
             if (ringtoneUri != null) {
@@ -478,12 +493,19 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                             (dialogInterface, i) -> {
                     })
                     .setIcon(R.mipmap.ic_launcher);
-                if (!getActivity().isFinishing()) alertDialog.show();
+                if (getActivity() != null && !getActivity().isFinishing())
+                    alertDialog.show();
                 return false;
             } else if (KcaService.getServiceStatus()) {
-                Intent intent = new Intent(getActivity(), KcaViewButtonService.class);
-                intent.setAction(isTrue ? PREF_CHANGE_ON_ACTION : PREF_CHANGE_OFF_ACTION);
-                getActivity().startService(intent);
+                if (sHandler != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("url", isTrue ?
+                            KCA_API_PREF_CHANGE_ON_ACTION : KCA_API_PREF_CHANGE_OFF_ACTION);
+                    bundle.putString("data", "");
+                    Message sMsg = sHandler.obtainMessage();
+                    sMsg.setData(bundle);
+                    sHandler.sendMessage(sMsg);
+                }
             }
         }
 
@@ -682,13 +704,13 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             NotificationChannel channel = new NotificationChannel(notification_id,
                     KcaUtils.format("[Test] %s %s", soundKind, uri.hashCode()), NotificationManager.IMPORTANCE_HIGH);
 
-            if (isSound && uri.length() > 0) {
+            if (isSound && !uri.isEmpty()) {
                 AudioAttributes.Builder attrs = new AudioAttributes.Builder();
                 attrs.setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION);
                 attrs.setUsage(AudioAttributes.USAGE_NOTIFICATION);
 
                 try {
-                    Uri content_uri = getContentUri(context, Uri.parse(uri));
+                    Uri content_uri = getUriFromContent(Uri.parse(uri));
                     if (DEFAULT_NOTIFICATION_URI.equals(content_uri)) {
                         channel.setSound(DEFAULT_NOTIFICATION_URI, attrs.build());
                     } else if (checkContentUri(context, content_uri)) {

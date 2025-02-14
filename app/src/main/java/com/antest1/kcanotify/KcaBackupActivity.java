@@ -1,9 +1,10 @@
 package com.antest1.kcanotify;
 
 import static com.antest1.kcanotify.KcaBackupItemAdpater.BACKUP_KEY;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
@@ -14,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.Gson;
@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class KcaBackupActivity extends BaseActivity {
     private final String FILE_PATH = "backup";
@@ -68,9 +70,7 @@ public class KcaBackupActivity extends BaseActivity {
         backup_list.setAdapter(adapter);
 
         exportButton = findViewById(R.id.backup_export_button);
-        exportButton.setOnClickListener(v -> {
-            new BackupSaveTask().execute();
-        });
+        exportButton.setOnClickListener(v -> saveBackup());
 
         handler = new UpdateHandler(this);
         adapter.setHandler(handler);
@@ -118,18 +118,16 @@ public class KcaBackupActivity extends BaseActivity {
         return list;
     }
 
-    private class BackupSaveTask extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            is_exporting = true;
-            exportButton.setEnabled(false);
-        }
+    private void saveBackup() {
+        Handler handler = new Handler(Looper.getMainLooper());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
+        String exportDirPath = KcaUtils.format(FILE_PATH.concat("/kca_backup_%s"), dateFormat.format(new Date()));
+        is_exporting = true;
+        exportButton.setEnabled(false);
 
-        @Override
-        protected String doInBackground(String[] params) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
-            String exportDirPath = KcaUtils.format(FILE_PATH.concat("/kca_backup_%s"), dateFormat.format(new Date()));
-
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            String result;
             File savedir = new File(getExternalFilesDir(null), exportDirPath);
             if (!savedir.exists()) savedir.mkdirs();
 
@@ -156,34 +154,34 @@ public class KcaBackupActivity extends BaseActivity {
                     }
                 }
                 exportFolder.delete();
-                return zipFile.getFile().getPath();
+                result = zipFile.getFile().getPath();
 
             } catch (IOException e) {
                 e.printStackTrace();
-                return KcaUtils.getStringFromException(e);
+                result = KcaUtils.getStringFromException(e);
             }
-        }
 
-        @Override
-        protected void onPostExecute(String result) {
-            is_exporting = false;
-            exportButton.setEnabled(true);
-            if ("Error".equals(result)) {
-                exportMessage.setText(getString(R.string.backup_msg_export_error).concat(result));
-            } else if (result != null) {
-                exportMessage.setText(getString(R.string.backup_msg_export_done).concat(result));
-                adapter.setListItem(getBackupDataList());
-                adapter.notifyDataSetChanged();
-            }
-        }
+            final String resultFinal = result;
+            handler.post(() -> {
+                is_exporting = false;
+                exportButton.setEnabled(true);
+                if (resultFinal.contains("Error")) {
+                    exportMessage.setText(getString(R.string.backup_msg_export_error).concat(resultFinal));
+                } else {
+                    exportMessage.setText(getString(R.string.backup_msg_export_done).concat(resultFinal));
+                    adapter.setListItem(getBackupDataList());
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        });
     }
 
-    private class BackupLoadTask extends AsyncTask<String, String, String> {
-        @Override
-        protected String doInBackground(String[] params) {
-            String backup_fn = params[0];
-            File savedir = new File(getExternalFilesDir(null), FILE_PATH);
-
+    private void loadBackup(String backup_fn) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        File savedir = new File(getExternalFilesDir(null), FILE_PATH);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            String result;
             try {
                 File exportFolder = new File(savedir.getAbsolutePath().concat("/").concat(backup_fn).replace(".zip", ""));
                 if (!exportFolder.exists()) exportFolder.mkdirs();
@@ -205,24 +203,24 @@ public class KcaBackupActivity extends BaseActivity {
                     }
                 }
                 exportFolder.delete();
-                return backup_fn;
+                result = backup_fn;
 
             } catch (IOException e) {
                 e.printStackTrace();
-                return KcaUtils.getStringFromException(e);
+                result = KcaUtils.getStringFromException(e);
             }
-        }
 
-        @Override
-        protected void onPostExecute(String result) {
-            is_exporting = false;
-            exportButton.setEnabled(true);
-            if ("Error".equals(result)) {
-                exportMessage.setText(getString(R.string.backup_msg_import_error).concat(result));
-            } else if (result != null) {
-                exportMessage.setText(getString(R.string.backup_msg_import_done).concat(result));
-            }
-        }
+            final String resultFinal = result;
+            handler.post(() -> {
+                is_exporting = false;
+                exportButton.setEnabled(true);
+                if (resultFinal.contains("Error")) {
+                    exportMessage.setText(getString(R.string.backup_msg_import_error).concat(resultFinal));
+                } else {
+                    exportMessage.setText(getString(R.string.backup_msg_import_done).concat(resultFinal));
+                }
+            });
+        });
     }
 
     private List<JsonObject> getBackupDataList() {
@@ -248,6 +246,7 @@ public class KcaBackupActivity extends BaseActivity {
         private final WeakReference<KcaBackupActivity> mActivity;
 
         UpdateHandler(KcaBackupActivity activity) {
+            super(Looper.getMainLooper());
             mActivity = new WeakReference<>(activity);
         }
 
@@ -272,12 +271,8 @@ public class KcaBackupActivity extends BaseActivity {
         if (action.equals("restore")) {
             mBuilder.setTitle(getString(R.string.backup_dialog_import_title));
             mBuilder.setMessage(KcaUtils.format(getString(R.string.backup_dialog_import_msg), backup_fn));
-            mBuilder.setPositiveButton(getString(R.string.dialog_ok), (dialog, which) -> {
-                new BackupLoadTask().execute(backup_fn);
-            });
-            mBuilder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> {
-                dialog.dismiss();
-            }));
+            mBuilder.setPositiveButton(getString(R.string.dialog_ok), (dialog, which) -> loadBackup(backup_fn));
+            mBuilder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
             AlertDialog mDialog = mBuilder.create();
             mDialog.show();
         } else if (action.equals("delete")) {

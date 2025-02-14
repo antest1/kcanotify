@@ -8,8 +8,9 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Vibrator;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
@@ -28,6 +29,8 @@ import com.google.gson.JsonParser;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
@@ -83,7 +86,7 @@ public class FleetInfoActivity extends BaseActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int n) {
                     current_fleet = n;
-                    new ShipItemLoadTask().execute();
+                    loadShipItem();
                     dialog.dismiss();
                 }
             });
@@ -179,7 +182,7 @@ public class FleetInfoActivity extends BaseActivity {
             }
         });
 
-        new ShipItemLoadTask().execute();
+        loadShipItem();
         // Toast.makeText(getApplicationContext(), deckBuilderData(), Toast.LENGTH_LONG).show();
     }
 
@@ -187,26 +190,24 @@ public class FleetInfoActivity extends BaseActivity {
         return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
     }
 
-    private class ShipItemLoadTask extends AsyncTask<String, String, JsonArray> {
-        String fleet_name = "";
+    private void loadShipItem() {
+        Handler handler = new Handler(Looper.getMainLooper());
+        final String[] fleet_name = {""};
+        fleetlist_loading.setVisibility(View.VISIBLE);
 
-        @Override
-        protected void onPreExecute() {
-            fleetlist_loading.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected JsonArray doInBackground(String[] params) {
-            JsonArray deck_data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-            JsonArray data = null;
+        JsonArray deck_data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            boolean passed = true;
+            JsonArray data;
             if (deck_data == null) {
-                fleet_name = "-";
-                return null;
+                fleet_name[0] = "-";
+                passed = false;
             } else {
                 if (current_fleet == 4) {
-                    fleet_name = getString(R.string.fleetlist_combined_fleet);
+                    fleet_name[0] = getString(R.string.fleetlist_combined_fleet);
                     if (deck_data.size() < 2) {
-                        return null;
+                        passed = false;
                     } else {
                         KcaFleetInfoItemAdapter.is_combined = true;
                         data = deckInfoCalc.getDeckListInfo(deck_data, 0, "all", KC_REQ_LIST);
@@ -223,44 +224,43 @@ public class FleetInfoActivity extends BaseActivity {
                     }
                 } else {
                     if (deck_data.size() <= current_fleet) {
-                        fleet_name = String.valueOf(current_fleet + 1);
-                        return null;
+                        fleet_name[0] = String.valueOf(current_fleet + 1);
+                        passed = false;
                     } else {
                         KcaFleetInfoItemAdapter.is_combined = false;
                         JsonObject fleet_data = deck_data.get(current_fleet).getAsJsonObject();
-                        fleet_name = fleet_data.get("api_name").getAsString();
+                        fleet_name[0] = fleet_data.get("api_name").getAsString();
                         data = deckInfoCalc.getDeckListInfo(deck_data, current_fleet, "all", KC_REQ_LIST);
                         adapter.setListViewItemList(data);
                     }
                 }
             }
-            return deck_data;
-        }
 
-        @Override
-        protected void onPostExecute(JsonArray deck_data) {
-            fleetlist_name.setText(fleet_name);
-            if (deck_data == null) {
-                findViewById(R.id.fleetlist_content).setVisibility(View.GONE);
-                fleetlist_fp.setText("");
-                fleetlist_seek.setText("");
-            } else {
-                if (current_fleet == 4) {
-                    findViewById(R.id.fleetlist_content).setVisibility(View.VISIBLE);
-                    fleetlist_fp.setText(deckInfoCalc.getAirPowerRangeString(deck_data, 0, null));
-                    fleetlist_seek.setText(KcaUtils.format(getString(R.string.fleetview_seekvalue_f),
-                            deckInfoCalc.getSeekValue(deck_data, "0,1", SEEK_33CN1, null)));
-
+            final boolean passedFinal = passed;
+            handler.post(() -> {
+                fleetlist_name.setText(fleet_name[0]);
+                if (!passedFinal) {
+                    findViewById(R.id.fleetlist_content).setVisibility(View.GONE);
+                    fleetlist_fp.setText("");
+                    fleetlist_seek.setText("");
                 } else {
-                    findViewById(R.id.fleetlist_content).setVisibility(View.VISIBLE);
-                    fleetlist_fp.setText(deckInfoCalc.getAirPowerRangeString(deck_data, current_fleet, null));
-                    fleetlist_seek.setText(KcaUtils.format(getString(R.string.fleetview_seekvalue_f),
-                            deckInfoCalc.getSeekValue(deck_data, String.valueOf(current_fleet), SEEK_33CN1, null)));
+                    if (current_fleet == 4) {
+                        findViewById(R.id.fleetlist_content).setVisibility(View.VISIBLE);
+                        fleetlist_fp.setText(deckInfoCalc.getAirPowerRangeString(deck_data, 0, null));
+                        fleetlist_seek.setText(KcaUtils.format(getString(R.string.fleetview_seekvalue_f),
+                                deckInfoCalc.getSeekValue(deck_data, "0,1", SEEK_33CN1, null)));
+
+                    } else {
+                        findViewById(R.id.fleetlist_content).setVisibility(View.VISIBLE);
+                        fleetlist_fp.setText(deckInfoCalc.getAirPowerRangeString(deck_data, current_fleet, null));
+                        fleetlist_seek.setText(KcaUtils.format(getString(R.string.fleetview_seekvalue_f),
+                                deckInfoCalc.getSeekValue(deck_data, String.valueOf(current_fleet), SEEK_33CN1, null)));
+                    }
+                    adapter.notifyDataSetChanged();
                 }
-                adapter.notifyDataSetChanged();
-            }
-            fleetlist_loading.setVisibility(View.GONE);
-        }
+                fleetlist_loading.setVisibility(View.GONE);
+            });
+        });
     }
 
     public String deckBuilderData() {

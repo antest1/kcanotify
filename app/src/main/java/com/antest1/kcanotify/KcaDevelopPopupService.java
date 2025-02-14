@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
 import android.os.IBinder;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -53,7 +51,7 @@ public class KcaDevelopPopupService extends BaseService {
     WindowManager.LayoutParams layoutParams;
     NotificationManagerCompat notificationManager;
 
-    List<View> ed_items = new ArrayList();
+    List<View> ed_items = new ArrayList<>();
     ImageView ed_icon;
     TextView ed_name, ed_count, ed_ship, ed_time;
 
@@ -111,11 +109,9 @@ public class KcaDevelopPopupService extends BaseService {
         popupWidth = popupView.getMeasuredWidth();
         popupHeight = popupView.getMeasuredHeight();
 
-        Display display = windowManager.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
+        SizeInsets screenSize = KcaUtils.getDefaultDisplaySizeInsets(this);
+        screenWidth = screenSize.size.x;
+        screenHeight = screenSize.size.y;
         Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
         if (layoutParams == null) {

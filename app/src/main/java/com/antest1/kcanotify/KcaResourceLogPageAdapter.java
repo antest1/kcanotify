@@ -1,40 +1,41 @@
 package com.antest1.kcanotify;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import android.util.Log;
+import androidx.lifecycle.Lifecycle;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import static com.antest1.kcanotify.KcaResourcelogItemAdpater.resourceData;
 
-public class KcaResourceLogPageAdapter extends FragmentStatePagerAdapter {
+public class KcaResourceLogPageAdapter extends FragmentStateAdapter {
     private final static int tabCount = 2;
-    public KcaResourceLogPageAdapter(FragmentManager fm) {
-        super(fm);
+    public KcaResourceLogPageAdapter(FragmentManager fragmentManager, Lifecycle lifecycle) {
+        super(fragmentManager, lifecycle);
     }
 
+    @NonNull
     @Override
-    public Fragment getItem(int position) {
-        Log.e("KCA", "getItem "+position);
-
-        KcaResoureLogFragment f = KcaResoureLogFragment.create(resourceData, position);
-        switch(position) {
-            case 0:
-                return f;
-            case 1:
-                return f;
-            default:
-                return null;
+    public Fragment createFragment(int position) {
+        if (position < tabCount) {
+            return KcaResoureLogFragment.create(resourceData, position);
+        } else {
+            return null;
         }
     }
 
     @Override
-    public int getCount() {
-        return tabCount;
+    public long getItemId(int position) {
+        return KcaResoureLogFragment.getStateId() + position;
     }
 
     @Override
-    public int getItemPosition(Object object) {
-        return POSITION_NONE;
+    public boolean containsItem(long itemId) {
+        return KcaResoureLogFragment.getStateId() == itemId;
+    }
+
+    @Override
+    public int getItemCount() {
+        return tabCount;
     }
 }

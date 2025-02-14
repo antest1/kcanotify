@@ -13,6 +13,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.util.Log;
@@ -29,13 +30,13 @@ public class KcaForegroundCheck {
     public static final String FAIRY_FORECHECK_OFF = "fairy_forecheck_off";
     public static final int FOREGROUND_CHECK_INTERVAL = 500;
 
-    private KcaViewButtonService service;
+    private KcaService service;
     ScheduledExecutorService checkForegroundScheduler;
     private boolean is_kc_foreground;
     private boolean is_login_done;
     private GotoForegroundReceiver gotoFgReceiver;
     
-    public KcaForegroundCheck(KcaViewButtonService service) {
+    public KcaForegroundCheck(KcaService service) {
         this.service = service;
         is_kc_foreground = true;
         is_login_done = false;
@@ -75,7 +76,8 @@ public class KcaForegroundCheck {
         if (checkForegroundScheduler != null) {
             checkForegroundScheduler.shutdown();
         }
-        service.showFairy();
+        service.startService(new Intent(service, KcaViewButtonService.class)
+                .setAction(KcaViewButtonService.RETURN_FAIRY_ACTION));
     }
 
     private static boolean isForeGroundEvent(UsageEvents.Event event) {
@@ -147,10 +149,12 @@ public class KcaForegroundCheck {
             if (current_foreground_status != is_kc_foreground) {
                 is_kc_foreground = current_foreground_status;
                 if (is_kc_foreground) {
-                    service.showFairy();
+                    service.startService(new Intent(service, KcaViewButtonService.class)
+                            .setAction(KcaViewButtonService.KCA_STATUS_ON));
                     Log.e(TAG, "kancolle detected: " + foregroundPackage);
                 } else {
-                    service.hideFairy();
+                    service.startService(new Intent(service, KcaViewButtonService.class)
+                            .setAction(KcaViewButtonService.KCA_STATUS_OFF));
                     Log.e(TAG, "kancolle not detected: " + foregroundPackage);
                 }
             }

@@ -8,6 +8,7 @@ import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
@@ -139,7 +140,7 @@ public class KcaLandAirBasePopupService extends BaseService {
     }
 
     @SuppressLint("HandlerLeak")
-    final Handler handler = new Handler() {
+    final Handler handler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(Message msg) {
             setPopupContent();
             windowManager.updateViewLayout(layoutView, layoutParams);

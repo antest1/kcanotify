@@ -4576,14 +4576,6 @@
         "rewards": "an AR Akashi and either a Furniture Fairy OR 250 Ranking Points OR 4 Screws",
         "resources": [[0, 2025, 2025, 0], [0, 0, 0, 0]]
     },
-    "378": {
-        "code": "L2501C1",
-        "name": "New Year Time-limited! 6th Fleet Special Exercises",
-        "desc": "Assemble a fleet containing 1 AS as flagship, 1 SS(V), 1 AS/SS(V), and up to 3 XX, then score 4 A+ ranks in PVP within the same day.",
-        "memo": "※Weekly",
-        "rewards": "¶First choice: Either 4 Buckets OR a Submarine Radar & Waterproof Periscope OR a Submarine Supply Material ¶Second choice: Either 8 Development Materials OR three Screws OR a Submarine Supply Material",
-        "resources": [[500, 200, 200, 0], [0, 0, 0, 0]]
-    },
     "329": {
         "code": "L2501C2",
         "name": "[Setsubun Quest: Masu] Setsubun Exercise! 2025",
@@ -4592,19 +4584,32 @@
         "rewards": "a Setsubun Beans and either 11 Ranking Points OR a Flamethrower",
         "resources": [[220, 220, 0, 0], [0, 0, 0, 0]]
     },
-    "379": {
-        "code": "L2501C3",
-        "name": "[Limited Time Quest] \"Elite DesDiv11\" Special Exercises!",
-        "desc": "Assemble a fleet containing any two of: \"Fubuki Kai Ni, Shirayuki Kai Ni, Miyuki Kai Ni, or Hatsuyuki Kai\"; and up to 4 XX, then score 4 S ranks in PVP within the same day.",
-        "memo": "※Weekly",
-        "rewards": "¶First choice: Either two 25mm Twin Autocannon Mounts OR a Type 91 Anti-Aircraft Fire Director OR 4 Development Materials ¶Second choice: Either 4 Buckets OR two Screws OR an Irako",
-        "resources": [[110, 110, 110, 110], [0, 0, 0, 0]]
-    },
     "441": {
         "code": "L2501D1",
         "name": "[Setsubun Quest: Eho] Reiwa 7th Year Setsubun Expeditions",
         "desc": "Complete expeditions 05, A1, 19, 23, and 39.",
         "rewards": "¶First choice: Either two New Model Gun Mount Improvement Materials OR 4 Setsubun Beanss OR 2025 Fuels ¶Second choice: Either 5 Screws OR a Medal OR three Special Aviation Rations",
         "resources": [[880, 880, 880, 880], [0, 0, 0, 0]]
+    },
+    "234": {
+        "code": "L2502B1",
+        "name": "[Valentine] Valentine's Day 2025, First Operation",
+        "desc": "Sortie any 3 of Ooi, Kuma, Kashima, Kamoi, Kamikaze, Hamakaze, Takanami, Suzunami, Fujinami, Hayanami and Hamanami, and up to 3 additional ships to [W1-3], [W1-4], [W2-1] and [W2-2]. A-Rank+ each boss node.",
+        "rewards": "¶First choice: Either 6 Development Materials OR 4 Buckets OR a Furniture Fairy ¶Second choice: Either a Mamiya OR a +3 Equipment Slots",
+        "resources": [[2025, 0, 0, 214], [0, 0, 0, 0]]
+    },
+    "238": {
+        "code": "L2502B2",
+        "name": "[Valentine] Valentine's Day 2025, Second Operation",
+        "desc": "Sortie any 3 of Ooyodo, Furutaka, Jingei, I-201, I-203, C. Cappellini, Washington, South Dakota and Kinugasa Kai Ni, and up to 3 additional ships to [W2-3], [W2-4], [W3-1] and [W4-2]. A-Rank+ each boss node.",
+        "rewards": "¶First choice: Either two Mamiyas OR a +5 Equipment Slots ¶Second choice: Either two Medals OR a Reinforcement Expansion OR an Action Report",
+        "resources": [[0, 0, 214, 2025], [0, 0, 0, 0]]
+    },
+    "349": {
+        "code": "L2502C1",
+        "name": "[Valentine] Valentine's Day 2025, Special Exercises",
+        "desc": "Secure 4 S-Rank victories in Exercises within the same day using any 3 of Mogador, Gotland, Perth, Comdt. Teste, Kamoi, Mizuho, Murakumo, Akebono and Oboro, and up to 3 additional ships.",
+        "rewards": "¶First choice: Either two New Model Aerial Armament Materials OR two Zuiun Model 12 OR two Type 2 Depth Charges ¶Second choice: Either a Furniture Fairy OR two Irako OR 4 Screws",
+        "resources": [[0, 0, 2025, 214], [0, 0, 0, 0]]
     }
 }

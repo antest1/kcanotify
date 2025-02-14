@@ -3,6 +3,7 @@ package com.antest1.kcanotify;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.widget.Toolbar;
@@ -271,6 +272,7 @@ public class AkashiActivity extends BaseActivity {
         private final WeakReference<AkashiActivity> mActivity;
 
         UpdateHandler(AkashiActivity activity) {
+            super(Looper.getMainLooper());
             mActivity = new WeakReference<>(activity);
         }
 

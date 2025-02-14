@@ -6,15 +6,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
-import android.graphics.Insets;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import androidx.preference.PreferenceManager;
+
+import android.os.Looper;
 import android.provider.Settings;
 
 import androidx.annotation.Nullable;
@@ -22,16 +20,13 @@ import androidx.core.content.ContextCompat;
 
 import android.util.Log;
 import android.view.ContextThemeWrapper;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowInsets;
 import android.view.WindowManager;
-import android.view.WindowMetrics;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -311,16 +306,13 @@ public class KcaFleetViewService extends BaseService {
 
             fleetInfoLine.setText(getString(R.string.kca_init_content));
             itemView = mInflater.inflate(R.layout.view_battleview_items, null);
-            mHandler = new Handler();
+            mHandler = new Handler(Looper.getMainLooper());
             timer = this::updateFleetInfoLine;
             runTimer();
 
             layoutParams.width = screenWidth;
             windowManager.addView(fleetView, layoutParams);
-            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            displayWidth = size.x;
+            displayWidth = KcaUtils.getDefaultDisplaySizeInsets(this).size.x;
         } catch (Exception e) {
             e.printStackTrace();
             active = false;
@@ -1336,22 +1328,10 @@ public class KcaFleetViewService extends BaseService {
     }
 
     private void updateScreenSize() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            WindowMetrics windowMetrics = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getCurrentWindowMetrics();
-            WindowInsets insets = windowMetrics.getWindowInsets();
-            // Not allow window to stay on cutout or navigation bar or status bar
-            Insets safeInsets = insets.getInsets(WindowInsets.Type.displayCutout() | WindowInsets.Type.navigationBars() | WindowInsets.Type.statusBars());
-            screenPaddingLeft = safeInsets.left;
-            screenPaddingTop = safeInsets.top;
-            Rect bounds = windowMetrics.getBounds();
-            screenWidth = bounds.width() - safeInsets.left - safeInsets.right;
-            screenHeight = bounds.height() - safeInsets.top - safeInsets.bottom;
-        } else {
-            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            screenWidth = size.x;
-            screenHeight = size.y;
-        }
+        SizeInsets screenSize = KcaUtils.getDefaultDisplaySizeInsets(this);
+        screenWidth = screenSize.size.x;
+        screenHeight = screenSize.size.y;
+        screenPaddingLeft = screenSize.insets.x;
+        screenPaddingTop = screenSize.insets.y;
     }
 }

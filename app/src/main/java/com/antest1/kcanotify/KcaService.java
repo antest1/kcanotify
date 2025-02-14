@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Vibrator;
 import androidx.preference.PreferenceManager;
@@ -108,8 +109,10 @@ public class KcaService extends BaseService {
     KcaDropLogger dropLogger;
     KcaResourceLogger resourceLogger;
     KcaPacketLogger packetLogger;
+    KcaPoiDBAPI poiApiClient;
 
     KcaDeckInfo deckInfoCalc;
+    KcaForegroundCheck foregroundCheck;
 
     AlarmManager alarmManager;
     AudioManager mAudioManager;
@@ -275,6 +278,8 @@ public class KcaService extends BaseService {
                     stopSelf();
                 }
 
+                if (isPoiDBEnabled()) poiApiClient = new KcaPoiDBAPI(handler);
+
                 KcaBattle.setHandler(nHandler);
                 KcaApiData.setHandler(nHandler);
                 KcaAlarmService.setHandler(nHandler);
@@ -305,6 +310,11 @@ public class KcaService extends BaseService {
                 toForegroundHandler.removeCallbacksAndMessages(null);
                 toForegroundHandler.postDelayed(() ->
                         startForeground(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build()), 24);
+
+                if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_AUTOHIDE)) {
+                    foregroundCheck = new KcaForegroundCheck(this);
+                    foregroundCheck.command(KcaForegroundCheck.FAIRY_FORECHECK_ON);
+                }
 
                 notificationTimeCounter = -1;
                 timer = () -> {
@@ -351,7 +361,7 @@ public class KcaService extends BaseService {
     public void setServiceDown() {
         isPortAccessed = false;
         stopTimer();
-        stopForeground(true);
+        stopForeground(STOP_FOREGROUND_REMOVE);
 
         handler = null;
         nHandler = null;
@@ -367,6 +377,8 @@ public class KcaService extends BaseService {
     public void onDestroy() {
         if (receiver != null) unregisterReceiver(receiver);
         receiver = null;
+        if (foregroundCheck != null) foregroundCheck.exit();
+        foregroundCheck = null;
         if (notifiManager != null) {
             notifiManager.cancelAll();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -582,7 +594,8 @@ public class KcaService extends BaseService {
         private final WeakReference<KcaService> mService;
 
         kcaServiceHandler(KcaService service) {
-            mService = new WeakReference<KcaService>(service);
+            super(Looper.getMainLooper());
+            mService = new WeakReference<>(service);
         }
 
         @Override
@@ -594,11 +607,6 @@ public class KcaService extends BaseService {
         }
     }
 
-    private void makeToast(String message, int length, int color) {
-        KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
-        showCustomToast(customToast, message, length, color);
-    }
-
     public void handleServiceMessage(Message msg) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String url = msg.getData().getString("url");
@@ -606,7 +614,7 @@ public class KcaService extends BaseService {
         Reader data = new InputStreamReader(new ByteArrayInputStream(raw));
         String request = msg.getData().getString("request");
 
-        if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url.length() == 0) {
+        if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url.isEmpty()) {
             return;
         }
 
@@ -653,7 +661,7 @@ public class KcaService extends BaseService {
                     e1.printStackTrace();
                 }
 
-                makeToast(getString(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                showCustomToast(getString(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 dbHelper.recordErrorLog(ERROR_TYPE_VPN, api_url, api_request, api_response, api_error);
                 return;
             }
@@ -677,7 +685,7 @@ public class KcaService extends BaseService {
             }
 
             if (url.startsWith(API_WORLD_GET_WORLDINFO)) {
-                makeToast(getString(R.string.kca_toast_server_select), Toast.LENGTH_LONG,
+                showCustomToast(getString(R.string.kca_toast_server_select), Toast.LENGTH_LONG,
                         ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 return;
             }
@@ -891,7 +899,7 @@ public class KcaService extends BaseService {
                     int api_event_id = api_data.get("api_event_id").getAsInt();
                     int api_color_no = api_data.get("api_color_no").getAsInt();
                     currentNodeInfo = KcaApiData.getNodeFullInfo(this, currentNodeAlphabet, api_event_id, api_event_kind, api_color_no, false);
-                    makeToast(currentNodeInfo, Toast.LENGTH_LONG, getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
+                    showCustomToast(currentNodeInfo, Toast.LENGTH_LONG, getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
                 }
             }
 
@@ -966,10 +974,10 @@ public class KcaService extends BaseService {
 
             // Game Data Dependent Tasks
             if (restartFlag) {
-                makeToast(getString(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                showCustomToast(getString(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
             }
             else if (!checkDataLoadTriggered()) {
-                makeToast(getString(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                showCustomToast(getString(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 //new retrieveApiStartData().execute("", "down", "");
             }
             else {
@@ -1121,7 +1129,7 @@ public class KcaService extends BaseService {
                                 String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
                                 if (soundKind.equals(NOTI_SOUND_KIND_NORMAL) || soundKind.equals(NOTI_SOUND_KIND_MIXED)) {
                                     if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                                        Uri notificationUri = KcaUtils.getContentUri(getApplicationContext(),
+                                        Uri notificationUri = KcaUtils.getUriFromContent(
                                                 Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
                                         Log.e("KCA", getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
                                         KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
@@ -1133,7 +1141,7 @@ public class KcaService extends BaseService {
                             int toastColor;
                             if (hcondition) toastColor = R.color.colorHeavyDmgStatePanel;
                             else toastColor = R.color.colorWarningPanel;
-                            makeToast(message.trim(), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), toastColor));
+                            showCustomToast(message.trim(), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), toastColor));
                         }
                     }
                 }
@@ -1531,7 +1539,11 @@ public class KcaService extends BaseService {
                                 boolean createFlag = dev_instance.get("api_id").getAsInt() > 0;
                                 int itemKcId = dev_instance.get("api_slotitem_id").getAsInt();
                                 int itemFailKcId = 0;
-                                if (isPoiDBEnabled()) KcaPoiDBAPI.sendEquipDevData(Arrays.toString(materials), flagship, createFlag ? itemKcId : itemFailKcId, getAdmiralLevel(), createFlag);
+                                if (isPoiDBEnabled() && poiApiClient != null) {
+                                    poiApiClient.sendEquipDevData(Arrays.toString(materials),
+                                            flagship, createFlag ? itemKcId : itemFailKcId,
+                                            getAdmiralLevel(), createFlag);
+                                }
                             }
                             updateQuestView();
 
@@ -1744,7 +1756,11 @@ public class KcaService extends BaseService {
                                     materials[i] = api_kdock_item.get(KcaUtils.format("api_item%d", i + 1)).getAsInt();
                                 }
                                 int created_ship_id = api_kdock_item.get("api_created_ship_id").getAsInt();
-                                if (isPoiDBEnabled()) KcaPoiDBAPI.sendShipDevData(Arrays.toString(materials), checkKdockId, flagship, created_ship_id, checkHighSpeed, getAdmiralLevel(), checkLargeFlag);
+                                if (isPoiDBEnabled() && poiApiClient != null) {
+                                    poiApiClient.sendShipDevData(Arrays.toString(materials),
+                                            checkKdockId, flagship, created_ship_id,
+                                            checkHighSpeed, getAdmiralLevel(), checkLargeFlag);
+                                }
 
                                 checkKdockId = -1;
                                 checkLargeFlag = -1;
@@ -2130,6 +2146,7 @@ public class KcaService extends BaseService {
         private final WeakReference<KcaService> mService;
 
         kcaNotificationHandler(KcaService service) {
+            super(Looper.getMainLooper());
             mService = new WeakReference<>(service);
         }
 
@@ -2146,7 +2163,6 @@ public class KcaService extends BaseService {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String url = msg.getData().getString("url");
         String data = msg.getData().getString("data");
-        KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
 
         if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url.length() == 0) {
             Log.e("KCA", "url: " + url);
@@ -2199,6 +2215,19 @@ public class KcaService extends BaseService {
                 updateNotification(false);
                 startService(new Intent(this, KcaViewButtonService.class)
                         .setAction(KcaViewButtonService.FAIRY_CHANGE));
+            }
+
+            if (url.equals(KCA_API_PREF_CHANGE_ON_ACTION)) {
+                if (foregroundCheck == null) {
+                    foregroundCheck = new KcaForegroundCheck(this);
+                    foregroundCheck.command(KcaForegroundCheck.FAIRY_FORECHECK_ON);
+                }
+            }
+            if (url.equals(KCA_API_PREF_CHANGE_OFF_ACTION)) {
+                if (foregroundCheck != null) {
+                    foregroundCheck.command(KcaForegroundCheck.FAIRY_FORECHECK_OFF);
+                    foregroundCheck = null;
+                }
             }
 
             if (url.startsWith(KCA_API_PREF_NOTICOUNT_CHANGED)) {
@@ -2310,7 +2339,10 @@ public class KcaService extends BaseService {
                 String enemy_name = jsonDataObj.get("enemy_name").getAsString();
                 int result = jsonDataObj.get("result").getAsInt();
 
-                if (isPoiDBEnabled()) KcaPoiDBAPI.sendShipDropData(result, world * 10 + map, quest_name, node, enemy_name, rank, isboss, getAdmiralLevel(), maprank, enemy);
+                if (isPoiDBEnabled() && poiApiClient != null) {
+                    poiApiClient.sendShipDropData(result, world * 10 + map, quest_name,
+                            node, enemy_name, rank, isboss, getAdmiralLevel(), maprank, enemy);
+                }
                 recordDropLog(jsonDataObj, !KcaApiData.checkUserPortEnough());
                 if (result > 0) {
                     KcaApiData.addShipCountInBattle();
@@ -2325,7 +2357,7 @@ public class KcaService extends BaseService {
                         String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
                         if (soundKind.equals(NOTI_SOUND_KIND_NORMAL) || soundKind.equals(NOTI_SOUND_KIND_MIXED)) {
                             if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                                Uri notificationUri = KcaUtils.getContentUri(getApplicationContext(),
+                                Uri notificationUri = KcaUtils.getUriFromContent(
                                         Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
                                 Log.e("KCA", getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
                                 KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
@@ -2336,13 +2368,13 @@ public class KcaService extends BaseService {
                 }
 
                 if (heavyDamagedMode == HD_DANGER) {
-                    makeToast(getString(R.string.heavy_damaged), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
+                    showCustomToast(getString(R.string.heavy_damaged), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
                     Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
                     intent.putExtra(KCA_MSG_DATA, "1");
                     broadcaster.sendBroadcast(intent);
                 } else {
                     if (heavyDamagedMode == HD_DAMECON) {
-                        makeToast(getString(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
+                        showCustomToast(getString(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
                     }
                     Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
                     intent.putExtra(KCA_MSG_DATA, "0");
@@ -2379,7 +2411,7 @@ public class KcaService extends BaseService {
                 String api_url = jsonDataObj.get("api_url").getAsString();
                 String api_node = jsonDataObj.get("api_node").getAsString();
                 String api_error = jsonDataObj.get("api_error").getAsString();
-                makeToast(getString(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+                showCustomToast(getString(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
                 dbHelper.recordErrorLog(ERROR_TYPE_BATTLE, api_url, api_node, api_data, api_error);
             }
 
@@ -2389,7 +2421,7 @@ public class KcaService extends BaseService {
             makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
-            makeToast(getString(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+            showCustomToast(getString(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
             dbHelper.recordErrorLog(ERROR_TYPE_NOTI, url, "notification", data, getStringFromException(e));
         }
     }
@@ -2641,8 +2673,7 @@ public class KcaService extends BaseService {
     private boolean isCurrentPortDeckDataReady() {
         JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         if (data == null) {
-            KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
-            makeToast(getString(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+            showCustomToast(getString(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorPrimaryDark));
             Log.e("KCA", KcaUtils.format("currentPortDeckData is null"));
             return false;
         } else {
@@ -2696,7 +2727,7 @@ public class KcaService extends BaseService {
         }
     }
 
-    public void showCustomToast(KcaCustomToast toast, String body, int duration, int color) {
-        KcaUtils.showCustomToast(getApplicationContext(), getBaseContext(), toast, body, duration, color);
+    public void showCustomToast(String body, int duration, int color) {
+        KcaUtils.showCustomToast(this, body, duration, color);
     }
 }

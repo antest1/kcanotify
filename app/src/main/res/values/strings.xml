@@ -666,8 +666,13 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="reslog_interval_day">Day</string>
     <string name="reslog_interval_week">Week</string>
     <string name="reslog_interval_month">Month</string>
+    <string name="reslog_interval_day_initial">D</string>
+    <string name="reslog_interval_week_initial">W</string>
+    <string name="reslog_interval_month_initial">M</string>
     <string name="reslog_label_resource">Resource</string>
     <string name="reslog_label_consumable">Consumable</string>
+    <string name="reslog_label_resource_initial">Res.</string>
+    <string name="reslog_label_consumable_initial">Con.</string>
     <string name="reslog_clear_dialog_message">Do you want to clear the whole resource log?</string>
 
     <string name="action_datasync">Data Sync</string>

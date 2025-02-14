@@ -6,7 +6,6 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -58,7 +57,7 @@ import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_VIBRATE;
 import static com.antest1.kcanotify.KcaUtils.checkContentUri;
 import static com.antest1.kcanotify.KcaUtils.createBuilder;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
-import static com.antest1.kcanotify.KcaUtils.getContentUri;
+import static com.antest1.kcanotify.KcaUtils.getUriFromContent;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getNotificationId;
@@ -299,7 +298,7 @@ public class KcaAlarmService extends BaseService {
                 attrs.setUsage(AudioAttributes.USAGE_NOTIFICATION);
 
                 try {
-                    Uri content_uri = getContentUri(getApplicationContext(), Uri.parse(uri));
+                    Uri content_uri = getUriFromContent(Uri.parse(uri));
                     if (DEFAULT_NOTIFICATION_URI.equals(content_uri)) {
                         channel.setSound(DEFAULT_NOTIFICATION_URI, attrs.build());
                     } else if (checkContentUri(getApplicationContext(), content_uri)) {
