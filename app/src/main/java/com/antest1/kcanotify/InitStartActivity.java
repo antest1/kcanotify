@@ -64,6 +64,7 @@ import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class InitStartActivity extends BaseActivity {
+    private static final String TAG = "InitStartActivity";
     public static final String ACTION_RESET = "ACTION_RESET";
 
     Handler handler = new Handler(Looper.getMainLooper());
@@ -83,8 +84,6 @@ public class InitStartActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         setDefaultPreferences();
-
-        setAppLocale();
 
         setContentView(R.layout.activity_init_download);
         Log.e("KCA-DA", "created");
@@ -404,15 +403,9 @@ public class InitStartActivity extends BaseActivity {
         editor.commit();
     }
 
-    private void setAppLocale() {
-        String pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
-        if (pref.startsWith("default") || !pref.contains("-")) {
-            LocaleUtils.setLocale(getBaseContext(), Locale.getDefault());
-        } else {
-            String[] locale = pref.split("-");
-            LocaleUtils.setLocale(getBaseContext(), new Locale(locale[0], locale[1]));
-        }
-        KcaApplication.defaultLocale = LocaleUtils.getLocale();
-        updateLocaleConfig();
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        LocaleUtils.setLocaleFromPreference(newBase);
+        super.attachBaseContext(newBase);
     }
 }

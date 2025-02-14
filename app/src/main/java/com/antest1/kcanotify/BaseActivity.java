@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -11,12 +12,12 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        updateLocaleConfig();
     }
 
-    protected void updateLocaleConfig() {
-        Configuration config = new Configuration();
-        config.locale = LocaleUtils.getLocale();
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        Configuration config = newBase.getResources().getConfiguration();
+        config.setLocale(LocaleUtils.getLocale());
+        super.attachBaseContext(newBase.createConfigurationContext(config));
     }
 }

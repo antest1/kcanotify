@@ -1,13 +1,10 @@
 package com.antest1.kcanotify;
 
-import android.app.ActivityManager;
 import android.app.Notification;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -36,12 +33,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowInsets;
@@ -81,32 +76,19 @@ import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.channels.FileChannel;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -270,36 +252,6 @@ public class KcaUtils {
         return sb.toString();
     }
 
-    public static boolean[] makeExcludeFlag(int[] list) {
-        boolean[] flag = {false, false, false, false, false, false};
-        for (int i = 0; i < list.length; i++) {
-            flag[list[i]] = true;
-        }
-        return flag;
-    }
-
-    public static boolean isPackageExist(Context context, String name) {
-        boolean isExist = false;
-
-        PackageManager pkgMgr = context.getPackageManager();
-        List<ResolveInfo> mApps;
-        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        mApps = pkgMgr.queryIntentActivities(mainIntent, 0);
-
-        try {
-            for (int i = 0; i < mApps.size(); i++) {
-                if (mApps.get(i).activityInfo.packageName.startsWith(name)) {
-                    isExist = true;
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            isExist = false;
-        }
-        return isExist;
-    }
-
     public static Intent getKcIntent(Context context) {
         String package_name = getStringPreferences(context, PREF_KC_PACKAGE);
         Intent kcIntent = context.getPackageManager().getLaunchIntentForPackage(package_name);
@@ -425,10 +377,6 @@ public class KcaUtils {
         return builder;
     }
 
-    public static String getName(Context context, int resid) {
-        return context.getResources().getResourceEntryName(resid);
-    }
-
     public static int getIdWithFallback(String resourceName, String fallbackResourceName, Class<?> c) {
         try {
             Field idField = c.getDeclaredField(resourceName);
@@ -458,31 +406,26 @@ public class KcaUtils {
 
     // True: latest, False: need to update
     public static boolean compareVersion(String version_current, String version_default) {
-        if (version_current != null && version_current.isEmpty()) return false;
-        if (version_current.equals(version_default)) return true;
-        String[] current_split = version_current.replace("r", ".0.").split("\\.");
-        String[] default_split = version_default.replace("r", ".0.").split("\\.");
-        int min_length = Math.min(current_split.length, default_split.length);
-        for (int i = 0; i < min_length; i++) {
-            if (!current_split[i].trim().isEmpty() && !default_split[i].trim().isEmpty()) {
-                if (Integer.parseInt(current_split[i]) > Integer.parseInt(default_split[i])) {
-                    return true;
-                } else if (Integer.parseInt(current_split[i]) < Integer.parseInt(default_split[i])) {
-                    return false;
+        if (version_current != null) {
+            if (version_current.isEmpty()) return false;
+            if (version_current.equals(version_default)) return true;
+
+            String[] current_split = version_current.replace("r", ".0.").split("\\.");
+            String[] default_split = version_default.replace("r", ".0.").split("\\.");
+            int min_length = Math.min(current_split.length, default_split.length);
+            for (int i = 0; i < min_length; i++) {
+                if (!current_split[i].trim().isEmpty() && !default_split[i].trim().isEmpty()) {
+                    if (Integer.parseInt(current_split[i]) > Integer.parseInt(default_split[i])) {
+                        return true;
+                    } else if (Integer.parseInt(current_split[i]) < Integer.parseInt(default_split[i])) {
+                        return false;
+                    }
                 }
             }
+            return current_split.length > default_split.length;
+        } else {
+            return true;
         }
-        return current_split.length > default_split.length;
-    }
-
-    public static boolean isServiceRunning(Context context, Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /** @noinspection deprecation*/
@@ -494,6 +437,7 @@ public class KcaUtils {
         }
     }
 
+    /** @noinspection deprecation*/
     public static NotificationCompat.Builder createBuilder(Context context, String channel) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             return new NotificationCompat.Builder(context, channel);
@@ -587,7 +531,7 @@ public class KcaUtils {
 
     public static boolean searchStringFromStart(String name, String query, boolean match_case) {
         if (name == null) return false;
-        if (query.trim().length() == 0) return true;
+        if (query.trim().isEmpty()) return true;
         // katakana to hiragana
         name = KanaConverter.convertKana(name, OP_ZEN_KATA_TO_ZEN_HIRA);
         query = KanaConverter.convertKana(query, OP_ZEN_KATA_TO_ZEN_HIRA);
@@ -600,7 +544,7 @@ public class KcaUtils {
 
     public static boolean searchStringContains(String name, String query, boolean match_case) {
         if (name == null) return false;
-        if (query.trim().length() == 0) return true;
+        if (query.trim().isEmpty()) return true;
         // katakana to hiragana
         name = KanaConverter.convertKana(name, OP_ZEN_KATA_TO_ZEN_HIRA);
         query = KanaConverter.convertKana(query, OP_ZEN_KATA_TO_ZEN_HIRA);
@@ -631,34 +575,6 @@ public class KcaUtils {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         return retrofit.create(KcaDownloader.class);
-    }
-
-    public static KcaDownloader getResDownloader(Context context){
-        OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(1, TimeUnit.MINUTES);
-        builder.addInterceptor(chain -> {
-            Request original = chain.request();
-            Request request = original.newBuilder()
-                    .header("User-Agent", "Kcanotify/".concat(BuildConfig.VERSION_NAME).replace("r", "."))
-                    .method(original.method(), original.body()).build();
-            return chain.proceed(request);
-        });
-
-        OkHttpClient okHttpClient = builder.build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/")
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .client(okHttpClient)
-                .build();
-        return retrofit.create(KcaDownloader.class);
-    }
-
-    public static boolean checkFairyImageInStorage(Context context, String name) {
-        ContextWrapper cw = new ContextWrapper(context);
-        File directory = cw.getDir("fairy", Context.MODE_PRIVATE);
-        File image = new File(directory, name);
-        return image.exists();
     }
 
     public static JsonObject getJsonObjectFromStorage(Context context, String name, KcaDBHelper helper) {
@@ -871,28 +787,8 @@ public class KcaUtils {
                 || nwCap.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
     }
 
-    public static int getGravity(int status) {
-        int value;
-        switch (status) {
-            case 1:
-                value = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
-                break;
-            case 0:
-                value = Gravity.CENTER;
-                break;
-            case -1:
-                value = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
-                break;
-            default:
-                value = Gravity.CENTER;
-                break;
-        }
-        return value;
-    }
-
     // Image Downscale Functions from Android Reference
     // https://developer.android.com/topic/performance/graphics/load-bitmap.html
-
     public static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
         final int height = options.outHeight;
@@ -1009,73 +905,10 @@ public class KcaUtils {
         return addresses.toArray(new String[0]);
     }
 
-    public static byte[] addAll(final byte[] array1, byte[] array2) {
-        byte[] joinedArray = Arrays.copyOf(array1, array1.length + array2.length);
-        System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
-        return joinedArray;
-    }
-
-    public static Map<String, String> getKcaQSyncHeaderMap() {
-        Map<String, String> map = new HashMap<>();
-        map.put("Referer", "app:/KCA/");
-        map.put("Content-Type", "application/x-www-form-urlencoded");
-        map.put("User-Agent", KcaUtils.format("Kcanotify/%s ", BuildConfig.VERSION_NAME));
-        return map;
-    }
-
-    public static String getRSAEncodedString(Context context, String value) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, IOException, BadPaddingException, IllegalBlockSizeException {
-        /*
-        Example:
-        try {
-            JsonObject data = new JsonObject();
-            data.addProperty("userid", 20181234);
-            data.addProperty("data", "416D341GX141JI0318W");
-            String encoded = KcaUtils.getRSAEncodedString(getApplicationContext(), data.toString());
-            Log.e("KCA", encoded);
-            data.remove("data");
-            encoded = KcaUtils.getRSAEncodedString(getApplicationContext(), data.toString());
-            Log.e("KCA", data.toString());
-            Log.e("KCA", encoded);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
-
-        List<String> value_list = new ArrayList<>();
-        for (int i = 0; i < (int) Math.ceil(value.length() / 96.0); i++) {
-            value_list.add(value.substring(i*96, Math.min((i+1)*96, value.length()) ));
-        }
-
-        AssetManager am = context.getAssets();
-        AssetManager.AssetInputStream ais =
-                (AssetManager.AssetInputStream) am.open("kcaqsync_pubkey.txt");
-        byte[] bytes = ByteStreams.toByteArray(ais);
-        String publicKeyContent = new String(bytes)
-                .replaceAll("\\n", "")
-                .replace("-----BEGIN PUBLIC KEY-----", "")
-                .replace("-----END PUBLIC KEY-----", "").trim();
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(Base64.decode(publicKeyContent, Base64.DEFAULT));
-        Key encryptionKey = keyFactory.generatePublic(pubSpec);
-        Cipher rsa = Cipher.getInstance("RSA/None/PKCS1Padding");
-        rsa.init(Cipher.ENCRYPT_MODE, encryptionKey);
-
-        byte[] data_all = {};
-        for (String item : value_list) {
-            byte[] item_byte = rsa.doFinal(item.getBytes("utf-8"));
-            data_all = addAll(data_all, item_byte);
-        }
-
-        String result = Base64.encodeToString(rsa.doFinal(value.getBytes("utf-8")), Base64.DEFAULT).replace("\n", "");
-        return result;
-    }
-
-
     // Customized base64 encoding: http://kancolle-calc.net/data/share.js
     static String BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
     static String[] CODE = { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111",
             "1000", "1001", "1010", "1011", "1100", "1101" };
-
 
     public static String encode64(String dataString) {
         StringBuilder buff = new StringBuilder();
