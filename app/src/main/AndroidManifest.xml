@@ -215,7 +215,7 @@
         </service>
         <service
             android:name=".KcaBattleViewService"
-            android:configChanges="layoutDirection|screenSize|screenLayout" />
+            android:configChanges="locale|layoutDirection|screenSize|screenLayout" />
         <service
             android:name=".KcaFleetViewService"
             android:configChanges="locale|layoutDirection|screenSize|screenLayout" />
