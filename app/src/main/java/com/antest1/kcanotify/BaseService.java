@@ -14,13 +14,19 @@ public class BaseService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        updateLocaleConfig();
     }
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        Configuration config = newBase.getResources().getConfiguration();
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        updateLocaleConfig();
+    }
+
+    protected void updateLocaleConfig() {
+        Configuration config = new Configuration();
         config.setLocale(LocaleUtils.getLocale());
-        super.attachBaseContext(newBase.createConfigurationContext(config));
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }
 
     @Nullable
