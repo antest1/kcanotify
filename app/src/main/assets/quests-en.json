@@ -4546,51 +4546,6 @@
         "rewards": "¶First choice: Either 4 7.7mm Machine Guns OR three 25mm Single Autocannon Mounts OR a Mamiya ¶Second choice: Either 4 Screws OR 4000 Fuels OR two Irako",
         "resources": [[320, 320, 320, 320], [0, 0, 0, 0]]
     },
-    "840": {
-        "code": "L2501B5",
-        "name": "[Setsubun Quest: Beans] Setsubun Operation 2025",
-        "desc": "Assemble a fleet containing as flagship and second ship any 2 of: \"Houshou, Asahi, Akashi, Jingei, Chougei, Oboro, Akebono, Sazanami, or Ushio\"; and up to 4 XX, then A+ rank the boss nodes of [W1-1], [W1-2], and [W1-3], twice each.",
-        "memo": "※Weekly",
-        "rewards": "two Setsubun Beanss and either 6 Development Materials OR two Screws OR a Special Aviation Ration",
-        "resources": [[0, 220, 220, 220], [0, 0, 0, 0]]
-    },
-    "841": {
-        "code": "L2501B6",
-        "name": "[Setsubun Quest: Demon] Southwestern Setsubun Operation 2025",
-        "desc": "Assemble a fleet containing as flagship and second ship any 2 of: \"Gloire, Ranger, Johnston, Shinyou, Ooyodo, Yuubari, Hayashimo, Asashimo, or Kazagumo\"; and up to 4 XX, then A+ rank the boss nodes of [W1-4], [W2-1], and [W2-2], twice each.",
-        "memo": "※Weekly",
-        "rewards": "three Setsubun Beanss and either an Underway Replenishment OR three Screws OR 6 Buckets",
-        "resources": [[2025, 0, 0, 0], [0, 0, 0, 0]]
-    },
-    "843": {
-        "code": "L2501B7",
-        "name": "[Setsubun Quest: Holly] Setsubun Extra Operation 2025 - Plentiful Harvest!",
-        "desc": "Assemble a fleet containing 1 CVL, 2 CA, and up to 3 XX, then S rank the boss nodes of [W2-3], [W4-1], [W7-5-T], and [W5-1].",
-        "rewards": "4 Setsubun Beanss and either three Screws OR two Special Aviation Rations OR 50 Ranking Points",
-        "resources": [[0, 0, 0, 2025], [0, 0, 0, 0]]
-    },
-    "882": {
-        "code": "L2501B8",
-        "name": "[Setsubun Quest: Final Extra Operation] Setsubun 2025 - Pray for Peace!",
-        "desc": "Assemble a fleet containing any 4 of: \"Agano, Sakawa, Mizuho, Miyuki, Uranami, Amagiri, Sagiri, and Minegumo\"; and up to 2 XX, then S rank the boss nodes of [W1-5], [W3-2], and [W6-3], twice each.",
-        "rewards": "an AR Akashi and either a Furniture Fairy OR 250 Ranking Points OR 4 Screws",
-        "resources": [[0, 2025, 2025, 0], [0, 0, 0, 0]]
-    },
-    "329": {
-        "code": "L2501C2",
-        "name": "[Setsubun Quest: Masu] Setsubun Exercise! 2025",
-        "desc": "Assemble a fleet containing 1 CVL/AS as flagship, and 4 DD/2 DE/2 SS(V), and up to 1-3 XX, then score 3 B+ ranks in PVP within the same day.",
-        "memo": "※Daily",
-        "rewards": "a Setsubun Beans and either 11 Ranking Points OR a Flamethrower",
-        "resources": [[220, 220, 0, 0], [0, 0, 0, 0]]
-    },
-    "441": {
-        "code": "L2501D1",
-        "name": "[Setsubun Quest: Eho] Reiwa 7th Year Setsubun Expeditions",
-        "desc": "Complete expeditions 05, A1, 19, 23, and 39.",
-        "rewards": "¶First choice: Either two New Model Gun Mount Improvement Materials OR 4 Setsubun Beanss OR 2025 Fuels ¶Second choice: Either 5 Screws OR a Medal OR three Special Aviation Rations",
-        "resources": [[880, 880, 880, 880], [0, 0, 0, 0]]
-    },
     "234": {
         "code": "L2502B1",
         "name": "[Valentine] Valentine's Day 2025, First Operation",
@@ -4605,11 +4560,32 @@
         "rewards": "¶First choice: Either two Mamiyas OR a +5 Equipment Slots ¶Second choice: Either two Medals OR a Reinforcement Expansion OR an Action Report",
         "resources": [[0, 0, 214, 2025], [0, 0, 0, 0]]
     },
+    "1026": {
+        "code": "L2502B3",
+        "name": "[Time-limited] 1st Torpedo Squadron, Prepare for Battle! Weigh Anchor!",
+        "desc": "Sortie any 4 of Abukuma, Kasumi, Shiranui, Usugumo, Akebono, Ushio, Hatsushimo, Hatsuharu and Wakaba, and up to 2 additional ships to [W1-2], [W1-3] and [W1-4]. S-Rank each boss node twice.",
+        "rewards": "¶First choice: Either 8 Development Materials OR a Type 22 Surface Radar Kai 4 OR three Screws ¶Second choice: Either a Medal OR a Northern Camouflage (+Northern Equipment) ★5 OR two Irako",
+        "resources": [[350, 350, 350, 350], [0, 0, 0, 0]]
+    },
+    "1027": {
+        "code": "L2502B4",
+        "name": "[Time-limited] 5th Fleet, Prepare for Emergency Deployment!",
+        "desc": "Sortie any 5 of Ashigara, Nachi, Tama, Kiso, Abukuma, Kasumi, Shiranui, Usugumo, Akebono, Ushio, Hatsushimo, Hatsuharu and Wakaba, and up to 1 additional ship to [W2-1], [W2-2], [W3-1] and [W3-2]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either 8 Buckets OR two New Model Gun Mount Improvement Materials OR 4 Screws ¶Second choice: Either three Mamiyas OR an Arctic Gear & Deck Personnel OR three Medals",
+        "resources": [[550, 550, 550, 550], [0, 0, 0, 0]]
+    },
     "349": {
         "code": "L2502C1",
         "name": "[Valentine] Valentine's Day 2025, Special Exercises",
         "desc": "Secure 4 S-Rank victories in Exercises within the same day using any 3 of Mogador, Gotland, Perth, Comdt. Teste, Kamoi, Mizuho, Murakumo, Akebono and Oboro, and up to 3 additional ships.",
         "rewards": "¶First choice: Either two New Model Aerial Armament Materials OR two Zuiun Model 12 OR two Type 2 Depth Charges ¶Second choice: Either a Furniture Fairy OR two Irako OR 4 Screws",
         "resources": [[0, 0, 2025, 214], [0, 0, 0, 0]]
+    },
+    "1028": {
+        "code": "L2503B1",
+        "name": "[WD Limited Quest] Light Aircraft Carrier, Sortie!",
+        "desc": "Assemble a fleet containing either Langley as flagship or 2 CVL, and up to 4-5 XX, then A+ rank the boss nodes of 1-3, 1-4, 2-1 and 3-1.",
+        "rewards": "¶First choice: Either 4 Buckets OR 6 Development Materials OR an Irako ¶Second choice: Either three Underway Replenishments OR 14 Development Materials OR a Medal",
+        "resources": [[314, 314, 314, 314], [0, 0, 0, 0]]
     }
 }

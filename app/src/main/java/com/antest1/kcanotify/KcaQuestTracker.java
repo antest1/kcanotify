@@ -2,7 +2,6 @@ package com.antest1.kcanotify;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -13,25 +12,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
-import org.json.JSONArray;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 import static com.antest1.kcanotify.KcaApiData.STYPE_AO;
 import static com.antest1.kcanotify.KcaApiData.STYPE_AP;
 import static com.antest1.kcanotify.KcaApiData.STYPE_AV;
-import static com.antest1.kcanotify.KcaApiData.STYPE_BB;
 import static com.antest1.kcanotify.KcaApiData.STYPE_BBV;
 import static com.antest1.kcanotify.KcaApiData.STYPE_CA;
 import static com.antest1.kcanotify.KcaApiData.STYPE_CL;
@@ -82,19 +72,18 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(" CREATE TABLE ".concat(qt_table_name).concat(" ( "));
-        sb.append(" KEY INTEGER PRIMARY KEY, ");
-        sb.append(" ACTIVE INTEGER, ");
-        sb.append(" CND0 INTEGER, ");
-        sb.append(" CND1 INTEGER, ");
-        sb.append(" CND2 INTEGER, ");
-        sb.append(" CND3 INTEGER, ");
-        sb.append(" CND4 INTEGER, ");
-        sb.append(" CND5 INTEGER, ");
-        sb.append(" TYPE INTEGER, ");
-        sb.append(" TIME TEXT ) ");
-        db.execSQL(sb.toString());
+        String sb = " CREATE TABLE ".concat(qt_table_name).concat(" ( ") +
+                " KEY INTEGER PRIMARY KEY, " +
+                " ACTIVE INTEGER, " +
+                " CND0 INTEGER, " +
+                " CND1 INTEGER, " +
+                " CND2 INTEGER, " +
+                " CND3 INTEGER, " +
+                " CND4 INTEGER, " +
+                " CND5 INTEGER, " +
+                " TYPE INTEGER, " +
+                " TIME TEXT ) ";
+        db.execSQL(sb);
     }
 
     @Override
@@ -144,35 +133,6 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         }
         c.close();
         test();
-    }
-
-    public void syncQuestTrack(int id, boolean active, JsonArray cond, long timestamp) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String id_str = String.valueOf(id);
-
-        Date currentTime = getJapanCalendarInstance(timestamp).getTime();
-        SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
-        String time = df.format(currentTime);
-        int quest_type = 0;
-
-        JsonObject questInfo = KcaApiData.getQuestTrackInfo(id_str);
-        if (questInfo != null) quest_type = questInfo.get("type").getAsInt();
-
-        ContentValues values = new ContentValues();
-        values.put("KEY", id);
-        values.put("ACTIVE", active ? 1 : 0);
-
-        values.put("CND0", cond.get(0).getAsInt() + getInitialCondValue(id_str));
-        for (int i = 1; i < 4; i++) {
-            if (i < cond.size()) values.put("CND".concat(String.valueOf(i)), cond.get(i).getAsInt());
-            else values.put("CND".concat(String.valueOf(i)), 0);
-        }
-        values.put("TIME", time);
-        values.put("TYPE", quest_type);
-        int u = db.update(qt_table_name, values, "KEY=?", new String[]{String.valueOf(id)});
-        if (u == 0) {
-            db.insertWithOnConflict(qt_table_name, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        }
     }
 
     public void removeQuestTrack(int id, boolean hard) {
@@ -246,12 +206,14 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         long start_time = week_data.get("start").getAsLong();
                         long end_time = week_data.get("end").getAsLong();
                         Date date1 = dateFormat.parse(KcaUtils.format("%s %s %s %s", quest_time[0], quest_time[1], quest_time[2], quest_time[3]));
-                        long quest_timestamp = date1.getTime();
-                        if (quest_timestamp < start_time || quest_timestamp >= end_time) {
-                            valid_flag = false;
+                        if (date1 != null) {
+                            long quest_timestamp = date1.getTime();
+                            if (quest_timestamp < start_time || quest_timestamp >= end_time) {
+                                valid_flag = false;
+                            }
                         }
                     } catch (ParseException e) {
-                        e.printStackTrace();
+                        // do nothing
                     }
                     break;
                 case 3: // Monthly
@@ -279,13 +241,11 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         return valid_flag;
     }
 
-    private boolean isWinRank(String rank) {
-        return (rank.equals("S") || rank.equals("A") || rank.equals("B"));
-    }
-
+    private boolean isSRank(String rank) { return rank.equals("S"); }
     private boolean isGoodRank(String rank) {
         return (rank.equals("S") || rank.equals("A"));
     }
+    private boolean isWinRank(String rank) { return isGoodRank(rank) || rank.equals("B"); }
 
     public JsonArray getQuestTrackInfo(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -312,18 +272,19 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
 
     public void updateIdCountTracker(String id, int idx) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor c = db.rawQuery("SELECT KEY, CND" + String.valueOf(idx) + " from "
+        String cond = "CND" + idx;
+        Cursor c = db.rawQuery(KcaUtils.format("SELECT KEY, %s from ", cond)
                 .concat(qt_table_name)
                 .concat(" WHERE KEY=? AND ACTIVE=1"), new String[]{id});
         if (c.moveToFirst()) {
             ContentValues values = new ContentValues();
-            values.put("CND" + idx, c.getInt(c.getColumnIndexOrThrow("CND" + idx)) + 1);
+            values.put(cond, c.getInt(c.getColumnIndexOrThrow(cond)) + 1);
             db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{id});
         }
         c.close();
     }
 
-    public JsonObject updateNodeTracker(JsonObject data) {
+    public void updateNodeTracker(JsonObject data) {
         SQLiteDatabase db = this.getWritableDatabase();
         int world = data.get("world").getAsInt();
         int map = data.get("map").getAsInt();
@@ -335,18 +296,16 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         Cursor c = db.rawQuery("SELECT KEY, CND0, CND1, CND2, CND3, CND4, CND5 from "
                 .concat(qt_table_name).concat(" WHERE ACTIVE=1 ORDER BY KEY"), null);
 
-        int requiredShip = 0;
+        int requiredShip;
         JsonObject updateTarget = new JsonObject();
         while (c.moveToNext()) {
             boolean wflag = false;
-            boolean fleetflag = true;
             String key = c.getString(c.getColumnIndexOrThrow("KEY"));
             int cond0 = c.getInt(c.getColumnIndexOrThrow("CND0"));
             int cond1 = c.getInt(c.getColumnIndexOrThrow("CND1"));
             int cond2 = c.getInt(c.getColumnIndexOrThrow("CND2"));
             int cond3 = c.getInt(c.getColumnIndexOrThrow("CND3"));
-            int cond4 = c.getInt(c.getColumnIndexOrThrow("CND4"));
-            int cond5 = c.getInt(c.getColumnIndexOrThrow("CND5"));
+
             JsonArray targetData;
             switch (key) {
                 case "214": // 아호
@@ -411,12 +370,10 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 }
             }
         }
-
         c.close();
-        return updateTarget;
     }
 
-    public JsonObject updateQuestTracker(JsonObject data) {
+    public void updateQuestTracker(JsonObject data) {
         SQLiteDatabase db = this.getWritableDatabase();
         String rank = data.get("result").getAsString();
 
@@ -488,7 +445,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         if (kcShipId == 17 || kcShipId == 225 || kcShipId == 566) requiredShip -= 1;
                         if (kcShipId == 18 || kcShipId == 226 || kcShipId == 567) requiredShip -= 1;
                     }
-                    wflag = (requiredShip == 0) && rank.equals("S");
+                    wflag = (requiredShip == 0) && isSRank(rank);
                     break;
                 case "339":
                     requiredShip = 4;
@@ -498,7 +455,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         if (kcShipId == 13 || kcShipId == 195 || kcShipId == 207) requiredShip -= 1;
                         if (kcShipId == 14 || kcShipId == 208 || kcShipId == 627) requiredShip -= 1;
                     }
-                    wflag = (requiredShip == 0) && rank.equals("S");
+                    wflag = (requiredShip == 0) && isSRank(rank);
                     break;
                 case "342":
                     requiredShip = 0;
@@ -506,7 +463,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         if (kcShipType == STYPE_CL) requiredShip += 1;
                         if (kcShipType == STYPE_DD || kcShipType == STYPE_DE) requiredShip += 10;
                     }
-                    wflag = (requiredShip >= 40 || requiredShip == 31) && (rank.equals("S") || rank.equals("A"));
+                    wflag = (requiredShip >= 40 || requiredShip == 31) && isGoodRank(rank);
                     break;
                 default:
                     break;
@@ -537,10 +494,9 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         }
 
         c.close();
-        return updateTarget;
     }
 
-    public JsonObject updateBattleTracker(JsonObject data) {
+    public void updateBattleTracker(JsonObject data) {
         SQLiteDatabase db = this.getWritableDatabase();
         int world = data.get("world").getAsInt();
         int map = data.get("map").getAsInt();
@@ -558,8 +514,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         JsonArray deck_data = data.getAsJsonObject("deck_port").getAsJsonArray("api_deck_data");
         JsonArray fleet_data = deck_data.get(0).getAsJsonObject().getAsJsonArray("api_ship");
 
-        JsonArray ship_ke_combined = null;
-        JsonArray aftercbhps_e = null;
+        JsonArray ship_ke_combined;
+        JsonArray aftercbhps_e;
 
         int cvcount = 0; // carrier
         int apcount = 0; // wa-class
@@ -569,14 +525,16 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             int ship_id = ship_ke.get(i).getAsInt();
             if (ship_id == -1) break;
             JsonObject kcShipData = KcaApiData.getKcShipDataById(ship_ke.get(i).getAsInt(), "stype");
-            int stype = kcShipData.get("stype").getAsInt();
-            String hp_str = afterhps_e.get(i).getAsString();
-            if (hp_str.contains("N")) continue;
-            boolean isSunk = (Integer.parseInt(hp_str) <= 0);
-            if ((stype == STYPE_CV || stype == STYPE_CVL || stype == STYPE_CVB) && isSunk)
-                cvcount += 1;
-            if (stype == STYPE_AP && isSunk) apcount += 1;
-            if ((stype == STYPE_SS || stype == STYPE_SSV) && isSunk) sscount += 1;
+            if (kcShipData != null) {
+                int stype = kcShipData.get("stype").getAsInt();
+                String hp_str = afterhps_e.get(i).getAsString();
+                if (hp_str.contains("N")) continue;
+                boolean isSunk = (Integer.parseInt(hp_str) <= 0);
+                if ((stype == STYPE_CV || stype == STYPE_CVL || stype == STYPE_CVB) && isSunk)
+                    cvcount += 1;
+                if (stype == STYPE_AP && isSunk) apcount += 1;
+                if ((stype == STYPE_SS || stype == STYPE_SSV) && isSunk) sscount += 1;
+            }
         }
 
         if (data.has("ship_ke_combined")) {
@@ -586,19 +544,21 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 int ship_id = ship_ke_combined.get(i).getAsInt();
                 if (ship_id == -1) break;
                 JsonObject kcShipData = KcaApiData.getKcShipDataById(ship_id, "stype");
-                int stype = kcShipData.get("stype").getAsInt();
-                boolean isSunk = aftercbhps_e.get(i).getAsInt() <= 0;
-                if ((stype == STYPE_CV || stype == STYPE_CVL || stype == STYPE_CVB) && isSunk)
-                    cvcount += 1;
-                if (stype == STYPE_AP && isSunk) apcount += 1;
-                if ((stype == STYPE_SS || stype == STYPE_SSV) && isSunk) sscount += 1;
+                if (kcShipData != null) {
+                    int stype = kcShipData.get("stype").getAsInt();
+                    boolean isSunk = aftercbhps_e.get(i).getAsInt() <= 0;
+                    if ((stype == STYPE_CV || stype == STYPE_CVL || stype == STYPE_CVB) && isSunk)
+                        cvcount += 1;
+                    if (stype == STYPE_AP && isSunk) apcount += 1;
+                    if ((stype == STYPE_SS || stype == STYPE_SSV) && isSunk) sscount += 1;
+                }
             }
         }
 
         Cursor c = db.rawQuery("SELECT KEY, CND0, CND1, CND2, CND3, CND4, CND5 from "
                 .concat(qt_table_name).concat(" WHERE ACTIVE=1 ORDER BY KEY"), null);
 
-        int requiredShip = 0;
+        int requiredShip;
         JsonObject updateTarget = new JsonObject();
 
         ArrayList<Integer> kcShipIdList = new ArrayList<>();
@@ -630,7 +590,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             int cond2 = c.getInt(c.getColumnIndexOrThrow("CND2"));
             int cond3 = c.getInt(c.getColumnIndexOrThrow("CND3"));
             int cond4 = c.getInt(c.getColumnIndexOrThrow("CND4"));
-            int cond5 = c.getInt(c.getColumnIndexOrThrow("CND5"));
+
             JsonArray targetData;
             switch (key) {
                 case "210": // 출격10회
@@ -689,7 +649,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     wflag = world == 4 && map == 4 && isboss && isGoodRank(rank);
                     break;
                 case "243": // 산호
-                    wflag = world == 5 && map == 2 && isboss && rank.equals("S");
+                    wflag = world == 5 && map == 2 && isboss && isSRank(rank);
                     break;
                 case "261": // 해상안전
                 case "265": // 호위월간
@@ -702,10 +662,10 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         if (kcShipId == 63 || kcShipId == 192 || kcShipId == 266) requiredShip -= 1;
                         if (kcShipId == 65 || kcShipId == 194 || kcShipId == 268) requiredShip -= 1;
                     }
-                    wflag = (world == 2 && map == 5 && isboss && rank.equals("S") && requiredShip == 0);
+                    wflag = (world == 2 && map == 5 && isboss && isSRank(rank) && requiredShip == 0);
                     break;
                 case "256": // 잠수함대
-                    wflag = world == 6 && map == 1 && isboss && rank.equals("S");
+                    wflag = world == 6 && map == 1 && isboss && isSRank(rank);
                     break;
                 case "257": // 수뢰전대
                     requiredShip = 0;
@@ -721,7 +681,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                             }
                         }
                     }
-                    wflag = world == 1 && map == 4 && isboss && rank.equals("S") && fleetflag && requiredShip <= 3;
+                    wflag = world == 1 && map == 4 && isboss && isSRank(rank) && fleetflag && requiredShip <= 3;
                     break;
                 case "259": // 수상타격
                     requiredShip = 0;
@@ -739,7 +699,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     for (int kcShipType: kcShipTypeList) {
                         if (kcShipType == STYPE_CL) requiredShip += 1;
                     }
-                    wflag = world == 5 && map == 1 && isboss && rank.equals("S") && requiredShip == 31;
+                    wflag = world == 5 && map == 1 && isboss && isSRank(rank) && requiredShip == 31;
                     break;
                 case "264": // 공모기동
                     requiredShip = 0;
@@ -748,7 +708,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                             requiredShip += 10;
                         if (kcShipType == STYPE_DD) requiredShip += 1;
                     }
-                    wflag = world == 4 && map == 2 && isboss && rank.equals("S") && requiredShip == 22;
+                    wflag = world == 4 && map == 2 && isboss && isSRank(rank) && requiredShip == 22;
                     break;
                 case "266": // 수상반격
                     requiredShip = 0;
@@ -765,7 +725,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                             if (kcShipType == STYPE_DD) requiredShip += 1;
                         }
                     }
-                    wflag = world == 2 && map == 5 && isboss && rank.equals("S") && fleetflag && requiredShip == 114;
+                    wflag = world == 2 && map == 5 && isboss && isSRank(rank) && fleetflag && requiredShip == 114;
                     break;
                 case "280": // 병참선
                     requiredShip = 0;
@@ -782,19 +742,19 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         targetData.add(cond1);
                         targetData.add(cond2);
                         targetData.add(cond3);
-                        if (world == 1 && map == 2 && isboss && rank.equals("S"))
+                        if (world == 1 && map == 2 && isboss && isSRank(rank))
                             targetData.set(0, new JsonPrimitive(1));
-                        if (world == 1 && map == 3 && isboss && rank.equals("S"))
+                        if (world == 1 && map == 3 && isboss && isSRank(rank))
                             targetData.set(1, new JsonPrimitive(1));
-                        if (world == 1 && map == 4 && isboss && rank.equals("S"))
+                        if (world == 1 && map == 4 && isboss && isSRank(rank))
                             targetData.set(2, new JsonPrimitive(1));
-                        if (world == 2 && map == 1 && isboss && rank.equals("S"))
+                        if (world == 2 && map == 1 && isboss && isSRank(rank))
                             targetData.set(3, new JsonPrimitive(1));
                         updateTarget.add(key, targetData);
                     }
                     break;
                 case "822": // 오키노시마
-                    wflag = world == 2 && map == 4 && isboss && rank.equals("S");
+                    wflag = world == 2 && map == 4 && isboss && isSRank(rank);
                     break;
                 case "854": // Z전단
                     targetData = new JsonArray();
@@ -808,7 +768,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         targetData.set(1, new JsonPrimitive(1));
                     if (world == 6 && map == 3 && isboss && isGoodRank(rank))
                         targetData.set(2, new JsonPrimitive(1));
-                    if (world == 6 && map == 4 && isboss && rank.equals("S"))
+                    if (world == 6 && map == 4 && isboss && isSRank(rank))
                         targetData.set(3, new JsonPrimitive(1));
                     updateTarget.add(key, targetData);
                     break;
@@ -818,13 +778,13 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     targetData.add(cond1);
                     targetData.add(cond2);
                     targetData.add(cond3);
-                    if (world == 7 && map == 2 && node == 15 && rank.equals("S"))
+                    if (world == 7 && map == 2 && node == 15 && isSRank(rank))
                         targetData.set(0, new JsonPrimitive(1));
-                    if (world == 5 && map == 5 && isboss && rank.equals("S"))
+                    if (world == 5 && map == 5 && isboss && isSRank(rank))
                         targetData.set(1, new JsonPrimitive(1));
-                    if (world == 6 && map == 2 && isboss && rank.equals("S"))
+                    if (world == 6 && map == 2 && isboss && isSRank(rank))
                         targetData.set(2, new JsonPrimitive(1));
-                    if (world == 6 && map == 5 && isboss && rank.equals("S"))
+                    if (world == 6 && map == 5 && isboss && isSRank(rank))
                         targetData.set(3, new JsonPrimitive(1));
                     updateTarget.add(key, targetData);
                     break;
@@ -860,20 +820,27 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     targetData.add(cond2);
                     targetData.add(cond3);
                     targetData.add(cond4);
-                    if (world == 4 && map == 1 && isboss && rank.equals("S"))
+                    if (world == 4 && map == 1 && isboss && isSRank(rank))
                         targetData.set(0, new JsonPrimitive(1));
-                    if (world == 4 && map == 2 && isboss && rank.equals("S"))
+                    if (world == 4 && map == 2 && isboss && isSRank(rank))
                         targetData.set(1, new JsonPrimitive(1));
-                    if (world == 4 && map == 3 && isboss && rank.equals("S"))
+                    if (world == 4 && map == 3 && isboss && isSRank(rank))
                         targetData.set(2, new JsonPrimitive(1));
-                    if (world == 4 && map == 4 && isboss && rank.equals("S"))
+                    if (world == 4 && map == 4 && isboss && isSRank(rank))
                         targetData.set(3, new JsonPrimitive(1));
-                    if (world == 4 && map == 5 && isboss && rank.equals("S"))
+                    if (world == 4 && map == 5 && isboss && isSRank(rank))
                         targetData.set(4, new JsonPrimitive(1));
                     updateTarget.add(key, targetData);
                     break;
                 case "875": // 5-4 분기퀘
-                    wflag = world == 5 && map == 4 && isboss && isGoodRank(rank);
+                    requiredShip = 0;
+                    int[] naganami_ids = {543}; // 나가나미 개2
+                    int[] other_dd31_ids = {344, 345, 359, 569, 578, 649}; // 타카나미改/오키나미改/아사시모改
+                    for (int kcShipId: kcShipIdList) {
+                        if (Arrays.binarySearch(naganami_ids, kcShipId) >= 0) requiredShip += 10;
+                        if (Arrays.binarySearch(other_dd31_ids, kcShipId) >= 0) requiredShip += 1;
+                    }
+                    wflag = world == 5 && map == 4 && isboss && isSRank(rank) && requiredShip >= 11;
                     break;
                 case "893": // 정박지 전과퀘 (1-5, 7-1, 7-2-1, 7-2-2)
                     targetData = new JsonArray();
@@ -881,13 +848,13 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     targetData.add(cond1);
                     targetData.add(cond2);
                     targetData.add(cond3);
-                    if (world == 1 && map == 5 && isboss && rank.equals("S"))
+                    if (world == 1 && map == 5 && isboss && isSRank(rank))
                         targetData.set(0, new JsonPrimitive(1));
-                    if (world == 7 && map == 1 && isboss && rank.equals("S"))
+                    if (world == 7 && map == 1 && isboss && isSRank(rank))
                         targetData.set(1, new JsonPrimitive(1));
-                    if (world == 7 && map == 2 && node == 7 && rank.equals("S"))
+                    if (world == 7 && map == 2 && node == 7 && isSRank(rank))
                         targetData.set(2, new JsonPrimitive(1));
-                    if (world == 7 && map == 2 && node == 15 && rank.equals("S"))
+                    if (world == 7 && map == 2 && node == 15 && isSRank(rank))
                         targetData.set(3, new JsonPrimitive(1));
                     updateTarget.add(key, targetData);
                     break;
@@ -905,15 +872,15 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         targetData.add(cond2);
                         targetData.add(cond3);
                         targetData.add(cond4);
-                        if (world == 1 && map == 3 && isboss && rank.equals("S"))
+                        if (world == 1 && map == 3 && isboss && isSRank(rank))
                             targetData.set(0, new JsonPrimitive(1));
-                        if (world == 1 && map == 4 && isboss && rank.equals("S"))
+                        if (world == 1 && map == 4 && isboss && isSRank(rank))
                             targetData.set(1, new JsonPrimitive(1));
-                        if (world == 2 && map == 1 && isboss && rank.equals("S"))
+                        if (world == 2 && map == 1 && isboss && isSRank(rank))
                             targetData.set(2, new JsonPrimitive(1));
-                        if (world == 2 && map == 2 && isboss && rank.equals("S"))
+                        if (world == 2 && map == 2 && isboss && isSRank(rank))
                             targetData.set(3, new JsonPrimitive(1));
-                        if (world == 2 && map == 3 && isboss && rank.equals("S"))
+                        if (world == 2 && map == 3 && isboss && isSRank(rank))
                             targetData.set(4, new JsonPrimitive(1));
                         updateTarget.add(key, targetData);
                     }
@@ -932,13 +899,13 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         targetData.add(cond1);
                         targetData.add(cond2);
                         targetData.add(cond3);
-                        if (world == 1 && map == 4 && isboss && rank.equals("S"))
+                        if (world == 1 && map == 4 && isboss && isSRank(rank))
                             targetData.set(0, new JsonPrimitive(1));
-                        if (world == 2 && map == 1 && isboss && rank.equals("S"))
+                        if (world == 2 && map == 1 && isboss && isSRank(rank))
                             targetData.set(1, new JsonPrimitive(1));
-                        if (world == 2 && map == 2 && isboss && rank.equals("S"))
+                        if (world == 2 && map == 2 && isboss && isSRank(rank))
                             targetData.set(2, new JsonPrimitive(1));
-                        if (world == 2 && map == 3 && isboss && rank.equals("S"))
+                        if (world == 2 && map == 3 && isboss && isSRank(rank))
                             targetData.set(3, new JsonPrimitive(1));
                         updateTarget.add(key, targetData);
                     }
@@ -954,11 +921,11 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         targetData.add(cond0);
                         targetData.add(cond1);
                         targetData.add(cond2);
-                        if (world == 5 && map == 1 && isboss && rank.equals("S"))
+                        if (world == 5 && map == 1 && isboss && isSRank(rank))
                             targetData.set(0, new JsonPrimitive(1));
-                        if (world == 5 && map == 3 && isboss && rank.equals("S"))
+                        if (world == 5 && map == 3 && isboss && isSRank(rank))
                             targetData.set(1, new JsonPrimitive(1));
-                        if (world == 5 && map == 4 && isboss && rank.equals("S"))
+                        if (world == 5 && map == 4 && isboss && isSRank(rank))
                             targetData.set(2, new JsonPrimitive(1));
                         updateTarget.add(key, targetData);
                     }
@@ -980,13 +947,13 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         targetData.add(cond1);
                         targetData.add(cond2);
                         targetData.add(cond3);
-                        if (world == 5 && map == 1 && isboss && rank.equals("S"))
+                        if (world == 5 && map == 1 && isboss && isSRank(rank))
                             targetData.set(0, new JsonPrimitive(1));
-                        if (world == 5 && map == 4 && isboss && rank.equals("S"))
+                        if (world == 5 && map == 4 && isboss && isSRank(rank))
                             targetData.set(1, new JsonPrimitive(1));
-                        if (world == 6 && map == 4 && isboss && rank.equals("S"))
+                        if (world == 6 && map == 4 && isboss && isSRank(rank))
                             targetData.set(2, new JsonPrimitive(1));
-                        if (world == 6 && map == 5 && isboss && rank.equals("S"))
+                        if (world == 6 && map == 5 && isboss && isSRank(rank))
                             targetData.set(3, new JsonPrimitive(1));
                         updateTarget.add(key, targetData);
                     }
@@ -1014,9 +981,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{entryKey});
             }
         }
-
         c.close();
-        return updateTarget;
     }
 
     public boolean checkApQuestActive() {
@@ -1030,9 +995,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         return result;
     }
 
-    public boolean check_quest_completed(KcaDBHelper helper) {
+    public boolean check_quest_completed() {
         SQLiteDatabase db = this.getReadableDatabase();
-        int count = 0;
         boolean result = false;
         Cursor c = db.rawQuery("SELECT * from "
                 .concat(qt_table_name)
@@ -1053,7 +1017,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 JsonArray cond = questTrackInfo.getAsJsonArray("cond");
                 int type = questTrackInfo.get("type").getAsInt();
                 for (int i = 0; i < cond.size(); i++) {
-                    if (cond_value[i] == null || cond_value[i].equals("")) continue;
+                    if (cond_value[i] == null || cond_value[i].isEmpty()) continue;
                     if(Integer.parseInt(cond_value[i]) >= Integer.parseInt(cond.get(i).getAsString())) {
                         if (!checkQuestValid(type, Integer.parseInt(key), time)) {
                             db.delete(qt_table_name, "KEY=?", new String[]{key});
@@ -1103,10 +1067,11 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             if (questTrackInfo != null) {
                 int type = questTrackInfo.get("type").getAsInt();
                 if (!checkQuestValid(type, Integer.parseInt(key), time)) {
-                    db.delete(qt_table_name, "KEY=?", new String[]{String.valueOf(key)});
+                    db.delete(qt_table_name, "KEY=?", new String[]{key});
                 }
             }
         }
+        c.close();
     }
 
     public JsonArray getQuestTrackerData() {
@@ -1124,7 +1089,6 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             int cond4 = c.getInt(c.getColumnIndexOrThrow("CND4"));
             int cond5 = c.getInt(c.getColumnIndexOrThrow("CND5"));
 
-            String time = c.getString(c.getColumnIndexOrThrow("TIME"));
             int[] cond_value = {cond0, cond1, cond2, cond3, cond4, cond5};
             JsonObject questItem = new JsonObject();
             questItem.addProperty("id", key);
@@ -1133,7 +1097,6 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             JsonObject questTrackInfo = KcaApiData.getQuestTrackInfo(key);
             if (questTrackInfo != null) {
                 JsonArray cond_info = questTrackInfo.getAsJsonArray("cond");
-                int type = questTrackInfo.get("type").getAsInt();
                 for (int i = 0; i < cond_info.size(); i++) {
                     if(cond_value[i] >= cond_info.get(i).getAsInt()) {
                         cond_value[i] = cond_info.get(i).getAsInt();
@@ -1160,7 +1123,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             Log.e("KCA-QT", KcaUtils.format("%s -> %s %s %s", key, active, cond0, time));
             count += 1;
         }
-        Log.e("KCA-QT", "Total: " + String.valueOf(count));
+        Log.e("KCA-QT", "Total: " + count);
         c.close();
     }
 }

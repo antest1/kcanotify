@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -10,8 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
@@ -23,6 +22,8 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Vibrator;
+
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import android.provider.Settings;
 import androidx.core.app.NotificationCompat;
@@ -43,12 +44,12 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
-import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -84,10 +85,8 @@ public class KcaService extends BaseService {
     public static final String SERVICE_CHANNEL_ID_OLD = "noti_service_channel";
     public static final String SERVICE_CHANNEL_NAME = "Kcanotify Service";
 
-    public static String currentLocale;
     public static boolean isInitState = false;
     public static boolean isFirstState;
-    public static boolean isPassiveMode = false;
     public static boolean restartFlag = false;
 
     public static boolean isServiceOn = false;
@@ -120,15 +119,11 @@ public class KcaService extends BaseService {
     MediaPlayer mediaPlayer;
     NotificationManager notifiManager;
 
-    public static boolean noti_vibr_on = true;
-    // int viewBitmapId, viewBitmapSmallId;
-    // Bitmap viewBitmap = null;
     Runnable timer;
     int notificationTimeCounter;
 
     private String notifyTitle = "";
     private String notifyContent = "";
-    private boolean notifyFirstTime = true;
     private NotificationCompat.Builder notifyBuilder;
 
     kcaServiceHandler handler;
@@ -140,21 +135,11 @@ public class KcaService extends BaseService {
     String kcaFirstDeckInfo;
     static String kca_version;
     String api_start2_data = null;
-    boolean api_start2_down_mode = false;
     boolean api_start2_init = false;
     Gson gson = new GsonBuilder().setLenient().create();
 
     public static boolean getServiceStatus() {
         return isServiceOn;
-    }
-
-    public Handler getNofiticationHandler() {
-        return nHandler;
-    }
-
-    private boolean checkKeyInPreferences(String key) {
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        return pref.contains(key);
     }
 
     private void createServiceChannel() {
@@ -289,27 +274,33 @@ public class KcaService extends BaseService {
                 KcaViewButtonService.setHandler(nHandler);
                 KcaAkashiRepairInfo.initAkashiTimer();
 
-                isPassiveMode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE)) == SNIFFER_PASSIVE;
-                if (isPassiveMode) {
+                if (sniffer_mode == SNIFFER_PASSIVE) {
                     receiver = new KcaReceiver();
                     IntentFilter filter = new IntentFilter();
                     filter.addAction(GOTO_BROADCAST_ACTION);
                     filter.addAction(BROADCAST_ACTION);
-                    registerReceiver(receiver, filter);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED);
+                    } else {
+                        registerReceiver(receiver, filter);
+                    }
                 }
 
-                notifyFirstTime = true;
                 notifyBuilder = createBuilder(this, getServiceChannelId());
                 notifyTitle = KcaUtils.format(getString(R.string.kca_init_title), getString(R.string.app_name));
                 notifyContent = getString(R.string.kca_init_content);
-                // String initSubContent = KcaUtils.format("%s %s", getString(R.string.app_name), getString(R.string.app_version));
+
                 kcaFirstDeckInfo = getString(R.string.kca_init_content);
                 initViewNotificationBuilder(notifyTitle, notifyContent);
+
+                KcaMoraleInfo.initMoraleValue(Integer.parseInt(
+                        getStringPreferences(getApplicationContext(), PREF_KCA_MORALE_MIN)));
 
                 Handler toForegroundHandler = new Handler(getMainLooper());
                 toForegroundHandler.removeCallbacksAndMessages(null);
                 toForegroundHandler.postDelayed(() ->
-                        startForeground(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build()), 24);
+                        startForeground(getNotificationId(NOTI_FRONT, 1),
+                                notifyBuilder.build()), 24);
 
                 if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_AUTOHIDE)) {
                     foregroundCheck = new KcaForegroundCheck(this);
@@ -389,28 +380,6 @@ public class KcaService extends BaseService {
         super.onDestroy();
     }
 
-    public boolean isPackageExist(String name) {
-        boolean isExist = false;
-
-        PackageManager pkgMgr = getPackageManager();
-        List<ResolveInfo> mApps;
-        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        mApps = pkgMgr.queryIntentActivities(mainIntent, 0);
-
-        try {
-            for (int i = 0; i < mApps.size(); i++) {
-                if (mApps.get(i).activityInfo.packageName.startsWith(name)) {
-                    isExist = true;
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            isExist = false;
-        }
-        return isExist;
-    }
-
     private void initViewNotificationBuilder(String title, String content) {
         Intent aIntent = new Intent(KcaService.this, MainActivity.class);
         PendingIntent pendingIntent;
@@ -461,10 +430,10 @@ public class KcaService extends BaseService {
                 if (isFirstState) notifyContent = KcaUtils.format("%s %s", getString(R.string.app_name), getString(R.string.app_version));
                 else notifyContent = notifyContent.concat(getString(R.string.kca_view_noexpedition));
             } else {
-                List<String> kcaExpStrList = new ArrayList<String>();
+                List<String> kcaExpStrList = new ArrayList<>();
                 for (int i = 1; i < 4; i++) {
                     String str = KcaExpedition2.getTimeInfoStr(i, viewType);
-                    if (str.length() > 0) {
+                    if (!str.isEmpty()) {
                         kcaExpStrList.add(str);
                     }
                 }
@@ -476,7 +445,7 @@ public class KcaService extends BaseService {
                     notifyContent = joinStr(kcaExpStrList, " / ");
                 }
             }
-            if (notifyContent.trim().length() == 0) {
+            if (notifyContent.trim().isEmpty()) {
                 notifyContent = notifyContent.concat(getString(R.string.kca_view_noexpedition));
             }
         } else {
@@ -484,7 +453,7 @@ public class KcaService extends BaseService {
         }
 
         String nodeString = "";
-        if (currentNodeInfo.length() > 0) {
+        if (!currentNodeInfo.isEmpty()) {
             nodeString = KcaUtils.format("[%s]", currentNodeInfo.replaceAll("[()]", "").replaceAll("\\s", "/"));
         }
 
@@ -599,7 +568,7 @@ public class KcaService extends BaseService {
         }
 
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             KcaService service = mService.get();
             if (service != null) {
                 service.handleServiceMessage(msg);
@@ -647,13 +616,13 @@ public class KcaService extends BaseService {
                 String api_response = jsonDataObj.get("response").getAsString();
                 String api_error = jsonDataObj.get("error").getAsString();
 
-                List<String> filtered_resquest_list = new ArrayList<String>();
+                List<String> filtered_resquest_list = new ArrayList<>();
                 try {
                     String[] requestData = api_request.split("&");
-                    for (int i = 0; i < requestData.length; i++) {
-                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                    for (String item : requestData) {
+                        String decodedData = KcaUtils.decodeUrlParam(item);
                         if (!decodedData.startsWith("api_token")) {
-                            filtered_resquest_list.add(requestData[i]);
+                            filtered_resquest_list.add(item);
                         }
                     }
                     api_request = joinStr(filtered_resquest_list, "&");
@@ -672,15 +641,11 @@ public class KcaService extends BaseService {
                 api_start2_init = false;
                 KcaFleetViewService.setReadyFlag(false);
 
-                if (!Settings.canDrawOverlays(getApplicationContext())) {
-                    // Can not draw overlays: pass
-                } else {
+                if (Settings.canDrawOverlays(getApplicationContext())) {
                     startService(new Intent(this, KcaViewButtonService.class));
                     startService(new Intent(this, KcaQuestViewService.class));
                     sendQuestCompletionInfo();
                 }
-
-                KcaMoraleInfo.initMoraleValue(Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCA_MORALE_MIN)));
                 return;
             }
 
@@ -729,7 +694,7 @@ public class KcaService extends BaseService {
                     dbHelper.putValue(DB_KEY_KDOCKDATA, requiredInfoApiData.getAsJsonArray("api_kdock").toString());
                     JsonArray slotitem_data = requiredInfoApiData.getAsJsonArray("api_slot_item");
                     int size2 = KcaApiData.putSlotItemDataToDB(slotitem_data);
-                    Log.e("KCA", "Total Items: " + String.valueOf(size2));
+                    Log.e("KCA", "Total Items: " + size2);
                     if (size2 > 0) restartFlag = false;
                 }
                 return;
@@ -762,10 +727,10 @@ public class KcaService extends BaseService {
             if (url.startsWith(API_REQ_MISSION_RESULT)) {
                 int deck_id = -1;
                 String[] requestData = request.split("&");
-                for (int i = 0; i < requestData.length; i++) {
-                    String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                for (String item : requestData) {
+                    String decodedData = KcaUtils.decodeUrlParam(item);
                     if (decodedData.startsWith("api_deck_id")) {
-                        deck_id = Integer.valueOf(decodedData.replace("api_deck_id=", "")) - 1;
+                        deck_id = Integer.parseInt(decodedData.replace("api_deck_id=", "")) - 1;
                         break;
                     }
                 }
@@ -861,16 +826,13 @@ public class KcaService extends BaseService {
                     }
                     KcaApiData.getPortData(reqPortApiData);
                     if (reqPortApiData.has("api_deck_port")) {
-                        dbHelper.putValue(DB_KEY_DECKPORT, reqPortApiData.getAsJsonArray("api_deck_port").toString());
+                        dbHelper.putValue(DB_KEY_DECKPORT,
+                                reqPortApiData.getAsJsonArray("api_deck_port").toString());
                     }
                     if (reqPortApiData.has("api_ship")) {
                         final String ship_data = reqPortApiData.get("api_ship").toString();
-                        Thread ship_data_thread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                dbHelper.putValue(DB_KEY_SHIPIFNO, ship_data);
-                            }
-                        });
+                        Thread ship_data_thread = new Thread(()
+                                -> dbHelper.putValue(DB_KEY_SHIPIFNO, ship_data));
                         ship_data_thread.start();
                     }
                     if (reqPortApiData.has("api_ndock")) {
@@ -935,16 +897,15 @@ public class KcaService extends BaseService {
                 KcaQuestViewService.setQuestMode(true);
                 int api_tab_id = -1;
                 String[] requestData = request.split("&");
-                for (int i = 0; i < requestData.length; i++) {
-                    String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                for (String item : requestData) {
+                    String decodedData = KcaUtils.decodeUrlParam(item);
                     if (decodedData.startsWith("api_tab_id")) {
-                        api_tab_id = Integer.valueOf(decodedData.replace("api_tab_id=", ""));
+                        api_tab_id = Integer.parseInt(decodedData.replace("api_tab_id=", ""));
                         break;
                     }
                 }
-                if (!Settings.canDrawOverlays(getApplicationContext())) {
-                    // Can not draw overlays: pass
-                } else if (jsonDataObj.has("api_data")) {
+                if (Settings.canDrawOverlays(getApplicationContext())
+                        && jsonDataObj.has("api_data")) {
                     JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                     KcaQuestViewService.setApiData(api_data);
                     startService(new Intent(getBaseContext(), KcaQuestViewService.class)
@@ -957,14 +918,14 @@ public class KcaService extends BaseService {
             if (url.startsWith(API_REQ_QUEST_CLEARITEMGET)) {
                 int quest_id = 0;
                 String[] requestData = request.split("&");
-                for (int i = 0; i < requestData.length; i++) {
-                    String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                for (String item : requestData) {
+                    String decodedData = KcaUtils.decodeUrlParam(item);
                     if (decodedData.startsWith("api_quest_id")) {
-                        quest_id = Integer.valueOf(decodedData.replace("api_quest_id=", ""));
+                        quest_id = Integer.parseInt(decodedData.replace("api_quest_id=", ""));
                         break;
                     }
                 }
-                Log.e("KCA", "clear " + String.valueOf(quest_id));
+                Log.e("KCA", "clear " + quest_id);
                 dbHelper.removeQuest(quest_id);
                 questTracker.removeQuestTrack(quest_id, true);
                 if (quest_id == 212 || quest_id == 218) questTracker.clearApDupFlag();
@@ -991,7 +952,7 @@ public class KcaService extends BaseService {
                     Log.e("KCA", "Port Handler Called");
                     if (jsonDataObj.has("api_data")) {
                         JsonObject reqPortApiData = jsonDataObj.getAsJsonObject("api_data");
-                        int size = KcaApiData.getPortData(reqPortApiData);
+                        KcaApiData.getPortData(reqPortApiData);
 
                         if (reqPortApiData.has("api_combined_flag")) {
                             int combined_flag = reqPortApiData.get("api_combined_flag").getAsInt();
@@ -1039,13 +1000,13 @@ public class KcaService extends BaseService {
                     String[] requestData = request.split("&");
                     int mapno = 0;
                     int rank = 0;
-                    for (int i = 0; i < requestData.length; i++) {
-                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                    for (String item : requestData) {
+                        String decodedData = KcaUtils.decodeUrlParam(item);
                         if (decodedData.startsWith("api_map_no")) {
-                            mapno = Integer.valueOf(decodedData.replace("api_map_no=", ""));
+                            mapno = Integer.parseInt(decodedData.replace("api_map_no=", ""));
                             break;
                         } else if (decodedData.startsWith("api_rank")) {
-                            rank = Integer.valueOf(decodedData.replace("api_rank=", ""));
+                            rank = Integer.parseInt(decodedData.replace("api_rank=", ""));
                             break;
                         }
                     }
@@ -1162,10 +1123,10 @@ public class KcaService extends BaseService {
 
                             int deck_id = -1;
                             String[] requestData = request.split("&");
-                            for (int i = 0; i < requestData.length; i++) {
-                                String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                            for (String item : requestData) {
+                                String decodedData = KcaUtils.decodeUrlParam(item);
                                 if (decodedData.startsWith("api_deck_id")) {
-                                    deck_id = Integer.valueOf(decodedData.replace("api_deck_id=", "")) - 1;
+                                    deck_id = Integer.parseInt(decodedData.replace("api_deck_id=", "")) - 1;
                                     break;
                                 }
                             }
@@ -1173,10 +1134,10 @@ public class KcaService extends BaseService {
                                 KcaBattle.currentFleet = deck_id;
                             }
 
+                            int checkvalue;
                             JsonObject api_data = new JsonObject();
                             JsonArray api_deck_data = new JsonArray();
                             JsonArray api_ship_data = new JsonArray();
-                            int checkvalue = 0;
 
                             if (deck_id == 0 && isCombined) {
                                 JsonObject first = portdeckdata.get(0).getAsJsonObject();
@@ -1210,8 +1171,7 @@ public class KcaService extends BaseService {
                                 checkvalue = Math.max(firstHeavyDamaged, secondHeavyDamaged);
                             } else {
                                 JsonObject fleet = portdeckdata.get(deck_id).getAsJsonObject();
-                                int fleetHeavyDamaged = deckInfoCalc.checkHeavyDamageExist(portdeckdata, deck_id);
-                                checkvalue = fleetHeavyDamaged;
+                                checkvalue = deckInfoCalc.checkHeavyDamageExist(portdeckdata, deck_id);
                                 api_deck_data.add(fleet);
                                 JsonArray firstShipInfo = fleet.getAsJsonArray("api_ship");
                                 for (JsonElement e : firstShipInfo) {
@@ -1288,9 +1248,9 @@ public class KcaService extends BaseService {
                     int ndock_id = -1;
                     String[] requestData = request.split("&");
                     for (String requestDatum : requestData) {
-                        String decodedData = URLDecoder.decode(requestDatum, "utf-8");
+                        String decodedData = KcaUtils.decodeUrlParam(requestDatum);
                         if (decodedData.startsWith("api_ndock_id")) {
-                            ndock_id = Integer.valueOf(decodedData.replace("api_ndock_id=", "")) - 1;
+                            ndock_id = Integer.parseInt(decodedData.replace("api_ndock_id=", "")) - 1;
                             break;
                         }
                     }
@@ -1305,12 +1265,12 @@ public class KcaService extends BaseService {
                     int ship_id = -1;
                     int highspeed = -1;
                     String[] requestData = request.split("&");
-                    for (int i = 0; i < requestData.length; i++) {
-                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                    for (String item : requestData) {
+                        String decodedData = KcaUtils.decodeUrlParam(item);
                         if (decodedData.startsWith("api_ship_id")) {
-                            ship_id = Integer.valueOf(decodedData.replace("api_ship_id=", ""));
+                            ship_id = Integer.parseInt(decodedData.replace("api_ship_id=", ""));
                         } else if (decodedData.startsWith("api_highspeed")) {
-                            highspeed = Integer.valueOf(decodedData.replace("api_highspeed=", ""));
+                            highspeed = Integer.parseInt(decodedData.replace("api_highspeed=", ""));
                         }
                     }
                     KcaApiData.updateShipMorale(ship_id);
@@ -1328,16 +1288,15 @@ public class KcaService extends BaseService {
                     int target_area_id = 0;
                     int target_base_id = 0;
                     String[] requestData = request.split("&");
-                    for (int i = 0; i < requestData.length; i++) {
-                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                    for (String item : requestData) {
+                        String decodedData = KcaUtils.decodeUrlParam(item);
                         if (decodedData.startsWith("api_area_id")) {
-                            target_area_id = Integer.valueOf(decodedData.replace("api_area_id=", ""));
+                            target_area_id = Integer.parseInt(decodedData.replace("api_area_id=", ""));
                         } else if (decodedData.startsWith("api_base_id")) {
-                            target_base_id = Integer.valueOf(decodedData.replace("api_base_id=", ""));
+                            target_base_id = Integer.parseInt(decodedData.replace("api_base_id=", ""));
                         }
                     }
 
-                    int new_distance = -1;
                     JsonObject distance_data = new JsonObject();
                     JsonArray api_plane_info = new JsonArray();
                     if (jsonDataObj.has("api_data")) {
@@ -1380,12 +1339,12 @@ public class KcaService extends BaseService {
                     int target_base_id = 0;
                     String new_name = "";
                     String[] requestData = request.split("&");
-                    for (int i = 0; i < requestData.length; i++) {
-                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                    for (String item : requestData) {
+                        String decodedData = KcaUtils.decodeUrlParam(item);
                         if (decodedData.startsWith("api_area_id")) {
-                            target_area_id = Integer.valueOf(decodedData.replace("api_area_id=", ""));
+                            target_area_id = Integer.parseInt(decodedData.replace("api_area_id=", ""));
                         } else if (decodedData.startsWith("api_base_id")) {
-                            target_base_id = Integer.valueOf(decodedData.replace("api_base_id=", ""));
+                            target_base_id = Integer.parseInt(decodedData.replace("api_base_id=", ""));
                         } else if (decodedData.startsWith("api_name")) {
                             new_name = decodedData.replace("api_name=", "");
                         }
@@ -1412,10 +1371,10 @@ public class KcaService extends BaseService {
                     String target_base_id = "";
                     String new_action_kind = "";
                     String[] requestData = request.split("&");
-                    for (int i = 0; i < requestData.length; i++) {
-                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                    for (String item : requestData) {
+                        String decodedData = KcaUtils.decodeUrlParam(item);
                         if (decodedData.startsWith("api_area_id")) {
-                            target_area_id = Integer.valueOf(decodedData.replace("api_area_id=", ""));
+                            target_area_id = Integer.parseInt(decodedData.replace("api_area_id=", ""));
                         } else if (decodedData.startsWith("api_base_id")) {
                             target_base_id = decodedData.replace("api_base_id=", "");
                         } else if (decodedData.startsWith("api_action_kind")) {
@@ -1448,12 +1407,12 @@ public class KcaService extends BaseService {
                     int target_area_id = 0;
                     int target_base_id = 0;
                     String[] requestData = request.split("&");
-                    for (int i = 0; i < requestData.length; i++) {
-                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                    for (String item : requestData) {
+                        String decodedData = KcaUtils.decodeUrlParam(item);
                         if (decodedData.startsWith("api_area_id")) {
-                            target_area_id = Integer.valueOf(decodedData.replace("api_area_id=", ""));
+                            target_area_id = Integer.parseInt(decodedData.replace("api_area_id=", ""));
                         } else if (decodedData.startsWith("api_base_id")) {
-                            target_base_id = Integer.valueOf(decodedData.replace("api_base_id=", ""));
+                            target_base_id = Integer.parseInt(decodedData.replace("api_base_id=", ""));
                         }
                     }
 
@@ -1510,19 +1469,19 @@ public class KcaService extends BaseService {
                         int[] materials = {0, 0, 0, 0};
                         JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
                         int flagship = deckInfoCalc.getKcShipList(portdeckdata, 0)[0];
-                        for (int i = 0; i < requestData.length; i++) {
-                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        for (String item : requestData) {
+                            String decodedData = KcaUtils.decodeUrlParam(item);
                             if (decodedData.startsWith("api_item1")) {
-                                materials[0] = Integer.valueOf(decodedData.replace("api_item1=", ""));
+                                materials[0] = Integer.parseInt(decodedData.replace("api_item1=", ""));
                             }
                             if (decodedData.startsWith("api_item2")) {
-                                materials[1] = Integer.valueOf(decodedData.replace("api_item2=", ""));
+                                materials[1] = Integer.parseInt(decodedData.replace("api_item2=", ""));
                             }
                             if (decodedData.startsWith("api_item3")) {
-                                materials[2] = Integer.valueOf(decodedData.replace("api_item3=", ""));
+                                materials[2] = Integer.parseInt(decodedData.replace("api_item3=", ""));
                             }
                             if (decodedData.startsWith("api_item4")) {
-                                materials[3] = Integer.valueOf(decodedData.replace("api_item4=", ""));
+                                materials[3] = Integer.parseInt(decodedData.replace("api_item4=", ""));
                             }
                         }
 
@@ -1553,7 +1512,7 @@ public class KcaService extends BaseService {
                             JsonObject shipData = KcaApiData.getKcShipDataById(flagship, "name");
                             String shipname = shipData.get("name").getAsString();
 
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
                             String timetext = dateFormat.format(new Date());
 
                             JsonObject equipdevdata = new JsonObject();
@@ -1563,8 +1522,8 @@ public class KcaService extends BaseService {
                             equipdevdata.add("items", new JsonArray());
 
                             for (int i = 0; i < devInfo.size(); i++) {
-                                String itemname = "";
-                                int itemtype = 0;
+                                String itemname;
+                                int itemtype;
                                 String itemcount = "";
 
                                 JsonObject dev_instance = devInfo.get(i).getAsJsonObject();
@@ -1597,8 +1556,8 @@ public class KcaService extends BaseService {
 
                     if (url.startsWith(API_REQ_KOUSYOU_DESTROYITEM)) {
                         String[] requestData = request.split("&");
-                        for (int i = 0; i < requestData.length; i++) {
-                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        for (String param : requestData) {
+                            String decodedData = KcaUtils.decodeUrlParam(param);
                             if (decodedData.startsWith("api_slotitem_ids")) {
                                 String itemlist = decodedData.replace("api_slotitem_ids=", "");
                                 String[] itemlist_array = itemlist.split(",");
@@ -1684,14 +1643,14 @@ public class KcaService extends BaseService {
 
                     if (url.equals(API_REQ_KOUSYOU_CREATESHIP)) {
                         String[] requestData = request.split("&");
-                        for (int i = 0; i < requestData.length; i++) {
-                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        for (String item : requestData) {
+                            String decodedData = KcaUtils.decodeUrlParam(item);
                             if (decodedData.startsWith("api_kdock_id=")) {
-                                checkKdockId = Integer.valueOf(decodedData.replace("api_kdock_id=", "")) - 1;
+                                checkKdockId = Integer.parseInt(decodedData.replace("api_kdock_id=", "")) - 1;
                             } else if (decodedData.startsWith("api_highspeed=")) {
-                                checkHighSpeed = Integer.valueOf(decodedData.replace("api_highspeed=", ""));
+                                checkHighSpeed = Integer.parseInt(decodedData.replace("api_highspeed=", ""));
                             } else if (decodedData.startsWith("api_large_flag=")) {
-                                checkLargeFlag = Integer.valueOf(decodedData.replace("api_large_flag=", ""));
+                                checkLargeFlag = Integer.parseInt(decodedData.replace("api_large_flag=", ""));
                             }
                         }
                         questTracker.updateIdCountTracker("606");
@@ -1702,10 +1661,10 @@ public class KcaService extends BaseService {
                     if (url.equals(API_REQ_KOUSYOU_CREATESHIP_SPEEDCHANGE)) {
                         int kdockid = -1;
                         String[] requestData = request.split("&");
-                        for (int i = 0; i < requestData.length; i++) {
-                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        for (String item : requestData) {
+                            String decodedData = KcaUtils.decodeUrlParam(item);
                             if (decodedData.startsWith("api_kdock_id=")) {
-                                kdockid = Integer.valueOf(decodedData.replace("api_kdock_id=", "")) - 1;
+                                kdockid = Integer.parseInt(decodedData.replace("api_kdock_id=", "")) - 1;
                                 break;
                             }
                         }
@@ -1773,8 +1732,8 @@ public class KcaService extends BaseService {
                         String targetShip = "";
                         int slotDestFlag = 0;
                         String[] requestData = request.split("&");
-                        for (int i = 0; i < requestData.length; i++) {
-                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        for (String item : requestData) {
+                            String decodedData = KcaUtils.decodeUrlParam(item);
                             if (decodedData.startsWith("api_ship_id")) {
                                 targetShip = decodedData.replace("api_ship_id=", "");
                             } else if (decodedData.startsWith("api_slot_dest_flag")) {
@@ -1789,8 +1748,8 @@ public class KcaService extends BaseService {
                             JsonObject deckData = portdeckdata.get(i).getAsJsonObject();
                             JsonArray deckShipData = deckData.get("api_ship").getAsJsonArray();
                             for (int j = 0; j < deckShipData.size(); j++) {
-                                for (int k = 0; k < targetShipList.length; k++) {
-                                    if (targetShipList[k].equals(String.valueOf(deckShipData.get(j).getAsInt()))) {
+                                for (String ship : targetShipList) {
+                                    if (ship.equals(String.valueOf(deckShipData.get(j).getAsInt()))) {
                                         deckShipData.set(j, new JsonPrimitive(-1));
                                         deckData.add("api_ship", deckShipData);
                                         portdeckdata.set(i, deckData);
@@ -1816,14 +1775,14 @@ public class KcaService extends BaseService {
                         int originalShipIdx = -1;
 
                         boolean in_change = false;
-                        for (int i = 0; i < requestData.length; i++) {
-                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        for (String item : requestData) {
+                            String decodedData = KcaUtils.decodeUrlParam(item);
                             if (decodedData.startsWith("api_ship_idx=")) {
-                                shipIdx = Integer.valueOf(decodedData.replace("api_ship_idx=", ""));
+                                shipIdx = Integer.parseInt(decodedData.replace("api_ship_idx=", ""));
                             } else if (decodedData.startsWith("api_ship_id=")) {
-                                shipId = Integer.valueOf(decodedData.replace("api_ship_id=", ""));
+                                shipId = Integer.parseInt(decodedData.replace("api_ship_id=", ""));
                             } else if (decodedData.startsWith("api_id=")) {
-                                deckIdx = Integer.valueOf(decodedData.replace("api_id=", "")) - 1;
+                                deckIdx = Integer.parseInt(decodedData.replace("api_id=", "")) - 1;
                             }
                         }
                         if (deckIdx != -1) {
@@ -1880,7 +1839,7 @@ public class KcaService extends BaseService {
 
                             boolean akashi_nochange_flag = true;
                             for (int i = 0; i < akashi_flagship_deck.size(); i++) {
-                                JsonObject item = akashi_flagship_deck.get(i).getAsJsonObject();;
+                                JsonObject item = akashi_flagship_deck.get(i).getAsJsonObject();
                                 int deckid = item.get("id").getAsInt();
                                 if (deckid == deckIdx || deckid == originalDeckIdx) {
                                     akashi_nochange_flag = false;
@@ -1899,10 +1858,10 @@ public class KcaService extends BaseService {
                     if (url.startsWith(API_REQ_HENSEI_PRESET) && isCurrentPortDeckDataReady()) {
                         String[] requestData = request.split("&");
                         int deckIdx = -1;
-                        for (int i = 0; i < requestData.length; i++) {
-                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        for (String item : requestData) {
+                            String decodedData = KcaUtils.decodeUrlParam(item);
                             if (decodedData.startsWith("api_deck_id=")) {
-                                deckIdx = Integer.valueOf(decodedData.replace("api_deck_id=", "")) - 1;
+                                deckIdx = Integer.parseInt(decodedData.replace("api_deck_id=", "")) - 1;
                                 break;
                             }
                         }
@@ -1937,17 +1896,17 @@ public class KcaService extends BaseService {
                             isCombined = (api_combined > 0);
                             KcaBattle.isCombined = api_combined > 0;
                         }
-                        Log.e("KCA", "Combined: " + String.valueOf(isCombined));
+                        Log.e("KCA", "Combined: " + isCombined);
                         updateFleetView();
                     }
 
                     if (url.startsWith(API_REQ_MEMBER_ITEMUSE_COND)) {
                         String[] requestData = request.split("&");
                         int deckIdx = -1;
-                        for (int i = 0; i < requestData.length; i++) {
-                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        for (String item : requestData) {
+                            String decodedData = KcaUtils.decodeUrlParam(item);
                             if (decodedData.startsWith("api_deck_id=")) {
-                                deckIdx = Integer.valueOf(decodedData.replace("api_deck_id=", "")) - 1;
+                                deckIdx = Integer.parseInt(decodedData.replace("api_deck_id=", "")) - 1;
                                 break;
                             }
                         }
@@ -1974,10 +1933,10 @@ public class KcaService extends BaseService {
                     if (url.startsWith(API_GET_MEMBER_SHIP3)) {
                         String[] requestData = request.split("&");
                         int userShipId = -1;
-                        for (int i = 0; i < requestData.length; i++) {
-                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        for (String item : requestData) {
+                            String decodedData = KcaUtils.decodeUrlParam(item);
                             if (decodedData.startsWith("api_shipid=")) {
-                                userShipId = Integer.valueOf(decodedData.replace("api_shipid=", ""));
+                                userShipId = Integer.parseInt(decodedData.replace("api_shipid=", ""));
                                 break;
                             }
                         }
@@ -1998,10 +1957,10 @@ public class KcaService extends BaseService {
                     if (url.startsWith(API_REQ_KAISOU_SLOT_EXCHANGE)) {
                         String[] requestData = request.split("&");
                         int userShipId = -1;
-                        for (int i = 0; i < requestData.length; i++) {
-                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        for (String item : requestData) {
+                            String decodedData = KcaUtils.decodeUrlParam(item);
                             if (decodedData.startsWith("api_id=")) {
-                                userShipId = Integer.valueOf(decodedData.replace("api_id=", ""));
+                                userShipId = Integer.parseInt(decodedData.replace("api_id=", ""));
                                 break;
                             }
                         }
@@ -2032,16 +1991,16 @@ public class KcaService extends BaseService {
                         int targetId = -1;
                         String itemIds = "";
                         int slotDestFlag = -1;
-                        for (int i = 0; i < requestData.length; i++) {
-                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        for (String item : requestData) {
+                            String decodedData = KcaUtils.decodeUrlParam(item);
                             if (decodedData.startsWith("api_id=")) {
-                                targetId = Integer.valueOf(decodedData.replace("api_id=", ""));
+                                targetId = Integer.parseInt(decodedData.replace("api_id=", ""));
                             }
                             if (decodedData.startsWith("api_id_items=")) {
                                 itemIds = decodedData.replace("api_id_items=", "");
                             }
                             if (decodedData.startsWith("api_slot_dest_flag=")) {
-                                slotDestFlag = Integer.valueOf(decodedData.replace("api_slot_dest_flag=", ""));
+                                slotDestFlag = Integer.parseInt(decodedData.replace("api_slot_dest_flag=", ""));
                             }
                         }
                         if (jsonDataObj.has("api_data")) {
@@ -2068,24 +2027,21 @@ public class KcaService extends BaseService {
                         String[] requestData = request.split("&");
                         int certainFlag = 0;
                         int itemId = 0;
-                        for (int i = 0; i < requestData.length; i++) {
-                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        for (String item : requestData) {
+                            String decodedData = KcaUtils.decodeUrlParam(item);
                             if (decodedData.startsWith("api_certain_flag=")) {
-                                certainFlag = Integer.valueOf(decodedData.replace("api_certain_flag=", ""));
+                                certainFlag = Integer.parseInt(decodedData.replace("api_certain_flag=", ""));
                             }
                             if (decodedData.startsWith("api_slot_id=")) {
-                                itemId = Integer.valueOf(decodedData.replace("api_slot_id=", ""));
+                                itemId = Integer.parseInt(decodedData.replace("api_slot_id=", ""));
                             }
                         }
 
                         JsonObject itemData = KcaApiData.getUserItemStatusById(itemId, "slotitem_id,level", "");
                         if (itemData != null) {
-                            int itemKcId = itemData.get("slotitem_id").getAsInt();
-                            int level = itemData.get("level").getAsInt();
-                            int api_remodel_flag = 0;
                             if (jsonDataObj.has("api_data")) {
                                 JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
-                                api_remodel_flag = api_data.get("api_remodel_flag").getAsInt();
+                                int api_remodel_flag = api_data.get("api_remodel_flag").getAsInt();
                                 if (certainFlag == 1 || api_remodel_flag == 1) {
                                     JsonObject api_after_slot = api_data.get("api_after_slot").getAsJsonObject();
                                     JsonArray api_slot_item = new JsonArray();
@@ -2096,7 +2052,7 @@ public class KcaService extends BaseService {
                                     }
                                 }
                                 JsonElement use_slot_id = api_data.get("api_use_slot_id");
-                                List<String> use_slot_id_list = new ArrayList<String>();
+                                List<String> use_slot_id_list = new ArrayList<>();
                                 if (use_slot_id != null) {
                                     for (JsonElement id : use_slot_id.getAsJsonArray()) {
                                         use_slot_id_list.add(id.getAsString());
@@ -2120,13 +2076,13 @@ public class KcaService extends BaseService {
         } catch (Exception e) {
             e.printStackTrace();
             String api_request = "";
-            List<String> filtered_resquest_list = new ArrayList<String>();
+            List<String> filtered_resquest_list = new ArrayList<>();
             try {
                 String[] requestData = request.split("&");
-                for (int i = 0; i < requestData.length; i++) {
-                    String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                for (String item : requestData) {
+                    String decodedData = KcaUtils.decodeUrlParam(item);
                     if (!decodedData.startsWith("api_token")) {
-                        filtered_resquest_list.add(requestData[i]);
+                        filtered_resquest_list.add(item);
                     }
                 }
                 api_request = joinStr(filtered_resquest_list, "&");
@@ -2151,7 +2107,7 @@ public class KcaService extends BaseService {
         }
 
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             KcaService service = mService.get();
             if (service != null) {
                 service.handleNotificationMessage(msg);
@@ -2159,12 +2115,13 @@ public class KcaService extends BaseService {
         }
     }
 
+    @SuppressLint({"RestrictedApi", "DiscouragedApi"})
     public void handleNotificationMessage(Message msg) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String url = msg.getData().getString("url");
         String data = msg.getData().getString("data");
 
-        if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url.length() == 0) {
+        if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url == null || url.isEmpty()) {
             Log.e("KCA", "url: " + url);
             return;
         }
@@ -2176,7 +2133,7 @@ public class KcaService extends BaseService {
             }
 
             if (url.startsWith(KCA_API_DATA_LOADED)) {
-                if (jsonDataObj.has("ship")) {
+                if (jsonDataObj != null && jsonDataObj.has("ship")) {
                     Log.e("KCA", KcaUtils.format("Ship: %d", jsonDataObj.get("ship").getAsInt()));
                     Log.e("KCA", KcaUtils.format("Item: %d", jsonDataObj.get("item").getAsInt()));
                     restartFlag = false;
@@ -2260,56 +2217,52 @@ public class KcaService extends BaseService {
                 updateNotification(false);
             }
 
-            if (url.startsWith(KCA_API_NOTI_EXP_FIN)) {
-                // Currently Nothing
-            }
-
-            if (url.startsWith(KCA_API_NOTI_DOCK_FIN)) {
-                // Currently Nothing
-            }
+            // if (url.startsWith(KCA_API_NOTI_EXP_FIN)) { } // Currently Nothing
+            // if (url.startsWith(KCA_API_NOTI_DOCK_FIN)) { } // Currently Nothing
 
             if (url.startsWith(KCA_API_NOTI_BATTLE_INFO)) {
-                // jsonDataObj = dbHelper.getJsonObjectValue(DB_KEY_BATTLEINFO);
-                String api_url = jsonDataObj.get("api_url").getAsString();
-                JsonObject battleInfoData = dbHelper.getJsonObjectValue(DB_KEY_BATTLEINFO);
-                if (battleInfoData.has("is_result")) {
-                    JsonArray deck_data = battleInfoData.getAsJsonObject("deck_port").getAsJsonArray("api_deck_data");
-                    if (battleInfoData.has("api_f_afterhps")) {
-                        JsonObject main_fleet = deck_data.get(0).getAsJsonObject();
-                        JsonArray api_ship = main_fleet.getAsJsonArray("api_ship");
-                        JsonArray api_f_afterhps = battleInfoData.getAsJsonArray("api_f_afterhps");
-                        for (int i = 0; i < api_ship.size(); i++) {
-                            int ship_id = api_ship.get(i).getAsInt();
-                            if (ship_id != -1) {
-                                int now_hp = api_f_afterhps.get(i).getAsInt();
-                                KcaApiData.updateShipHpOnBattle(ship_id, now_hp);
+                if (jsonDataObj != null) {
+                    String api_url = jsonDataObj.get("api_url").getAsString();
+                    JsonObject battleInfoData = dbHelper.getJsonObjectValue(DB_KEY_BATTLEINFO);
+                    if (battleInfoData.has("is_result")) {
+                        JsonArray deck_data = battleInfoData.getAsJsonObject("deck_port").getAsJsonArray("api_deck_data");
+                        if (battleInfoData.has("api_f_afterhps")) {
+                            JsonObject main_fleet = deck_data.get(0).getAsJsonObject();
+                            JsonArray api_ship = main_fleet.getAsJsonArray("api_ship");
+                            JsonArray api_f_afterhps = battleInfoData.getAsJsonArray("api_f_afterhps");
+                            for (int i = 0; i < api_ship.size(); i++) {
+                                int ship_id = api_ship.get(i).getAsInt();
+                                if (ship_id != -1) {
+                                    int now_hp = api_f_afterhps.get(i).getAsInt();
+                                    KcaApiData.updateShipHpOnBattle(ship_id, now_hp);
+                                }
                             }
                         }
-                    }
 
-                    if (battleInfoData.has("api_f_afterhps_combined") &&
-                        battleInfoData.get("api_f_afterhps_combined") != null) {
-                        JsonObject combined_fleet = deck_data.get(1).getAsJsonObject();
-                        JsonArray api_ship = combined_fleet.getAsJsonArray("api_ship");
-                        JsonArray api_f_afterhps_combined = battleInfoData.getAsJsonArray("api_f_afterhps_combined");
-                        for (int i = 0; i < api_ship.size(); i++) {
-                            int ship_id = api_ship.get(i).getAsInt();
-                            if (ship_id != -1) {
-                                int now_hp = api_f_afterhps_combined.get(i).getAsInt();
-                                KcaApiData.updateShipHpOnBattle(ship_id, now_hp);
+                        if (battleInfoData.has("api_f_afterhps_combined") &&
+                                battleInfoData.get("api_f_afterhps_combined") != null) {
+                            JsonObject combined_fleet = deck_data.get(1).getAsJsonObject();
+                            JsonArray api_ship = combined_fleet.getAsJsonArray("api_ship");
+                            JsonArray api_f_afterhps_combined = battleInfoData.getAsJsonArray("api_f_afterhps_combined");
+                            for (int i = 0; i < api_ship.size(); i++) {
+                                int ship_id = api_ship.get(i).getAsInt();
+                                if (ship_id != -1) {
+                                    int now_hp = api_f_afterhps_combined.get(i).getAsInt();
+                                    KcaApiData.updateShipHpOnBattle(ship_id, now_hp);
+                                }
                             }
                         }
-                    }
-                    updateFleetView();
+                        updateFleetView();
 
-                    if (api_url.startsWith(API_REQ_SORTIE_BATTLE_RESULT) || api_url.startsWith(API_REQ_COMBINED_BATTLERESULT)) {
-                        JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
-                        questTracker.updateBattleTracker(questTrackData);
-                        updateQuestView();
-                    } else if (api_url.startsWith(API_REQ_PRACTICE_BATTLE_RESULT)) {
-                        JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
-                        questTracker.updateQuestTracker(questTrackData);
-                        updateQuestView();
+                        if (api_url.startsWith(API_REQ_SORTIE_BATTLE_RESULT) || api_url.startsWith(API_REQ_COMBINED_BATTLERESULT)) {
+                            JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
+                            questTracker.updateBattleTracker(questTrackData);
+                            updateQuestView();
+                        } else if (api_url.startsWith(API_REQ_PRACTICE_BATTLE_RESULT)) {
+                            JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
+                            questTracker.updateQuestTracker(questTrackData);
+                            updateQuestView();
+                        }
                     }
                 }
                 Intent intent = new Intent(KCA_MSG_BATTLE_INFO);
@@ -2318,7 +2271,7 @@ public class KcaService extends BaseService {
 
             if (url.startsWith(KCA_API_NOTI_BATTLE_NODE)) {
                 // Reference: https://github.com/andanteyk/ElectronicObserver/blob/1052a7b177a62a5838b23387ff35283618f688dd/ElectronicObserver/Other/Information/apilist.txt
-                if (jsonDataObj.has("api_maparea_id")) {
+                if (jsonDataObj != null && jsonDataObj.has("api_maparea_id")) {
                     JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
                     questTracker.updateNodeTracker(questTrackData);
                 }
@@ -2328,57 +2281,61 @@ public class KcaService extends BaseService {
             }
 
             if (url.startsWith(KCA_API_NOTI_BATTLE_DROPINFO)) {
-                int world = jsonDataObj.get("world").getAsInt();
-                int map = jsonDataObj.get("map").getAsInt();
-                int node = jsonDataObj.get("node").getAsInt();
-                String rank = jsonDataObj.get("rank").getAsString();
-                int maprank = jsonDataObj.get("maprank").getAsInt();
-                JsonObject enemy = jsonDataObj.getAsJsonObject("enemy");
-                boolean isboss = jsonDataObj.get("isboss").getAsBoolean();
-                String quest_name = jsonDataObj.get("quest_name").getAsString();
-                String enemy_name = jsonDataObj.get("enemy_name").getAsString();
-                int result = jsonDataObj.get("result").getAsInt();
+                if (jsonDataObj != null) {
+                    int world = jsonDataObj.get("world").getAsInt();
+                    int map = jsonDataObj.get("map").getAsInt();
+                    int node = jsonDataObj.get("node").getAsInt();
+                    String rank = jsonDataObj.get("rank").getAsString();
+                    int maprank = jsonDataObj.get("maprank").getAsInt();
+                    JsonObject enemy = jsonDataObj.getAsJsonObject("enemy");
+                    boolean isboss = jsonDataObj.get("isboss").getAsBoolean();
+                    String quest_name = jsonDataObj.get("quest_name").getAsString();
+                    String enemy_name = jsonDataObj.get("enemy_name").getAsString();
+                    int result = jsonDataObj.get("result").getAsInt();
 
-                if (isPoiDBEnabled() && poiApiClient != null) {
-                    poiApiClient.sendShipDropData(result, world * 10 + map, quest_name,
-                            node, enemy_name, rank, isboss, getAdmiralLevel(), maprank, enemy);
-                }
-                recordDropLog(jsonDataObj, !KcaApiData.checkUserPortEnough());
-                if (result > 0) {
-                    KcaApiData.addShipCountInBattle();
-                    KcaApiData.addItemCountInBattle(result);
+                    if (isPoiDBEnabled() && poiApiClient != null) {
+                        poiApiClient.sendShipDropData(result, world * 10 + map, quest_name,
+                                node, enemy_name, rank, isboss, getAdmiralLevel(), maprank, enemy);
+                    }
+                    recordDropLog(jsonDataObj, !KcaApiData.checkUserPortEnough());
+                    if (result > 0) {
+                        KcaApiData.addShipCountInBattle();
+                        KcaApiData.addItemCountInBattle(result);
+                    }
                 }
             }
 
             if (url.startsWith(KCA_API_NOTI_HEAVY_DMG)) {
-                heavyDamagedMode = jsonDataObj.get("data").getAsInt();
-                if (heavyDamagedMode != HD_NONE) {
-                    if (isHDVibrateEnabled()) {
-                        String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-                        if (soundKind.equals(NOTI_SOUND_KIND_NORMAL) || soundKind.equals(NOTI_SOUND_KIND_MIXED)) {
-                            if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                                Uri notificationUri = KcaUtils.getUriFromContent(
-                                        Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
-                                Log.e("KCA", getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
-                                KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
+                if (jsonDataObj != null) {
+                    heavyDamagedMode = jsonDataObj.get("data").getAsInt();
+                    if (heavyDamagedMode != HD_NONE) {
+                        if (isHDVibrateEnabled()) {
+                            String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
+                            if (soundKind.equals(NOTI_SOUND_KIND_NORMAL) || soundKind.equals(NOTI_SOUND_KIND_MIXED)) {
+                                if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                                    Uri notificationUri = KcaUtils.getUriFromContent(
+                                            Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
+                                    Log.e("KCA", getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
+                                    KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
+                                }
                             }
+                            doVibrate(vibrator, 1500);
                         }
-                        doVibrate(vibrator, 1500);
                     }
-                }
 
-                if (heavyDamagedMode == HD_DANGER) {
-                    showCustomToast(getString(R.string.heavy_damaged), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
-                    Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
-                    intent.putExtra(KCA_MSG_DATA, "1");
-                    broadcaster.sendBroadcast(intent);
-                } else {
-                    if (heavyDamagedMode == HD_DAMECON) {
-                        showCustomToast(getString(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
+                    if (heavyDamagedMode == HD_DANGER) {
+                        showCustomToast(getString(R.string.heavy_damaged), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
+                        Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
+                        intent.putExtra(KCA_MSG_DATA, "1");
+                        broadcaster.sendBroadcast(intent);
+                    } else {
+                        if (heavyDamagedMode == HD_DAMECON) {
+                            showCustomToast(getString(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
+                        }
+                        Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
+                        intent.putExtra(KCA_MSG_DATA, "0");
+                        broadcaster.sendBroadcast(intent);
                     }
-                    Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
-                    intent.putExtra(KCA_MSG_DATA, "0");
-                    broadcaster.sendBroadcast(intent);
                 }
             }
 
@@ -2407,12 +2364,14 @@ public class KcaService extends BaseService {
             }
 
             if (url.startsWith(KCA_API_PROCESS_BATTLE_FAILED)) {
-                String api_data = jsonDataObj.get("api_data").getAsString();
-                String api_url = jsonDataObj.get("api_url").getAsString();
-                String api_node = jsonDataObj.get("api_node").getAsString();
-                String api_error = jsonDataObj.get("api_error").getAsString();
-                showCustomToast(getString(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
-                dbHelper.recordErrorLog(ERROR_TYPE_BATTLE, api_url, api_node, api_data, api_error);
+                if (jsonDataObj != null) {
+                    String api_data = jsonDataObj.get("api_data").getAsString();
+                    String api_url = jsonDataObj.get("api_url").getAsString();
+                    String api_node = jsonDataObj.get("api_node").getAsString();
+                    String api_error = jsonDataObj.get("api_error").getAsString();
+                    showCustomToast(getString(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+                    dbHelper.recordErrorLog(ERROR_TYPE_BATTLE, api_url, api_node, api_data, api_error);
+                }
             }
 
             sendQuestCompletionInfo();
@@ -2427,7 +2386,7 @@ public class KcaService extends BaseService {
     }
 
     private void sendQuestCompletionInfo() {
-        boolean quest_completed_exist = questTracker.check_quest_completed(dbHelper);
+        boolean quest_completed_exist = questTracker.check_quest_completed();
         Intent intent = new Intent(KCA_MSG_QUEST_COMPLETE);
         String response = "0";
         if (quest_completed_exist) response = "1";
@@ -2435,12 +2394,8 @@ public class KcaService extends BaseService {
         broadcaster.sendBroadcast(intent);
     }
 
-    private int getSeekCn() {
-        return Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));
-    }
-
     private int getExpeditionType() {
-        return Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_EXP_TYPE));
+        return Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCA_EXP_TYPE));
     }
 
     private boolean isPoiDBEnabled() {
@@ -2484,26 +2439,6 @@ public class KcaService extends BaseService {
         return getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_V_NS);
     }
 
-    private String getSeekType() {
-        int cn = Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));
-        String seekType = "";
-        switch (cn) {
-            case 1:
-                seekType = getString(R.string.seek_type_1);
-                break;
-            case 3:
-                seekType = getString(R.string.seek_type_3);
-                break;
-            case 4:
-                seekType = getString(R.string.seek_type_4);
-                break;
-            default:
-                seekType = getString(R.string.seek_type_0);
-                break;
-        }
-        return seekType;
-    }
-
     private void processExpeditionInfo() {
         processExpeditionInfo(false);
     }
@@ -2512,13 +2447,11 @@ public class KcaService extends BaseService {
         JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         if (data == null) return;
         //Log.e("KCA", "processExpeditionInfo Called");
-        int deck_id, mission_no;
+        int mission_no;
         long arrive_time;
         String deck_name;
         for (int i = 1; i < data.size(); i++) {
-            int idx = i - 1; // 1=>0, 2=>1, 3=>2 (0: Fleet #1)
             JsonObject deck = (JsonObject) data.get(i);
-            deck_id = deck.get("api_id").getAsInt();
             deck_name = deck.get("api_name").getAsString();
             JsonArray apiMission = (JsonArray) deck.get("api_mission");
             if (apiMission.get(0).getAsInt() == 1) {
@@ -2559,8 +2492,7 @@ public class KcaService extends BaseService {
         int canceled_mission_no = canceled_info.get(1).getAsInt();
         long arrive_time = canceled_info.get(2).getAsLong();
         int idx = KcaExpedition2.getIdxByMissionNo(canceled_mission_no);
-        if (idx == -1) return;
-        else {
+        if (idx != -1) {
             KcaExpedition2.cancel(idx, arrive_time);
             Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
             String kantai_name = KcaExpedition2.getDeckName(idx);
