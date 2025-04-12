@@ -1420,7 +1420,8 @@ public class KcaBattleViewService extends BaseService {
                 layoutParams.y = screenPaddingTop + screenHeight;
                 setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
 
-                battleViewLayout.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+                battleViewLayout.addOnLayoutChangeListener(
+                        (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
                     if (bottom - top == oldBottom - oldTop) return;
                     fleetViewHeight = bottom - top;
                     updateScreenSize();
@@ -1439,11 +1440,11 @@ public class KcaBattleViewService extends BaseService {
                         if (api_data != null && api_data.has("api_heavy_damaged")) {
                             int value = api_data.get("api_heavy_damaged").getAsInt();
                             if (value == HD_DANGER) {
-                                battleViewLayout.findViewById(R.id.battleviewpanel)
-                                        .setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getApplicationContext(), R.color.colorHeavyDmgStateTransparentPanel)));
+                                battleViewLayout.setBackgroundTintList(ColorStateList.valueOf(
+                                        ContextCompat.getColor(getApplicationContext(),
+                                                R.color.colorHeavyDmgStatePanel)));
                             } else {
-                                battleViewLayout.findViewById(R.id.battleviewpanel)
-                                        .setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryTransparentDark)));
+                                battleViewLayout.setBackgroundTintList(null);
                             }
                         }
                         int setViewResult = setView();
