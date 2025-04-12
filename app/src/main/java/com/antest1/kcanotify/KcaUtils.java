@@ -72,10 +72,13 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
+import java.net.URLDecoder;
 import java.net.UnknownHostException;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -176,6 +179,14 @@ public class KcaUtils {
             editor.putString(key, value.toString());
         }
         editor.commit();
+    }
+
+    public static String decodeUrlParam(String encoded) throws UnsupportedEncodingException {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return URLDecoder.decode(encoded, StandardCharsets.UTF_8);
+        } else {
+            return URLDecoder.decode(encoded, "utf-8");
+        }
     }
 
     public static String getUpdateServer(Context ctx) {
