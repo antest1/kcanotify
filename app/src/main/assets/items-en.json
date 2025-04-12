@@ -551,6 +551,10 @@
     "九九式練爆二二型改(夜間装備実験機)": "Type 99 Training Bomber Model 22 Kai (Experimental Night Equipment Aircraft)",
     "10cm連装高角砲改": "10cm Twin High-angle Gun Mount Kai",
     "九七式艦攻改(北東海軍航空隊)": "Type 97 Torpedo Bomber Kai (Hokutou Naval Aviation)",
+    "18cm/57 三連装主砲": "18cm/57 Triple Main Gun Mount",
+    "10cm/56 単装高角砲(集中配備)": "10cm/56 Single High-angle Gun Mount (Concentrated Deployment)",
+    "零式艦戦62型改(夜間爆戦)": "Type 0 Fighter Model 62 Kai (Night Fighter-bomber)",
+    "零式艦戦62型改(熟練/夜間爆戦)": "Type 0 Fighter Model 62 Kai (Skilled / Night Fighter-bomber)",
     "12.5inch連装副砲": "12.5inch Twin Secondary Gun Mount",
     "12.7mm機銃": "12.7mm Machine Gun",
     "14inch連装砲": "14inch Twin Gun Mount",
@@ -697,5 +701,7 @@
     "15.2cm深海三連装砲": "15.2cm Abyssal Triple Gun Mount",
     "深海野牛艦戦 Mk.II": "Abyssal Buffalo Fighter Mk.II",
     "深海不屈艦爆 Mk.II": "Abyssal Dauntless Bomber Mk.II",
-    "深海打撃艦攻 Mk.II": "Abyssal Devastator Torpedo Bomber Mk.II"
+    "深海打撃艦攻 Mk.II": "Abyssal Devastator Torpedo Bomber Mk.II",
+    "深海5inch連装砲 Mk.30+GFCS": "Abyssal 5inch Twin Gun Mount Mk.30 + GFCS",
+    "深海18cm三連装砲+深海SG": "Abyssal 18cm Triple Gun Mount + Abyssal SG"
 }
