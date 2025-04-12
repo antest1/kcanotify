@@ -2386,7 +2386,7 @@ public class KcaService extends BaseService {
     }
 
     private void sendQuestCompletionInfo() {
-        boolean quest_completed_exist = questTracker.check_quest_completed(dbHelper);
+        boolean quest_completed_exist = questTracker.check_quest_completed();
         Intent intent = new Intent(KCA_MSG_QUEST_COMPLETE);
         String response = "0";
         if (quest_completed_exist) response = "1";
