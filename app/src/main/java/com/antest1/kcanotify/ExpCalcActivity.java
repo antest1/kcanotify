@@ -47,7 +47,7 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 
 
 public class ExpCalcActivity extends BaseActivity {
-    public static final int LEVEL_MAX = 180;
+    public static final int LEVEL_MAX = 185;
     private static final int RANK_S = 0;
     private static final int RANK_A = 1;
     private static final int RANK_B = 2;
