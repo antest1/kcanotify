@@ -28,9 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
             android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
             android:layout_marginBottom="2dp"
             android:background="@color/colorPanelBack"
             android:orientation="vertical">
@@ -47,7 +45,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
                     android:layout_weight="0"
                     android:padding="4dp"
                     android:text="@string/droplog_label_date"
@@ -88,11 +85,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:layout_marginLeft="4dp"
                     android:layout_weight="0"
                     android:checked="true"
+                    android:maxLines="1"
                     android:scaleX="0.75"
                     android:scaleY="0.75"
+                    android:singleLine="true"
                     android:text="@string/droplog_sort_desc"
                     android:textSize="20dp"
                     android:translationX="-5dp" />
@@ -111,7 +109,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
                     android:layout_weight="0"
                     android:gravity="center_vertical"
                     android:padding="4dp"
@@ -309,7 +306,6 @@
             android:layout_marginLeft="4dp"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
-            android:layout_weight="0"
             android:orientation="horizontal">
 
             <TextView
@@ -317,17 +313,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textAlignment="textEnd"
-                android:textSize="14dp" />
+                android:gravity="end"
+                android:textSize="16dp" />
 
             <TextView
                 android:id="@+id/textView7"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:textColor="@color/grey"
-                android:textSize="12dp" />
+                android:textColor="@color/grey" />
 
             <ImageView
                 android:id="@+id/droplog_showhide"
@@ -351,56 +346,85 @@
 
             <TextView
                 android:id="@+id/droplog_item_label_time"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="5"
                 android:maxLines="1"
-                android:padding="4dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
                 android:text="@string/droplog_item_label_time"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="12dp" />
+                android:textSize="12sp"
+                app:autoSizeMaxTextSize="12sp"
+                app:autoSizeMinTextSize="7sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
 
             <TextView
                 android:id="@+id/droplog_item_label_area"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:padding="4dp"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="3"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
                 android:text="@string/droplog_item_label_area"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="12dp" />
+                android:textSize="12sp"
+                app:autoSizeMaxTextSize="12sp"
+                app:autoSizeMinTextSize="7sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
 
             <TextView
                 android:id="@+id/droplog_item_label_isboss"
-                android:layout_width="24dp"
-                android:layout_height="wrap_content"
-                android:padding="4dp"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="1"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
                 android:text="@string/droplog_item_label_isboss"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="12dp" />
+                android:textSize="12sp"
+                app:autoSizeMaxTextSize="12sp"
+                app:autoSizeMinTextSize="7sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
 
             <TextView
                 android:id="@+id/droplog_item_label_rank"
-                android:layout_width="24dp"
-                android:layout_height="wrap_content"
-                android:padding="4dp"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="1"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
                 android:text="@string/droplog_item_label_rank"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="12dp" />
+                android:textSize="12sp"
+                app:autoSizeMaxTextSize="12sp"
+                app:autoSizeMinTextSize="7sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
 
             <TextView
                 android:id="@+id/droplog_item_label_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="6"
                 android:maxLines="1"
-                android:padding="4dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
                 android:text="@string/droplog_item_label_name"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="12dp" />
+                android:textSize="12sp"
+                app:autoSizeMaxTextSize="12sp"
+                app:autoSizeMinTextSize="7sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
 
         </LinearLayout>
 
