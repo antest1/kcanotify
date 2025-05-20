@@ -2128,6 +2128,13 @@
         "rewards": "¶First choice: Either three New Model Gun Mount Improvement Materials OR a 25mm Twin Autocannon Mount ★9 OR an Action Report ¶Second choice: Either two Type 94 Anti-Aircraft Fire Directors OR 4 New Model Armament Materials OR a 10cm Twin High-angle Gun Mount Kai ★8",
         "resources": [[1943, 2025, 0, 0], [0, 0, 0, 0]]
     },
+    "1029": {
+        "code": "B209",
+        "name": "DesDiv32 \"Hamanami Kai Ni\" Set Sail! Break Through the Enemy Line!",
+        "desc": "Assemble a fleet containing Hamanami Kai Ni as flagship, any 2 of: \"Tamanami, Suzunami, Fujinami, Hayanami, or Asashimo\"; and up to 3 XX, then S rank the boss nodes of 2-2, 2-3, and 2-4, and reach node N on 1-6.",
+        "rewards": "¶First choice: Either 17 Development Materials OR two New Model Gun Mount Improvement Materials OR 5 Screws ¶Second choice: Either two 25mm Triple Autocannon Mount ★9 OR a Type 13 Air Radar Kai (Late Model) ★8 OR a 12.7cm Twin Gun Mount Model D Kai 2 ★7",
+        "resources": [[1944, 1111, 2025, 512], [0, 0, 0, 0]]
+    },
     "201": {
         "code": "Bd1",
         "name": "Daily Victory",
@@ -4546,46 +4553,84 @@
         "rewards": "¶First choice: Either 4 7.7mm Machine Guns OR three 25mm Single Autocannon Mounts OR a Mamiya ¶Second choice: Either 4 Screws OR 4000 Fuels OR two Irako",
         "resources": [[320, 320, 320, 320], [0, 0, 0, 0]]
     },
-    "234": {
-        "code": "L2502B1",
-        "name": "[Valentine] Valentine's Day 2025, First Operation",
-        "desc": "Sortie any 3 of Ooi, Kuma, Kashima, Kamoi, Kamikaze, Hamakaze, Takanami, Suzunami, Fujinami, Hayanami and Hamanami, and up to 3 additional ships to [W1-3], [W1-4], [W2-1] and [W2-2]. A-Rank+ each boss node.",
-        "rewards": "¶First choice: Either 6 Development Materials OR 4 Buckets OR a Furniture Fairy ¶Second choice: Either a Mamiya OR a +3 Equipment Slots",
-        "resources": [[2025, 0, 0, 214], [0, 0, 0, 0]]
+    "971": {
+        "code": "L2504B1",
+        "name": "[Kantai 12th Anniversary Quest] 12th Anniversary Fleet, Sortie!",
+        "desc": "Sortie a CA/AV as flagship, a CA/AV, a CL, a DD and up to 2 additional ships to [W1-1], [W1-2], [W1-3], [W1-4] and [W1-5]. A-Rank+ each boss node.",
+        "memo": "※CAV cannot fulfill CA requirements.",
+        "rewards": "¶First choice: Either 12 Development Materials OR a Medal ¶Second choice: Either three Irako OR 4 Screws OR 12 Buckets",
+        "resources": [[600, 600, 120, 120], [0, 0, 0, 0]]
     },
-    "238": {
-        "code": "L2502B2",
-        "name": "[Valentine] Valentine's Day 2025, Second Operation",
-        "desc": "Sortie any 3 of Ooyodo, Furutaka, Jingei, I-201, I-203, C. Cappellini, Washington, South Dakota and Kinugasa Kai Ni, and up to 3 additional ships to [W2-3], [W2-4], [W3-1] and [W4-2]. A-Rank+ each boss node.",
-        "rewards": "¶First choice: Either two Mamiyas OR a +5 Equipment Slots ¶Second choice: Either two Medals OR a Reinforcement Expansion OR an Action Report",
-        "resources": [[0, 0, 214, 2025], [0, 0, 0, 0]]
+    "972": {
+        "code": "L2504B2",
+        "name": "[Kantai 12th Anniversary Quest] Second Carrier Division, Here We Are! ",
+        "desc": "Sortie Hiryuu and Souryuu as flagship and second ship, and up to 4 additional ships to [W2-2], [W2-3], [W2-4], [W5-2] and [W5-4]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either a Remodel Blueprint OR 12 Screws OR an Action Report ¶Second choice: Either three Medals OR a Prototype Flight Deck Catapult OR three Latest Overseas Warship Technologys",
+        "resources": [[0, 2025, 423, 0], [0, 0, 0, 0]]
     },
-    "1026": {
-        "code": "L2502B3",
-        "name": "[Time-limited] 1st Torpedo Squadron, Prepare for Battle! Weigh Anchor!",
-        "desc": "Sortie any 4 of Abukuma, Kasumi, Shiranui, Usugumo, Akebono, Ushio, Hatsushimo, Hatsuharu and Wakaba, and up to 2 additional ships to [W1-2], [W1-3] and [W1-4]. S-Rank each boss node twice.",
-        "rewards": "¶First choice: Either 8 Development Materials OR a Type 22 Surface Radar Kai 4 OR three Screws ¶Second choice: Either a Medal OR a Northern Camouflage (+Northern Equipment) ★5 OR two Irako",
-        "resources": [[350, 350, 350, 350], [0, 0, 0, 0]]
-    },
-    "1027": {
-        "code": "L2502B4",
-        "name": "[Time-limited] 5th Fleet, Prepare for Emergency Deployment!",
-        "desc": "Sortie any 5 of Ashigara, Nachi, Tama, Kiso, Abukuma, Kasumi, Shiranui, Usugumo, Akebono, Ushio, Hatsushimo, Hatsuharu and Wakaba, and up to 1 additional ship to [W2-1], [W2-2], [W3-1] and [W3-2]. S-Rank each boss node.",
-        "rewards": "¶First choice: Either 8 Buckets OR two New Model Gun Mount Improvement Materials OR 4 Screws ¶Second choice: Either three Mamiyas OR an Arctic Gear & Deck Personnel OR three Medals",
+    "979": {
+        "code": "L2504B3",
+        "name": "[Kantai 12th Anniversary Quest] Resource Securing Maritime Escort Operation",
+        "desc": "Sortie any fleet to [W1-3], [W1-5], [W1-6], [W7-2-M] and [W7-4]. S-Rank each boss node. Reach [W1-6-N] once.",
+        "rewards": "¶First choice: Either a Mamiya OR 3600 Bauxites OR a Medal ¶Second choice: Either 12 Development Materials OR 8800 Fuels OR two Furniture Fairys",
         "resources": [[550, 550, 550, 550], [0, 0, 0, 0]]
     },
-    "349": {
-        "code": "L2502C1",
-        "name": "[Valentine] Valentine's Day 2025, Special Exercises",
-        "desc": "Secure 4 S-Rank victories in Exercises within the same day using any 3 of Mogador, Gotland, Perth, Comdt. Teste, Kamoi, Mizuho, Murakumo, Akebono and Oboro, and up to 3 additional ships.",
-        "rewards": "¶First choice: Either two New Model Aerial Armament Materials OR two Zuiun Model 12 OR two Type 2 Depth Charges ¶Second choice: Either a Furniture Fairy OR two Irako OR 4 Screws",
-        "resources": [[0, 0, 2025, 214], [0, 0, 0, 0]]
+    "1009": {
+        "code": "L2504B4",
+        "name": "[Kantai 12th Anniversary Quest:Extra Operation] Fleet, Head West!",
+        "desc": "Sortie any 2 of Fubuki, Akebono, Oboro, Shoukaku, Yamato, Mogador, Gotland, Kinugasa Kai Ni and Fletcher Kai Mod.2+, a Fubuki-class (not Fubuki) and up to 3 additional ships to [W4-1], [W4-2], [W4-3], [W4-4] and [W4-5]. S-Rank each boss node.",
+        "rewards": "a Furniture: 12th Anniversary Hanging Scroll and either two Type 2 Two-seat Fighter Toryuu Model CS OR a Kikka Kai OR a Prototype Flight Deck Catapult",
+        "resources": [[2025, 2025, 1200, 1200], [0, 0, 0, 0]]
     },
-    "1028": {
-        "code": "L2503B1",
-        "name": "[WD Limited Quest] Light Aircraft Carrier, Sortie!",
-        "desc": "Assemble a fleet containing either Langley as flagship or 2 CVL, and up to 4-5 XX, then A+ rank the boss nodes of 1-3, 1-4, 2-1 and 3-1.",
-        "rewards": "¶First choice: Either 4 Buckets OR 6 Development Materials OR an Irako ¶Second choice: Either three Underway Replenishments OR 14 Development Materials OR a Medal",
-        "resources": [[314, 314, 314, 314], [0, 0, 0, 0]]
+    "363": {
+        "code": "L2504C1",
+        "name": "Kantai 12th Anniversary Quest] Commemorative Fleet Exercise!",
+        "desc": "Secure 5 A-Rank+ victories in Exercises within the same day using any 2 of Heian Maru, Mogador, Gotland, Ootomari, Oboro, Akebono and Kinugasa Kai Ni as flagship and second ship, and up to 4 additional ships.",
+        "rewards": "¶First choice: Either two Irako OR three Screws OR 4 7.7mm Machine Guns ¶Second choice: Either a Repair Godness OR 12 Development Materials OR 2025 Fuels",
+        "resources": [[423, 423, 0, 0], [0, 0, 0, 0]]
+    },
+    "448": {
+        "code": "L2504D1",
+        "name": "[Kantai 12th Anniversary Quest] Maritime Escort Expedition",
+        "desc": "Complete Expeditions 05, A1, A3, 04 and 12.",
+        "rewards": "¶First choice: Either 2025 Steels OR 2025 Ammos OR 2025 Bauxites ¶Second choice: Either 12 Development Materials OR three Screws OR a Type 3 Depth Charge Projector (Concentrated Deployment)",
+        "resources": [[2025, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "449": {
+        "code": "L2504D2",
+        "name": "[Kantai 12th Anniversary Quest] Strengthening Resource Import and Export",
+        "desc": "Have 2800 Steel and 3000 Ammo, complete Expeditions 05, 09, 11 twice.",
+        "rewards": "¶First choice: Either 6000 Fuels OR 4800 Bauxites ¶Second choice: Either 12 Buckets OR two Mamiyas OR 4 Screws",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1126": {
+        "code": "L2504F1",
+        "name": "[Kantai 12th Anniversary Quest: Extra Quest] Special Arsenal",
+        "desc": "Have 4 20.3cm (No.2) Twin Gun Mounts, 880 Bauxite and 2500 Steel. Scrap 12 Medium Caliber Main Guns, 12 Recon Seaplanes and 6 Radars.",
+        "rewards": "¶First choice: Either two New Model Gun Mount Improvement Materials OR three New Model Aerial Armament Materials OR 5 Screws ¶Second choice: Either a Prototype 20.3cm (No.4) Twin Gun Mount OR three 203mm/53 Twin Gun Mount ★4",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1136": {
+        "code": "L2504F2",
+        "name": "[Kantai 12th Anniversary Quest: Extra Quest] Special Aircraft Arsenal",
+        "desc": "Have 48 Development Materials, three New Model Aviation Armament Materials and a Skilled Crew Member. Set Hiryuu Kai Ni or Houshou Kai Ni+ as secretary with a \\u26058+ Shiden Kai 2 in her first slot, other slots must be empty. Scrap 8 Shiden Model 11 and a Type 2 Two-seat Fighter Toryuu Model C.",
+        "rewards": "¶First choice: Either three New Model Armament Materials OR 5 Screws OR a Ne Type Engine ¶Second choice: Either a Prototype Shusui ★2 OR a Prototype Keiun (Carrier-based Reconnaissance Model) ★3 OR a Prototype Shinden (Land-based Fighter)",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1030": {
+        "code": "L2505B1",
+        "name": "[Limited Time Quest] Fletcher-class, Patrol Mission",
+        "desc": "Assemble a fleet containing 2 Fletcher-class, any 1 of the: \"Northampton-class or New Orleans-class\"; and up to 3 XX, then S rank the boss nodes of 1-3, 1-4, and 2-4, twice each.",
+        "memo": "※Weekly ※Fletcher-class: Fletcher, Johnston, Heywood L. Edwards, Richard P. Leary ※Northampton-class: Northampton, Houston ※New Orleans-class: Minneapolis, Tuscaloosa",
+        "rewards": "¶First choice: Either 1500 Steels OR three Screws OR 1800 Ammos ¶Second choice: Either a Mamiya OR 9 Buckets OR 1800 Fuels",
+        "resources": [[380, 380, 380, 380], [0, 0, 0, 0]]
+    },
+    "1149": {
+        "code": "L2505F1",
+        "name": "[Limited Time Quest] Elimination of Unnecessary Equipment After the Event",
+        "desc": "Prepare 48 Instant Construction Material. Scrap 4 Large Caliber Main Guns, 8 Medium Caliber Main Guns, and 8 Torpedoes.",
+        "memo": "※Weekly",
+        "rewards": "¶First choice: Either 1600 Ammos OR 1600 Fuels OR a New Model Armament Material ¶Second choice: Either 1500 Steels OR 1200 Bauxites OR two Screws",
+        "resources": [[0, 400, 500, 0], [0, 0, 0, 0]]
     }
 }
