@@ -83,6 +83,17 @@ public class AkashiDetailActivity extends BaseActivity {
             smat_count.setText(String.valueOf(smat_str));
         }
 
+        JsonObject useritem_count = new JsonObject();
+        JsonArray useitem_data = dbHelper.getJsonArrayValue(DB_KEY_USEITEMS);
+        if (useitem_data != null) {
+            for (int n = 0; n < useitem_data.size(); n++) {
+                JsonObject item = useitem_data.get(n).getAsJsonObject();
+                String key = item.get("api_id").getAsString();
+                String value = item.get("api_count").getAsString();
+                useritem_count.addProperty(key, value);
+            }
+        }
+
         if (!getIntent().hasExtra("item_id")) {
             finish();
         } else {
@@ -109,13 +120,13 @@ public class AkashiDetailActivity extends BaseActivity {
                     statusText.add(KcaUtils.format("★%s: %d", i == 10 ? "max" : String.valueOf(i), val));
                 }
             }
-            if (statusText.size() > 0) {
+            if (!statusText.isEmpty()) {
                 getItemImprovStat.setText(KcaUtils.joinStr(statusText, ", "));
             } else {
                 getItemImprovStat.setText("-");
             }
 
-            if (itemImprovmetInfo.length() > 0) {
+            if (itemImprovmetInfo != null && !itemImprovmetInfo.isEmpty()) {
                 itemImprovementData = JsonParser.parseString(itemImprovmetInfo).getAsJsonObject();
                 JsonArray itemImprovementDetail = itemImprovementData.getAsJsonArray("improvement");
                 JsonArray itemDefaultEquippedOn = itemImprovementData.getAsJsonArray("default_equipped_on");
@@ -154,17 +165,6 @@ public class AkashiDetailActivity extends BaseActivity {
                             String e3 = mse_string[2];
                             JsonArray require_items = data.getAsJsonArray("require_item");
 
-                            JsonObject useritem_count = new JsonObject();
-                            JsonArray useitem_data = dbHelper.getJsonArrayValue(DB_KEY_USEITEMS);
-                            if (useitem_data != null) {
-                                for (int n = 0; n < useitem_data.size(); n++) {
-                                    JsonObject item = useitem_data.get(n).getAsJsonObject();
-                                    String key = item.get("api_id").getAsString();
-                                    String value = item.get("api_count").getAsString();
-                                    useritem_count.addProperty(key, value);
-                                }
-                            }
-
                             List<String> require_items_str = new ArrayList<>();
                             require_items_str.add(e3);
                             for (int k = 0; k < require_items.size(); k++) {
@@ -181,6 +181,31 @@ public class AkashiDetailActivity extends BaseActivity {
                                         require_item_name, require_item_count, useritem_count_view));
                             }
                             e3 = KcaUtils.joinStr(require_items_str, "\n");
+                            ((TextView) findViewById(getId(KcaUtils.format("akashi_improv_detail_e%d_%d", j, i+1), R.id.class)))
+                                    .setText(e3);
+                        } else if (j == 2 && data.has("require_item2")) {
+                            List<String> require_items_str = new ArrayList<>();
+                            require_items_str.add(mse_string[2]);
+
+                            JsonArray require_item2 = data.getAsJsonArray("require_item2");
+                            int item2_from = require_item2.get(0).getAsInt();
+                            JsonArray item2_req_items = require_item2.get(1).getAsJsonArray();
+
+                            for (int k = 0; k < item2_req_items.size(); k++) {
+                                JsonArray r_item = item2_req_items.get(k).getAsJsonArray();
+                                int require_item_count = r_item.get(1).getAsInt();
+                                JsonObject item_info = getRequiredItemData(r_item.get(0).getAsInt());
+                                String require_item_name = getRequiredItemName(item_info.getAsJsonObject("name"));
+                                String useitem_id = item_info.get("useitem_id").getAsString();
+                                int useritem_count_view = 0;
+                                if (useritem_count.has(useitem_id)) {
+                                    useritem_count_view = useritem_count.get(useitem_id).getAsInt();
+                                }
+                                require_items_str.add(KcaUtils.format("[★%d~] %sx%d (%d)",
+                                        item2_from, require_item_name, require_item_count, useritem_count_view));
+                            }
+
+                            String e3 = KcaUtils.joinStr(require_items_str, "\n");
                             ((TextView) findViewById(getId(KcaUtils.format("akashi_improv_detail_e%d_%d", j, i+1), R.id.class)))
                                     .setText(e3);
                         } else {
