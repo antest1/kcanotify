@@ -129,10 +129,12 @@ public class AkashiActivity extends BaseActivity {
 
             MaterialButtonToggleGroup toggleGroup = findViewById(R.id.toggleGroup);
             toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
-                String name = getResources().getResourceEntryName(checkedId);
-                currentClicked = name.charAt(name.length() - 1) - (int)'0';
-                loadAkashiList(currentClicked, isSafeChecked);
-                resetListView(true);
+                if (isChecked) {
+                    String name = getResources().getResourceEntryName(checkedId);
+                    currentClicked = name.charAt(name.length() - 1) - (int)'0';
+                    loadAkashiList(currentClicked, isSafeChecked);
+                    resetListView(true);
+                }
             });
             toggleGroup.check(KcaUtils.getId(KcaUtils.format("akashi_day_%d", currentClicked), R.id.class));
 
