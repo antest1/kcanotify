@@ -71,6 +71,8 @@ public class KcaAkashiListViewItem {
 
     // 0: sun ~ 6: sat
     public void setEquipImprovementElement(int day, boolean checked) {
+        if (equipImprovementData == null) return;
+
         JsonArray data = equipImprovementData.getAsJsonArray("improvement");
         boolean convert_exception = equipImprovementData.has("convert_exception");
         String[] material1 = new String[4];

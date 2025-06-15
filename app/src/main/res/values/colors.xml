@@ -264,6 +264,7 @@
     <color name="colorResourceAmmo">#6d4c41</color>
     <color name="colorResourceSteel">#757575</color>
     <color name="colorResourceBauxite">#f57c00</color>
+    <color name="colorMaterialDynamicNeutral90">#e2e2e9</color>
 
     <color name="colorConsumableBucket">#7cb342</color>
     <color name="colorConsumableDevmat">#00acc1</color>
