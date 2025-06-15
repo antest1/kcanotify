@@ -5,13 +5,8 @@ import android.os.Handler;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +22,7 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 public class AkashiFilterActivity extends BaseActivity {
     Toolbar toolbar;
     private static Handler sHandler;
-    static Gson gson = new Gson();
-    TextView itemNameTextView, itemImproveDefaultShipTextView;
     Button selectAllButton, selectNoneButton, selectReverseButton;
-    JsonObject itemImprovementData;
 
     public static void setHandler(Handler h) {
         sHandler = h;
@@ -45,71 +37,58 @@ public class AkashiFilterActivity extends BaseActivity {
         getSupportActionBar().setTitle(getString(R.string.action_akashi_filter));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final String filter = getStringPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST);
         for(final int type: T3LIST_IMPROVABLE) {
             int btnId = getId("akashi_filter_equip_btn_".concat(String.valueOf(type)), R.id.class);
-            final ImageView btnView = (ImageView) findViewById(btnId);
-            btnView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String filter = getStringPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST);
-                    if(checkFiltered(filter, type)) {
-                        setPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST, deleteFiltered(filter, type));
-                        btnView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.imagebtn_on));
-                    } else {
-                        setPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST, addFiltered(filter, type));
-                        btnView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.imagebtn_off));
-                    }
-                    sHandler.sendEmptyMessage(0);
+            final ImageView btnView = findViewById(btnId);
+            btnView.setOnClickListener(v -> {
+                String filterList = getStringPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST);
+                if(checkFiltered(filterList, type)) {
+                    setPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST, deleteFiltered(filterList, type));
+                    btnView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.imagebtn_on));
+                } else {
+                    setPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST, addFiltered(filterList, type));
+                    btnView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.imagebtn_off));
                 }
+                sHandler.sendEmptyMessage(0);
             });
         }
         setEquipButton();
 
-        selectAllButton = (Button) findViewById(R.id.akashi_filter_btn_all);
-        selectNoneButton = (Button) findViewById(R.id.akashi_filter_btn_none);
-        selectReverseButton = (Button) findViewById(R.id.akashi_filter_btn_reverse);
+        selectAllButton = findViewById(R.id.akashi_filter_btn_all);
+        selectNoneButton = findViewById(R.id.akashi_filter_btn_none);
+        selectReverseButton = findViewById(R.id.akashi_filter_btn_reverse);
 
-        selectAllButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST, "|");
-                setEquipButton();
-                sHandler.sendEmptyMessage(0);
-            }
+        selectAllButton.setOnClickListener(v -> {
+            setPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST, "|");
+            setEquipButton();
+            sHandler.sendEmptyMessage(0);
         });
 
-        selectNoneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<String> typelist = new ArrayList<String>();
-                for(int type: T3LIST_IMPROVABLE) {
-                    typelist.add(String.valueOf(type));
-                }
+        selectNoneButton.setOnClickListener(v -> {
+            List<String> typelist = new ArrayList<>();
+            for(int type: T3LIST_IMPROVABLE) {
+                typelist.add(String.valueOf(type));
+            }
+            setPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST,
+                    "|".concat(joinStr(typelist, "|")).concat("|"));
+            setEquipButton();
+            sHandler.sendEmptyMessage(0);
+        });
+
+        selectReverseButton.setOnClickListener(v -> {
+            String filter1 = getStringPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST);
+            List<String> typelist = new ArrayList<>();
+            for(int type: T3LIST_IMPROVABLE) {
+                if(!checkFiltered(filter1, type)) typelist.add(String.valueOf(type));
+            }
+            if(!typelist.isEmpty()) {
                 setPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST,
                         "|".concat(joinStr(typelist, "|")).concat("|"));
-                setEquipButton();
-                sHandler.sendEmptyMessage(0);
+            } else {
+                setPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST, "|");
             }
-        });
-
-        selectReverseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String filter = getStringPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST);
-                List<String> typelist = new ArrayList<String>();
-                for(int type: T3LIST_IMPROVABLE) {
-                    if(!checkFiltered(filter, type)) typelist.add(String.valueOf(type));
-                }
-                if(typelist.size() > 0) {
-                    setPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST,
-                            "|".concat(joinStr(typelist, "|")).concat("|"));
-                } else {
-                    setPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST, "|");
-                }
-                setEquipButton();
-                sHandler.sendEmptyMessage(0);
-            }
+            setEquipButton();
+            sHandler.sendEmptyMessage(0);
         });
     }
 
@@ -145,7 +124,7 @@ public class AkashiFilterActivity extends BaseActivity {
         String filter = getStringPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST);
         for(int type: T3LIST_IMPROVABLE) {
             int btnId = getId("akashi_filter_equip_btn_".concat(String.valueOf(type)), R.id.class);
-            ImageView btnView = (ImageView) findViewById(btnId);
+            ImageView btnView = findViewById(btnId);
             if(checkFiltered(filter, type)) {
                 btnView.setBackground(ContextCompat.getDrawable(this, R.drawable.imagebtn_off));
             } else {
