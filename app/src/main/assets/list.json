@@ -4,7 +4,7 @@
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/icon_info.json"
 }, {
 	"name": "akashi_data.json",
-	"version": 2025060701,
+	"version": 2025060702,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/akashi_data.json"
 }, {
 	"name": "akashi_reqitems.json",
@@ -24,7 +24,7 @@
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/map_sub.json"
 }, {
 	"name": "expedition.json",
-	"version": 2023120302,
+	"version": 2025060703,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/expedition.json"
 }, {
 	"name": "items-en.json",
@@ -60,11 +60,11 @@
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/quests-ko.json"
 }, {
 	"name": "quests-scn.json",
-	"version": 2025060701,
+	"version": 2025061401,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/quests-scn.json"
 }, {
 	"name": "quests-tcn.json",
-	"version": 2025060701,
+	"version": 2025061401,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/quests-tcn.json"
 }, {
 	"name": "ships-en.json",
