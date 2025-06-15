@@ -172,7 +172,7 @@ public class KcaApiData {
 
     public static final int T3_COUNT = 65;
     public static final int[] T3LIST_IMPROVABLE = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19,
-            20, 21, 22, 23, 24, 28, 29, 30, 31, 34, 36, 37, 38, 42, 43, 44, 46, 49, 50, 54, 58};
+            20, 21, 22, 23, 24, 28, 29, 30, 31, 34, 36, 37, 38, 42, 43, 44, 45, 46, 49, 50, 54, 58};
 
     public static final int[] BASIC_MASTERY_MIN_BONUS = {0, 10, 25, 40, 55, 70, 85, 100};
     public static final int[] BASIC_MASTERY_MAX_BONUS = {9, 24, 39, 54, 69, 84, 99, 120};

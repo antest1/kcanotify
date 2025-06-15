@@ -439,6 +439,17 @@
                         android:src="@mipmap/item_44" />
 
                     <ImageView
+                        android:id="@+id/akashi_filter_equip_btn_45"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/imagebtn_on"
+                        android:padding="5dp"
+                        android:src="@mipmap/item_45" />
+
+                    <ImageView
                         android:id="@+id/akashi_filter_equip_btn_46"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
@@ -447,6 +458,15 @@
                         android:background="@drawable/imagebtn_on"
                         android:padding="5dp"
                         android:src="@mipmap/item_46" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="start"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/akashi_filter_equip_btn_49"
@@ -457,15 +477,6 @@
                         android:background="@drawable/imagebtn_on"
                         android:padding="5dp"
                         android:src="@mipmap/item_49" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="start"
-                    android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/akashi_filter_equip_btn_50"
