@@ -121,7 +121,7 @@ public class EquipmentInfoActivity extends BaseActivity {
                 for (int j = 0; j < shipItem.size(); j++) {
                     int item_id = shipItem.get(j).getAsInt();
                     if (item_id > 0) {
-                        String item_info_str = helper.getItemValue(item_id);
+                        String item_info_str = dbHelper.getItemValue(item_id);
                         if (item_info_str != null) {
                             JsonObject item_info = JsonParser.parseString(item_info_str).getAsJsonObject();
                             item_list.add(getItemKey(item_info));
@@ -130,7 +130,7 @@ public class EquipmentInfoActivity extends BaseActivity {
                 }
                 int ex_item_id = ship_info.get("api_slot_ex").getAsInt();
                 if (ex_item_id > 0) {
-                    String item_info_str = helper.getItemValue(ex_item_id);
+                    String item_info_str = dbHelper.getItemValue(ex_item_id);
                     if (item_info_str != null) {
                         JsonObject item_info = JsonParser.parseString(item_info_str).getAsJsonObject();
                         item_list.add(getItemKey(item_info));
