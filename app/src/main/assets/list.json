@@ -28,19 +28,19 @@
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/expedition.json"
 }, {
 	"name": "items-en.json",
-	"version": 2025053001,
+	"version": 2025062701,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/items-en.json"
 }, {
 	"name": "items-ko.json",
-	"version": 2025053001,
+	"version": 2025062701,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/items-ko.json"
 }, {
 	"name": "items-scn.json",
-	"version": 2025053001,
+	"version": 2025062701,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/items-scn.json"
 }, {
 	"name": "items-tcn.json",
-	"version": 2025053001,
+	"version": 2025062701,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/items-tcn.json"
 }, {
 	"name": "quest_track.json",
