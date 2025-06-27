@@ -757,6 +757,7 @@
     <string name="text_api_leng_2">중</string>
     <string name="text_api_leng_3">장</string>
     <string name="text_api_leng_4">초장</string>
+    <string name="text_api_leng_5">최장</string>
 
     <string name="text_api_houm2">대폭</string>
     <string name="text_api_houk2">영격</string>

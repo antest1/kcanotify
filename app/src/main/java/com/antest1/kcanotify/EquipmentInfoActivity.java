@@ -152,7 +152,7 @@ public class EquipmentInfoActivity extends BaseActivity {
         }
         itemStatTranslation.addProperty("api_houm2", getString(R.string.text_api_houm2));
         itemStatTranslation.addProperty("api_houk2", getString(R.string.text_api_houk2));
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= 5; i++) {
             itemStatTranslation.addProperty("api_leng"+i, getString(getId("text_api_leng_"+i, R.string.class)));
         }
 
