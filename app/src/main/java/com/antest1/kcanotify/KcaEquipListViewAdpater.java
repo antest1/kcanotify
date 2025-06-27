@@ -289,7 +289,7 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
         countInfo = counter;
         totalEquipment = 0;
         totalStars = 0;
-        if (filtcond.length() > 0) {
+        if (!filtcond.isEmpty()) {
             Type listType = new TypeToken<List<JsonObject>>() {}.getType();
             listViewItemList = new Gson().fromJson(total_equip_list, listType);
             listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, input -> {

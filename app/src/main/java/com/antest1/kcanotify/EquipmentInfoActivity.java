@@ -121,7 +121,7 @@ public class EquipmentInfoActivity extends BaseActivity {
                 for (int j = 0; j < shipItem.size(); j++) {
                     int item_id = shipItem.get(j).getAsInt();
                     if (item_id > 0) {
-                        String item_info_str = helper.getItemValue(item_id);
+                        String item_info_str = dbHelper.getItemValue(item_id);
                         if (item_info_str != null) {
                             JsonObject item_info = JsonParser.parseString(item_info_str).getAsJsonObject();
                             item_list.add(getItemKey(item_info));
@@ -130,7 +130,7 @@ public class EquipmentInfoActivity extends BaseActivity {
                 }
                 int ex_item_id = ship_info.get("api_slot_ex").getAsInt();
                 if (ex_item_id > 0) {
-                    String item_info_str = helper.getItemValue(ex_item_id);
+                    String item_info_str = dbHelper.getItemValue(ex_item_id);
                     if (item_info_str != null) {
                         JsonObject item_info = JsonParser.parseString(item_info_str).getAsJsonObject();
                         item_list.add(getItemKey(item_info));
@@ -152,7 +152,7 @@ public class EquipmentInfoActivity extends BaseActivity {
         }
         itemStatTranslation.addProperty("api_houm2", getString(R.string.text_api_houm2));
         itemStatTranslation.addProperty("api_houk2", getString(R.string.text_api_houk2));
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= 5; i++) {
             itemStatTranslation.addProperty("api_leng"+i, getString(getId("text_api_leng_"+i, R.string.class)));
         }
 

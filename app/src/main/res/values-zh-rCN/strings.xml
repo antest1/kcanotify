@@ -763,6 +763,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="text_api_leng_2">中</string>
     <string name="text_api_leng_3">长</string>
     <string name="text_api_leng_4">超长</string>
+    <string name="text_api_leng_5">最长</string>
 
     <string name="text_api_houm2">对爆</string>
     <string name="text_api_houk2">迎击</string>

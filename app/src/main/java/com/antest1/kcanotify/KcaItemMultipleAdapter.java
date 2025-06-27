@@ -15,7 +15,7 @@ public class KcaItemMultipleAdapter extends BaseAdapter {
     Context context;
     int layout;
     int rescale = -1;
-    List<Integer> item = new ArrayList<>();
+    List<Integer> item;
     LayoutInflater inf;
     private List<Integer> selected = new ArrayList<>();
 
