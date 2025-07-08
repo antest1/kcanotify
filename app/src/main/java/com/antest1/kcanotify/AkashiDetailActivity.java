@@ -187,21 +187,25 @@ public class AkashiDetailActivity extends BaseActivity {
                             require_items_str.add(mse_string[2]);
 
                             JsonArray require_item2 = data.getAsJsonArray("require_item2");
-                            int item2_from = require_item2.get(0).getAsInt();
-                            JsonArray item2_req_items = require_item2.get(1).getAsJsonArray();
-
-                            for (int k = 0; k < item2_req_items.size(); k++) {
-                                JsonArray r_item = item2_req_items.get(k).getAsJsonArray();
-                                int require_item_count = r_item.get(1).getAsInt();
-                                JsonObject item_info = getRequiredItemData(r_item.get(0).getAsInt());
-                                String require_item_name = getRequiredItemName(item_info.getAsJsonObject("name"));
-                                String useitem_id = item_info.get("useitem_id").getAsString();
-                                int useritem_count_view = 0;
-                                if (useritem_count.has(useitem_id)) {
-                                    useritem_count_view = useritem_count.get(useitem_id).getAsInt();
+                            if (require_item2.size() % 2 == 0) {
+                                int require_item2_cnt = require_item2.size() / 2;
+                                for (int k = 0; k < require_item2_cnt; k++) {
+                                    int item2_from = require_item2.get(k*2).getAsInt();
+                                    JsonArray item2_req_items = require_item2.get(k*2+1).getAsJsonArray();
+                                    for (int n = 0; n < item2_req_items.size(); n++) {
+                                        JsonArray r_item = item2_req_items.get(n).getAsJsonArray();
+                                        int require_item_count = r_item.get(1).getAsInt();
+                                        JsonObject item_info = getRequiredItemData(r_item.get(0).getAsInt());
+                                        String require_item_name = getRequiredItemName(item_info.getAsJsonObject("name"));
+                                        String useitem_id = item_info.get("useitem_id").getAsString();
+                                        int useritem_count_view = 0;
+                                        if (useritem_count.has(useitem_id)) {
+                                            useritem_count_view = useritem_count.get(useitem_id).getAsInt();
+                                        }
+                                        require_items_str.add(KcaUtils.format("[★%d] %sx%d (%d)",
+                                                item2_from, require_item_name, require_item_count, useritem_count_view));
+                                    }
                                 }
-                                require_items_str.add(KcaUtils.format("[★%d~] %sx%d (%d)",
-                                        item2_from, require_item_name, require_item_count, useritem_count_view));
                             }
 
                             String e3 = KcaUtils.joinStr(require_items_str, "\n");
