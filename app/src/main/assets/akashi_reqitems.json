@@ -98,4 +98,14 @@
         "scn": "海外舰最新技术",
         "tcn": "海外艦最新技術"
     }
+}, {
+    "id": 10,
+    "useitem_id": 91,
+    "name": {
+        "jp": "緊急修理資材",
+        "en": "Emergency Repair Material",
+        "ko": "긴급수리자재",
+        "scn": "紧急修理资材",
+        "tcn": "緊急修理資材"
+    }
 }]

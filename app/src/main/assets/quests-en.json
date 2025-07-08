@@ -2135,6 +2135,13 @@
         "rewards": "¶First choice: Either 17 Development Materials OR two New Model Gun Mount Improvement Materials OR 5 Screws ¶Second choice: Either two 25mm Triple Autocannon Mount ★9 OR a Type 13 Air Radar Kai (Late Model) ★8 OR a 12.7cm Twin Gun Mount Model D Kai 2 ★7",
         "resources": [[1944, 1111, 2025, 512], [0, 0, 0, 0]]
     },
+    "1033": {
+        "code": "B210",
+        "name": "Active Operation of Second-class Transport Ships",
+        "desc": "Sortie No.101 Transport Ship as flagship, a CL, 2 DD and up to 3 additional ships to [W1-1], [W1-2], [W1-3] and [W1-4]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either two 12.7mm Single Machine Gun Mounts OR two 25mm Single Autocannon Mounts OR two Combat Rations ¶Second choice: Either 4 7.7mm Machine Guns OR an Army Infantry Units OR a New Model Rocket Development Material",
+        "resources": [[300, 300, 300, 0], [0, 0, 0, 0]]
+    },
     "201": {
         "code": "Bd1",
         "name": "Daily Victory",
@@ -3016,7 +3023,7 @@
         "code": "Cs4",
         "name": "Mass Exercises for Summer",
         "desc": "Secure 8 victories in Exercises within the same day.",
-        "rewards": "a Mamiya and either a Present Box OR a Repair Team OR two 25mm Twin Autocannon Mounts",
+        "rewards": "¶First choice: Either a Mamiya OR two Irako ¶Second choice: Either a Present Box OR a Repair Team OR three 12.7mm Single Machine Gun Mounts",
         "resources": [[0, 300, 0, 1000], [0, 0, 0, 0]]
     },
     "401": {
@@ -4110,6 +4117,14 @@
         "rewards": "a Type 94 Anti-Aircraft Fire Director and a Type 13 Air Radar Kai",
         "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
     },
+    "1151": {
+        "code": "F131",
+        "name": "Increase in Army and Foreign Fighter Aircraft",
+        "desc": "Have 36 Development Materials, 8 Type 0 Fighter Model 21 and 4 Type 0 Fighter Model 32. Scrap 14 Reconnaissance Seaplanes, 12 Medium Caliber Main Guns and 10 Dive Bombers.",
+        "memo": "※Consumes the resources.",
+        "rewards": "¶First choice: Either two Type 3 Fighter Hiens OR two Spitfire Mk.Is OR two Type 2 Two-seat Fighter Toryuus ¶Second choice: Either two Type 3 Fighter Hiens OR two Spitfire Mk.Is OR a New Model Aerial Armament Material",
+        "resources": [[0, 0, 0, 360], [0, 0, 0, 0]]
+    },
     "605": {
         "code": "Fd1",
         "name": "Daily Development 1",
@@ -4553,38 +4568,6 @@
         "rewards": "¶First choice: Either 4 7.7mm Machine Guns OR three 25mm Single Autocannon Mounts OR a Mamiya ¶Second choice: Either 4 Screws OR 4000 Fuels OR two Irako",
         "resources": [[320, 320, 320, 320], [0, 0, 0, 0]]
     },
-    "1030": {
-        "code": "L2505B1",
-        "name": "[Limited Time Quest] Fletcher-class, Patrol Mission",
-        "desc": "Assemble a fleet containing 2 Fletcher-class, any 1 of the: \"Northampton-class or New Orleans-class\"; and up to 3 XX, then S rank the boss nodes of 1-3, 1-4, and 2-4, twice each.",
-        "memo": "※Weekly ※Fletcher-class: Fletcher, Johnston, Heywood L. Edwards, Richard P. Leary ※Northampton-class: Northampton, Houston ※New Orleans-class: Minneapolis, Tuscaloosa",
-        "rewards": "¶First choice: Either 1500 Steels OR three Screws OR 1800 Ammos ¶Second choice: Either a Mamiya OR 9 Buckets OR 1800 Fuels",
-        "resources": [[380, 380, 380, 380], [0, 0, 0, 0]]
-    },
-    "953": {
-        "code": "L2505B2",
-        "name": "[Rainy Season Limited Quest] Defend the Nansei Islands in the Rain!",
-        "desc": "Sortie a CL(T)/CT/CA(V) as flagship, an AV, a DD, a DE and up to 2 additional ships to [W2-1], [W2-2] and [W2-3]. A-Rank+ each boss node.",
-        "memo": "※Weekly",
-        "rewards": "two Teru Teru Bouzus and either 5 Buckets OR 6 Development Materials OR a Type 3 Fighter Hien",
-        "resources": [[150, 150, 150, 150], [0, 0, 0, 0]]
-    },
-    "954": {
-        "code": "L2505B3",
-        "name": "[Rainy Season Limited Quest] Maritime Escorts Strengthening in the Rainy Season 2025",
-        "desc": "Sortie a DD as flagship, 2 DE and up to 3 additional ships to [W1-2], [W1-3], [W1-4], [W1-5] and [W1-6]. S-Rank each boss node. Reach [W1-6-N] twice.",
-        "memo": "※Weekly",
-        "rewards": "three Teru Teru Bouzus and either a Medal OR a Mamiya OR 10 Development Materials",
-        "resources": [[750, 750, 750, 0], [0, 0, 0, 0]]
-    },
-    "955": {
-        "code": "L2505B4",
-        "name": "[Monthly Rainy Season Limited Quest] Western Sea Area Joint Operation 2025",
-        "desc": "Sortie a CV(L/B), 2 CA(V) or 2 Akizuki-class, and up to 3 additional ships to [W4-1], [W4-2], [W4-3], [W4-4] and [W4-5]. S-Rank each boss node.",
-        "memo": "※Monthly",
-        "rewards": "4 Teru Teru Bouzus and either 440 Ranking Points OR 20 Development Materials OR two Medals",
-        "resources": [[1200, 1200, 1200, 0], [0, 0, 0, 0]]
-    },
     "1031": {
         "code": "L2505B5",
         "name": "[Early Summer Limited Quest] Northern Waters, Active Combat Patrol Operations",
@@ -4599,27 +4582,25 @@
         "rewards": "¶First choice: Either 4 New Model Aerial Armament Materials OR a Prototype Flight Deck Catapult OR a New Technology Aircraft Blueprint ¶Second choice: Either 4 New Model Armament Materials OR 6 Latest Overseas Warship Technologys OR two Remodel Blueprints",
         "resources": [[750, 750, 750, 750], [0, 0, 0, 0]]
     },
-    "367": {
-        "code": "L2505C1",
-        "name": "[Rainy Season Limited Quest] Maritime Escort Force, Exercises in the Rain!",
-        "desc": "Secure 4 A-Rank+ victories in Exercises within the same day using 2 DE and up to 4 additional ships, or 4 DD and up to 2 additional ships.",
-        "memo": "※Daily",
-        "rewards": "a Development Material and a Teru Teru Bouzu",
-        "resources": [[75, 75, 75, 75], [0, 0, 1, 0]]
-    },
-    "1149": {
-        "code": "L2505F1",
-        "name": "[Limited Time Quest] Elimination of Unnecessary Equipment After the Event",
-        "desc": "Prepare 48 Instant Construction Material. Scrap 4 Large Caliber Main Guns, 8 Medium Caliber Main Guns, and 8 Torpedoes.",
-        "memo": "※Weekly",
-        "rewards": "¶First choice: Either 1600 Ammos OR 1600 Fuels OR a New Model Armament Material ¶Second choice: Either 1500 Steels OR 1200 Bauxites OR two Screws",
-        "resources": [[0, 400, 500, 0], [0, 0, 0, 0]]
-    },
     "1150": {
         "code": "L2505F2",
         "name": "[Early Summer Limited Quest] Naval Arsenal Reorganization Operation Begins!",
         "desc": "Have 30 Furniture Boxes (Small), 12 Type 99 Dive Bombers and 12 Type 97 Torpedo Bombers. Scrap 26 Medium Caliber Main Guns, 20 Large Caliber Main Guns and 10 Secondary Guns.",
         "rewards": "¶First choice: Either a Furniture Fairy OR a New Model Aerial Armament Material OR a Medal ¶Second choice: Either a +3 Equipment Slots OR a Reinforcement Expansion OR a Medal",
         "resources": [[0, 0, 500, 0], [0, 0, 0, 0]]
+    },
+    "1034": {
+        "code": "L2506B1",
+        "name": "Monthly [Time-limited] Escort Asahi on a Summer Day",
+        "desc": "Sortie Asahi as flagship and either 3 DD and up to 2 additional ships OR a DE and up to 4 to additional ships to [W1-2], [W1-3], [W1-4] and [W2-1]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either 640 Ammos OR 800 Steels OR two Buckets ¶Second choice: Either 16 Development Materials OR a Medal OR a New Model Gun Mount Improvement Material",
+        "resources": [[360, 360, 0, 280], [0, 0, 0, 0]]
+    },
+    "1035": {
+        "code": "L2506B2",
+        "name": "Monthly [Time-limited] Summer Night in Solomon",
+        "desc": "Sortie Noshiro or Atlanta as flagship, 3 DD and up to 2 additional ships OR Richard P. Leary as flagship, 2 DD and up to 3 additional ships to [W5-1], [W5-3] and [W5-4]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either 6 Buckets OR two Ryuusei Kais OR 12 Development Materials ¶Second choice: Either two Latest Overseas Warship Technologys OR two Medals OR 9 Development Materials",
+        "resources": [[480, 480, 480, 0], [0, 0, 0, 0]]
     }
 }
