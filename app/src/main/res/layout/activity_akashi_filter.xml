@@ -489,6 +489,16 @@
                         android:src="@mipmap/item_50" />
 
                     <ImageView
+                        android:id="@+id/akashi_filter_equip_btn_52"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_margin="5dp"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/imagebtn_on"
+                        android:padding="5dp"
+                        android:src="@mipmap/item_52" />
+
+                    <ImageView
                         android:id="@+id/akashi_filter_equip_btn_54"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
