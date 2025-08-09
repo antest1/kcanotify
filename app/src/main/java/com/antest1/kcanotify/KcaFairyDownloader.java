@@ -84,12 +84,14 @@ public class KcaFairyDownloader {
         fairyWait = true;
         publishProgress(0);
         totalFiles = downloadData.size();
-        handler.post(() -> mProgressDialog.setMax(totalFiles));
-        for (int i = 0; i < downloadData.size(); i++) {
-            JsonObject item = downloadData.get(i).getAsJsonObject();
-            String name = item.get("name").getAsString();
-            String url = item.get("url").getAsString();
-            downloadFile(url, name);
+        if (handler != null) {
+            handler.post(() -> mProgressDialog.setMax(totalFiles));
+            for (int i = 0; i < downloadData.size(); i++) {
+                JsonObject item = downloadData.get(i).getAsJsonObject();
+                String name = item.get("name").getAsString();
+                String url = item.get("url").getAsString();
+                downloadFile(url, name);
+            }
         }
     }
 
@@ -102,7 +104,7 @@ public class KcaFairyDownloader {
         Log.e("KCA-FS", KcaUtils.format("%d %d %d", totalFiles, successedFiles, failedFiles));
         setPreferences(activity, PREF_FAIRY_DOWN_FLAG, true);
         if (!activity.isFinishing() && mProgressDialog != null) {
-            mProgressDialog.dismiss();
+            mProgressDialog.dismissAllowingStateLoss();
         }
         if (totalFiles == 0) {
             Toast.makeText(activity, "no file to download", Toast.LENGTH_LONG).show();
@@ -137,14 +139,16 @@ public class KcaFairyDownloader {
     }
 
     private void publishProgress(Integer progress) {
-        handler.post(() -> {
-            mProgressDialog.setIndeterminate(!fairyWait);
-            mProgressDialog.setMax(totalFiles);
-            mProgressDialog.setProgress(progress);
+        if (handler != null) {
+            handler.post(() -> {
+                mProgressDialog.setIndeterminate(!fairyWait);
+                mProgressDialog.setMax(totalFiles);
+                mProgressDialog.setProgress(progress);
 
-            if (totalFiles == 0 || progress == totalFiles) {
-                workFinished();
-            }
-        });
+                if (totalFiles == 0 || progress == totalFiles) {
+                    workFinished();
+                }
+            });
+        }
     }
 }
