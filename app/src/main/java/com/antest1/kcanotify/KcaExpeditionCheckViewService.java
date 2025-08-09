@@ -206,8 +206,9 @@ public class KcaExpeditionCheckViewService extends BaseService {
         }
 
         clearItemViewLayout();
-        int setViewResult = setView();
+        updateFleetChips(selected);
 
+        int setViewResult = setView();
         Log.e("KCA", "show_excheckview_action " + setViewResult);
         for (int i = 1; i < 4; i++) {
             layoutView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnClickListener(fleetChipOnClickListener);
@@ -1085,12 +1086,14 @@ public class KcaExpeditionCheckViewService extends BaseService {
     };
 
     private void updateFleetChips(int newSelected) {
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i <= 3; i++) {
             Chip chip = layoutView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class));
             if (newSelected == i) {
                 chip.setChipStrokeColorResource(R.color.colorAccent);
+                chip.setChecked(true);
             } else {
                 chip.setChipStrokeColorResource(R.color.colorFleetInfoNormalBtn);
+                chip.setChecked(false);
             }
         }
     }

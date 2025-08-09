@@ -2142,6 +2142,13 @@
         "rewards": "¶First choice: Either two 12.7mm Single Machine Gun Mounts OR two 25mm Single Autocannon Mounts OR two Combat Rations ¶Second choice: Either 4 7.7mm Machine Guns OR an Army Infantry Units OR a New Model Rocket Development Material",
         "resources": [[300, 300, 300, 0], [0, 0, 0, 0]]
     },
+    "1036": {
+        "code": "B211",
+        "name": "Transport Convoy Escort Force, Sortie!",
+        "desc": "Sortie 2 LHA/AO, 2 DE and up to 2 additional ships to [W1-2], [W1-3], [W1-4] and [W1-5]. A-Rank+ each boss node twice.",
+        "rewards": "¶First choice: Either a +2 Equipment Slots OR 2000 Fuels OR a New Model Rocket Development Material ¶Second choice: Either two Medals OR 9 Screws OR 3600 Bauxites",
+        "resources": [[400, 400, 400, 0], [0, 0, 0, 0]]
+    },
     "201": {
         "code": "Bd1",
         "name": "Daily Victory",
@@ -4125,6 +4132,30 @@
         "rewards": "¶First choice: Either two Type 3 Fighter Hiens OR two Spitfire Mk.Is OR two Type 2 Two-seat Fighter Toryuus ¶Second choice: Either two Type 3 Fighter Hiens OR two Spitfire Mk.Is OR a New Model Aerial Armament Material",
         "resources": [[0, 0, 0, 360], [0, 0, 0, 0]]
     },
+    "1152": {
+        "code": "F132",
+        "name": "Strengthening Kaiboukan Anti-Submarine Weapons",
+        "desc": "Have 32 Development Materials. Set a DE as secretary with a \\u26053+ Type 3 Depth Charge Projector in her first slot, 2 Type 3 Depth Charge Projectors in her second and third slot. Scrap 4 Type 94 Depth Charge Projectors.",
+        "memo": "※Consumes the items and resources.",
+        "rewards": "a Type 3 Depth Charge Projector (Concentrated Deployment)",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1153": {
+        "code": "F133",
+        "name": "Further Expansion of Anti-Submarine Weapons",
+        "desc": "Have 64 Development Materials. Set a Hiburi/Ukuru-class DE as secretary with a \\u26054+ Type 3 Depth Charge Projector in her first slot, 2 Type 3 Depth Charge Projectors in her second and third slot. Scrap 4 Type 94 Depth Charge Projectors.",
+        "memo": "※Consumes the items and resources.",
+        "rewards": "a Type 3 Depth Charge Projector (Concentrated Deployment) ★2",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1154": {
+        "code": "F134",
+        "name": "Development of Anti-Submarine Rocket Launcher",
+        "desc": "Have 3 New Model Rocket Development Materials. Set a Lv.96+ DD as secretary with a \\u2605max Type 3 Depth Charge Projector (Concentrated Deployment) in her first slot, a \\u26056+ 12cm Single Gun Mount in her second slot. Scrap 6 Type 3 Active Sonars.",
+        "memo": "※Consumes the items and resources.",
+        "rewards": "¶First choice: Either a +4 Equipment Slots OR 7200 Steels OR 80 Development Materials ¶Second choice: Either 22 Screws OR a Prototype 15cm Nonuple ASW Rocket Launcher OR three Latest Overseas Warship Technologys",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
     "605": {
         "code": "Fd1",
         "name": "Daily Development 1",
@@ -4568,27 +4599,6 @@
         "rewards": "¶First choice: Either 4 7.7mm Machine Guns OR three 25mm Single Autocannon Mounts OR a Mamiya ¶Second choice: Either 4 Screws OR 4000 Fuels OR two Irako",
         "resources": [[320, 320, 320, 320], [0, 0, 0, 0]]
     },
-    "1031": {
-        "code": "L2505B5",
-        "name": "[Early Summer Limited Quest] Northern Waters, Active Combat Patrol Operations",
-        "desc": "Sortie any 3 of Minneapolis, Tuscaloosa, Heywood L.E., Gambier Bay, Ooyodo, Ooi, Takanami, Fujinami, Hamanami, Hayanami and Fuyutsuki, one as flagship, and up to 3 additional ships to [W3-1], [W3-2] and [W3-5]. S-Rank each boss node twice.",
-        "rewards": "¶First choice: Either 24 Buckets OR a Remodel Blueprint OR 4 Mamiyas ¶Second choice: Either 4 Latest Overseas Warship Technologys OR 88 Development Materials OR a Prototype Flight Deck Catapult",
-        "resources": [[600, 600, 0, 600], [0, 0, 0, 0]]
-    },
-    "1032": {
-        "code": "L2505B6",
-        "name": "[Early Summer Limited Quest] Active Operation of Elite Mobile Forces",
-        "desc": "Sortie 2 Lv.90+ CV(L/B), 2 Lv.90+ DD and up to 2 additional ships to [W1-4], [W2-5], [W3-5] and [W5-2]. S-Rank each boss node twice.",
-        "rewards": "¶First choice: Either 4 New Model Aerial Armament Materials OR a Prototype Flight Deck Catapult OR a New Technology Aircraft Blueprint ¶Second choice: Either 4 New Model Armament Materials OR 6 Latest Overseas Warship Technologys OR two Remodel Blueprints",
-        "resources": [[750, 750, 750, 750], [0, 0, 0, 0]]
-    },
-    "1150": {
-        "code": "L2505F2",
-        "name": "[Early Summer Limited Quest] Naval Arsenal Reorganization Operation Begins!",
-        "desc": "Have 30 Furniture Boxes (Small), 12 Type 99 Dive Bombers and 12 Type 97 Torpedo Bombers. Scrap 26 Medium Caliber Main Guns, 20 Large Caliber Main Guns and 10 Secondary Guns.",
-        "rewards": "¶First choice: Either a Furniture Fairy OR a New Model Aerial Armament Material OR a Medal ¶Second choice: Either a +3 Equipment Slots OR a Reinforcement Expansion OR a Medal",
-        "resources": [[0, 0, 500, 0], [0, 0, 0, 0]]
-    },
     "1034": {
         "code": "L2506B1",
         "name": "Monthly [Time-limited] Escort Asahi on a Summer Day",
@@ -4602,5 +4612,12 @@
         "desc": "Sortie Noshiro or Atlanta as flagship, 3 DD and up to 2 additional ships OR Richard P. Leary as flagship, 2 DD and up to 3 additional ships to [W5-1], [W5-3] and [W5-4]. S-Rank each boss node.",
         "rewards": "¶First choice: Either 6 Buckets OR two Ryuusei Kais OR 12 Development Materials ¶Second choice: Either two Latest Overseas Warship Technologys OR two Medals OR 9 Development Materials",
         "resources": [[480, 480, 480, 0], [0, 0, 0, 0]]
+    },
+    "380": {
+        "code": "L2507C1",
+        "name": "Weekly [Time-limited] Landing Fleet Escort Exercises!",
+        "desc": "Secure 3 A-Rank+ victories in Exercises within the same day using either an LHA and 2 DE OR 3 DE, and up to 3 additional ships.",
+        "rewards": "¶First choice: Either three Buckets OR a Screw OR a Combat Ration ¶Second choice: Either three Development Materials OR two Type 94 Depth Charge Projectors OR a Type 3 Depth Charge Projector",
+        "resources": [[100, 100, 100, 100], [0, 0, 0, 0]]
     }
 }
