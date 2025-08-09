@@ -849,13 +849,13 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     targetData.add(cond2);
                     targetData.add(cond3);
                     if (world == 1 && map == 5 && isboss && isSRank(rank))
-                        targetData.set(0, new JsonPrimitive(1));
+                        targetData.set(0, new JsonPrimitive(cond0 + 1));
                     if (world == 7 && map == 1 && isboss && isSRank(rank))
-                        targetData.set(1, new JsonPrimitive(1));
+                        targetData.set(1, new JsonPrimitive(cond1 + 1));
                     if (world == 7 && map == 2 && node == 7 && isSRank(rank))
-                        targetData.set(2, new JsonPrimitive(1));
+                        targetData.set(2, new JsonPrimitive(cond2 + 1));
                     if (world == 7 && map == 2 && node == 15 && isSRank(rank))
-                        targetData.set(3, new JsonPrimitive(1));
+                        targetData.set(3, new JsonPrimitive(cond3 + 1));
                     updateTarget.add(key, targetData);
                     break;
                 case "894": // 항모병참선 분기퀘 (1-3, 1-4, 2-1, 2-2, 2-3)
