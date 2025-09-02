@@ -2146,7 +2146,7 @@
         "code": "B211",
         "name": "Transport Convoy Escort Force, Sortie!",
         "desc": "Sortie 2 LHA/AO, 2 DE and up to 2 additional ships to [W1-2], [W1-3], [W1-4] and [W1-5]. A-Rank+ each boss node twice.",
-        "rewards": "¶First choice: Either a +2 Equipment Slots OR 2000 Fuels OR a New Model Rocket Development Material ¶Second choice: Either two Medals OR 9 Screws OR 3600 Bauxites",
+        "rewards": "¶First choice: Either +2 Equipment Slots OR 2000 Fuels OR a New Model Rocket Development Material ¶Second choice: Either two Medals OR 9 Screws OR 3600 Bauxites",
         "resources": [[400, 400, 400, 0], [0, 0, 0, 0]]
     },
     "201": {
@@ -4153,7 +4153,15 @@
         "name": "Development of Anti-Submarine Rocket Launcher",
         "desc": "Have 3 New Model Rocket Development Materials. Set a Lv.96+ DD as secretary with a \\u2605max Type 3 Depth Charge Projector (Concentrated Deployment) in her first slot, a \\u26056+ 12cm Single Gun Mount in her second slot. Scrap 6 Type 3 Active Sonars.",
         "memo": "※Consumes the items and resources.",
-        "rewards": "¶First choice: Either a +4 Equipment Slots OR 7200 Steels OR 80 Development Materials ¶Second choice: Either 22 Screws OR a Prototype 15cm Nonuple ASW Rocket Launcher OR three Latest Overseas Warship Technologys",
+        "rewards": "¶First choice: Either +4 Equipment Slots OR 7200 Steels OR 80 Development Materials ¶Second choice: Either 22 Screws OR a Prototype 15cm Nonuple ASW Rocket Launcher OR three Latest Overseas Warship Technologys",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1155": {
+        "code": "F135",
+        "name": "Akizuki-class Air Defense Destroyer Armament Expansion",
+        "desc": "Have 2 New Model Artillery Armament Materials. Set a Lv.70+ Akizuki-class DD as secretary with 2 10cm Twin High-angle Gun Mounts in her first and second slot, and a Type 94 Anti-Aircraft Fire Director in her third slot. Scrap 8 12.7cm Twin High-angle Gun Mounts.",
+        "memo": "※Consumes the items and resources.",
+        "rewards": "¶First choice: Either 40 Development Materials OR +8 Equipment Slots OR 4 Combat Rations ¶Second choice: Either two 10cm Twin High-angle Gun Mount Kai ★5 OR a 10cm Twin High-angle Gun Mount + Anti-Aircraft Fire Director ★2",
         "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
     },
     "605": {
@@ -4619,5 +4627,19 @@
         "desc": "Secure 3 A-Rank+ victories in Exercises within the same day using either an LHA and 2 DE OR 3 DE, and up to 3 additional ships.",
         "rewards": "¶First choice: Either three Buckets OR a Screw OR a Combat Ration ¶Second choice: Either three Development Materials OR two Type 94 Depth Charge Projectors OR a Type 3 Depth Charge Projector",
         "resources": [[100, 100, 100, 100], [0, 0, 0, 0]]
+    },
+    "1037": {
+        "code": "L2508B1",
+        "name": "[Time-limited] The Autumn Flagship is... Me!",
+        "desc": "Sortie Akigumo, Akishimo, Akizuki or Akitsushima as flagship and up to 5 additional ships to [W1-3], [W1-4], [W1-5] and [W2-1]. A-Rank+ each boss node twice.",
+        "rewards": "¶First choice: Either +3 Equipment Slots OR 2400 Fuels OR two Screws ¶Second choice: Either 30 Development Materials OR two Medals OR +6 Equipment Slots",
+        "resources": [[600, 600, 0, 600], [0, 0, 0, 0]]
+    },
+    "381": {
+        "code": "L2508C1",
+        "name": "Weekly [Time-limited] Akizuki-class Exercise Mission",
+        "desc": "Secure 3 A-Rank+ victories in Exercises within the same day using any 3 of Akizuki-class, Akigumo, Akishimo and Akitsushima, and up to 3 additional ships.",
+        "rewards": "¶First choice: Either 4 Development Materials OR two 25mm Single Autocannon Mounts OR an Equipment Slots ¶Second choice: Either 4 Buckets OR two Screws OR +2 Equipment Slots",
+        "resources": [[100, 200, 100, 200], [0, 0, 0, 0]]
     }
 }
