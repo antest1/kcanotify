@@ -214,13 +214,9 @@ public class KcaUtils {
         return byteArrayOutputStream.toByteArray();
     }
 
-    public static byte[] gzipdecompress(byte[] contentBytes) {
+    public static byte[] gzipdecompress(byte[] contentBytes) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
-            ByteStreams.copy(new GZIPInputStream(new ByteArrayInputStream(contentBytes)), out);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        ByteStreams.copy(new GZIPInputStream(new ByteArrayInputStream(contentBytes)), out);
         return out.toByteArray();
     }
 

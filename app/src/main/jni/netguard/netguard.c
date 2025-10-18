@@ -814,8 +814,8 @@ void get_packet_data(const struct arguments *args, char* data, int size, int typ
 
     if (result == 1) {
         jbyteArray a = cstr2jbyteArray(env, data, size);
-        method_callback = (*env)->GetStaticMethodID(env, clsData, "getDataFromNative", "([BII[B[BII)V");
-        (*env)->CallStaticVoidMethod(env, clsData, method_callback, a, size, type, s, t, sport, tport);
+        method_callback = (*env)->GetStaticMethodID(env, clsData, "getDataFromNative", "([BII[B[BIIJ)V");
+        (*env)->CallStaticVoidMethod(env, clsData, method_callback, a, size, type, s, t, sport, tport, 0L);
         (*env)->DeleteLocalRef(env, a);
     }
     (*env)->DeleteLocalRef(env, s);

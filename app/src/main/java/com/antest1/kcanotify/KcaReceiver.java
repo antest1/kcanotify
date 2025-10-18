@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -46,11 +47,15 @@ public class KcaReceiver extends BroadcastReceiver {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
                 String url = bundle.getString("url", "");
-                if (url.length() > 0) {
+                if (!url.isEmpty()) {
                     byte[] request = bundle.getString("request", "").getBytes();
                     byte[] response = bundle.getByteArray("response");
                     if (bundle.getBoolean("gzipped", false)) {
-                        response = KcaUtils.gzipdecompress(response);
+                        try {
+                            response = KcaUtils.gzipdecompress(response);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     KcaHandler k = new KcaHandler(handler, url, request, response);
                     executorService.execute(k);

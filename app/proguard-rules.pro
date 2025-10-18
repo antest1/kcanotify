@@ -179,7 +179,7 @@
 
 -keep class com.antest1.kcanotify.KcaVpnData {
     int containsKcaServer(int, byte[], byte[], byte[]);
-    void getDataFromNative(byte[], int, int, byte[], byte[], int, int);
+    void getDataFromNative(byte[], int, int, byte[], byte[], int, int, long);
     void registerKcaServer(byte[], byte[]);
 }
 
