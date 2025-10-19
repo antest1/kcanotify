@@ -11,13 +11,20 @@ Since DMM currently blocks access from countries other than Japan, you may need 
 ##### Prerequisite
 <img src="https://kcanotify-docs.s3.ap-northeast-1.amazonaws.com/en/officialapp_integration.png" width="720"/>
 
-- From Settings → Kcanotify Settings:
+From Settings → Kcanotify Settings:
   - Select KanColle Application: <span class="text-danger">KanColle Android (Official)</span>
   - These settings can only be changed when the service is turned off.
-- From Sniffer(ACTIVE) Settings, enable <span class="text-danger">Capture HTTPS traffic</span>.
+
+
+**You must patch the official app to enable kcanotify to read game traffic.**  
+  - check **Instruction for Patching Official App** section for detail
+
+From Sniffer(ACTIVE) Settings, enable <span class="text-danger">Capture HTTPS traffic</span>.
   - You must first install the required components via the <b>Mitm Setup Wizard</b>. (check below instructions)
   - If the required components are not installed, a wizard screen will appear when you start Sniffer.
-- There are no special settings required for the Android version of KanColle.
+
+
+---
 
 ##### How to Play
 <img src="https://kcanotify-docs.s3.ap-northeast-1.amazonaws.com/en/active_sniffer_buttons.png" width="480"/>
@@ -29,6 +36,51 @@ Since DMM currently blocks access from countries other than Japan, you may need 
   - Allow the connection request after accepting the VpnService related dialog
   - Turn off battery optimization for the kcanotify mitm addon
 <img src="https://kcanotify-docs.s3.ap-northeast-1.amazonaws.com/en/sniffer_init.png" width="800"/>
+
+---
+
+##### Instruction for Patching Official App
+
+<img src="https://kcanotify-docs.s3.ap-northeast-1.amazonaws.com/common/revanced_icon.png" width="96"/>
+
+This guide explains how to apply a patch to
+the original APK file using **ReVanced Manager**.  
+You can download ReVanced Manager from the official website.
+
+🔗 [Official Website](https://revanced.app/)
+
+###### Installation and Settings
+
+<img src="https://kcanotify-docs.s3.ap-northeast-1.amazonaws.com/en/revanced_settings.png" width="360"/>
+
+Install and launch ReVanced Manager.  
+In the settings, enable
+<span class="text-danger">Allow changing patch selection</span> and
+<span class="text-danger">Show universal patches</span>.
+
+###### Selecting target app and patches
+
+<img src="https://kcanotify-docs.s3.ap-northeast-1.amazonaws.com/en/revanced_patcher.png" width="640"/>
+
+Open **Patcher** at the bottom of the screen.
+
+First, find and select the KanColle app from "Select an app" section.  
+🔍 You can also search for "艦これ" or "kancolle".
+
+Next, select <span class="text-danger">「Override certificate pinning」</span> from "Select patches" section.
+
+###### Run Patch and Install the Patched App
+
+<img src="https://kcanotify-docs.s3.ap-northeast-1.amazonaws.com/en/revanced_progress.png" width="640"/>
+
+Review the details and click "Patch".
+After the apk file is patched, install the patched apk.
+
+💡 Uninstall existing app before reinstalling.  
+📢 If there is an update via the DMM Store,  
+delete the old patched version and apply the patch again.
+
+---
 
 ##### Mitm Setup Wizard
 ###### Install kcanotify mitm addon
