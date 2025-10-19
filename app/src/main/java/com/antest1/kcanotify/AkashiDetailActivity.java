@@ -187,7 +187,7 @@ public class AkashiDetailActivity extends BaseActivity {
                             require_items_str.add(mse_string[2]);
 
                             JsonArray require_item2 = data.getAsJsonArray("require_item2");
-                            if (require_item2.size() % 2 == 0) {
+                            if (!require_item2.isEmpty() && require_item2.size() % 2 == 0) {
                                 int require_item2_cnt = require_item2.size() / 2;
                                 for (int k = 0; k < require_item2_cnt; k++) {
                                     int item2_from = require_item2.get(k*2).getAsInt();
@@ -198,9 +198,12 @@ public class AkashiDetailActivity extends BaseActivity {
                                         JsonObject item_info = getRequiredItemData(r_item.get(0).getAsInt());
                                         String require_item_name = getRequiredItemName(item_info.getAsJsonObject("name"));
                                         String useitem_id = item_info.get("useitem_id").getAsString();
-                                        int useritem_count_view = 0;
+
+                                        int useritem_count_view;
                                         if (useritem_count.has(useitem_id)) {
                                             useritem_count_view = useritem_count.get(useitem_id).getAsInt();
+                                        } else {
+                                            useritem_count_view = getUserItemCount(useitem_id);
                                         }
                                         require_items_str.add(KcaUtils.format("[★%d] %sx%d (%d)",
                                                 item2_from, require_item_name, require_item_count, useritem_count_view));
@@ -423,5 +426,21 @@ public class AkashiDetailActivity extends BaseActivity {
             }
         }
         return count_result;
+    }
+
+    private int getUserItemCount(String useritem_id) {
+        String key = switch (useritem_id) {
+            case "66" -> "145";
+            case "67" -> "146";
+            default -> null;
+        };
+
+        if (key != null) {
+            Set<String> total_items = new HashSet<>();
+            total_items.add(key);
+            JsonObject result = getItemCount(total_items);
+            if (result.has(key)) return result.get(key).getAsInt();
+        }
+        return 0;
     }
 }

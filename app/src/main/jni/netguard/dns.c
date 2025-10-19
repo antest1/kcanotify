@@ -148,7 +148,7 @@ void parse_dns_response(const struct arguments *args, const struct ng_session *s
                                 return;
                         }
 
-                        log_android(ANDROID_LOG_ERROR,
+                        log_android(ANDROID_LOG_DEBUG,
                                     "DNS answer %d qname %s qtype %d ttl %d data %s",
                                     a, name, qtype, ttl, rd);
                         register_kca_server(args, name, rd);

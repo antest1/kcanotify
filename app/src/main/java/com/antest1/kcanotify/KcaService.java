@@ -255,6 +255,7 @@ public class KcaService extends BaseService {
                 int sniffer_mode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE));
                 Log.e("KCA-S", String.valueOf(sniffer_mode));
 
+                KcaVpnData.initVpnDataQueue();
                 if (kc_app.equals(KC_PACKAGE_NAME) || sniffer_mode == SNIFFER_ACTIVE) {
                     KcaVpnData.setHandler(handler);
                 } else if (sniffer_mode == SNIFFER_PASSIVE) {

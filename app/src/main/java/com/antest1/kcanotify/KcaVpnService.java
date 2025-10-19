@@ -722,7 +722,7 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
 
     private void startNative(ParcelFileDescriptor vpn) {
         // Prepare rules
-        int prio = Log.WARN; // Log.ERROR;
+        int prio = Log.ERROR; // Log.WARN;
         int rcode = 3;
 
         SharedPreferences prefs = getSharedPreferences("pref", Context.MODE_PRIVATE);

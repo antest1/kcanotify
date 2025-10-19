@@ -11,13 +11,18 @@
 ##### 설정 방법
 <img src="https://kcanotify-docs.s3.ap-northeast-1.amazonaws.com/ko/officialapp_integration.png" width="720"/>
 
-- 설정 → 깡들리티 설정에서 다음과 같이 설정합니다.
+설정 → 깡들리티 설정에서 다음과 같이 설정합니다.
   - 칸코레 어플리케이션 선택: <span class="text-danger">안드로이드판 칸코레 (공식)</span>
   - 해당 설정은 서비스가 꺼져 있는 상태에서만 변경이 가능합니다.
-- 스니퍼(ACTIVE) 설정에서 <span class="text-danger">HTTPS 트래픽 캡쳐</span>를 활성화합니다.
+
+**깡들리티에서 게임 통신 내용을 읽을 수 있도록 게임 어플을 패치해야 합니다.**
+- 자세한 내용은 **칸코레 어플 패치 방법**을 참고하세요.
+
+스니퍼(ACTIVE) 설정에서 <span class="text-danger">HTTPS 트래픽 캡쳐</span>를 활성화합니다.
   - <b>Mitm 설치 도우미</b>를 통해 필요한 항목들을 먼저 설치해야 합니다. (하단 내용 참고)
   - 필요한 항목들이 설치되지 않은 경우 스니퍼 시작 시 도우미 화면이 나타납니다.
-- 안드로이드판 칸코레에서는 별도의 설정이 필요하지 않습니다.
+
+---
 
 ##### 플레이 방법
 <img src="https://kcanotify-docs.s3.ap-northeast-1.amazonaws.com/ko/active_sniffer_buttons.png" width="480"/>
@@ -29,6 +34,49 @@
   - VpnService 관련 안내를 수락한 이후, 연결 요청을 확인
   - kcanotify mitm addon의 배터리 최적화 해제
 <img src="https://kcanotify-docs.s3.ap-northeast-1.amazonaws.com/ko/sniffer_init.png" width="800"/>
+
+---
+
+##### 칸코레 어플 패치 방법
+
+<img src="https://kcanotify-docs.s3.ap-northeast-1.amazonaws.com/common/revanced_icon.png" width="96"/>
+
+이 가이드에서는 **ReVanced Manager**를 활용하여 원본 APK 파일을 패치하는 방법에 대해 설명합니다.  
+공식 웹사이트에서 ReVanced Manager를 다운로드받을 수 있습니다.
+
+🔗 [공식 웹사이트](https://revanced.app/)
+
+###### 설치 및 설정
+
+<img src="https://kcanotify-docs.s3.ap-northeast-1.amazonaws.com/ko/revanced_settings.png" width="360"/>
+
+ReVanced Manager를 실행한 이후,  
+설정에서 <span class="text-danger">패치 선택 변경 허용</span> 및
+<span class="text-danger">공용 패치 보기</span>를 활성화합니다.
+
+###### 앱 및 패치 선택하기
+
+<img src="https://kcanotify-docs.s3.ap-northeast-1.amazonaws.com/ko/revanced_patcher.png" width="640"/>
+
+화면 하단의 Patcher를 선택합니다.
+
+우선, "앱 선택하기"에서 칸코레 어플을 찾은 후 선택합니다.  
+🔍 "艦これ" 혹은 "kancolle" 키워드로 검색 가능
+
+이후, "패치 선택하기"에서 <span class="text-danger">「Override certificate pinning」</span>을 선택합니다.
+
+###### 패치 진행 및 설치
+
+<img src="https://kcanotify-docs.s3.ap-northeast-1.amazonaws.com/ko/revanced_progress.png" width="640"/>
+
+선택 내용 확인 이후, 우하단 패치하기를 눌러 진행합니다.  
+패치가 완료된 이후, 어플을 다시 설치하면 됩니다.
+
+💡 기존에 설치된 칸코레는 삭제되어야 합니다.  
+📢 DMM Store로부터 업데이트를 다운받고 설치할 때,  
+기존의 어플을 삭제한 이후 다시 패치를 수행해야 합니다.
+
+---
 
 ##### Mitm 설치 도우미
 

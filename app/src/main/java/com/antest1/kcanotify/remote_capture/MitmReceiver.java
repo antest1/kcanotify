@@ -243,7 +243,7 @@ public class MitmReceiver implements Runnable, MitmListener {
                         int pkt_type = (type == MsgType.HTTP_REQUEST) ? KcaVpnData.REQUEST : KcaVpnData.RESPONSE;
                         int sport = (type == MsgType.HTTP_REQUEST) ? port : 443;
                         int dport = (type == MsgType.HTTP_REQUEST) ? 443 : port;
-                        getDataFromNative(msg, msg.length, pkt_type, null, null, sport, dport);
+                        getDataFromNative(msg, msg.length, pkt_type, null, null, sport, dport, tstamp);
                     }
                 }
             }
