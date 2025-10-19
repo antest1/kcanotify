@@ -4663,14 +4663,14 @@
         "rewards": "¶First choice: Either a Pumpkin OR 4 SOC Seagulls OR 4 Screws ¶Second choice: Either an Action Report OR a RUR-4A Weapon Alpha Kai OR two Pumpkins",
         "resources": [[0, 0, 780, 780], [0, 0, 0, 0]]
     },
-    "987": {
+    "1002": {
         "code": "L2509B4",
         "name": "[Limited Time Expansion Quest] Pumpkin Festival 2025: Expansion Plan!",
         "desc": "Assemble a fleet containing any 3 of: \"Minneapolis, Tuscaloosa, Gambier Bay, Jervis, Oboro, Yuudachi, Murasame, Asashio, Nowaki, or Makinami\" with one as flagship; and up to 3 XX, then S rank the boss nodes of 3-2, 3-5, and 6-4.",
         "rewards": "¶First choice: Either 9 Screws OR a Reppuu Kai (Prototype Carrier Type) ★4 OR two Type 0 Fighter Model 62 Kai (Night Fighter-bomber) ★3 ¶Second choice: Either two Action Reports OR three Pumpkins OR a Remodel Blueprint",
         "resources": [[2025, 1031, 0, 0], [0, 0, 0, 0]]
     },
-    "1002": {
+    "987": {
         "code": "L2509B5",
         "name": "[Weekly Expansion Quest] Autumn Pumpkin Festival! Buono!",
         "desc": "Assemble a fleet containing any 3 of: \"Roma, Luigi Torelli, Maestrale, Grecale, Libeccio, Scirocco, Jervis, Minneapolis, Murasame, Yuudachi, Akebono, or Oboro\" with one as flagship; and up to 3 XX, then S rank the boss nodes of 4-2, 4-3, and 4-4.",

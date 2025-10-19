@@ -4868,7 +4868,7 @@
         "rewards": "[호박 or SOC Seagull×4 or 개수자재×4], [전투상보 or RUR-4A Weapon Alpha 개 or 호박×2]",
         "resources": [[0, 0, 780, 780], [0, 0, 0, 0]]
     },
-    "987": {
+    "1002": {
         "code": "L2509B4",
         "name": "【한정확장임무】 호박 축제 2025, 확장작전!",
         "desc": "「Minneapolis」 「Tuscaloosa」 「Gambier bay」 「Jervis」 「오보로」 「유다치」 「무라사메」 「아사시오」 「노와키」 「마키나미」 기함 포함 3척 이상의 강습함대로 키스섬 앞바다, 북방 AL 해역, 중부 북해역 피콕섬 앞바다의 적을 격멸하라!",
@@ -4876,7 +4876,7 @@
         "rewards": "[개수자재×9 or 렛푸 개 (시제함재형)★4 or 영식 함상전투기 62형 개 (야간폭전)★3×2], [전투상보×2 or 호박×3 or 개장설계도]",
         "resources": [[2025, 1031, 0, 0], [0, 0, 0, 0]]
     },
-    "1002": {
+    "987": {
         "code": "L2509B5",
         "name": "【주간확장임무】 가을의 호박 축제! Buono!",
         "desc": "「Roma」 「Luigi Torelli」 「Maestrale · Grecale · Libeccio · Scirocco」 「Jervis」 「Minneapolis」 「무라사메」 「유다치」 「오보로」 「아케보노」 기함 포함 3척 이상으로, 카레양 해역, 리랑카섬, 카스가다마섬을 제압하라!",
