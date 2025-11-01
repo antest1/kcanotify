@@ -415,6 +415,13 @@ public class KcaApiData {
             jp_name += "(南極観測船)";
         }
 
+        // add suffix for glorious
+        if (api_id == 740 || api_id == 1022) {
+            jp_name += "(巡洋戦艦)";
+        } else if (api_id == 741 || api_id == 1027) {
+            jp_name += "(正規空母)";
+        }
+
         if (currentLocaleCode.equals("jp")) {
             return jp_name;
         }
