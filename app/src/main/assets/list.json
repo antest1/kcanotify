@@ -4,7 +4,7 @@
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/icon_info.json"
 }, {
 	"name": "akashi_data.json",
-	"version": 2025100702,
+	"version": 2025110101,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/akashi_data.json"
 }, {
 	"name": "akashi_reqitems.json",
@@ -12,15 +12,15 @@
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/akashi_reqitems.json"
 }, {
 	"name": "akashi_day.json",
-	"version": 2025100701,
+	"version": 2025110101,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/akashi_day.json"
 }, {
 	"name": "edges.json",
-	"version": 2025032301,
+	"version": 2025103001,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/edges.json"
 }, {
 	"name": "map_sub.json",
-	"version": 2025032301,
+	"version": 2025103001,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/map_sub.json"
 }, {
 	"name": "expedition.json",
@@ -28,19 +28,19 @@
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/expedition.json"
 }, {
 	"name": "items-en.json",
-	"version": 2025062701,
+	"version": 2025103001,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/items-en.json"
 }, {
 	"name": "items-ko.json",
-	"version": 2025062701,
+	"version": 2025103001,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/items-ko.json"
 }, {
 	"name": "items-scn.json",
-	"version": 2025062701,
+	"version": 2025103001,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/items-scn.json"
 }, {
 	"name": "items-tcn.json",
-	"version": 2025062701,
+	"version": 2025103001,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/items-tcn.json"
 }, {
 	"name": "quest_track.json",
@@ -68,19 +68,19 @@
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/quests-tcn.json"
 }, {
 	"name": "ships-en.json",
-	"version": 2025051201,
+	"version": 2025103001,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/ships-en.json"
 }, {
 	"name": "ships-ko.json",
-	"version": 2025051201,
+	"version": 2025103001,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/ships-ko.json"
 }, {
 	"name": "ships-scn.json",
-	"version": 2025051201,
+	"version": 2025103001,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/ships-scn.json"
 }, {
 	"name": "ships-tcn.json",
-	"version": 2025051201,
+	"version": 2025103001,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/ships-tcn.json"
 }, {
 	"name": "ships_init_equip_count.json",
@@ -108,7 +108,7 @@
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/stype-tcn.json"
 }, {
 	"name": "world_list.json",
-	"version": 2025013001,
+	"version": 2025103001,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/world_list.json"
 }, {
 	"name": "ships_filter_data.json",
@@ -116,7 +116,7 @@
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/ships_filter_data.json"
 }, {
 	"name": "ships_nationality_data.json",
-	"version": 2025032301,
+	"version": 2025103001,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/ships_nationality_data.json"
 }, {
 	"name": "useitems-ko.json",

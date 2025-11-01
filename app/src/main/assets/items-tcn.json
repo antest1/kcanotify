@@ -558,6 +558,11 @@
     "Ju87 D-4(Fliegerass)": "Ju87 D-4(Fliegerass)",
     "Bf109 T-3(G)": "Bf109 T-3(G)",
     "Ho229": "Ho229",
+    "Do 217 E-5+TV誘導型 Hs293D": "Do 217 E-5+TV誘導型 Hs293D",
+    "21cm単装主砲": "21cm単裝主砲",
+    "15cm単装副砲": "15cm単装副砲",
+    "10.2cm三連装副砲": "10.2cm三連裝副砲",
+    "Sea Gladiator": "Sea Gladiator",
     "12.5inch連装副砲": "12.5inch連裝副砲",
     "12.7mm機銃": "12.7mm機槍",
     "14inch連装砲": "14inch連裝砲",
@@ -706,5 +711,8 @@
     "深海不屈艦爆 Mk.II": "深海不屈艦爆 Mk.II",
     "深海打撃艦攻 Mk.II": "深海打撃艦攻 Mk.II",
     "深海5inch連装砲 Mk.30+GFCS": "深海5inch連裝砲 Mk.30+GFCS",
-    "深海18cm三連装砲+深海SG": "深海18cm三連裝炮+深海SG"
+    "深海18cm三連装砲+深海SG": "深海18cm三連裝炮+深海SG",
+    "深海8.25inch単装主砲": "深海8.25inch単裝主砲",
+    "深海6inch副砲群": "深海6inch副砲群",
+    "深海4inch三連装副砲": "深海4inch10.2cm三連裝副砲"
 }
