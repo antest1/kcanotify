@@ -45,7 +45,7 @@ public class ShipInfoFilterActivity extends BaseActivity {
     public final static int SPECIAL_EQUIPMENT_COUNT = 5;
     public final static int SHIP_STATUS_COUNT = 2;
 
-    public final static int SHIP_NAT_COUNT = 10;
+    public final static int SHIP_NAT_COUNT = 11;
 
     Toolbar toolbar;
     static Gson gson = new Gson();
@@ -85,7 +85,7 @@ public class ShipInfoFilterActivity extends BaseActivity {
                 if (!val.endsWith(",")) data.add(sort_values.get(k));
             }
         }
-        if (data.size() == 0) return "|";
+        if (data.isEmpty()) return "|";
         return KcaUtils.format("|%s|", KcaUtils.joinStr(data, "|"));
     }
 
@@ -170,10 +170,10 @@ public class ShipInfoFilterActivity extends BaseActivity {
         sort_values = new SparseArray<>();
 
         for (String key_desc: sort_keys) {
-            if (key_desc.length() > 0) {
+            if (!key_desc.isEmpty()) {
                 String[] key_desc_list = key_desc.split(",", 3);
-                int key = Integer.valueOf(key_desc_list[0]);
-                int op = Integer.valueOf(key_desc_list[1]);
+                int key = Integer.parseInt(key_desc_list[0]);
+                int op = Integer.parseInt(key_desc_list[1]);
                 String value = "";
                 if (key_desc_list.length > 2) value = key_desc_list[2];
                 makeAndFilterItem(key, op, value, false);
@@ -304,7 +304,7 @@ public class ShipInfoFilterActivity extends BaseActivity {
         if (key != -1) ((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_spinner))
                 .setSelection(KcaShipListViewAdpater.getFilterIndexByKey(key));
         if (op != -1) ((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_operator)).setSelection(op);
-        if (value.length() > 0) {
+        if (!value.isEmpty()) {
             if (KcaShipListViewAdpater.isBoolean(key)) {
                 ((CheckBox) listview.findViewWithTag(target).findViewById(R.id.ship_stat_checked)).setChecked(op > 0);
             } else if (KcaShipListViewAdpater.isList(key)) {
@@ -396,8 +396,8 @@ public class ShipInfoFilterActivity extends BaseActivity {
         String[] val = obj.get("val").getAsString().split("_");
 
         for (String v: val) {
-            if (v.length() > 0) {
-                int idx = getRealPosition(fnc, Integer.valueOf(v));
+            if (!v.isEmpty()) {
+                int idx = getRealPosition(fnc, Integer.parseInt(v));
                 if (idx < selected_arr.length) {
                     selected_arr[idx] = true;
                     selectedItems.add(idx);
@@ -448,7 +448,7 @@ public class ShipInfoFilterActivity extends BaseActivity {
         List<String> stype_list = new ArrayList<>();
         for (int i = 1; i < KcaApiData.getShipTypeSize(); i++) {
             String value = KcaApiData.getShipTypeAbbr(i);
-            if (value.length() > 0) stype_list.add(value);
+            if (!value.isEmpty()) stype_list.add(value);
         }
         String[] stype_arr = new String[stype_list.size()];
         stype_arr = stype_list.toArray(stype_arr);
@@ -511,14 +511,11 @@ public class ShipInfoFilterActivity extends BaseActivity {
     }
     private int getSpeedPosition(int i) { return (i - 1) / 5; }
     private int getRealPosition(int fnc, int i) {
-        switch (fnc) {
-            case 1:
-                return getStypePosition(i);
-            case 2:
-                return getSpeedPosition(i);
-            default:
-                return i;
-        }
+        return switch (fnc) {
+            case 1 -> getStypePosition(i);
+            case 2 -> getSpeedPosition(i);
+            default -> i;
+        };
     }
 
     private void setValueAndFinish() {
@@ -540,17 +537,15 @@ public class ShipInfoFilterActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                setValueAndFinish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            setValueAndFinish();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     public static class KcaTextWatcher implements TextWatcher {
-        private EditText mEditText;
+        private final EditText mEditText;
         public KcaTextWatcher(EditText editText) {
             mEditText = editText;
         }

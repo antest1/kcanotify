@@ -558,6 +558,11 @@
     "Ju87 D-4(Fliegerass)": "Ju87 D-4(Fliegerass)",
     "Bf109 T-3(G)": "Bf109 T-3(G)",
     "Ho229": "Ho229",
+    "Do 217 E-5+TV誘導型 Hs293D": "Do 217 E-5 + TV-guided Hs293D",
+    "21cm単装主砲": "21cm Single Gun Mount",
+    "15cm単装副砲": "15cm Single Secondary Gun Mount",
+    "10.2cm三連装副砲": "10.2cm Triple Secondary Gun Mount",
+    "Sea Gladiator": "Sea Gladiator",
     "12.5inch連装副砲": "12.5inch Twin Secondary Gun Mount",
     "12.7mm機銃": "12.7mm Machine Gun",
     "14inch連装砲": "14inch Twin Gun Mount",
@@ -706,5 +711,8 @@
     "深海不屈艦爆 Mk.II": "Abyssal Dauntless Bomber Mk.II",
     "深海打撃艦攻 Mk.II": "Abyssal Devastator Torpedo Bomber Mk.II",
     "深海5inch連装砲 Mk.30+GFCS": "Abyssal 5inch Twin Gun Mount Mk.30 + GFCS",
-    "深海18cm三連装砲+深海SG": "Abyssal 18cm Triple Gun Mount + Abyssal SG"
+    "深海18cm三連装砲+深海SG": "Abyssal 18cm Triple Gun Mount + Abyssal SG",
+    "深海8.25inch単装主砲": "Abyssal 8.25inch Single Gun Mount",
+    "深海6inch副砲群": "Abyssal 6inch Secondary Gun Mount Battery",
+    "深海4inch三連装副砲": "Abyssal 4inch Triple Secondary Gun Mount"
 }
