@@ -796,6 +796,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="nat8">瑞典</string>
     <string name="nat9">澳洲</string>
     <string name="nat10">荷蘭</string>
+    <string name="nat11">挪威</string>
 
 
     <!-- strings from PCAPdroid -->

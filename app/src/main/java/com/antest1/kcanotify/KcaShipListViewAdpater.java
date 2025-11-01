@@ -600,7 +600,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
                 if (!found_flag) continue;
             }
 
-            if (ship_nat.trim().length() > 0) {
+            if (!ship_nat.trim().isEmpty()) {
                 String[] nat_list = ship_nat.split(",");
                 boolean found_flag = false;
                 for (String key: nat_list) {
