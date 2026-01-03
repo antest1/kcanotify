@@ -29,12 +29,14 @@ public class KcaHandler implements Runnable {
     String url;
     byte[] requestBytes;
     byte[] responseBytes;
+    boolean useDevTools;
 
-    public KcaHandler(Handler h, String u, byte[] b1, byte[] b2) {
+    public KcaHandler(Handler h, String u, byte[] b1, byte[] b2, boolean ud) {
         handler = h;
         url = u;
         requestBytes = b1;
         responseBytes = b2;
+        useDevTools = ud;
     }
 
     public void run() {
@@ -44,6 +46,7 @@ public class KcaHandler implements Runnable {
         bundle.putString("url", url.replace("/kcsapi", ""));
         bundle.putString("request", reqData);
         bundle.putByteArray("data", responseBytes);
+        bundle.putBoolean("dev_flag", useDevTools);
         Message msg = handler.obtainMessage();
         msg.setData(bundle);
 

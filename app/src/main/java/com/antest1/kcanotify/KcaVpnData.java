@@ -176,7 +176,8 @@ public class KcaVpnData {
                         if (requestBody == null) requestBody = new byte[]{};
 
                         if (checkKcVersion(requestUri) || checkKcApi(requestUri)) {
-                            KcaHandler k = new KcaHandler(handler, requestUri, requestBody, responseBody);
+                            KcaHandler k = new KcaHandler(
+                                    handler, requestUri, requestBody, responseBody, false);
                             executorService.execute(k);
                             requestUriMap.remove(tstamp);
                             requestDataMap.remove(tstamp);
@@ -198,7 +199,9 @@ public class KcaVpnData {
             } else {
                 error_data.addProperty("response", responseDataStr);
             }
-            KcaHandler k = new KcaHandler(handler, error_uri, empty_request.getBytes(), error_data.toString().getBytes());
+            KcaHandler k = new KcaHandler(
+                    handler, error_uri,
+                    empty_request.getBytes(),error_data.toString().getBytes(), false);
             executorService.execute(k);
             Log.e("KCA", getStringFromException(e));
         }

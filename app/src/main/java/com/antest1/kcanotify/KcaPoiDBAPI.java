@@ -36,10 +36,16 @@ public class KcaPoiDBAPI {
 
     public static final String USER_AGENT = KcaUtils.format("Kcanotify/%s", BuildConfig.VERSION_NAME);
 
+    public boolean isDevRequestFlag = false;
+
     public Handler sHandler;
 
     public KcaPoiDBAPI(Handler h) {
         sHandler = h;
+    }
+
+    public void setDevFlag(boolean dev_flag) {
+        isDevRequestFlag = dev_flag;
     }
 
     public void sendEquipDevData(String items, int secretary, int itemId, int teitokuLv, boolean successful) {
@@ -100,6 +106,9 @@ public class KcaPoiDBAPI {
     }
 
     private void requestApi(String endpoint, String body) {
+        // cancel request if dev_flag set (from gotobrowser)
+        if (isDevRequestFlag) return;
+
         Handler handler = new Handler(Looper.getMainLooper());
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
