@@ -45,7 +45,7 @@ public class ShipInfoFilterActivity extends BaseActivity {
     public final static int SPECIAL_EQUIPMENT_COUNT = 5;
     public final static int SHIP_STATUS_COUNT = 2;
 
-    public final static int SHIP_NAT_COUNT = 11;
+    public final static int SHIP_NAT_COUNT = 12;
 
     Toolbar toolbar;
     static Gson gson = new Gson();

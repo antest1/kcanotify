@@ -2149,6 +2149,13 @@
         "rewards": "¶First choice: Either +2 Equipment Slots OR 2000 Fuels OR a New Model Rocket Development Material ¶Second choice: Either two Medals OR 9 Screws OR 3600 Bauxites",
         "resources": [[400, 400, 400, 0], [0, 0, 0, 0]]
     },
+    "1010": {
+        "code": "B212",
+        "name": "Air Defense Destroyer Akizuki Kai Ni, Reporting In!",
+        "desc": "Sortie Akizuki Kai Ni as flagship and up to 5 additional ships to [W1-4], [W2-4], [W5-4], [W7-1] and [W7-2-M]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either two Type 94 Anti-Aircraft Fire Directors OR a Type 13 Air Radar Kai ★8 OR an Action Report ¶Second choice: Either a 10cm Twin High-angle Gun Mount Kai + Anti-Aircraft Fire Director Kai OR a Prototype 61cm Sextuple (Oxygen) Torpedo Mount",
+        "resources": [[610, 610, 610, 610], [0, 0, 0, 0]]
+    },
     "201": {
         "code": "Bd1",
         "name": "Daily Victory",
@@ -4607,20 +4614,6 @@
         "rewards": "¶First choice: Either 4 7.7mm Machine Guns OR three 25mm Single Autocannon Mounts OR a Mamiya ¶Second choice: Either 4 Screws OR 4000 Fuels OR two Irako",
         "resources": [[320, 320, 320, 320], [0, 0, 0, 0]]
     },
-    "1034": {
-        "code": "L2506B1",
-        "name": "Monthly [Time-limited] Escort Asahi on a Summer Day",
-        "desc": "Sortie Asahi as flagship and either 3 DD and up to 2 additional ships OR a DE and up to 4 to additional ships to [W1-2], [W1-3], [W1-4] and [W2-1]. S-Rank each boss node.",
-        "rewards": "¶First choice: Either 640 Ammos OR 800 Steels OR two Buckets ¶Second choice: Either 16 Development Materials OR a Medal OR a New Model Gun Mount Improvement Material",
-        "resources": [[360, 360, 0, 280], [0, 0, 0, 0]]
-    },
-    "1035": {
-        "code": "L2506B2",
-        "name": "Monthly [Time-limited] Summer Night in Solomon",
-        "desc": "Sortie Noshiro or Atlanta as flagship, 3 DD and up to 2 additional ships OR Richard P. Leary as flagship, 2 DD and up to 3 additional ships to [W5-1], [W5-3] and [W5-4]. S-Rank each boss node.",
-        "rewards": "¶First choice: Either 6 Buckets OR two Ryuusei Kais OR 12 Development Materials ¶Second choice: Either two Latest Overseas Warship Technologys OR two Medals OR 9 Development Materials",
-        "resources": [[480, 480, 480, 0], [0, 0, 0, 0]]
-    },
     "380": {
         "code": "L2507C1",
         "name": "Weekly [Time-limited] Landing Fleet Escort Exercises!",
@@ -4642,88 +4635,74 @@
         "rewards": "¶First choice: Either 4 Development Materials OR two 25mm Single Autocannon Mounts OR an Equipment Slots ¶Second choice: Either 4 Buckets OR two Screws OR +2 Equipment Slots",
         "resources": [[100, 200, 100, 200], [0, 0, 0, 0]]
     },
-    "984": {
-        "code": "L2509B1",
-        "name": "[Limited Time Quest] 13th Year of Bountiful Autumn Harvest, Pumpkin Season Has Begun!",
-        "desc": "Assemble a fleet containing any 2 of: \"Oboro, Yuudachi, Murasame, Asashio, Makinami, Hayanami, Hamanami, Kiyoshimo, Jingei, Chougei, Ukuru, or Inagi\" with one as flagship; and up to 4 XX, then S rank the boss nodes of 1-3, 1-4, and 2-1, twice each.",
-        "rewards": "a Pumpkin and either a Mamiya OR 5 Buckets OR 8 Development Materials",
-        "resources": [[360, 360, 0, 0], [0, 0, 0, 0]]
+    "1024": {
+        "code": "L2512B5",
+        "name": "[End-Of-Year] Sortie! Coastal Defense Battleship, Maritime Combat Patrol!",
+        "desc": "Sortie Thonburi as flagship and up to 5 additional ships, OR 2 Norge-class, one as flagship, and up to 4 additional ships to to [W1-3], [W1-4], [W2-1] and [W3-1]. A-Rank+ each boss node.",
+        "rewards": "¶First choice: Either two Repair Teams OR three Screws OR a New Model Armament Material ¶Second choice: Either a 20.3cm Twin Gun Mount ★8 OR a Skilled Lookouts ★6 OR two Medals",
+        "resources": [[750, 500, 500, 500], [0, 0, 0, 0]]
     },
-    "985": {
-        "code": "L2509B2",
-        "name": "[Limited Time Quest] Special Assault Fleet, Set Sail!",
-        "desc": "Assemble a fleet containing any 3 of: \"Jingei, Chougei, Asahi, I-201, I-47, Murasame, Makinami, Kaiboukan No.4, Kaiboukan No.22, or Kaiboukan No.30\"; and up to 3 XX, then S rank the boss nodes of 1-5, 2-2, and 2-3.",
-        "rewards": "¶First choice: Either two Mamiyas OR a Reinforcement Expansion OR a Pumpkin ¶Second choice: Either an Action Report OR two Pumpkins OR two New Model Aerial Armament Materials",
-        "resources": [[570, 570, 0, 0], [0, 0, 0, 0]]
+    "361": {
+        "code": "L2512C1",
+        "name": "[End-Of-Year] Maritime Escort Force, Special Exercises!",
+        "desc": "Set the flagship with 2 Emergency Repair Personnel in her first and second slot, then secure 4 S-Rank victories in Exercises within the same day using a CVL, 4 DD and up to 1 additional ship, OR 2 DE and up to 4 additional ships in Fleet 1.",
+        "rewards": "two Repair Godnesses, ¶First choice: Either 4 Combat Rations OR 4 Screws OR 4 Type 94 Depth Charge Projectors ¶Second choice: Either a Type 2 Depth Charge ★4 OR 6 Type 3 Depth Charge Projectors OR 3300 Fuels",
+        "resources": [[700, 300, 300, 300], [0, 0, 0, 0]]
     },
-    "986": {
-        "code": "L2509B3",
-        "name": "[Limited Time Quest] US Special Assault Fleet +α, Sortie!",
-        "desc": "Assemble a fleet containing any 3 of: \"Gambier Bay, Minneapolis, Tuscaloosa, Brooklyn, Johnston, or Luigi Torelli\"; and up to 3 XX, then S rank the boss node of 3-1, and A+ rank the boss nodes of 2-4, and 6-1.",
-        "rewards": "¶First choice: Either a Pumpkin OR 4 SOC Seagulls OR 4 Screws ¶Second choice: Either an Action Report OR a RUR-4A Weapon Alpha Kai OR two Pumpkins",
-        "resources": [[0, 0, 780, 780], [0, 0, 0, 0]]
+    "1121": {
+        "code": "L2512F1",
+        "name": "[End-Of-Year] Naval District General Cleaning! Happy New Year!",
+        "desc": "Have 8 Type 96 Fighters, 5 Type 94 Depth Charge Projectors and 2025 Steel. Scrap 11 Small Caliber Main Guns, 11 Medium Caliber Main Guns and 11 Reconnaissance Seaplanes.",
+        "rewards": "¶First choice: Either two Repair Teams OR a Medal OR 2026 Fuels ¶Second choice: Either two Mamiyas OR two Medals OR 7 Screws",
+        "resources": [[1000, 0, 1000, 0], [0, 0, 0, 0]]
     },
-    "1002": {
-        "code": "L2509B4",
-        "name": "[Limited Time Expansion Quest] Pumpkin Festival 2025: Expansion Plan!",
-        "desc": "Assemble a fleet containing any 3 of: \"Minneapolis, Tuscaloosa, Gambier Bay, Jervis, Oboro, Yuudachi, Murasame, Asashio, Nowaki, or Makinami\" with one as flagship; and up to 3 XX, then S rank the boss nodes of 3-2, 3-5, and 6-4.",
-        "rewards": "¶First choice: Either 9 Screws OR a Reppuu Kai (Prototype Carrier Type) ★4 OR two Type 0 Fighter Model 62 Kai (Night Fighter-bomber) ★3 ¶Second choice: Either two Action Reports OR three Pumpkins OR a Remodel Blueprint",
-        "resources": [[2025, 1031, 0, 0], [0, 0, 0, 0]]
-    },
-    "987": {
-        "code": "L2509B5",
-        "name": "[Weekly Expansion Quest] Autumn Pumpkin Festival! Buono!",
-        "desc": "Assemble a fleet containing any 3 of: \"Roma, Luigi Torelli, Maestrale, Grecale, Libeccio, Scirocco, Jervis, Minneapolis, Murasame, Yuudachi, Akebono, or Oboro\" with one as flagship; and up to 3 XX, then S rank the boss nodes of 4-2, 4-3, and 4-4.",
-        "rewards": "¶First choice: Either a Pumpkin OR 12 Development Materials ¶Second choice: Either two Ro.44 Seaplane Fighters OR a Latest Overseas Warship Technology OR a Pumpkin",
-        "resources": [[880, 880, 0, 0], [0, 0, 0, 0]]
-    },
-    "359": {
-        "code": "L2509C1",
-        "name": "Halloween Fleet: Bountiful Autumn, Assault Exercise!",
-        "desc": "Assemble a fleet containing any 4 of: \"Jervis, Abukuma, Oboro, Yuudachi, Murasame, Nowaki, Asashio, I-201, Hayanami, Hamanami, Ukuru, Inagi, Johnston, or Minneapolis\"; and up to 2 XX, then score 5 A+ ranks in PVP within the same day.",
-        "rewards": "¶First choice: Either a Mamiya OR 6 Flamethrowers OR 4 Screws ¶Second choice: Either a Pumpkin OR 4200 Fuels OR 2700 Bauxites",
-        "resources": [[480, 480, 0, 0], [0, 0, 0, 0]]
-    },
-    "1119": {
-        "code": "L2509F1",
-        "name": "[Limited Time] Halloween Pumpkin, Wanna Eat It?",
-        "desc": "Scrap 8 Small Caliber Main Guns, 8 Medium Caliber Main Guns, 8 Seaplane Recons, and Prepare 8 20.3cm Twin Gun Mount, 8 Type 99 Dive Bomber, 1031 Furniture Coins.",
-        "rewards": "¶First choice: Either a Medal OR a Pumpkin OR 12 Development Materials ¶Second choice: Either 2025 Bauxites OR a Mamiya OR a Pumpkin",
-        "resources": [[0, 0, 880, 0], [0, 0, 0, 0]]
-    },
-    "1156": {
-        "code": "L2509F2",
-        "name": "[Heavy Pumpkin Festival Expansion Quest] Will you Harvest a Big One?",
-        "desc": "Scrap 12 \"Dive Bombers\", 12 \"Torpedo Bombers\", 12 \"Seaplane Recons\", and prepare 2 New Model Aerial Armament Material, 5 Pumpkins, and 80 Development Materials.",
-        "rewards": "¶First choice: Either +48 Equipment Slots OR 8 Pumpkins OR three Action Reports ¶Second choice: Either a Sinzan ★8 OR a B-25 OR 5 Latest Overseas Warship Technologys",
+    "1146": {
+        "code": "L2512F2",
+        "name": "[End-Of-Year] Extended Cleaning & Special Resource Export I",
+        "desc": "Have 5 Smoke Generator (Smoke Screen), 25 Furniture Boxes (Small) and 2025 Ammo. Scrap 8 Dive Bombers, 8 Torpedo Bombers and 16 Torpedoes.",
+        "rewards": "¶First choice: Either 3200 Steels OR 3600 Fuels OR 26 Development Materials ¶Second choice: Either 30 Buckets OR three Skilled Crew Members OR two Medals",
         "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
     },
-    "1038": {
-        "code": "L2510B1",
-        "name": "[Halloween] Halloween Refills Have Begun!",
-        "desc": "Sortie any 4 of Akebono, Oboro, Asahi, Mizuho, Jingei, Chougei, Johnston and Richard P. Leary, one as flagship, and up to 2 additional ships to [W1-1] and [W1-3]. S-Rank each boss node four times.",
-        "rewards": "a Pumpkin and either 20 Development Materials OR a Pumpkin OR +4 Equipment Slots",
-        "resources": [[300, 300, 0, 0], [0, 0, 0, 0]]
-    },
-    "1039": {
-        "code": "L2510B2",
-        "name": "Weekly [Halloween] Halloween Maritime Escort Squadron, Sortie!",
-        "desc": "Sortie any 4 of Akebono, Asashio, Makinami, Hamanami, Abukuma, Ukuru, Inagi, Noumi, Kaiboukan No.4, Kaiboukan No.22 and Kaiboukan No.30, and up to 2 additional ships to [W1-2], [W1-4] and [W1-5]. S-Rank each boss node.",
-        "rewards": "a Pumpkin and either three Type 2 12cm Mortar Kais OR a Pumpkin OR a Medal",
-        "resources": [[480, 0, 480, 0], [0, 0, 0, 0]]
-    },
-    "1040": {
-        "code": "L2510B3",
-        "name": "Weekly [Halloween] Halloween Wolf Squad, Night Raid!",
-        "desc": "Sortie any 3 of Oboro, Yuudachi, Nowaki, Hayanami, Kumano Maru, Jingei Kai and Tuscaloosa, one as flagship, and up to 3 additional ships to [W2-1] and [W2-2]. S-Rank each boss node twice.",
-        "rewards": "¶First choice: Either a Pumpkin OR two Mamiyas ¶Second choice: Either 4800 Ammos OR a Pumpkin OR 36 Development Materials",
-        "resources": [[480, 0, 0, 480], [0, 0, 0, 0]]
-    },
-    "1157": {
-        "code": "L2510F1",
-        "name": "[Halloween] Organize Your Anti-Submarine Equipment Too!",
-        "desc": "Have 2 Pumpkins, 3 12cm 30-tube Rocket Launchers and 30 Development Materials. Scrap 6 Type 94 Depth Charge Projectors, 6 Type 3 Depth Charge Projectors and 6 Type 2 12cm Mortar Kai.",
-        "rewards": "¶First choice: Either +18 Equipment Slots OR 4 Pumpkins OR two Type 2 Depth Charge ★4 ¶Second choice: Either two Type 2 12cm Mortar Kai (Concentrated Deployment) ★6 OR a Prototype 15cm Nonuple ASW Rocket Launcher ★3 OR three Latest Overseas Warship Technologys",
+    "1147": {
+        "code": "L2512F3",
+        "name": "[End-Of-Year] Extended Cleaning & Special Resource Export II",
+        "desc": "Have 8 Type 13 Air Radars, 4 Type 21 Air Radars and 2025 Steel. Scrap 8 Large Caliber Main Guns, 16 Medium Caliber Main Guns and 20 Reconnaissance Seaplanes.",
+        "rewards": "¶First choice: Either 5000 Ammos OR 2026 Bauxites OR 5000 Fuels ¶Second choice: Either 42 Development Materials OR a Type 42 Air Radar ★4 OR three New Model Gun Mount Improvement Materials",
         "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "801": {
+        "code": "L2601B1",
+        "name": "[New Year] Happy New Year! In 2026, Weigh Anchor!",
+        "desc": "Sortie a CL(T)/CT as flagship, either 3 DD and up to 2 additional ships OR 2 DE and up to 3 additional ships to [W1-1], [W1-2], [W1-3] and [W1-5]. A-Rank+ each boss node.",
+        "rewards": "¶First choice: Either 10 Development Materials OR a Mamiya OR a Furniture Fairy ¶Second choice: Either a Medal OR 5 Screws OR three Irako",
+        "resources": [[2026, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "802": {
+        "code": "L2601B2",
+        "name": "[New Year] Happy New Year! In Reiwa 8th Year, Elite Cruiser Squadron, Commence Sortie!",
+        "desc": "Sortie 3 CL(T)/CT/CA(V), one as flagship, a DD and up to 2 additional ships to [W1-4], [W2-1], [W2-2] and [W2-3]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either two New Model Armament Materials OR two New Model Gun Mount Improvement Materials OR two Medals ¶Second choice: Either three 20.3cm (No.2) Twin Gun Mount ★8 OR three 6inch Mk.XXIII Triple Gun Mount ★8 OR two Action Reports",
+        "resources": [[0, 0, 0, 2026], [0, 0, 0, 0]]
+    },
+    "803": {
+        "code": "L2601B3",
+        "name": "[New Year] Happy New Year 2026! Carrier Task Force, to the West! To the North and South!",
+        "desc": "Sortie a CV(L/B) as flagship, 2 DD and up to 3 additional ships to [W4-1], [W4-2], [W5-2] and [W3-1]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either two New Model Aerial Armament Materials OR 4 Emergency Repair Materials OR two Medals ¶Second choice: Either two Tenzan Model 12A Kai ★4 OR 4 Skilled Crew Members OR two 12cm 30-tube Rocket Launcher ★6",
+        "resources": [[2026, 2026, 0, 0], [0, 0, 0, 0]]
+    },
+    "804": {
+        "code": "L2601B4",
+        "name": "[New Year] Elite Japanese, British and American Aircraft Carriers, Joint New Year Operation!",
+        "desc": "Sortie any 2 of Ark Royal, Victorious, Intrepid, Hornet, Souryuu, Hiryuu, Shoukaku and Zuikaku, and up to 4 additional ships to [W2-5], [W5-5], [W6-2], [W7-2-M] and [W4-5]. S-Rank each boss node.",
+        "rewards": "a Furniture: Happy New Year! Hiryuu's Scroll and either two Skilled Deck Personnels OR a Prototype Flight Deck Catapult OR a Skilled Carrier-based Aircraft Maintenance Personnel",
+        "resources": [[0, 2026, 2026, 2026], [0, 0, 0, 0]]
+    },
+    "378": {
+        "code": "L2601C1",
+        "name": "Weekly [New Year] 6th Fleet, Special Exercises!",
+        "desc": "Secure 5 A-Rank+ victories in Exercises within the same day using an AS as flagship, an SS(V), an AS/SS(V) and up to 3 additional ships.",
+        "rewards": "¶First choice: Either 5 Buckets OR a Submarine Radar & Waterproof Periscope OR a Submarine Supply Material ¶Second choice: Either 12 Development Materials OR a Medal OR two Submarine Supply Materials",
+        "resources": [[550, 220, 220, 0], [0, 0, 0, 0]]
     }
 }

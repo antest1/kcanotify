@@ -236,6 +236,13 @@
                 android:layout_weight="1"
                 android:text="@string/nat11" />
 
+            <CheckBox
+                android:id="@+id/nat12"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/nat12" />
+
         </LinearLayout>
 
 

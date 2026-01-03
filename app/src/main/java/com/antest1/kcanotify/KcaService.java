@@ -583,6 +583,7 @@ public class KcaService extends BaseService {
         byte[] raw = msg.getData().getByteArray("data");
         Reader data = new InputStreamReader(new ByteArrayInputStream(raw));
         String request = msg.getData().getString("request");
+        boolean dev_flag = msg.getData().getBoolean("dev_flag");
 
         if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url.isEmpty()) {
             return;
@@ -610,6 +611,8 @@ public class KcaService extends BaseService {
             if (getBooleanPreferences(getApplicationContext(), PREF_PACKET_LOG)) {
                 packetLogger.log(url, request, jsonDataObj.toString());
             }
+
+            if (poiApiClient != null) poiApiClient.setDevFlag(dev_flag);
 
             if (url.equals(KCA_API_VPN_DATA_ERROR)) { // VPN Data Dump Send
                 String api_url = jsonDataObj.get("uri").getAsString();

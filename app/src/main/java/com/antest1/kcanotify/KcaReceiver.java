@@ -50,6 +50,7 @@ public class KcaReceiver extends BroadcastReceiver {
                 if (!url.isEmpty()) {
                     byte[] request = bundle.getString("request", "").getBytes();
                     byte[] response = bundle.getByteArray("response");
+                    boolean use_devtools = bundle.getBoolean("use_devtools", true);
                     if (bundle.getBoolean("gzipped", false)) {
                         try {
                             response = KcaUtils.gzipdecompress(response);
@@ -57,7 +58,7 @@ public class KcaReceiver extends BroadcastReceiver {
                             throw new RuntimeException(e);
                         }
                     }
-                    KcaHandler k = new KcaHandler(handler, url, request, response);
+                    KcaHandler k = new KcaHandler(handler, url, request, response, use_devtools);
                     executorService.execute(k);
                 }
             }
@@ -70,7 +71,7 @@ public class KcaReceiver extends BroadcastReceiver {
                         String url = cursor.getString(cursor.getColumnIndexOrThrow("URL"));
                         byte[] request = cursor.getString(cursor.getColumnIndexOrThrow("REQUEST")).getBytes();
                         byte[] response = cursor.getString(cursor.getColumnIndexOrThrow("RESPONSE")).getBytes();
-                        KcaHandler k = new KcaHandler(handler, url, request, response);
+                        KcaHandler k = new KcaHandler(handler, url, request, response, true);
                         executorService.execute(k);
                     }
                     cursor.close();
