@@ -870,6 +870,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="nat9">Australia</string>
     <string name="nat10">Netherlands</string>
     <string name="nat11">Norway</string>
+    <string name="nat12">Thailand</string>
 
 
     <!-- strings from PCAPdroid -->
