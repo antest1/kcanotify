@@ -76,7 +76,7 @@ License
 -------
 [GNU General Public License version 3](http://www.gnu.org/licenses/gpl.txt)
 
-Copyright (c) 2016-2025 antest1(IE10)
+Copyright (c) 2016-2026 antest1(IE10)
 
 All rights reserved
 
