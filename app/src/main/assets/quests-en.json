@@ -2156,6 +2156,20 @@
         "rewards": "¶First choice: Either two Type 94 Anti-Aircraft Fire Directors OR a Type 13 Air Radar Kai ★8 OR an Action Report ¶Second choice: Either a 10cm Twin High-angle Gun Mount Kai + Anti-Aircraft Fire Director Kai OR a Prototype 61cm Sextuple (Oxygen) Torpedo Mount",
         "resources": [[610, 610, 610, 610], [0, 0, 0, 0]]
     },
+    "1041": {
+        "code": "B213",
+        "name": "DesDiv 32 Hayanami Kai Ni, Ready to Go!",
+        "desc": "Sortie Hayanami Kai Ni as flagship, any 2 of Tamanami, Suzunami, Fujinami and Hamanami, and up to 3 additional ships to [W2-2], [W2-4], [W2-5], [W7-1] and [W7-2-M]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either two Medals OR a Type 2 Depth Charge ★8 OR an Action Report ¶Second choice: Either a Type 4 Passive Sonar ★2 OR a Passive Radiolocator (E27) + Type 22 Surface Radar Kai 4 (Late Adjustment Model) OR a 12.7cm Twin Gun Mount Model D Kai 3",
+        "resources": [[1944, 2026, 0, 0], [0, 0, 0, 0]]
+    },
+    "1042": {
+        "code": "B214",
+        "name": "Latest Remodeled Aircraft Carrier Hiryuu Kai San, a Whirlwind of Fury!",
+        "desc": "Sortie Hiryuu Kai San as flagship, any 2 of Kazagumo, Tamanami, Suzunami, Fujinami, Hayanami and Hamanami, and up to 3 additional ships to [W2-5], [W3-5], [W4-5], [W5-5] and [W6-4]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either 6 Prototype Reppuu Late Models OR 6 Ryuusei Kais OR +12 Equipment Slots ¶Second choice: Either 5 New Model Aerial Armament Materials OR 5 Medals OR two New Technology Aircraft Blueprints",
+        "resources": [[1942, 0, 1946, 2026], [0, 0, 0, 0]]
+    },
     "201": {
         "code": "Bd1",
         "name": "Daily Victory",
@@ -4171,6 +4185,48 @@
         "rewards": "¶First choice: Either 40 Development Materials OR +8 Equipment Slots OR 4 Combat Rations ¶Second choice: Either two 10cm Twin High-angle Gun Mount Kai ★5 OR a 10cm Twin High-angle Gun Mount + Anti-Aircraft Fire Director ★2",
         "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
     },
+    "1158": {
+        "code": "F136",
+        "name": "DesDiv 32 Hayanami, Preparing for Remodel!",
+        "desc": "Have a New Model Armament Materials and 8 Type 3 Depth Charge Projectors. Set Hayanami as secretary with any 3 of Tamanami, Suzunami, Fujinami and Hamanami. Scrap 5 Type 93 Passive Sonars, 5 Type 3 Active Sonars and 5 Type 95 Depth Charges.",
+        "rewards": "¶First choice: Either 63 Development Materials OR +10 Equipment Slots OR three New Model Armament Materials ¶Second choice: Either two Type 3 Depth Charge Projector (Concentrated Deployment) ★4 OR a Prototype 15cm Nonuple ASW Rocket Launcher",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1159": {
+        "code": "F137",
+        "name": "Reorganization of Mass-Produced Aircraft",
+        "desc": "Have a Skilled Crew Member, 40 Development Materials, 4000 Bauxite and 88000 Furniture Coins. Set Houshou Kai Ni+ as secretary. Scrap 3 Type 96 Fighters, 3 Type 0 Fighter Model 21, 3 Type 0 Fighter Model 32 and 3 Type 3 Fighter Hien.",
+        "rewards": "¶First choice: Either 4 Type 0 Fighter Model 52 OR three Shiden Model 11 OR two Shiden Kai 2 ¶Second choice: Either 5 Shiden Model 11 OR 4 Prototype Reppuu Late Models OR 6 Screws",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1160": {
+        "code": "F138",
+        "name": "Modification of the Prototype Shinden to the Carrier-based Fighter Model Kai Ni",
+        "desc": "Have 2 New Model Aviation Armament Materials and a ★max Prototype Shinden (Land-based Fighter). Set Hiryuu Kai Ni+ as secretary with any 3 of Tamanami Kai Ni, Suzunami Kai Ni, Fujinami Kai Ni, Hayanami Kai Ni, Hamanami Kai Ni and Kazagumo Kai Ni. Scrap 5 Type 0 Fighter Model 52 and 5 Shiden Kai 2.",
+        "rewards": "a Shinden Kai 2 (Carrier-based Fighter Model Kai 2)",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1161": {
+        "code": "F139",
+        "name": "Arsenal Preparation for New Equipment I",
+        "desc": "Have 8800 Ammo. Set Hiryuu Kai Ni+ as secretary. Scrap 9 Fighters, 9 Dive Bombers, 9 Torpedo Bombers, 8 Depth Charges, 8 AA Machine Guns, 9 Medium Caliber Main Guns and 7 Large Caliber Main Guns.",
+        "rewards": "¶First choice: Either +10 Equipment Slots OR two Medals OR two New Model Armament Materials ¶Second choice: Either 88 Development Materials OR 4 Tenzan Model 12A Kais OR a Prototype Flight Deck Catapult",
+        "resources": [[0, 0, 220, 220], [0, 0, 0, 0]]
+    },
+    "1162": {
+        "code": "F140",
+        "name": "Arsenal Preparation for New Equipment II",
+        "desc": "Have 2 New Model Armament Materials, 8800 Bauxite and 8800 Steel. Scrap 6 Type 0 Fighter Model 52, 4 Shiden Model 11, 8 12.7cm Twin High-angle Gun Mounts and 2 46cm Triple Gun Mounts.",
+        "rewards": "¶First choice: Either two New Model Aerial Armament Materials OR a Remodel Blueprint OR 4 Ryuusei Kais ¶Second choice: Either 110 Development Materials OR a Ne Type Engine OR three Latest Overseas Warship Technologys",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1163": {
+        "code": "F141",
+        "name": "Shinden with Jet Propulsion",
+        "desc": "Have 3 New Model Aviation Armament Materials, 4 New Model Armament Materials, 160 Development Materials, a Skilled Crew Member and a Ne-Type Engine. Set Hiryuu Kai San as secretary with a ★max Shinden Kai 2 (Carrier-based Fighter Model Kai 2) in her first slot.",
+        "rewards": "a Shinden Kai 3 (Prototype Jet Shinden)",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
     "605": {
         "code": "Fd1",
         "name": "Daily Development 1",
@@ -4635,74 +4691,25 @@
         "rewards": "¶First choice: Either 4 Development Materials OR two 25mm Single Autocannon Mounts OR an Equipment Slots ¶Second choice: Either 4 Buckets OR two Screws OR +2 Equipment Slots",
         "resources": [[100, 200, 100, 200], [0, 0, 0, 0]]
     },
-    "1024": {
-        "code": "L2512B5",
-        "name": "[End-Of-Year] Sortie! Coastal Defense Battleship, Maritime Combat Patrol!",
-        "desc": "Sortie Thonburi as flagship and up to 5 additional ships, OR 2 Norge-class, one as flagship, and up to 4 additional ships to to [W1-3], [W1-4], [W2-1] and [W3-1]. A-Rank+ each boss node.",
-        "rewards": "¶First choice: Either two Repair Teams OR three Screws OR a New Model Armament Material ¶Second choice: Either a 20.3cm Twin Gun Mount ★8 OR a Skilled Lookouts ★6 OR two Medals",
-        "resources": [[750, 500, 500, 500], [0, 0, 0, 0]]
+    "234": {
+        "code": "L2602B1",
+        "name": "Weekly [Valentine] Valentine's Day 2026, Special Operation",
+        "desc": "Sortie any 3 of Ooi, Kuma, Kashima, Kamoi, Ootomari, Kamikaze, Takanami, Suzunami, Fujinami, Hayanami and Hamanami, one as Fleet 1 flagship, and up to 3 additional ships to [W1-3], [W1-4] and [W2-1]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either 4 Development Materials OR two Buckets OR two 25mm Single Autocannon Mounts ¶Second choice: Either an Irako OR +2 Equipment Slots",
+        "resources": [[214, 0, 214, 0], [0, 0, 0, 0]]
     },
-    "361": {
-        "code": "L2512C1",
-        "name": "[End-Of-Year] Maritime Escort Force, Special Exercises!",
-        "desc": "Set the flagship with 2 Emergency Repair Personnel in her first and second slot, then secure 4 S-Rank victories in Exercises within the same day using a CVL, 4 DD and up to 1 additional ship, OR 2 DE and up to 4 additional ships in Fleet 1.",
-        "rewards": "two Repair Godnesses, ¶First choice: Either 4 Combat Rations OR 4 Screws OR 4 Type 94 Depth Charge Projectors ¶Second choice: Either a Type 2 Depth Charge ★4 OR 6 Type 3 Depth Charge Projectors OR 3300 Fuels",
-        "resources": [[700, 300, 300, 300], [0, 0, 0, 0]]
+    "238": {
+        "code": "L2602B2",
+        "name": "[Valentine] Valentine's Day 2026, Special Extra Operation",
+        "desc": "Sortie any 3 of I-41, Luigi Torelli, Heian Maru, Jingei Kai, Ooyodo Kai, Furutaka Kai Ni and Kinugasa Kai Ni, one as Fleet 1 flagship, and up to 3 additional ships to [W2-2], [W3-1] and [W7-5-T]. A-Rank+ each boss node twice.",
+        "rewards": "¶First choice: Either two Mamiyas OR two Reinforcement Expansions ¶Second choice: Either two Medals OR +12 Equipment Slots OR an Action Report",
+        "resources": [[214, 0, 0, 2026], [0, 0, 0, 0]]
     },
-    "1121": {
-        "code": "L2512F1",
-        "name": "[End-Of-Year] Naval District General Cleaning! Happy New Year!",
-        "desc": "Have 8 Type 96 Fighters, 5 Type 94 Depth Charge Projectors and 2025 Steel. Scrap 11 Small Caliber Main Guns, 11 Medium Caliber Main Guns and 11 Reconnaissance Seaplanes.",
-        "rewards": "¶First choice: Either two Repair Teams OR a Medal OR 2026 Fuels ¶Second choice: Either two Mamiyas OR two Medals OR 7 Screws",
-        "resources": [[1000, 0, 1000, 0], [0, 0, 0, 0]]
-    },
-    "1146": {
-        "code": "L2512F2",
-        "name": "[End-Of-Year] Extended Cleaning & Special Resource Export I",
-        "desc": "Have 5 Smoke Generator (Smoke Screen), 25 Furniture Boxes (Small) and 2025 Ammo. Scrap 8 Dive Bombers, 8 Torpedo Bombers and 16 Torpedoes.",
-        "rewards": "¶First choice: Either 3200 Steels OR 3600 Fuels OR 26 Development Materials ¶Second choice: Either 30 Buckets OR three Skilled Crew Members OR two Medals",
-        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
-    },
-    "1147": {
-        "code": "L2512F3",
-        "name": "[End-Of-Year] Extended Cleaning & Special Resource Export II",
-        "desc": "Have 8 Type 13 Air Radars, 4 Type 21 Air Radars and 2025 Steel. Scrap 8 Large Caliber Main Guns, 16 Medium Caliber Main Guns and 20 Reconnaissance Seaplanes.",
-        "rewards": "¶First choice: Either 5000 Ammos OR 2026 Bauxites OR 5000 Fuels ¶Second choice: Either 42 Development Materials OR a Type 42 Air Radar ★4 OR three New Model Gun Mount Improvement Materials",
-        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
-    },
-    "801": {
-        "code": "L2601B1",
-        "name": "[New Year] Happy New Year! In 2026, Weigh Anchor!",
-        "desc": "Sortie a CL(T)/CT as flagship, either 3 DD and up to 2 additional ships OR 2 DE and up to 3 additional ships to [W1-1], [W1-2], [W1-3] and [W1-5]. A-Rank+ each boss node.",
-        "rewards": "¶First choice: Either 10 Development Materials OR a Mamiya OR a Furniture Fairy ¶Second choice: Either a Medal OR 5 Screws OR three Irako",
-        "resources": [[2026, 0, 0, 0], [0, 0, 0, 0]]
-    },
-    "802": {
-        "code": "L2601B2",
-        "name": "[New Year] Happy New Year! In Reiwa 8th Year, Elite Cruiser Squadron, Commence Sortie!",
-        "desc": "Sortie 3 CL(T)/CT/CA(V), one as flagship, a DD and up to 2 additional ships to [W1-4], [W2-1], [W2-2] and [W2-3]. S-Rank each boss node.",
-        "rewards": "¶First choice: Either two New Model Armament Materials OR two New Model Gun Mount Improvement Materials OR two Medals ¶Second choice: Either three 20.3cm (No.2) Twin Gun Mount ★8 OR three 6inch Mk.XXIII Triple Gun Mount ★8 OR two Action Reports",
-        "resources": [[0, 0, 0, 2026], [0, 0, 0, 0]]
-    },
-    "803": {
-        "code": "L2601B3",
-        "name": "[New Year] Happy New Year 2026! Carrier Task Force, to the West! To the North and South!",
-        "desc": "Sortie a CV(L/B) as flagship, 2 DD and up to 3 additional ships to [W4-1], [W4-2], [W5-2] and [W3-1]. S-Rank each boss node.",
-        "rewards": "¶First choice: Either two New Model Aerial Armament Materials OR 4 Emergency Repair Materials OR two Medals ¶Second choice: Either two Tenzan Model 12A Kai ★4 OR 4 Skilled Crew Members OR two 12cm 30-tube Rocket Launcher ★6",
-        "resources": [[2026, 2026, 0, 0], [0, 0, 0, 0]]
-    },
-    "804": {
-        "code": "L2601B4",
-        "name": "[New Year] Elite Japanese, British and American Aircraft Carriers, Joint New Year Operation!",
-        "desc": "Sortie any 2 of Ark Royal, Victorious, Intrepid, Hornet, Souryuu, Hiryuu, Shoukaku and Zuikaku, and up to 4 additional ships to [W2-5], [W5-5], [W6-2], [W7-2-M] and [W4-5]. S-Rank each boss node.",
-        "rewards": "a Furniture: Happy New Year! Hiryuu's Scroll and either two Skilled Deck Personnels OR a Prototype Flight Deck Catapult OR a Skilled Carrier-based Aircraft Maintenance Personnel",
-        "resources": [[0, 2026, 2026, 2026], [0, 0, 0, 0]]
-    },
-    "378": {
-        "code": "L2601C1",
-        "name": "Weekly [New Year] 6th Fleet, Special Exercises!",
-        "desc": "Secure 5 A-Rank+ victories in Exercises within the same day using an AS as flagship, an SS(V), an AS/SS(V) and up to 3 additional ships.",
-        "rewards": "¶First choice: Either 5 Buckets OR a Submarine Radar & Waterproof Periscope OR a Submarine Supply Material ¶Second choice: Either 12 Development Materials OR a Medal OR two Submarine Supply Materials",
-        "resources": [[550, 220, 220, 0], [0, 0, 0, 0]]
+    "349": {
+        "code": "L2602C1",
+        "name": "Weekly [Valentine] Valentine's Day 2026, Special Exercises",
+        "desc": "Secure 5 S-Rank victories in Exercises within the same day using any 3 of Thonburi, Helena, Mogador, Gotland, Perth, Comdt. Teste, Akebono, Oboro and Nosaki, one as Fleet 1 flagship, and up to 3 additional ships.",
+        "rewards": "¶First choice: Either a New Model Aerial Armament Material OR two Tenzans OR 8 Development Materials ¶Second choice: Either 6 Buckets OR a Mamiya OR three Screws",
+        "resources": [[214, 214, 214, 214], [0, 0, 0, 0]]
     }
 }
