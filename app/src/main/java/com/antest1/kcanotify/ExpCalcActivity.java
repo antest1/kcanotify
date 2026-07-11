@@ -47,7 +47,7 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 
 
 public class ExpCalcActivity extends BaseActivity {
-    public static final int LEVEL_MAX = 185;
+    public static final int LEVEL_MAX = 188;
     private static final int RANK_S = 0;
     private static final int RANK_A = 1;
     private static final int RANK_B = 2;
@@ -295,12 +295,12 @@ public class ExpCalcActivity extends BaseActivity {
                 shipselect_current_flag = true;
                 if (!load_flag) {
                     if (current_lv_adapter != null) {
-                        value_current_lv.setSelection(lv - 1);
+                        value_current_lv.setSelection(Math.min(lv - 1, LEVEL_MAX - 1));
                     }
                     if (target_lv_adapter != null) {
                         if (ship_afterlv <= 0 || lv >= ship_afterlv)
                             value_target_lv.setSelection(Math.min(lv, LEVEL_MAX - 1));
-                        else value_target_lv.setSelection(ship_afterlv - 1);
+                        else value_target_lv.setSelection(Math.min(ship_afterlv - 1, LEVEL_MAX - 1));
                     }
                 } else {
                     load_flag = false;
@@ -375,19 +375,19 @@ public class ExpCalcActivity extends BaseActivity {
     private void loadCurrentState() {
         load_flag = current_state.has("current_lv") || current_state.has("target_lv");
         if (current_state.has("ship")) {
-            value_ship.setSelection(current_state.get("ship").getAsInt());
+            safeSetSelection(value_ship, current_state.get("ship").getAsInt());
         }
         if (current_state.has("current_lv")) {
-            value_current_lv.setSelection(current_state.get("current_lv").getAsInt());
+            safeSetSelection(value_current_lv, current_state.get("current_lv").getAsInt());
         }
         if (current_state.has("target_lv")) {
-            value_target_lv.setSelection(current_state.get("target_lv").getAsInt());
+            safeSetSelection(value_target_lv, current_state.get("target_lv").getAsInt());
         }
         if (current_state.has("map")) {
-            value_map.setSelection(current_state.get("map").getAsInt());
+            safeSetSelection(value_map, current_state.get("map").getAsInt());
         }
         if (current_state.has("rank")) {
-            value_rank.setSelection(current_state.get("rank").getAsInt());
+            safeSetSelection(value_rank, current_state.get("rank").getAsInt());
         }
         if (current_state.has("flagship")) {
             chkbox_flagship.setChecked(current_state.get("flagship").getAsBoolean());
@@ -497,6 +497,13 @@ public class ExpCalcActivity extends BaseActivity {
         View target = listview.findViewWithTag(tag);
         listview.removeView(target);
         track_values.remove(tag);
+    }
+
+    private void safeSetSelection(Spinner spinner, int index) {
+        if (spinner == null || spinner.getAdapter() == null) return;
+        int count = spinner.getAdapter().getCount();
+        if (count == 0) return;
+        spinner.setSelection(Math.max(0, Math.min(index, count - 1)));
     }
 
     private void setValueAndFinish() {
