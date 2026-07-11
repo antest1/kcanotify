@@ -2066,6 +2066,8 @@ public class KcaService extends BaseService {
                                 }
                             }
                             questTracker.updateIdCountTracker("619");
+                            questTracker.updateIdCountTracker("1166");
+                            questTracker.updateIdCountTracker("1167");
                             updateQuestView();
                         }
                     }
