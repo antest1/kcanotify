@@ -107,10 +107,9 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="4dp"
-            android:layout_weight="1.0"
             android:background="@android:color/darker_gray"
             android:paddingLeft="5dp"
             android:paddingTop="0dp"
@@ -121,8 +120,7 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1.0"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -130,7 +128,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
-                android:layout_weight="1.0"
                 android:background="@color/colorQuestTrackProgress"
                 android:ellipsize="marquee"
                 android:paddingLeft="8dp"
@@ -252,7 +249,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:layout_weight="1.0"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
@@ -442,7 +438,7 @@
                 <RelativeLayout
                     android:id="@+id/view_excheck_detail"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="4"
                     android:minWidth="@dimen/excheckview_popup_width"
                     android:orientation="vertical"
@@ -492,7 +488,7 @@
 
                     <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_below="@id/excheck_detail_line"
                         android:layout_marginTop="4dp">
 
@@ -601,7 +597,7 @@
                                         <LinearLayout
                                             android:id="@+id/view_excheck_fleet_condition"
                                             android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
+                                            android:layout_height="wrap_content"
                                             android:orientation="vertical">
 
                                         </LinearLayout>
@@ -636,7 +632,7 @@
                                         <LinearLayout
                                             android:id="@+id/view_excheck_firepower_data"
                                             android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
+                                            android:layout_height="wrap_content"
                                             android:orientation="horizontal">
 
                                             <TextView
@@ -671,7 +667,7 @@
                                         <LinearLayout
                                             android:id="@+id/view_excheck_asw_data"
                                             android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
+                                            android:layout_height="wrap_content"
                                             android:orientation="horizontal">
 
                                             <TextView
@@ -705,7 +701,7 @@
                                         <LinearLayout
                                             android:id="@+id/view_excheck_fp_data"
                                             android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
+                                            android:layout_height="wrap_content"
                                             android:orientation="horizontal">
 
                                             <TextView
@@ -739,7 +735,7 @@
                                         <LinearLayout
                                             android:id="@+id/view_excheck_los_data"
                                             android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
+                                            android:layout_height="wrap_content"
                                             android:orientation="horizontal">
 
                                             <TextView
