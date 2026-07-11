@@ -579,18 +579,19 @@ public class KcaService extends BaseService {
 
     public void handleServiceMessage(Message msg) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) return;
         String url = msg.getData().getString("url");
+        if (url == null || url.isEmpty()) return;
+
         byte[] raw = msg.getData().getByteArray("data");
-        Reader data = new InputStreamReader(new ByteArrayInputStream(raw));
+        if (raw == null) return;
+
+        final JsonObject jsonDataObj;
         String request = msg.getData().getString("request");
         boolean dev_flag = msg.getData().getBoolean("dev_flag");
 
-        if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url.isEmpty()) {
-            return;
-        }
-
-        final JsonObject jsonDataObj;
         try {
+            Reader data = new InputStreamReader(new ByteArrayInputStream(raw));
             String init = new String(Arrays.copyOfRange(raw, 0, 7));
             if (init.contains("svdata=")) {
                 data.skip("svdata=".length());
