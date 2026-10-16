@@ -576,6 +576,16 @@
     "大発動艇(R35&フランス兵)": "Daihatsu Landing Craft (R35 & French Infantry)",
     "61cm四連装(酸素)魚雷五型改三": "61cm Quadruple (Oxygen) Torpedo Mount Model 5 Kai 3",
     "SB2U-2": "SB2U-2",
+    "13.8cm単装砲 Modèle 1927": "13.8cm Single Gun Mount Modèle 1927",
+    "55cm三連装魚雷 Modèle 1924": "55cm Triple Torpedo Mount Modèle 1924",
+    "55cm複合配置五連装魚雷 Modèle 1932": "55cm Composite Armament Quintuple Torpedo Mount Modèle 1932",
+    "20.3cm/50 連装砲 Modèle 1931": "20.3cm/50 Twin Gun Mount Modèle 1931",
+    "20.3cm/50 連装砲改(SHS改良弾)": "20.3cm/50 Twin Gun Mount Kai 改(SHS Improved Ammunition)",
+    "Bofors 12cm単装両用砲": "Bofors 12cm Single Dual Purpose Gun Mount",
+    "PL101(偵察)": "PL101(Reconnaissance)",
+    "PL101(爆装)": "PL101(Bombing)",
+    "V-156F(SB2U輸出型)": "V-156F(SB2U Export Type)",
+    "G-36A(F4F輸出型)": "G-36A(F4F Export Type)",
     "12.5inch連装副砲": "12.5inch Twin Secondary Gun Mount",
     "12.7mm機銃": "12.7mm Machine Gun",
     "14inch連装砲": "14inch Twin Gun Mount",
@@ -727,5 +737,7 @@
     "深海18cm三連装砲+深海SG": "Abyssal 18cm Triple Gun Mount + Abyssal SG",
     "深海8.25inch単装主砲": "Abyssal 8.25inch Single Gun Mount",
     "深海6inch副砲群": "Abyssal 6inch Secondary Gun Mount Battery",
-    "深海4inch三連装副砲": "Abyssal 4inch Triple Secondary Gun Mount"
+    "深海4inch三連装副砲": "Abyssal 4inch Triple Secondary Gun Mount",
+    "深海28.3cm L/52 三連装砲": "Abyssal 28.3cm L/52 Triple Gun Mount",
+    "深海20.3cm SHS連装砲": "Abyssal 20.3cm SHS Twin Gun Mount"
 }

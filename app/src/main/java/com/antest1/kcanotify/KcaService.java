@@ -2024,6 +2024,11 @@ public class KcaService extends BaseService {
                     }
 
                     if (url.equals(API_REQ_KOUSYOU_REMOEL_SLOT)) {
+                        questTracker.updateIdCountTracker("619");
+                        questTracker.updateIdCountTracker("1166");
+                        questTracker.updateIdCountTracker("1167");
+                        updateQuestView();
+
                         JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
                         int[] kcShipData = deckInfoCalc.getKcShipList(portdeckdata, 0);
                         int flagship = kcShipData[0];
@@ -2065,10 +2070,6 @@ public class KcaService extends BaseService {
                                     KcaApiData.removeSlotItemData(joinStr(use_slot_id_list, ","));
                                 }
                             }
-                            questTracker.updateIdCountTracker("619");
-                            questTracker.updateIdCountTracker("1166");
-                            questTracker.updateIdCountTracker("1167");
-                            updateQuestView();
                         }
                     }
                 }
