@@ -545,6 +545,37 @@ public class KcaApiData {
     }
 
 
+    // Reload a resource file kept in memory (or copied to the DB) when the service starts, so a newly
+    // downloaded or restored file applies right away. Other files are read when needed, and translation
+    // files are reloaded by loadTranslationData.
+    public static void reloadResource(Context context, String name) {
+        switch (name) {
+            case "edges.json":
+                if (helper != null) loadMapEdgeInfoFromStorage(context);
+                break;
+            case "map_sub.json":
+                if (helper != null) loadSubMapInfoFromStorage(context);
+                break;
+            case "quest_track.json":
+                if (helper != null) loadQuestTrackDataFromStorage(helper, context);
+                break;
+            case "ships_filter_data.json":
+                loadShipFilterDataFromStorage(context);
+                break;
+            case "ships_nationality_data.json":
+                loadShipNationalityDataFromStorage(context);
+                break;
+            case "ships_init_equip_count.json":
+                loadShipInitEquipCountFromStorage(context);
+                break;
+            case "expedition.json":
+                loadSimpleExpeditionInfoFromStorage(context);
+                break;
+            default:
+                break;
+        }
+    }
+
     public static int loadMapEdgeInfoFromStorage(Context context) {
         JsonObject data = getJsonObjectFromStorage(context, "edges.json");
         if (data != null) {

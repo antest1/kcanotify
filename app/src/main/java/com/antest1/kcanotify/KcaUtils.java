@@ -830,11 +830,30 @@ public class KcaUtils {
         return BitmapFactory.decodeResource(res, resId, options);
     }
 
+    // resource files used by the current language: "common" + this language's "langpacks" in resources_config.json
+    public static List<String> getResourceFilter(Context context) {
+        List<String> filter = new ArrayList<>();
+        try (InputStream is = context.getAssets().open("resources_config.json")) {
+            JsonObject config = JsonParser.parseString(new String(ByteStreams.toByteArray(is))).getAsJsonObject();
+            for (JsonElement item : config.getAsJsonArray("common")) {
+                filter.add(item.getAsString());
+            }
+            for (JsonElement item : config.getAsJsonObject("langpacks").getAsJsonArray(LocaleUtils.getResourceLocaleCode())) {
+                filter.add(item.getAsString());
+            }
+        } catch (IOException e) {
+            // do nothing
+        }
+        return filter;
+    }
+
     public static boolean validateResourceFiles(Context context, KcaDBHelper helper) {
         int count = 0;
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("data", Context.MODE_PRIVATE);
         for (final File entry : directory.listFiles()) {
+            // skip unfinished downloads (*.download), which are not resource files yet
+            if (!entry.getName().endsWith(".json")) continue;
             try {
                 Reader reader = new FileReader(entry);
                 JsonParser.parseReader(reader);

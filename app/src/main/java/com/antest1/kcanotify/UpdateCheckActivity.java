@@ -31,11 +31,16 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -62,6 +67,9 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class UpdateCheckActivity extends BaseActivity {
     public static final int LOAD_DELAY = 500;
+    private static final String DOWNLOAD_SUFFIX = ".download";
+    private static final ExecutorService fileWorker = Executors.newSingleThreadExecutor();
+    private static final Set<String> downloadingFiles = Collections.synchronizedSet(new HashSet<>());
 
     Toolbar toolbar;
     static Gson gson = new Gson();
@@ -129,7 +137,7 @@ public class UpdateCheckActivity extends BaseActivity {
         gamedata_adapter.setHandler(handler);
         resource_adapter.setHandler(handler);
 
-        resource_target = getResourcesFilter();
+        resource_target = KcaUtils.getResourceFilter(getApplicationContext());
 
         checkstart_chkbox = findViewById(R.id.reschk_checkatstart);
         checkstart_chkbox.setChecked(getBooleanPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START));
@@ -462,86 +470,87 @@ public class UpdateCheckActivity extends BaseActivity {
     }
 
     private void downloadFile(String url, String name, int version) {
+        if (!downloadingFiles.add(name)) return; // already downloading
+        final Context context = getApplicationContext();
+        final Handler mainHandler = new Handler(Looper.getMainLooper());
         long timestamp = System.currentTimeMillis() / 1000;
         final File root_dir = getDir("data", Context.MODE_PRIVATE);
-        final File data = new File(root_dir, name);
-        if (data.exists()) data.delete();
+        // download next to the file and replace it only after the download is valid
+        final String tempName = name + DOWNLOAD_SUFFIX;
+        new File(root_dir, tempName).delete();
 
-        PRDownloader.download(KcaUtils.format("%s?t=%d", url, timestamp), root_dir.getPath(), name)
+        PRDownloader.download(KcaUtils.format("%s?t=%d", url, timestamp), root_dir.getPath(), tempName)
                 .build()
                 .start(new OnDownloadListener() {
                     @Override
                     public void onDownloadComplete() {
-                        saveAssetData(UpdateCheckActivity.this, name, version);
-                        if (name.equals("icon_info.json")) {
-                            Toast.makeText(getApplicationContext(), "Download Completed: " + name + "\nRetrieving Fairy Images..", Toast.LENGTH_LONG).show();
-                            final Handler handler1 = new Handler(Looper.getMainLooper());
-                            handler1.postDelayed(() -> fairyDownloader.run(false), LOAD_DELAY);
-                        }
-                        int num_count = 0;
-                        for (int i = 0; i < resource_info.size(); i++) {
-                            JsonObject item = resource_info.get(i).getAsJsonObject();
-                            if (item.get("name").getAsString().equals(name)) {
-                                int latest_res_v = item.get("version").getAsInt();
-                                item.addProperty("version_str", getVersionString(version, latest_res_v));
-                                item.addProperty("highlight", version < latest_res_v);
-                                if (version < latest_res_v) num_count += 1;
-                            }
-                        }
-                        resource_adapter.setListItem(resource_info);
-                        resource_adapter.notifyDataSetChanged();
-                        resource_downall.setVisibility(num_count > 0 ? View.VISIBLE : View.GONE);
+                        fileWorker.execute(() -> {
+                            boolean saved = saveDownloadedFile(context, root_dir, name, tempName, version);
+                            downloadingFiles.remove(name);
+                            mainHandler.post(() -> {
+                                if (saved) {
+                                    KcaApiData.reloadResource(context, name);
+                                    Toast.makeText(context, "Download Completed: " + name, Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(context, "failed to read data", Toast.LENGTH_SHORT).show();
+                                }
+                                if (!isFinishing() && !isDestroyed()) onResourceDownloaded(name, version, saved);
+                            });
+                        });
                     }
 
                     @Override
                     public void onError(Error error) {
-                        Toast.makeText(getApplicationContext(), "Error when downloading " + name, Toast.LENGTH_LONG).show();
+                        new File(root_dir, tempName).delete();
+                        downloadingFiles.remove(name);
+                        Toast.makeText(context, "Error when downloading " + name, Toast.LENGTH_LONG).show();
                     }
                 });
     }
 
-    public List<String> getResourcesFilter() {
-        List<String> filter = new ArrayList<>();
-        AssetManager am = getAssets();
-        try {
-            AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("resources_config.json");
-            byte[] bytes = ByteStreams.toByteArray(ais);
-            JsonObject config = JsonParser.parseString(new String(bytes)).getAsJsonObject();
-            for (JsonElement item : config.getAsJsonArray("common")) {
-                filter.add(item.getAsString());
-            }
-            for (JsonElement item : config.getAsJsonObject("langpacks").getAsJsonArray(LocaleUtils.getResourceLocaleCode())) {
-                filter.add(item.getAsString());
-            }
-        } catch (IOException e) {
-            // do nothing
+    private void onResourceDownloaded(String name, int version, boolean saved) {
+        if (!saved) return;
+        if (name.equals("icon_info.json")) {
+            Toast.makeText(getApplicationContext(), "Download Completed: " + name + "\nRetrieving Fairy Images..", Toast.LENGTH_LONG).show();
+            final Handler handler1 = new Handler(Looper.getMainLooper());
+            handler1.postDelayed(() -> fairyDownloader.run(false), LOAD_DELAY);
         }
-        return filter;
+        int num_count = 0;
+        for (int i = 0; i < resource_info.size(); i++) {
+            JsonObject item = resource_info.get(i).getAsJsonObject();
+            int latest_res_v = item.get("version").getAsInt();
+            if (item.get("name").getAsString().equals(name)) {
+                item.addProperty("version_str", getVersionString(version, latest_res_v));
+                item.addProperty("highlight", version < latest_res_v);
+            }
+            if (item.get("highlight").getAsBoolean()) num_count += 1;
+        }
+        resource_adapter.setListItem(resource_info);
+        resource_adapter.notifyDataSetChanged();
+        resource_downall.setVisibility(num_count > 0 ? View.VISIBLE : View.GONE);
+    }
+
+    // Replace the resource file with the download only when it is valid JSON, then record its version.
+    // Runs whether or not this screen is still open, so the file and its version stay in sync.
+    private static boolean saveDownloadedFile(Context context, File dir, String name, String tempName, int version) {
+        File temp = new File(dir, tempName);
+        try (Reader reader = new FileReader(temp)) {
+            JsonParser.parseReader(reader);
+        } catch (Exception e) {
+            temp.delete();
+            return false;
+        }
+        if (!temp.renameTo(new File(dir, name))) {
+            temp.delete();
+            return false;
+        }
+        KcaDBHelper helper = new KcaDBHelper(context, null, KCANOTIFY_DB_VERSION);
+        helper.putResVer(name, version);
+        helper.close();
+        return true;
     }
 
     public boolean isInResourcesFilter(String key) {
         return !resource_target.isEmpty() && resource_target.contains(key);
-    }
-
-    private void saveAssetData(Activity mActivity, String name, int version) {
-        final WeakReference<Activity> weakReference = new WeakReference<>(mActivity);
-        Handler handler = new Handler(Looper.getMainLooper());
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> {
-            Activity activity = weakReference.get();
-            if (activity == null || activity.isFinishing() || activity.isDestroyed()) {
-                // do nothing
-            } else {
-                Context context = activity.getApplicationContext();
-                try {
-                    KcaDBHelper dbHelper = new KcaDBHelper(activity.getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-                    dbHelper.putResVer(name, version);
-                    dbHelper.close();
-                    handler.postDelayed(() -> Toast.makeText(context, "Download Completed: " + name, Toast.LENGTH_LONG).show(), LOAD_DELAY);
-                } catch (Exception e) {
-                    handler.post(() -> Toast.makeText(context, "failed to read data", Toast.LENGTH_SHORT).show());
-                }
-            }
-        });
     }
 }
