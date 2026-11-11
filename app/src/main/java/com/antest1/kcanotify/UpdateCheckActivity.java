@@ -676,9 +676,8 @@ public class UpdateCheckActivity extends BaseActivity {
         if (!isOutdated(file)) return current;
         String latest = formatResourceVersion(file.latest);
         if (current.equals(latest)) {
-            // updated on the same day
-            current = String.valueOf(file.current);
-            latest = String.valueOf(file.latest);
+            // updated again on the same day: only the revision (NN of yyyyMMddNN) differs
+            return KcaUtils.format("%s (rev %d → %d)", current, file.current % 100, file.latest % 100);
         }
         return current + " → " + latest;
     }
