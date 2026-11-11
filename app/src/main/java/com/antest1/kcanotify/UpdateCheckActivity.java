@@ -150,8 +150,7 @@ public class UpdateCheckActivity extends BaseActivity {
                 alertDialog.setMessage(getString(R.string.download_reset_message));
                 alertDialog.setPositiveButton(getString(R.string.dialog_ok),
                         (dialog, which) -> {
-                            dbHelper.clearResVer();
-                            setPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION, 0);
+                            resetDownloadedData(getApplicationContext(), dbHelper);
                             Intent mainIntent = new Intent(this, InitStartActivity.class);
                             mainIntent.putExtra(ACTION_RESET, true);
                             startActivity(mainIntent);
@@ -562,6 +561,21 @@ public class UpdateCheckActivity extends BaseActivity {
         helper.putResVer(name, version);
         helper.close();
         return true;
+    }
+
+    // Remove downloaded resources and game data, so that InitStartActivity (ACTION_RESET) restores
+    // the bundled ones. Fairy images (separate folder), logs and settings are kept.
+    private static void resetDownloadedData(Context context, KcaDBHelper helper) {
+        File[] files = context.getDir("data", Context.MODE_PRIVATE).listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) file.delete();
+            }
+        }
+        helper.clearResVer();
+        setPreferences(context, PREF_KCARESOURCE_VERSION, 0);
+        helper.deleteValue(DB_KEY_STARTDATA);
+        setPreferences(context, PREF_KCA_DATA_VERSION, "");
     }
 
     public boolean isInResourcesFilter(String key) {

@@ -135,7 +135,8 @@ public class InitStartActivity extends BaseActivity {
 
         new Thread(() -> {
             runOnUiThread(() -> appmessage.setText("Loading Translation Data..."));
-            int tl_result = loadTranslationData(getApplicationContext());
+            // after a reset, reload even if translation data is already in memory
+            int tl_result = loadTranslationData(getApplicationContext(), reset_flag);
             if (tl_result > 0) {
                 runOnUiThread(() -> Toast.makeText(getApplicationContext(), "error loading traslation data: " + tl_result, Toast.LENGTH_LONG).show());
             }
@@ -144,6 +145,14 @@ public class InitStartActivity extends BaseActivity {
             int setDefaultGameDataResult = KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
             if (setDefaultGameDataResult != 1) {
                 runOnUiThread(() -> Toast.makeText(getApplicationContext(), "error loading game data", Toast.LENGTH_LONG).show());
+            }
+            if (reset_flag) {
+                // the old data is still in memory (also used by a running service): apply the restored ones
+                JsonObject start_data = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
+                if (start_data != null && start_data.has("api_data") && start_data.get("api_data").isJsonObject()) {
+                    KcaApiData.getKcGameData(start_data.getAsJsonObject("api_data"));
+                }
+                KcaApiData.reloadAllResources(getApplicationContext());
             }
 
             runOnUiThread(() -> appmessage.setText("Checking External Filter..."));

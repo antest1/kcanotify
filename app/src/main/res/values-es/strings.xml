@@ -703,7 +703,7 @@
     <string name="download_fairy">Asistente</string>
     <string name="download_progress">Descargando…</string>
     <string name="download_reset">Inicializar todos los recursos</string>
-    <string name="download_reset_message">Inicializando recursos de la aplicación nuevamente.</string>
+    <string name="download_reset_message">Los recursos descargados y los datos del juego se restablecerán a los datos incluidos en la aplicación.</string>
     <string name="download_check_error">Error al cargar desde almacenamiento (usando datos predeterminados)</string>
     <string name="download_setting_checkatstart">Revisar por actualizaciones al inicar</string>
 

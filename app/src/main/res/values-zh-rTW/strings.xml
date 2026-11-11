@@ -706,7 +706,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="download_fairy">妖精醬~</string>
     <string name="download_progress">正在下載中&#8230;</string>
     <string name="download_reset">初始化資源</string>
-    <string name="download_reset_message">初始化應用程式資源</string>
+    <string name="download_reset_message">將已下載的資源和遊戲資料重設為應用程式內建的資料。</string>
     <string name="download_check_error">從裝置載入資源發生錯誤(使用預設資料)</string>
     <string name="download_setting_checkatstart">啟動應用程式時檢查更新</string>
 

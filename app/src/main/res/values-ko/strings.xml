@@ -700,7 +700,7 @@
     <string name="download_fairy">요정님</string>
     <string name="download_progress">다운로드 중…</string>
     <string name="download_reset">전체 리소스 초기화</string>
-    <string name="download_reset_message">리소스를 초기화합니다.</string>
+    <string name="download_reset_message">다운로드한 리소스와 게임 데이터를 앱에 포함된 데이터로 초기화합니다.</string>
     <string name="download_check_error">데이터 로딩 중 오류 발생 (기본 데이터 사용)</string>
     <string name="download_setting_checkatstart">어플리케이션 시작 시 업데이트 확인</string>
 

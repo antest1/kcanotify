@@ -576,6 +576,14 @@ public class KcaApiData {
         }
     }
 
+    public static void reloadAllResources(Context context) {
+        String[] names = {"edges.json", "map_sub.json", "quest_track.json", "ships_filter_data.json",
+                "ships_nationality_data.json", "ships_init_equip_count.json", "expedition.json"};
+        for (String name : names) {
+            reloadResource(context, name);
+        }
+    }
+
     public static int loadMapEdgeInfoFromStorage(Context context) {
         JsonObject data = getJsonObjectFromStorage(context, "edges.json");
         if (data != null) {
