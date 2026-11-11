@@ -450,6 +450,8 @@ public class KcaLandAirBasePopupService extends BaseService {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        // the popup layout is created on the first data request, which may not have arrived yet
+        if (layoutView == null) return;
         visibility = layoutView.getVisibility();
         if (windowManager != null && checkLayoutExist()) {
             windowManager.removeViewImmediate(layoutView);

@@ -39,6 +39,8 @@ public class SnapIndicator {
     }
 
     public void update(float y, int maxY, int paddingTop) {
+        // a move event can arrive without a matching show (or after remove)
+        if (snapIndicatorLayout.getParent() == null) return;
         if (y < paddingTop + maxY / 4f) {
             snapLayoutParams.y = paddingTop;
         } else if (y < paddingTop + maxY / 4f * 3f) {
@@ -61,6 +63,10 @@ public class SnapIndicator {
         } else {
             snapLayoutParams.y = paddingTop + maxY;
         }
-        windowManager.addView(snapIndicatorLayout, snapLayoutParams);
+        if (snapIndicatorLayout.getParent() != null) {
+            windowManager.updateViewLayout(snapIndicatorLayout, snapLayoutParams);
+        } else {
+            windowManager.addView(snapIndicatorLayout, snapLayoutParams);
+        }
     }
 }
