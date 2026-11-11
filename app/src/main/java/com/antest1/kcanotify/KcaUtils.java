@@ -49,7 +49,6 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.common.io.ByteStreams;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -274,10 +273,11 @@ public class KcaUtils {
         String current_version = getStringPreferences(context, PREF_KCA_DATA_VERSION);
         String default_version = context.getString(R.string.default_gamedata_version);
 
-        if (helper.getJsonObjectValue(DB_KEY_STARTDATA) != null && KcaUtils.compareVersion(current_version, default_version)) {
+        // start data is several MB: check the cheap conditions before reading and parsing it
+        if (KcaUtils.compareVersion(current_version, default_version)) {
             if (KcaApiData.isGameDataLoaded()) return 1;
             JsonObject start_data = helper.getJsonObjectValue(DB_KEY_STARTDATA);
-            if (start_data.has("api_data") && start_data.get("api_data").isJsonObject()) {
+            if (start_data != null && start_data.has("api_data") && start_data.get("api_data").isJsonObject()) {
                 KcaApiData.getKcGameData(start_data.getAsJsonObject("api_data"));
                 valid_data = true;
             }
@@ -289,9 +289,10 @@ public class KcaUtils {
                 AssetManager.AssetInputStream ais =
                         (AssetManager.AssetInputStream) assetManager.open("api_start2");
                 byte[] bytes = KcaUtils.gzipdecompress(ByteStreams.toByteArray(ais));
-                helper.putValue(DB_KEY_STARTDATA, new String(bytes));
-                JsonElement data = JsonParser.parseString(new String(bytes));
-                JsonObject api_data = new Gson().fromJson(data, JsonObject.class).getAsJsonObject("api_data");
+                String start_data_str = new String(bytes);
+                bytes = null;
+                helper.putValue(DB_KEY_STARTDATA, start_data_str);
+                JsonObject api_data = JsonParser.parseString(start_data_str).getAsJsonObject().getAsJsonObject("api_data");
                 KcaApiData.getKcGameData(api_data);
                 setPreferences(context, PREF_KCA_VERSION, default_version);
                 setPreferences(context, PREF_KCA_DATA_VERSION, default_version);
@@ -525,7 +526,12 @@ public class KcaUtils {
         Intent toastIntent = new Intent(context, KcaCustomToastService.class);
         toastIntent.setAction(KcaCustomToastService.TOAST_SHOW_ACTION);
         toastIntent.putExtra("data", data.toString());
-        context.startService(toastIntent);
+        try {
+            context.startService(toastIntent);
+        } catch (IllegalStateException e) {
+            // not allowed while the app is in background; dropping the toast is fine
+            Log.w("KCA", "showCustomToast: " + e.getMessage());
+        }
     }
 
     public static String getOrientationPrefix(int value) {

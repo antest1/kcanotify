@@ -38,6 +38,7 @@ public class KcaInspectorDetailActivity extends BaseActivity {
     final String DB_PREFIX = "DB ";
     final String DQ_PREFIX = "DQ ";
     final String QT_PREFIX = "QT ";
+    private static final int MAX_DISPLAY_LENGTH = 50000;
 
     String key, value_text= "";
     boolean is_formatted = true;
@@ -178,14 +179,24 @@ public class KcaInspectorDetailActivity extends BaseActivity {
             else gson = new GsonBuilder().create();
 
             try {
-                JsonElement data = gson.fromJson(value_text, JsonElement.class);
-                value_text = gson.toJson(data);
+                // formatting a value of several MB is itself slow, and it is truncated anyway
+                if (value_text.length() <= MAX_DISPLAY_LENGTH) {
+                    JsonElement data = gson.fromJson(value_text, JsonElement.class);
+                    value_text = gson.toJson(data);
+                }
             } catch (JsonSyntaxException ex) {
                 // Nothing to do
             } finally {
-                view_value.setText(value_text);
+                view_value.setText(getDisplayText(value_text));
             }
         }
+    }
+
+    // a TextView with the whole value (e.g. start data, several MB) freezes on layout and draw
+    private static String getDisplayText(String text) {
+        if (text.length() <= MAX_DISPLAY_LENGTH) return text;
+        return text.substring(0, MAX_DISPLAY_LENGTH)
+                .concat(KcaUtils.format("\n\n... (%d / %d)", MAX_DISPLAY_LENGTH, text.length()));
     }
 
     private Runnable auto_scroll(final int direction){

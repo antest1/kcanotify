@@ -716,8 +716,15 @@ public class KcaFleetViewService extends BaseService {
                                     shipIndex = i;
                                 }
                                 if (shipIndex < data.size()) {
-                                    JsonObject udata = data.get(shipIndex).getAsJsonObject().getAsJsonObject("user");
-                                    JsonObject kcdata = data.get(shipIndex).getAsJsonObject().getAsJsonObject("kc");
+                                    JsonObject shipInfo = data.get(shipIndex).getAsJsonObject();
+                                    if (!isJsonObjectField(shipInfo, "user") || !isJsonObjectField(shipInfo, "kc")) {
+                                        // "kc" is null for ships missing from the loaded game data
+                                        itemView.setVisibility(GONE);
+                                        selected = -1;
+                                        return true;
+                                    }
+                                    JsonObject udata = shipInfo.getAsJsonObject("user");
+                                    JsonObject kcdata = shipInfo.getAsJsonObject("kc");
 
                                     String ship_id = udata.get("ship_id").getAsString();
                                     int ship_married = udata.get("lv").getAsInt() >= 100 ? 1 : 0;
@@ -1245,6 +1252,10 @@ public class KcaFleetViewService extends BaseService {
         helper.recordErrorLog(ERROR_TYPE_FLEETVIEW, "fleetview", "FV_".concat(String.valueOf(type)), data_str, getStringFromException(e));
     }
 
+    private static boolean isJsonObjectField(JsonObject obj, String key) {
+        return obj.has(key) && obj.get(key).isJsonObject();
+    }
+
     private void startPopupService(Class<?> target, String action) {
         startPopupService(target, action, null);
     }
@@ -1264,7 +1275,12 @@ public class KcaFleetViewService extends BaseService {
         if (label != null) sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat(label), null);
         Intent popupIntent = new Intent(getBaseContext(), target);
         if (action != null) popupIntent.setAction(action);
-        startService(popupIntent);
+        try {
+            startService(popupIntent);
+        } catch (IllegalStateException e) {
+            // not allowed while the app is in background (e.g. config change while hidden)
+            Log.w("KCA", "startPopupService: " + e.getMessage());
+        }
     }
 
     @Override

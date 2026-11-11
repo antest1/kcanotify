@@ -833,4 +833,10 @@
     <string name="mitm_addon_update_available">新しいmitm addonアップデートをインストールできます。</string>
     <string name="mitm_addon_new_version">mitm addonのアップデートが必要です。</string>
     <string name="mitm_doze_notice">バッテリー最適化機能がmitm addonに干渉する可能性があります。</string>
+    <string name="svc_stopped_title">%sのサービスが停止しました</string>
+    <string name="svc_stopped_text">Androidがバックグラウンドでの再起動を許可しませんでした。タップすると再開します。</string>
+    <string name="svc_stopped_battery_hint">電池の最適化をオフにすると、この問題が起きにくくなります。</string>
+    <string name="svc_stopped_action_restart">再開</string>
+    <string name="svc_stopped_action_battery">電池の最適化</string>
+    <string name="sa_ringtone_picker_unavailable">この端末には通知音の選択画面がありません。</string>
 </resources>

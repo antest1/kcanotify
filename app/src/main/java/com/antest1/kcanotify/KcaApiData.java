@@ -805,17 +805,24 @@ public class KcaApiData {
         }
     }
 
+    public static JsonObject getMapEdgeInfo() {
+        if (helper == null) return null;
+        return helper.getJsonObjectValue(DB_KEY_MAPEDGES);
+    }
+
     public static String getCurrentNodeAlphabet(int maparea, int mapno, int no) {
+        return getCurrentNodeAlphabet(getMapEdgeInfo(), maparea, mapno, no);
+    }
+
+    // when resolving many nodes, load getMapEdgeInfo() once and pass it here
+    public static String getCurrentNodeAlphabet(JsonObject mapEdgeInfo, int maparea, int mapno, int no) {
         String currentMapString = KcaUtils.format("%d-%d", maparea, mapno);
         String no_str = String.valueOf(no);
-        if (helper != null) {
-            JsonObject mapEdgeInfo = helper.getJsonObjectValue(DB_KEY_MAPEDGES);
-            if (mapEdgeInfo != null && mapEdgeInfo.has(currentMapString)) {
-                JsonObject currentMapInfo = mapEdgeInfo.getAsJsonObject(currentMapString);
-                if (currentMapInfo.has(no_str)) {
-                    JsonArray nodeInfo = currentMapInfo.getAsJsonArray(no_str);
-                    no_str = nodeInfo.get(1).getAsString();
-                }
+        if (mapEdgeInfo != null && mapEdgeInfo.has(currentMapString)) {
+            JsonObject currentMapInfo = mapEdgeInfo.getAsJsonObject(currentMapString);
+            if (currentMapInfo.has(no_str)) {
+                JsonArray nodeInfo = currentMapInfo.getAsJsonArray(no_str);
+                no_str = nodeInfo.get(1).getAsString();
             }
         }
         return no_str;

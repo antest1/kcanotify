@@ -839,4 +839,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="mitm_addon_update_available">有新的 mitm 插件更新可用。</string>
     <string name="mitm_addon_new_version">必须更新 kcanotify mitm 插件</string>
     <string name="mitm_doze_notice">电池优化可能会干扰 mitm 插件</string>
+    <string name="svc_stopped_title">%s 服务已停止</string>
+    <string name="svc_stopped_text">Android 不允许服务在后台重新启动。点击即可重新启动。</string>
+    <string name="svc_stopped_battery_hint">关闭电池优化有助于避免此问题。</string>
+    <string name="svc_stopped_action_restart">重新启动</string>
+    <string name="svc_stopped_action_battery">电池优化</string>
+    <string name="sa_ringtone_picker_unavailable">此设备上没有可用的铃声选择器。</string>
 </resources>

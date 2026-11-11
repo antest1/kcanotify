@@ -338,6 +338,7 @@ public final class KcaConstants {
     public static final int NOTI_UPDATE = 3;
     public static final int NOTI_MORALE = 4;
     public static final int NOTI_AKASHI = 5;
+    public static final int NOTI_SERVICE_STATUS = 6;
 
     public static final int FRONT_NONE = 0;
     public static final int FRONT_EXP_SET = 2;
