@@ -144,7 +144,6 @@ public class KcaService extends BaseService {
 
     String kcaFirstDeckInfo;
     static String kca_version;
-    String api_start2_data = null;
     boolean api_start2_init = false;
     Gson gson = new GsonBuilder().setLenient().create();
 
@@ -772,8 +771,7 @@ public class KcaService extends BaseService {
 
             if (url.equals(API_START2) || url.equals(API_START2_NEW)) {
                 if (jsonDataObj.has("api_data")) {
-                    api_start2_data = jsonDataObj.toString();
-                    dbHelper.putValue(DB_KEY_STARTDATA, api_start2_data);
+                    dbHelper.putValue(DB_KEY_STARTDATA, jsonDataObj.toString());
                     //Toast.makeText(this, "Load Kancolle Data", Toast.LENGTH_LONG).show();
                     KcaApiData.getKcGameData(jsonDataObj.getAsJsonObject("api_data"));
                     if (kca_version != null) {
