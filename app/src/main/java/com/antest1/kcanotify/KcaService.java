@@ -143,7 +143,6 @@ public class KcaService extends BaseService {
     private BroadcastReceiver receiver;
 
     String kcaFirstDeckInfo;
-    static String kca_version;
     boolean api_start2_init = false;
     Gson gson = new GsonBuilder().setLenient().create();
 
@@ -210,11 +209,8 @@ public class KcaService extends BaseService {
                 deckInfoCalc = new KcaDeckInfo(getBaseContext());
                 KcaApiData.setDBHelper(dbHelper);
 
-                JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
-                //Log.e("KCA", kcDataObj.toJSONString());
-                if (kcDataObj != null && kcDataObj.has("api_data")) {
-                    KcaApiData.getKcGameData(kcDataObj.getAsJsonObject("api_data"));
-                }
+                JsonObject kcApiData = KcaGameDataStore.loadApiData(getApplicationContext());
+                if (kcApiData != null) KcaApiData.getKcGameData(kcApiData);
 
                 AssetManager assetManager = getResources().getAssets();
                 int loadMapEdgeInfoResult = loadMapEdgeInfoFromStorage(getApplicationContext());
@@ -239,7 +235,7 @@ public class KcaService extends BaseService {
 
                 loadSimpleExpeditionInfoFromStorage(getApplicationContext());
                 loadShipInitEquipCountFromStorage(getApplicationContext());
-                loadQuestTrackDataFromStorage(dbHelper, getApplicationContext());
+                loadQuestTrackDataFromStorage(getApplicationContext());
                 dbHelper.initExpScore();
 
                 showDataLoadErrorToast(getApplicationContext(), getString(R.string.download_check_error));
@@ -771,12 +767,10 @@ public class KcaService extends BaseService {
 
             if (url.equals(API_START2) || url.equals(API_START2_NEW)) {
                 if (jsonDataObj.has("api_data")) {
-                    dbHelper.putValue(DB_KEY_STARTDATA, jsonDataObj.toString());
+                    KcaGameDataStore.save(getApplicationContext(), jsonDataObj);
                     //Toast.makeText(this, "Load Kancolle Data", Toast.LENGTH_LONG).show();
+                    // the game does not tell the data version; KcaGameDataChecker syncs it with the server
                     KcaApiData.getKcGameData(jsonDataObj.getAsJsonObject("api_data"));
-                    if (kca_version != null) {
-                        setPreferences(getApplicationContext(), "kca_version", kca_version);
-                    }
                 }
                 return;
             }

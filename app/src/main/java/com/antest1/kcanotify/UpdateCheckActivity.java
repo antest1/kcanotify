@@ -1,547 +1,769 @@
 package com.antest1.kcanotify;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
+import android.graphics.drawable.Drawable;
+import android.icu.text.RelativeDateTimeFormatter;
+import android.icu.util.ULocale;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
+import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.downloader.Error;
-import com.downloader.OnDownloadListener;
-import com.downloader.PRDownloader;
-import com.google.android.material.materialswitch.MaterialSwitch;
-import com.google.common.io.ByteStreams;
-import com.google.gson.Gson;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.view.MenuCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.antest1.kcanotify.InitStartActivity.ACTION_RESET;
-import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
-import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE_START;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
-import static com.antest1.kcanotify.KcaResCheckItemAdpater.RESCHK_KEY;
+import static com.antest1.kcanotify.KcaDataUpdateAdapter.PROGRESS_HIDDEN;
+import static com.antest1.kcanotify.KcaDataUpdateAdapter.PROGRESS_INDETERMINATE;
+import static com.antest1.kcanotify.KcaDataUpdateAdapter.Row;
+import static com.antest1.kcanotify.KcaDataUpdateAdapter.Trailing;
+import static com.antest1.kcanotify.KcaDataUpdateAdapter.getThemeColor;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
-import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class UpdateCheckActivity extends BaseActivity {
-    public static final int LOAD_DELAY = 500;
+    private static final String TAG = "UpdateCheckActivity";
+    public static final String EXTRA_MAIN_FLAG = "main_flag";
+    // starts downloading all updates once the check is done
+    public static final String EXTRA_AUTO_UPDATE = "auto_update";
+    private static final int LOAD_DELAY = 500;
+    private static final String GAME_ROW_KEY = "game";
 
-    Toolbar toolbar;
-    static Gson gson = new Gson();
-    String latest_gamedata_version = "";
-    List<JsonObject> gamedata_info = new ArrayList<>();
-    List<JsonObject> resource_info = new ArrayList<>();
-    List<String> resource_target;
-    ListView data_list, resource_list;
-    KcaResCheckItemAdpater gamedata_adapter = new KcaResCheckItemAdpater();
-    KcaResCheckItemAdpater resource_adapter = new KcaResCheckItemAdpater();
-    Button gamedata_chk, resource_chk, resource_downall;
-    TextView gamedata_server;
-    TextView gamedata_load, resource_load;
-    MaterialSwitch checkstart_chkbox;
-    MaterialSwitch resource_reset;
+    private enum CheckState { CHECKING, FAILED_SERVER, FAILED_OFFLINE, READY }
 
-    boolean main_flag = false;
-    int checked = -1;
+    private enum Category {
+        TRANSLATION(R.string.data_update_cat_translation, R.drawable.ic_du_translate),
+        MAP(R.string.data_update_cat_map, R.drawable.ic_du_map),
+        AKASHI(R.string.data_update_cat_akashi, R.drawable.ic_du_build),
+        QUEST(R.string.data_update_cat_quest, R.drawable.ic_du_quest),
+        SHIP(R.string.data_update_cat_ship, R.drawable.ic_du_ship),
+        EXPEDITION(R.string.data_update_cat_expedition, R.drawable.ic_du_timer),
+        FAIRY(R.string.data_update_cat_fairy, R.drawable.ic_du_face),
+        OTHER(R.string.data_update_cat_other, R.drawable.ic_du_folder);
 
+        final int title;
+        final int icon;
+
+        Category(int title, int icon) {
+            this.title = title;
+            this.icon = icon;
+        }
+
+        static Category of(String name) {
+            if (name.equals("icon_info.json")) return FAIRY;
+            if (name.startsWith("akashi_")) return AKASHI;
+            if (name.equals("edges.json") || name.equals("map_sub.json") || name.equals("world_list.json")) return MAP;
+            if (name.equals("quest_track.json")) return QUEST;
+            if (name.startsWith("ships_")) return SHIP;
+            if (name.equals("expedition.json")) return EXPEDITION;
+            if (KcaDataUpdateManager.isTranslationFile(name)) return TRANSLATION;
+            return OTHER;
+        }
+    }
+
+    private static class ResourceFile {
+        final String name;
+        final Category category;
+        int current;
+        int latest = -1; // -1: not on the server list
+        String url;
+
+        ResourceFile(String name) {
+            this.name = name;
+            this.category = Category.of(name);
+        }
+    }
+
+    private final List<ResourceFile> files = new ArrayList<>();
+    private final Set<Category> expanded = EnumSet.noneOf(Category.class);
+    private final Map<String, Integer> progress = new HashMap<>();
+
+    LinearProgressIndicator topProgress;
+    RecyclerView listView;
+    KcaDataUpdateAdapter adapter;
     KcaDBHelper dbHelper;
-    UpdateHandler handler;
     KcaDownloader downloader;
     KcaFairyDownloader fairyDownloader;
-    Type listType = new TypeToken<ArrayList<JsonObject>>(){}.getType();
+    KcaDataUpdateManager updateManager;
 
-    private String getVersionString(int current, int latest) {
-        if (current == latest) {
-            return KcaUtils.format("UP-TO-DATE: %d", latest);
-        } else {
-            return KcaUtils.format("CURRENT: %d | LATEST: %d", current, latest);
-        }
-    }
+    boolean mainFlag = false;
+    boolean autoUpdate = false;
+    CheckState checkState = CheckState.CHECKING;
+    int checkId = 0;
+    String latestGameDataVersion = null;
+    // Last-Modified of list.json, to detect resource files served from an older CDN copy
+    String listLastModified = null;
 
-    private String getVersionString(String current, String latest) {
-        if (current != null && current.equalsIgnoreCase(latest)) {
-            return KcaUtils.format("UP-TO-DATE: %s", latest);
-        } else {
-            return KcaUtils.format("CURRENT: %s | LATEST: %s", current, latest);
+    private final KcaDataUpdateManager.Listener updateListener = new KcaDataUpdateManager.Listener() {
+        @Override
+        public void onItemChanged(String key, KcaDataUpdateManager.State state, int value) {
+            onUpdateItemChanged(key, state, value);
         }
-    }
+
+        @Override
+        public void onFinished(KcaDataUpdateManager.Summary summary) {
+            onUpdateFinished(summary);
+        }
+    };
+
+    private final KcaDataUpdateAdapter.SummaryActions summaryActions = new KcaDataUpdateAdapter.SummaryActions() {
+        @Override
+        public void onCancel() {
+            updateManager.cancelAll();
+        }
+
+        @Override
+        public void onRetry() {
+            if (checkState == CheckState.READY && retryFailed()) return;
+            checkUpdates();
+        }
+
+        @Override
+        public void onUpdateAll() {
+            updateAll();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rescheck);
 
-        Intent intent = this.getIntent();
-        if (intent != null && intent.getExtras() != null) {
-            main_flag = intent.getExtras().getBoolean("main_flag", false);
-        }
+        Intent intent = getIntent();
+        mainFlag = intent.getBooleanExtra(EXTRA_MAIN_FLAG, false);
+        autoUpdate = savedInstanceState == null && intent.getBooleanExtra(EXTRA_AUTO_UPDATE, false);
 
-        toolbar = findViewById(R.id.toolbar);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.setting_menu_kand_title_game_data_down));
+        getSupportActionBar().setTitle(getString(R.string.data_update_title));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         KcaApiData.setDBHelper(dbHelper);
-
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
         fairyDownloader = new KcaFairyDownloader(this);
-        PRDownloader.initialize(getApplicationContext());
+        updateManager = KcaDataUpdateManager.getInstance(this);
+        updateManager.addListener(updateListener);
 
-        handler = new UpdateHandler(this);
-        gamedata_adapter.setHandler(handler);
-        resource_adapter.setHandler(handler);
+        for (String name : KcaUtils.getResourceFilter(getApplicationContext())) {
+            files.add(new ResourceFile(name));
+        }
+        loadCurrentVersions();
 
-        resource_target = getResourcesFilter();
+        topProgress = findViewById(R.id.update_progress);
+        listView = findViewById(R.id.update_list);
+        listView.setLayoutManager(new LinearLayoutManager(this));
+        listView.setItemAnimator(null);
+        adapter = new KcaDataUpdateAdapter(summaryActions);
+        listView.setAdapter(adapter);
 
-        checkstart_chkbox = findViewById(R.id.reschk_checkatstart);
-        checkstart_chkbox.setChecked(getBooleanPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START));
-        checkstart_chkbox.setOnCheckedChangeListener((buttonView, isChecked)
-                -> setPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START, isChecked));
-
-        resource_reset = findViewById(R.id.reschk_reset);
-        resource_reset.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(UpdateCheckActivity.this);
-                alertDialog.setMessage(getString(R.string.download_reset_message));
-                alertDialog.setPositiveButton(getString(R.string.dialog_ok),
-                        (dialog, which) -> {
-                            dbHelper.clearResVer();
-                            setPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION, 0);
-                            Intent mainIntent = new Intent(this, InitStartActivity.class);
-                            mainIntent.putExtra(ACTION_RESET, true);
-                            startActivity(mainIntent);
-                            finish();
-                        });
-                alertDialog.setNegativeButton(getString(R.string.dialog_cancel),
-                        (dialog, which) -> {
-                            resource_reset.setChecked(false);
-                            dialog.dismiss();
-                        });
-                AlertDialog alert = alertDialog.create();
-                alert.setIcon(R.mipmap.ic_launcher);
-                alert.show();
-            }
-        });
-
-        data_list = findViewById(R.id.gamedata_list);
-        resource_list = findViewById(R.id.resources_list);
-
-        data_list.setAdapter(gamedata_adapter);
-        resource_list.setAdapter(resource_adapter);
-
-        gamedata_load = findViewById(R.id.gamedata_loading);
-        resource_load = findViewById(R.id.resources_loading);
-
-        gamedata_chk = findViewById(R.id.gamedata_updatecheck);
-        resource_chk = findViewById(R.id.resources_updatecheck);
-        resource_downall = findViewById(R.id.resources_downloadall);
-
-        gamedata_chk.setOnClickListener(v -> checkVersionUpdate());
-        resource_chk.setOnClickListener(v -> checkResourceUpdate());
-        resource_downall.setOnClickListener(v -> downloadAllResources());
-        resource_downall.setVisibility(View.GONE);
-
-
-        gamedata_server = findViewById(R.id.gamedata_server);
-        gamedata_server.setText(getString(R.string.action_server));
-        gamedata_server.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final int initValue = checked;
-                String[] listItems = getResources().getStringArray(R.array.ServerLocation);
-                String[] listEntry = getResources().getStringArray(R.array.ServerLocationValue);
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(UpdateCheckActivity.this);
-                mBuilder.setTitle(getString(R.string.setting_menu_app_title_updatecheckserver));
-                String currentServer = getStringPreferences(getApplicationContext(), PREF_UPDATE_SERVER);
-                for (int i = 0; i < listEntry.length; i++) if (currentServer.equals(listEntry[i])) {
-                    checked = i;
-                    break;
-                }
-
-                mBuilder.setSingleChoiceItems(listItems, checked, (dialog, which) -> {
-                    checked = which;
-                });
-                mBuilder.setPositiveButton(getString(R.string.dialog_ok), (dialog, which) -> {
-                    Log.e("KCA", "selected: " + checked);
-                    if (checked != -1) {
-                        String selectedServer = listEntry[checked];
-                        setPreferences(getApplicationContext(), PREF_UPDATE_SERVER, selectedServer);
-                    }
-                });
-                mBuilder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> {
-                    checked = initValue;
-                }));
-
-                AlertDialog mDialog = mBuilder.create();
-                mDialog.show();
-            }
-        });
-
-        checkVersionUpdate();
-        checkResourceUpdate();
+        checkUpdates();
     }
 
     @Override
     protected void onDestroy() {
+        // downloads keep going; the manager shows one result toast when no screen is listening
+        updateManager.removeListener(updateListener);
         super.onDestroy();
     }
 
     @Override
-    protected void onPause() {
-        loadTranslationData(getApplicationContext(), true);
-        super.onPause();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.data_update, menu);
+        MenuCompat.setGroupDividerEnabled(menu, true);
+        menu.findItem(R.id.action_data_check_at_start)
+                .setChecked(getBooleanPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START));
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (main_flag) {
-                    Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(mainIntent);
-                }
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            goBack();
+            return true;
+        } else if (id == R.id.action_data_refresh) {
+            checkUpdates();
+            return true;
+        } else if (id == R.id.action_data_check_at_start) {
+            boolean checked = !item.isChecked();
+            item.setChecked(checked);
+            setPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START, checked);
+            return true;
+        } else if (id == R.id.action_data_reset) {
+            showResetDialog();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
-        if (main_flag) {
-            Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(mainIntent);
-            finish();
-        }  else {
+        if (mainFlag) {
+            goBack();
+        } else {
             super.onBackPressed();
         }
     }
 
-    private void checkVersionUpdate() {
-        gamedata_load.setVisibility(View.VISIBLE);
-        data_list.setVisibility(View.GONE);
+    private void goBack() {
+        if (mainFlag) startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        finish();
+    }
 
-        gamedata_info.clear();
-        final Call<String> load_version = downloader.getRecentVersion();
+    private void loadCurrentVersions() {
+        for (ResourceFile file : files) file.current = dbHelper.getResVer(file.name);
+    }
 
+    // checks the latest game data version and the resource list on the update server
+    private void checkUpdates() {
+        if (updateManager.isRunning()) return; // the list is checked again after the downloads
+        updateManager.clearFinishedStates();
+        progress.clear();
+        loadCurrentVersions();
+        final int id = ++checkId;
         if (!KcaUtils.checkOnline(getApplicationContext())) {
-            gamedata_load.setText("No Internet Connection.");
-        } else {
-            load_version.enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                    try {
-                        String ver_result = response.body();
-                        JsonObject ver_data = gson.fromJson(ver_result, JsonObject.class);
-                        latest_gamedata_version = ver_data.get("data_version").getAsString();
+            checkState = CheckState.FAILED_OFFLINE;
+            render();
+            return;
+        }
+        checkState = CheckState.CHECKING;
+        render();
 
-                        JsonObject gamedata = new JsonObject();
-                        gamedata.addProperty("name", "api_start2");
-                        gamedata.addProperty("desc", "kancolle game data for kcanotify");
-                        String current_gd_v = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
-                        String latest_gd_v = latest_gamedata_version;
-                        gamedata.addProperty("version", latest_gd_v);
-                        gamedata.addProperty("version_str", getVersionString(current_gd_v, latest_gd_v));
-                        gamedata.addProperty("highlight", !KcaUtils.compareVersion(current_gd_v, latest_gd_v));
-                        gamedata.addProperty("url", "call_kcadata_download");
-                        gamedata_info.clear();
-                        gamedata_info.add(gamedata);
-                        gamedata_adapter.setContext(getApplicationContext());
-                        gamedata_adapter.setListItem(gamedata_info);
-                        gamedata_adapter.notifyDataSetChanged();
-
-                        gamedata_load.setVisibility(View.GONE);
-                        data_list.setVisibility(View.VISIBLE);
-                    } catch (Exception e) {
-                        gamedata_load.setText("Error: " + e.getMessage());
-                    }
+        final Context context = getApplicationContext();
+        new Thread(() -> {
+            String infoVersion = null;
+            try {
+                Response<String> response = downloader.getRecentVersion().execute();
+                if (response.isSuccessful() && response.body() != null) {
+                    JsonObject info = JsonParser.parseString(response.body()).getAsJsonObject();
+                    if (info.has("data_version")) infoVersion = info.get("data_version").getAsString();
                 }
+            } catch (Exception e) {
+                Log.w(TAG, "version info: " + e);
+            }
+            // the update server itself is the source of truth (KCAINFO can lag behind on the CDN);
+            // a version-only update (same content) is recorded here without a download
+            KcaGameDataChecker.Info latest = KcaGameDataChecker.syncVersion(context, downloader);
+            String gameVersion = KcaGameDataChecker.newerVersion(infoVersion, latest == null ? null : latest.version);
 
-                @Override
-                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                    gamedata_load.setText("Error: " + t);
+            JsonArray list = null;
+            String lastModified = null;
+            try {
+                Response<String> response = downloader.getResourceList().execute();
+                if (response.isSuccessful() && response.body() != null) {
+                    list = JsonParser.parseString(response.body()).getAsJsonArray();
+                    lastModified = response.headers().get("Last-Modified");
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "resource list: " + e);
+            }
+
+            final JsonArray resourceList = list;
+            final String listModified = lastModified;
+            runOnUiThread(() -> {
+                if (isFinishing() || isDestroyed() || id != checkId) return;
+                if (gameVersion == null || resourceList == null) {
+                    checkState = CheckState.FAILED_SERVER;
+                    render();
+                } else {
+                    applyCheckResult(gameVersion, resourceList, listModified);
                 }
             });
+        }).start();
+    }
+
+    private void applyCheckResult(String gameVersion, JsonArray list, String lastModified) {
+        latestGameDataVersion = gameVersion;
+        listLastModified = lastModified;
+        // entries not in the expected form are skipped, and their files are shown as up to date
+        Map<String, KcaDataUpdateManager.ListItem> items = new HashMap<>();
+        for (JsonElement element : list) {
+            KcaDataUpdateManager.ListItem item = KcaDataUpdateManager.ListItem.parse(element);
+            if (item != null) items.put(item.name, item);
+        }
+        for (ResourceFile file : files) {
+            KcaDataUpdateManager.ListItem item = items.get(file.name);
+            file.latest = item != null ? item.version : -1;
+            file.url = item != null ? item.url : null;
+        }
+        loadCurrentVersions();
+        checkState = CheckState.READY;
+        KcaDataUpdateManager.saveCheckResult(getApplicationContext(),
+                (isGameDataOutdated() ? 1 : 0) + countOutdatedFiles());
+        render();
+
+        if (autoUpdate) {
+            autoUpdate = false;
+            updateAll();
         }
     }
 
-    private void checkResourceUpdate() {
-        resource_load.setVisibility(View.VISIBLE);
-        resource_list.setVisibility(View.GONE);
+    private String getCurrentGameDataVersion() {
+        return getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
+    }
 
-        resource_info.clear();
-        final Call<String> load_resource = downloader.getResourceList();
+    private boolean isGameDataOutdated() {
+        if (checkState != CheckState.READY || !KcaGameDataChecker.isVersion(latestGameDataVersion)) return false;
+        String current = getCurrentGameDataVersion();
+        return !KcaGameDataChecker.isVersion(current) || !compareVersion(current, latestGameDataVersion);
+    }
 
-        if (!KcaUtils.checkOnline(getApplicationContext())) {
-            resource_load.setText("No Internet Connection.");
+    private boolean isOutdated(ResourceFile file) {
+        return checkState == CheckState.READY && file.url != null && file.latest > file.current;
+    }
+
+    private int countOutdatedFiles() {
+        int count = 0;
+        for (ResourceFile file : files) if (isOutdated(file)) count += 1;
+        return count;
+    }
+
+    private void enqueueGameData() {
+        if (isGameDataOutdated()) updateManager.enqueueGameData(latestGameDataVersion);
+        render();
+    }
+
+    private void enqueueFiles(List<ResourceFile> targets) {
+        for (ResourceFile file : targets) {
+            if (isOutdated(file)) updateManager.enqueueResource(file.name, file.url, file.latest, listLastModified);
+        }
+        render();
+    }
+
+    private void updateAll() {
+        if (isGameDataOutdated()) updateManager.enqueueGameData(latestGameDataVersion);
+        enqueueFiles(files);
+    }
+
+    // downloads the failed ones again; false if nothing failed
+    private boolean retryFailed() {
+        boolean retried = false;
+        if (isGameDataOutdated() && isFailed(KcaDataUpdateManager.GAME_DATA_KEY)) {
+            updateManager.enqueueGameData(latestGameDataVersion);
+            retried = true;
+        }
+        List<ResourceFile> targets = new ArrayList<>();
+        for (ResourceFile file : files) {
+            if (isOutdated(file) && isFailed(file.name)) targets.add(file);
+        }
+        if (!targets.isEmpty()) {
+            enqueueFiles(targets);
+            retried = true;
+        }
+        render();
+        return retried;
+    }
+
+    private boolean isFailed(String key) {
+        KcaDataUpdateManager.State state = updateManager.getState(key);
+        return state == KcaDataUpdateManager.State.FAILED || state == KcaDataUpdateManager.State.NOT_READY;
+    }
+
+    private void onUpdateItemChanged(String key, KcaDataUpdateManager.State state, int value) {
+        if (state == KcaDataUpdateManager.State.DOWNLOADING) {
+            progress.put(key, value);
         } else {
-            load_resource.enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                    int num_count = 0;
-                    try {
-                        resource_info = new ArrayList<>();
-                        List<JsonObject> res_result = gson.fromJson(response.body(), listType);
-                        if (res_result == null) {
-                            return;
-                        } else {
-                            for (int i = 0; i < res_result.size(); i++) {
-                                JsonObject item = res_result.get(i).getAsJsonObject();
-                                String name = item.get("name").getAsString();
-                                if (!isInResourcesFilter(name)) continue;
-                                String desc = "download " + name;
-                                item.addProperty("desc", desc);
-                                int current_res_v = dbHelper.getResVer(name);
-                                int latest_res_v = item.get("version").getAsInt();
-                                item.addProperty("version_str", getVersionString(current_res_v, latest_res_v));
-                                item.addProperty("highlight", current_res_v < latest_res_v);
-                                if (current_res_v < latest_res_v) num_count += 1;
-                                resource_info.add(item);
-                            }
-
-                            resource_adapter.setContext(getApplicationContext());
-                            resource_adapter.setListItem(resource_info);
-
-                            resource_adapter.notifyDataSetChanged();
-
-                            resource_load.setVisibility(View.GONE);
-                            resource_list.setVisibility(View.VISIBLE);
-                        }
-                    } catch (Exception e) {
-                        resource_load.setText("Error: " + e.getMessage());
-                    } finally {
-                        resource_downall.setVisibility(num_count > 0 ? View.VISIBLE : View.GONE);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<String> call, Throwable t) {
-                    resource_load.setText("Error: " + t);
-                }
-            });
-
+            progress.remove(key);
         }
-    }
-
-    private void downloadAllResources() {
-        for (int i = 0; i < resource_info.size(); i++) {
-            JsonObject item = resource_info.get(i);
-            boolean highlight = item.get("highlight").getAsBoolean();
-            if (highlight) {
-                String url = item.get("url").getAsString();
-                String name = item.get("name").getAsString();
-                int version = item.get("version").getAsInt();
-                downloadFile(url, name, version);
+        if (state == KcaDataUpdateManager.State.DONE) {
+            for (ResourceFile file : files) {
+                if (file.name.equals(key)) file.current = dbHelper.getResVer(key);
+            }
+            if (key.equals("icon_info.json")) {
+                Toast.makeText(getApplicationContext(), "Retrieving Fairy Images..", Toast.LENGTH_LONG).show();
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    if (!isFinishing() && !isDestroyed()) fairyDownloader.run(false);
+                }, LOAD_DELAY);
             }
         }
+        render();
     }
 
-
-    private static class UpdateHandler extends Handler {
-        private final WeakReference<UpdateCheckActivity> mActivity;
-
-        UpdateHandler(UpdateCheckActivity activity) {
-            mActivity = new WeakReference<>(activity);
+    private void onUpdateFinished(KcaDataUpdateManager.Summary summary) {
+        render();
+        String message = KcaDataUpdateManager.getSummaryText(getApplicationContext(), summary);
+        if (message == null) return;
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.update_root), message, Snackbar.LENGTH_LONG);
+        if (summary.failed + summary.notReady > 0) {
+            snackbar.setAction(R.string.data_update_retry, v -> retryFailed());
         }
-
-        @Override
-        public void handleMessage(Message msg) {
-            UpdateCheckActivity activity = mActivity.get();
-            if (activity != null) {
-                Bundle bundle = msg.getData();
-                String data = bundle.getString(RESCHK_KEY);
-                activity.handleUpdateMessage(data);
-            }
-        }
+        snackbar.show();
     }
 
-    public void handleUpdateMessage(String data) {
-        JsonObject obj = gson.fromJson(data, JsonObject.class);
-        String name = obj.get("name").getAsString();
-        String url = obj.get("url").getAsString();
-        if (url.equals("call_kcadata_download")) {
-            downloadGameData();
+    private void render() {
+        List<Row> rows = new ArrayList<>();
+        rows.add(Row.summary(buildSummary()));
+        boolean ready = checkState == CheckState.READY;
+        if (ready) {
+            rows.add(Row.header("game", getString(R.string.data_update_section_game)));
+            rows.add(buildGameRow());
+            rows.add(Row.header("resource", getString(R.string.data_update_section_resource)));
         } else {
-            int version = obj.get("version").getAsInt();
-            downloadFile(url, name, version);
+            // the latest versions are not known: shows what is installed
+            rows.add(Row.header("installed", getString(R.string.data_update_section_installed)));
+            rows.add(buildGameRow());
         }
-    }
-
-    private void downloadGameData() {
-        final Call<String> down_gamedata = downloader.getGameData("recent");
-        down_gamedata.enqueue(new retrofit2.Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
-                JsonObject response_data;
-                try {
-                    if (response.body() != null) {
-                        response_data = JsonParser.parseString(response.body()).getAsJsonObject();
-                        String kca_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
-                        String server_kca_version = response.headers().get("X-Api-Version");
-                        Log.e("KCA", "api_version: " + server_kca_version);
-                        if (kca_version == null || compareVersion(server_kca_version, kca_version)) {
-                            dbHelper.putValue(DB_KEY_STARTDATA, response_data.toString());
-                            KcaApiData.getKcGameData(response_data.getAsJsonObject("api_data"));
-                            KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, server_kca_version);
-                            KcaApiData.setDataLoadTriggered();
-                            Toast.makeText(getApplicationContext(),
-                                    getString(R.string.sa_getupdate_finished),
-                                    Toast.LENGTH_LONG).show();
-
-                            JsonObject gamedata = gamedata_info.get(0);
-                            String latest_gd_v = latest_gamedata_version;
-                            gamedata.addProperty("version", latest_gd_v);
-                            gamedata.addProperty("version_str", getVersionString(server_kca_version, latest_gd_v));
-                            gamedata.addProperty("highlight", !KcaUtils.compareVersion(server_kca_version, latest_gd_v));
-                            gamedata_adapter.setContext(getApplicationContext());
-                            gamedata_adapter.setListItem(gamedata_info);
-                            gamedata_adapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    getString(R.string.kca_toast_inconsistent_data),
-                                    Toast.LENGTH_LONG).show();;
-                        }
-                    }
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(),
-                            "Error: not valid data.",
-                            Toast.LENGTH_LONG).show();;
-                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "fairy_queue", "", "", getStringFromException(e));
-                }
+        for (Category category : Category.values()) {
+            List<ResourceFile> targets = new ArrayList<>();
+            for (ResourceFile file : files) if (file.category == category) targets.add(file);
+            if (targets.isEmpty()) continue;
+            rows.add(buildCategoryRow(category, targets));
+            if (targets.size() > 1 && expanded.contains(category)) {
+                for (ResourceFile file : targets) rows.add(buildFileRow(file));
             }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                if (KcaUtils.checkOnline(getApplicationContext())) {
-                    Toast.makeText(getApplicationContext(),
-                            KcaUtils.format(getString(R.string.sa_getupdate_servererror), t.getMessage()),
-                            Toast.LENGTH_LONG).show();;
-                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "fairy_queue", "", "", t.getMessage());
-                }
-            }
-        });
-    }
-
-    private void downloadFile(String url, String name, int version) {
-        long timestamp = System.currentTimeMillis() / 1000;
-        final File root_dir = getDir("data", Context.MODE_PRIVATE);
-        final File data = new File(root_dir, name);
-        if (data.exists()) data.delete();
-
-        PRDownloader.download(KcaUtils.format("%s?t=%d", url, timestamp), root_dir.getPath(), name)
-                .build()
-                .start(new OnDownloadListener() {
-                    @Override
-                    public void onDownloadComplete() {
-                        saveAssetData(UpdateCheckActivity.this, name, version);
-                        if (name.equals("icon_info.json")) {
-                            Toast.makeText(getApplicationContext(), "Download Completed: " + name + "\nRetrieving Fairy Images..", Toast.LENGTH_LONG).show();
-                            final Handler handler1 = new Handler(Looper.getMainLooper());
-                            handler1.postDelayed(() -> fairyDownloader.run(false), LOAD_DELAY);
-                        }
-                        int num_count = 0;
-                        for (int i = 0; i < resource_info.size(); i++) {
-                            JsonObject item = resource_info.get(i).getAsJsonObject();
-                            if (item.get("name").getAsString().equals(name)) {
-                                int latest_res_v = item.get("version").getAsInt();
-                                item.addProperty("version_str", getVersionString(version, latest_res_v));
-                                item.addProperty("highlight", version < latest_res_v);
-                                if (version < latest_res_v) num_count += 1;
-                            }
-                        }
-                        resource_adapter.setListItem(resource_info);
-                        resource_adapter.notifyDataSetChanged();
-                        resource_downall.setVisibility(num_count > 0 ? View.VISIBLE : View.GONE);
-                    }
-
-                    @Override
-                    public void onError(Error error) {
-                        Toast.makeText(getApplicationContext(), "Error when downloading " + name, Toast.LENGTH_LONG).show();
-                    }
-                });
-    }
-
-    public List<String> getResourcesFilter() {
-        List<String> filter = new ArrayList<>();
-        AssetManager am = getAssets();
-        try {
-            AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("resources_config.json");
-            byte[] bytes = ByteStreams.toByteArray(ais);
-            JsonObject config = JsonParser.parseString(new String(bytes)).getAsJsonObject();
-            for (JsonElement item : config.getAsJsonArray("common")) {
-                filter.add(item.getAsString());
-            }
-            for (JsonElement item : config.getAsJsonObject("langpacks").getAsJsonArray(LocaleUtils.getResourceLocaleCode())) {
-                filter.add(item.getAsString());
-            }
-        } catch (IOException e) {
-            // do nothing
         }
-        return filter;
+        adapter.setRows(rows);
+
+        int barProgress = PROGRESS_HIDDEN;
+        if (checkState == CheckState.CHECKING) {
+            barProgress = PROGRESS_INDETERMINATE;
+        } else if (updateManager.isRunning()) {
+            barProgress = getBatchProgress();
+        }
+        KcaDataUpdateAdapter.setProgress(topProgress, barProgress);
     }
 
-    public boolean isInResourcesFilter(String key) {
-        return !resource_target.isEmpty() && resource_target.contains(key);
-    }
-
-    private void saveAssetData(Activity mActivity, String name, int version) {
-        final WeakReference<Activity> weakReference = new WeakReference<>(mActivity);
-        Handler handler = new Handler(Looper.getMainLooper());
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> {
-            Activity activity = weakReference.get();
-            if (activity == null || activity.isFinishing() || activity.isDestroyed()) {
-                // do nothing
+    // 0-100 over the downloads requested since the queue was last empty
+    private int getBatchProgress() {
+        List<String> batch = updateManager.getBatchKeys();
+        if (batch.isEmpty()) return PROGRESS_INDETERMINATE;
+        int total = 0;
+        for (String key : batch) {
+            if (isFinished(updateManager.getState(key))) {
+                total += 100;
             } else {
-                Context context = activity.getApplicationContext();
-                try {
-                    KcaDBHelper dbHelper = new KcaDBHelper(activity.getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-                    dbHelper.putResVer(name, version);
-                    dbHelper.close();
-                    handler.postDelayed(() -> Toast.makeText(context, "Download Completed: " + name, Toast.LENGTH_LONG).show(), LOAD_DELAY);
-                } catch (Exception e) {
-                    handler.post(() -> Toast.makeText(context, "failed to read data", Toast.LENGTH_SHORT).show());
-                }
+                Integer value = progress.get(key);
+                if (value != null && value > 0) total += value;
             }
-        });
+        }
+        // nothing to show yet (e.g. the game data, whose size is not known)
+        if (total == 0) return PROGRESS_INDETERMINATE;
+        return total / batch.size();
+    }
+
+    private static boolean isFinished(KcaDataUpdateManager.State state) {
+        return state == null || state == KcaDataUpdateManager.State.DONE
+                || state == KcaDataUpdateManager.State.FAILED || state == KcaDataUpdateManager.State.NOT_READY;
+    }
+
+    private KcaDataUpdateAdapter.Summary buildSummary() {
+        KcaDataUpdateAdapter.Summary summary = new KcaDataUpdateAdapter.Summary();
+        long lastCheck = KcaDataUpdateManager.getLastCheckTime(getApplicationContext());
+        String lastChecked = lastCheck > 0
+                ? KcaUtils.format(getString(R.string.data_update_last_checked), getRelativeTime(lastCheck)) : "";
+        switch (checkState) {
+            case CHECKING:
+                summary.title = getString(R.string.data_update_checking);
+                summary.body = lastChecked;
+                return summary;
+            case FAILED_SERVER:
+            case FAILED_OFFLINE:
+                summary.icon = R.drawable.ic_du_error;
+                summary.iconTint = androidx.appcompat.R.attr.colorError;
+                summary.title = getString(R.string.data_update_check_failed);
+                summary.body = joinLines(getString(checkState == CheckState.FAILED_OFFLINE
+                        ? R.string.data_update_check_failed_offline
+                        : R.string.data_update_check_failed_server), lastChecked);
+                summary.retry = true;
+                return summary;
+            default:
+                break;
+        }
+
+        List<String> batch = updateManager.getBatchKeys();
+        if (updateManager.isRunning() && !batch.isEmpty()) {
+            int finished = 0;
+            for (String key : batch) if (isFinished(updateManager.getState(key))) finished += 1;
+            summary.style = KcaDataUpdateAdapter.CardStyle.PROGRESS;
+            summary.title = KcaUtils.format(getString(R.string.data_update_in_progress), finished, batch.size());
+            summary.body = getString(R.string.data_update_in_progress_hint);
+            summary.progress = getBatchProgress();
+            summary.cancel = true;
+            return summary;
+        }
+
+        int gameCount = isGameDataOutdated() ? 1 : 0;
+        int fileCount = countOutdatedFiles();
+        int done = 0, failed = 0, notReady = 0;
+        List<String> keys = new ArrayList<>();
+        keys.add(KcaDataUpdateManager.GAME_DATA_KEY);
+        for (ResourceFile file : files) keys.add(file.name);
+        for (String key : keys) {
+            KcaDataUpdateManager.State state = updateManager.getState(key);
+            boolean outdated = key.equals(KcaDataUpdateManager.GAME_DATA_KEY) ? gameCount > 0 : isOutdated(findFile(key));
+            if (state == KcaDataUpdateManager.State.DONE) done += 1;
+            else if (state == KcaDataUpdateManager.State.FAILED && outdated) failed += 1;
+            else if (state == KcaDataUpdateManager.State.NOT_READY && outdated) notReady += 1;
+        }
+
+        if (failed > 0) {
+            summary.style = KcaDataUpdateAdapter.CardStyle.ERROR;
+            summary.icon = R.drawable.ic_du_error;
+            summary.iconTint = androidx.appcompat.R.attr.colorError;
+            summary.title = KcaUtils.format(getString(R.string.data_update_failed_title), failed + notReady);
+            summary.body = KcaDataUpdateManager.getSummaryText(getApplicationContext(),
+                    new KcaDataUpdateManager.Summary(done, failed, notReady));
+            summary.retry = true;
+        } else if (notReady > 0) {
+            summary.icon = R.drawable.ic_du_timer;
+            summary.iconTint = com.google.android.material.R.attr.colorOnSurfaceVariant;
+            summary.title = getString(R.string.data_update_not_ready_title);
+            summary.body = getString(R.string.data_update_not_ready_hint);
+            summary.retry = true;
+        } else if (gameCount + fileCount > 0) {
+            summary.title = KcaUtils.format(getString(R.string.data_update_available), gameCount + fileCount);
+            summary.body = joinLines(KcaUtils.format(getString(R.string.data_update_available_detail),
+                    gameCount, fileCount), lastChecked);
+            summary.updateAll = true;
+        } else {
+            summary.icon = R.drawable.ic_du_check_circle;
+            summary.iconSuccess = true;
+            summary.title = getString(R.string.data_update_all_latest);
+            summary.body = lastChecked;
+        }
+        return summary;
+    }
+
+    private ResourceFile findFile(String name) {
+        for (ResourceFile file : files) if (file.name.equals(name)) return file;
+        return null;
+    }
+
+    private Row buildGameRow() {
+        String current = getCurrentGameDataVersion();
+        if (current == null || current.isEmpty()) current = "-";
+        boolean outdated = isGameDataOutdated();
+        String supporting = outdated ? current + " → " + latestGameDataVersion : current;
+        Row row = Row.entry(GAME_ROW_KEY, R.drawable.ic_du_storage, getString(R.string.data_update_cat_game), supporting)
+                .noExpandSpace();
+        if (checkState == CheckState.READY) {
+            Trailing trailing = getTrailing(KcaDataUpdateManager.GAME_DATA_KEY, outdated);
+            row.trailing(trailing, PROGRESS_INDETERMINATE, isActionable(trailing) ? this::enqueueGameData : null);
+            if (trailing == Trailing.DOWNLOADING) row.progress(PROGRESS_INDETERMINATE);
+        }
+        return row;
+    }
+
+    private Row buildCategoryRow(Category category, List<ResourceFile> targets) {
+        boolean ready = checkState == CheckState.READY;
+        int outdatedCount = 0;
+        int latestInstalled = 0;
+        ResourceFile downloading = null;
+        Trailing trailing = Trailing.LATEST;
+        for (ResourceFile file : targets) {
+            boolean outdated = isOutdated(file);
+            if (outdated) outdatedCount += 1;
+            latestInstalled = Math.max(latestInstalled, file.current);
+            Trailing fileTrailing = getTrailing(file.name, outdated);
+            if (fileTrailing == Trailing.DOWNLOADING) downloading = file;
+            if (getPriority(fileTrailing) > getPriority(trailing)) trailing = fileTrailing;
+        }
+
+        String supporting;
+        if (downloading != null) {
+            supporting = downloading.name;
+        } else if (targets.size() == 1) {
+            supporting = getVersionText(targets.get(0));
+        } else if (outdatedCount > 0) {
+            supporting = KcaUtils.format(getString(R.string.data_update_files_outdated), outdatedCount, targets.size());
+        } else {
+            supporting = formatResourceVersion(latestInstalled);
+        }
+
+        Row row = Row.entry("category:" + category.name(), category.icon, getString(category.title), supporting);
+        if (targets.size() > 1) {
+            row.expandable(expanded.contains(category), () -> {
+                if (!expanded.remove(category)) expanded.add(category);
+                render();
+            });
+        }
+        if (ready) {
+            int value = getProgress(downloading);
+            row.trailing(trailing, value, isActionable(trailing) ? () -> enqueueFiles(targets) : null);
+            if (trailing == Trailing.DOWNLOADING) row.progress(value);
+        }
+        return row;
+    }
+
+    private Row buildFileRow(ResourceFile file) {
+        Row row = Row.file("file:" + file.name, file.name, getVersionText(file));
+        if (checkState == CheckState.READY) {
+            Trailing trailing = getTrailing(file.name, isOutdated(file));
+            List<ResourceFile> target = new ArrayList<>();
+            target.add(file);
+            row.trailing(trailing, getProgress(file), isActionable(trailing) ? () -> enqueueFiles(target) : null);
+        }
+        return row;
+    }
+
+    private Trailing getTrailing(String key, boolean outdated) {
+        KcaDataUpdateManager.State state = updateManager.getState(key);
+        if (state == KcaDataUpdateManager.State.DOWNLOADING) return Trailing.DOWNLOADING;
+        if (state == KcaDataUpdateManager.State.QUEUED) return Trailing.QUEUED;
+        if (outdated) {
+            if (state == KcaDataUpdateManager.State.FAILED) return Trailing.FAILED;
+            if (state == KcaDataUpdateManager.State.NOT_READY) return Trailing.NOT_READY;
+            return Trailing.UPDATE;
+        }
+        return state == KcaDataUpdateManager.State.DONE ? Trailing.DONE : Trailing.LATEST;
+    }
+
+    // the state shown for a category: the most urgent one of its files
+    private static int getPriority(Trailing trailing) {
+        switch (trailing) {
+            case DOWNLOADING: return 6;
+            case QUEUED: return 5;
+            case FAILED: return 4;
+            case NOT_READY: return 3;
+            case UPDATE: return 2;
+            case DONE: return 1;
+            default: return 0;
+        }
+    }
+
+    private static boolean isActionable(Trailing trailing) {
+        return trailing == Trailing.UPDATE || trailing == Trailing.FAILED || trailing == Trailing.NOT_READY;
+    }
+
+    private int getProgress(ResourceFile file) {
+        if (file == null) return PROGRESS_INDETERMINATE;
+        Integer value = progress.get(file.name);
+        return value == null || value < 0 ? PROGRESS_INDETERMINATE : value;
+    }
+
+    private String getVersionText(ResourceFile file) {
+        String current = formatResourceVersion(file.current);
+        if (!isOutdated(file)) return current;
+        String latest = formatResourceVersion(file.latest);
+        if (current.equals(latest)) {
+            // updated again on the same day: only the revision (NN of yyyyMMddNN) differs
+            return KcaUtils.format("%s (rev %d → %d)", current, file.current % 100, file.latest % 100);
+        }
+        return current + " → " + latest;
+    }
+
+    // resource versions are yyyyMMddNN
+    private static String formatResourceVersion(int version) {
+        if (version <= 0) return "-";
+        String value = String.valueOf(version);
+        if (value.length() != 10) return value;
+        // shown as is if it is not a date
+        int month = Integer.parseInt(value.substring(4, 6));
+        int day = Integer.parseInt(value.substring(6, 8));
+        if (month < 1 || month > 12 || day < 1 || day > 31) return value;
+        return value.substring(0, 4) + "-" + value.substring(4, 6) + "-" + value.substring(6, 8);
+    }
+
+    private static String joinLines(String first, String second) {
+        if (second == null || second.isEmpty()) return first;
+        return first + "\n" + second;
+    }
+
+    private String getRelativeTime(long time) {
+        Locale locale = LocaleUtils.getLocale();
+        if (locale == null) locale = getResources().getConfiguration().getLocales().get(0);
+        RelativeDateTimeFormatter formatter = RelativeDateTimeFormatter.getInstance(ULocale.forLocale(locale));
+        long diff = Math.max(0, System.currentTimeMillis() - time);
+        if (diff < DateUtils.MINUTE_IN_MILLIS) {
+            return formatter.format(RelativeDateTimeFormatter.Direction.PLAIN, RelativeDateTimeFormatter.AbsoluteUnit.NOW);
+        } else if (diff < DateUtils.HOUR_IN_MILLIS) {
+            return formatter.format(diff / DateUtils.MINUTE_IN_MILLIS,
+                    RelativeDateTimeFormatter.Direction.LAST, RelativeDateTimeFormatter.RelativeUnit.MINUTES);
+        } else if (diff < DateUtils.DAY_IN_MILLIS) {
+            return formatter.format(diff / DateUtils.HOUR_IN_MILLIS,
+                    RelativeDateTimeFormatter.Direction.LAST, RelativeDateTimeFormatter.RelativeUnit.HOURS);
+        }
+        return formatter.format(diff / DateUtils.DAY_IN_MILLIS,
+                RelativeDateTimeFormatter.Direction.LAST, RelativeDateTimeFormatter.RelativeUnit.DAYS);
+    }
+
+    private void showResetDialog() {
+        float density = getResources().getDisplayMetrics().density;
+        MaterialCheckBox downloadAfter = new MaterialCheckBox(this);
+        downloadAfter.setText(R.string.data_reset_download_after);
+        downloadAfter.setChecked(KcaUtils.checkOnline(getApplicationContext()));
+        FrameLayout container = new FrameLayout(this);
+        container.setPadding((int) (18 * density), (int) (8 * density), (int) (24 * density), 0);
+        container.addView(downloadAfter);
+
+        Drawable icon = AppCompatResources.getDrawable(this, R.drawable.ic_backup_restore);
+        if (icon != null) {
+            icon = icon.mutate();
+            icon.setTint(getThemeColor(this, com.google.android.material.R.attr.colorSecondary));
+        }
+        AlertDialog dialog = new MaterialAlertDialogBuilder(this,
+                com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered)
+                .setIcon(icon)
+                .setTitle(R.string.data_reset_title)
+                .setMessage(R.string.data_reset_message)
+                .setView(container)
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .setPositiveButton(R.string.data_reset_confirm, (d, which) -> resetData(downloadAfter.isChecked()))
+                .show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setTextColor(getThemeColor(this, androidx.appcompat.R.attr.colorError));
+    }
+
+    private void resetData(boolean updateAfter) {
+        updateManager.cancelAll();
+        resetDownloadedData(getApplicationContext(), dbHelper);
+        Intent intent = new Intent(this, InitStartActivity.class);
+        intent.putExtra(ACTION_RESET, true);
+        intent.putExtra(InitStartActivity.EXTRA_UPDATE_AFTER_RESET, updateAfter);
+        startActivity(intent);
+        finish();
+    }
+
+    // Remove downloaded resources and game data, so that InitStartActivity (ACTION_RESET) restores
+    // the bundled ones. Fairy images (separate folder), logs and settings are kept.
+    private static void resetDownloadedData(Context context, KcaDBHelper helper) {
+        File[] dataFiles = context.getDir("data", Context.MODE_PRIVATE).listFiles();
+        if (dataFiles != null) {
+            for (File file : dataFiles) {
+                if (file.isFile()) file.delete();
+            }
+        }
+        helper.clearResVer();
+        setPreferences(context, PREF_KCARESOURCE_VERSION, 0);
+        KcaGameDataStore.delete(context);
+        setPreferences(context, PREF_KCA_DATA_VERSION, "");
     }
 }

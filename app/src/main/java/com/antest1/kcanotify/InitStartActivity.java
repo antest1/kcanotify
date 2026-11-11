@@ -37,7 +37,7 @@ import java.util.Locale;
 import retrofit2.Call;
 
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_REMOVED_ARRAY;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_MAIN;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
@@ -66,6 +66,8 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 public class InitStartActivity extends BaseActivity {
     private static final String TAG = "InitStartActivity";
     public static final String ACTION_RESET = "ACTION_RESET";
+    // with ACTION_RESET: opens the update screen and downloads the latest data after the reset
+    public static final String EXTRA_UPDATE_AFTER_RESET = "update_after_reset";
 
     Handler handler = new Handler(Looper.getMainLooper());
     KcaDBHelper dbHelper;
@@ -76,7 +78,8 @@ public class InitStartActivity extends BaseActivity {
     boolean is_destroyed = false;
     int fairy_flag;
     boolean reset_flag = false;
-    boolean validated_flag = false;
+    boolean update_after_reset = false;
+    volatile boolean validated_flag = false;
     boolean is_skipped = false;
 
     @Override
@@ -92,6 +95,7 @@ public class InitStartActivity extends BaseActivity {
 
         Intent mainIntent = getIntent();
         reset_flag = mainIntent.getBooleanExtra(ACTION_RESET, false);
+        update_after_reset = reset_flag && mainIntent.getBooleanExtra(EXTRA_UPDATE_AFTER_RESET, false);
         is_destroyed = false;
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
@@ -120,12 +124,6 @@ public class InitStartActivity extends BaseActivity {
         File backup_dir = new File(getExternalFilesDir(null), "backup");
         if (!backup_dir.exists()) backup_dir.mkdirs();
 
-        // Initialize resources
-        setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, false);
-        loadDefaultAsset();
-
-        validated_flag = KcaUtils.validateResourceFiles(getApplicationContext(), dbHelper);
-        setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, false);
         findViewById(R.id.init_layout).setOnClickListener(v -> {
             if (validated_flag && !reset_flag) {
                 startMainActivity(false);
@@ -134,8 +132,16 @@ public class InitStartActivity extends BaseActivity {
         });
 
         new Thread(() -> {
+            // Initialize resources: copying and checking the bundled data reads and writes several MB,
+            // so it runs here instead of on the main thread
+            setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, false);
+            loadDefaultAsset();
+            // sets PREF_DATALOAD_ERROR_FLAG itself when a file is broken, so the flag is not cleared after it
+            validated_flag = KcaUtils.validateResourceFiles(getApplicationContext(), dbHelper);
+
             runOnUiThread(() -> appmessage.setText("Loading Translation Data..."));
-            int tl_result = loadTranslationData(getApplicationContext());
+            // after a reset, reload even if translation data is already in memory
+            int tl_result = loadTranslationData(getApplicationContext(), reset_flag);
             if (tl_result > 0) {
                 runOnUiThread(() -> Toast.makeText(getApplicationContext(), "error loading traslation data: " + tl_result, Toast.LENGTH_LONG).show());
             }
@@ -145,6 +151,12 @@ public class InitStartActivity extends BaseActivity {
             if (setDefaultGameDataResult != 1) {
                 runOnUiThread(() -> Toast.makeText(getApplicationContext(), "error loading game data", Toast.LENGTH_LONG).show());
             }
+            if (reset_flag) {
+                // the old data is still in memory (also used by a running service): apply the restored ones
+                JsonObject api_data = KcaGameDataStore.loadApiData(getApplicationContext());
+                if (api_data != null) KcaApiData.getKcGameData(api_data);
+                KcaApiData.reloadAllResources(getApplicationContext());
+            }
 
             runOnUiThread(() -> appmessage.setText("Checking External Filter..."));
             boolean allow_ext = KcaUtils.getBooleanPreferences(getApplicationContext(), PREF_ALLOW_EXTFILTER);
@@ -152,23 +164,15 @@ public class InitStartActivity extends BaseActivity {
 
             boolean is_default_written = KcaUtils.getStringPreferences(getApplicationContext(), PREF_DEFAULT_APIVER).equals(BuildConfig.VERSION_NAME);
             if (!is_default_written) {
-                runOnUiThread(() -> appmessage.setText("Writing Default Data..."));
-                String internal_kca_version = getString(R.string.default_gamedata_version);
-                try {
-                    InputStream api_ais = getAssets().open("api_start2");
-                    byte[] bytes = gzipdecompress(ByteStreams.toByteArray(api_ais));
-                    String asset_start2_data = new String(bytes);
-                    dbHelper.putValue(DB_KEY_STARTDATA, asset_start2_data);
-                    KcaUtils.setPreferences(getApplicationContext(), PREF_DEFAULT_APIVER, BuildConfig.VERSION_NAME);
-                    KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_VERSION, internal_kca_version);
-                    KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, internal_kca_version);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                // loadDefaultAsset() has already applied the bundled game data if it is newer than the
+                // recorded one; overwriting here would roll back data downloaded before this app update
+                KcaUtils.setPreferences(getApplicationContext(), PREF_DEFAULT_APIVER, BuildConfig.VERSION_NAME);
             }
 
             // main update check
-            if (!KcaUtils.checkOnline(getApplicationContext()) || !getBooleanPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START)) {
+            if (update_after_reset && KcaUtils.checkOnline(getApplicationContext())) {
+                startUpdateActivity(true);
+            } else if (!KcaUtils.checkOnline(getApplicationContext()) || !getBooleanPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START)) {
                 startMainActivity(true);
             } else {
                 if (is_skipped) return;
@@ -210,6 +214,9 @@ public class InitStartActivity extends BaseActivity {
                     } else {
                         dataCheck(response_data);
                     }
+                } else {
+                    // version info not available (server or network error): go on without the check
+                    startMainActivity(true);
                 }
             }
         }).start();
@@ -237,51 +244,88 @@ public class InitStartActivity extends BaseActivity {
     }
 
     private void dataCheck(JsonObject response_data) {
-        boolean latest_flag = true;
-        List<String> update_text = new ArrayList<>();
-        String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
-        int currentKcaResVersion = dbHelper.getTotalResVer();
+        // checks below use the network; this is also called from a dialog button on the main thread
+        new Thread(() -> {
+            boolean latest_flag = true;
+            // checks the game data on the update server directly (KCAINFO can lag behind on the CDN),
+            // and records a version-only update (same content) without a download
+            KcaGameDataChecker.Info latestGameData = KcaGameDataChecker.syncVersion(getApplicationContext(), downloader);
+            String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
 
-        if (response_data.has("data_version")) {
-            String recentVersion = response_data.get("data_version").getAsString();
-            latest_flag = compareVersion(currentDataVersion, recentVersion);
-        }
-
-        if (response_data.has("kcadata_version")) {
-            int common_version = response_data.get("kcadata_version").getAsInt();
-            int new_resversion = common_version;
-            if (response_data.has("kcadata_langpacks")) {
-                int langpacks_version = response_data.getAsJsonObject("kcadata_langpacks")
-                        .get(LocaleUtils.getResourceLocaleCode()).getAsInt();
-                new_resversion = Math.max(common_version, langpacks_version);
+            String infoVersion = null;
+            if (response_data.has("data_version") && response_data.get("data_version").isJsonPrimitive()) {
+                infoVersion = response_data.get("data_version").getAsString();
             }
-            latest_flag = latest_flag && new_resversion <= currentKcaResVersion;
-        }
+            // null if neither is a valid version
+            String recentVersion = KcaGameDataChecker.newerVersion(infoVersion,
+                    latestGameData != null ? latestGameData.version : null);
+            if (recentVersion != null) {
+                latest_flag = KcaGameDataChecker.isVersion(currentDataVersion)
+                        && compareVersion(currentDataVersion, recentVersion);
+            }
 
-        setPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK, String.valueOf(System.currentTimeMillis()));
-        if (latest_flag) {
-            startMainActivity(true);
-        } else {
-            String message = getString(R.string.download_description_head);
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(InitStartActivity.this);
-            alertDialog.setTitle(getString(R.string.download_title));
-            alertDialog.setMessage(message.trim());
-            alertDialog.setCancelable(false);
-            alertDialog.setPositiveButton(getString(R.string.dialog_ok), (dialog, which) -> {
-                startUpdateActivity();
-             });
-
-            alertDialog.setNegativeButton(getString(R.string.dialog_cancel), (dialog, which) -> {
-                startMainActivity(true);
-            });
-
-            handler.post(() -> {
-                if (!is_destroyed && !InitStartActivity.this.isFinishing()) {
-                    AlertDialog alert = alertDialog.create();
-                    alert.setIcon(R.mipmap.ic_launcher);
-                    alert.show();
+            int outdatedResources = countOutdatedResources();
+            if (recentVersion != null && outdatedResources >= 0) {
+                // shown as a dot on the update chip of the main screen
+                KcaDataUpdateManager.saveCheckResult(getApplicationContext(),
+                        (latest_flag ? 0 : 1) + outdatedResources);
+            }
+            if (outdatedResources >= 0) {
+                latest_flag = latest_flag && outdatedResources == 0;
+            } else if (response_data.has("kcadata_version")) {
+                // resource list not available: fall back to the summary versions
+                int currentKcaResVersion = dbHelper.getTotalResVer();
+                int common_version = response_data.get("kcadata_version").getAsInt();
+                int new_resversion = common_version;
+                if (response_data.has("kcadata_langpacks")) {
+                    int langpacks_version = response_data.getAsJsonObject("kcadata_langpacks")
+                            .get(LocaleUtils.getResourceLocaleCode()).getAsInt();
+                    new_resversion = Math.max(common_version, langpacks_version);
                 }
-            });
+                latest_flag = latest_flag && new_resversion <= currentKcaResVersion;
+            }
+
+            setPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK, String.valueOf(System.currentTimeMillis()));
+            if (latest_flag) {
+                startMainActivity(true);
+            } else {
+                handler.post(() -> {
+                    if (!is_destroyed && !InitStartActivity.this.isFinishing()) {
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(InitStartActivity.this);
+                        alertDialog.setTitle(getString(R.string.download_title));
+                        alertDialog.setMessage(getString(R.string.download_description_head).trim());
+                        alertDialog.setCancelable(false);
+                        alertDialog.setPositiveButton(getString(R.string.dialog_ok), (dialog, which) -> {
+                            startUpdateActivity(false);
+                        });
+                        alertDialog.setNegativeButton(getString(R.string.dialog_cancel), (dialog, which) -> {
+                            startMainActivity(true);
+                        });
+                        AlertDialog alert = alertDialog.create();
+                        alert.setIcon(R.mipmap.ic_launcher);
+                        alert.show();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    // number of resource files (current language) older than the server list, or -1 if the list is not available
+    private int countOutdatedResources() {
+        String response = getResultFromCall(downloader.getResourceList());
+        try {
+            JsonArray list = JsonParser.parseString(response).getAsJsonArray();
+            List<String> targets = KcaUtils.getResourceFilter(getApplicationContext());
+            int count = 0;
+            for (JsonElement element : list) {
+                // entries not in the expected form are skipped
+                KcaDataUpdateManager.ListItem item = KcaDataUpdateManager.ListItem.parse(element);
+                if (item == null || !targets.contains(item.name)) continue;
+                if (dbHelper.getResVer(item.name) < item.version) count += 1;
+            }
+            return count;
+        } catch (Exception e) {
+            return -1;
         }
     }
 
@@ -296,11 +340,12 @@ public class InitStartActivity extends BaseActivity {
         //if(transition) overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-    private void startUpdateActivity() {
+    private void startUpdateActivity(boolean autoUpdate) {
         if (!is_destroyed) {
             runOnUiThread(() -> {
                 Intent updateIntent = new Intent(getApplicationContext(), UpdateCheckActivity.class);
-                updateIntent.putExtra("main_flag", true);
+                updateIntent.putExtra(UpdateCheckActivity.EXTRA_MAIN_FLAG, true);
+                updateIntent.putExtra(UpdateCheckActivity.EXTRA_AUTO_UPDATE, autoUpdate);
                 startActivity(updateIntent);
                 finish();
             });
@@ -312,15 +357,21 @@ public class InitStartActivity extends BaseActivity {
         byte[] bytes;
         String kca_data_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
         String internal_kca_version = getString(R.string.default_gamedata_version);
-        int currentKcaResVersion = dbHelper.getTotalResVer();
         try {
-            if (kca_data_version == null || compareVersion(internal_kca_version, kca_data_version)) {
+            // data kept in the DB before is not moved: game data is written below from the bundled one
+            // (a newer one is offered by the update check), and resources are read from their files
+            for (String key : DB_KEY_REMOVED_ARRAY) dbHelper.deleteValue(key);
+
+            // when there is no game data yet, or the bundled one is newer than the recorded one (not when the same)
+            if (!KcaGameDataStore.exists(getApplicationContext())
+                    || kca_data_version == null || !compareVersion(kca_data_version, internal_kca_version)) {
                 InputStream api_ais = am.open("api_start2");
                 bytes = gzipdecompress(ByteStreams.toByteArray(api_ais));
                 String asset_start2_data = new String(bytes);
-                dbHelper.putValue(DB_KEY_STARTDATA, asset_start2_data);
-                KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_VERSION, internal_kca_version);
-                KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, internal_kca_version);
+                if (KcaGameDataStore.save(getApplicationContext(), asset_start2_data)) {
+                    KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_VERSION, internal_kca_version);
+                    KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, internal_kca_version);
+                }
             }
 
             AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("list.json");
@@ -331,7 +382,8 @@ public class InitStartActivity extends BaseActivity {
                 JsonObject res_info = item.getAsJsonObject();
                 String name = res_info.get("name").getAsString();
                 int version = res_info.get("version").getAsInt();
-                if (currentKcaResVersion < version) {
+                // compare with this file's version, not the newest of all files
+                if (dbHelper.getResVer(name) < version) {
                     final File root_dir = getDir("data", Context.MODE_PRIVATE);
                     final File new_data = new File(root_dir, name);
                     if (new_data.exists()) new_data.delete();

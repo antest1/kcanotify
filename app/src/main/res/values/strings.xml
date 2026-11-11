@@ -18,7 +18,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_errorlog">Error Log</string>
     <string name="action_download">Download</string>
     <string name="action_check">CHECK</string>
-    <string name="action_server">CHANGE SERVER</string>
     <string name="action_perm">Grant Permissions</string>
     <string name="action_downloadall">DL ALL</string>
     <string name="action_inspector" translatable="false">Inspector</string>
@@ -313,7 +312,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="setting_menu_app_head">Application Information</string>
     <string name="setting_menu_app_title_current">Current Version</string>
-    <string name="setting_menu_app_title_updatecheckserver">Select Update Check Server</string>
     <string name="setting_menu_app_title_updatecheck">Check For Updates</string>
     <string name="setting_menu_app_title_down">APK Download Site</string>
     <string name="setting_menu_app_title_contact">Submit a Suggestion or Error Report</string>
@@ -778,7 +776,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="download_fairy">Fairy-san</string>
     <string name="download_progress">Downloading…</string>
     <string name="download_reset">Initialize all resources</string>
-    <string name="download_reset_message">Initializing app resource again.</string>
+    <string name="download_reset_message">Downloaded resources and game data will be reset to the data included in the app.</string>
     <string name="download_check_error">Error when loading from storage (using default data)</string>
     <string name="download_setting_checkatstart">Check update when start application</string>
 
@@ -917,4 +915,49 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="svc_stopped_action_restart">Restart</string>
     <string name="svc_stopped_action_battery">Battery settings</string>
     <string name="sa_ringtone_picker_unavailable">No ringtone picker is available on this device.</string>
+    <string name="data_update_result_done">Data update finished (%d)</string>
+    <string name="data_update_result_failed">%1$d updated, %2$d failed. Please try again later.</string>
+    <string name="data_update_result_not_ready">Some data is not ready on the server yet. Please try again in a few minutes.</string>
+    <string name="data_update_title">Data update</string>
+    <string name="data_update_refresh">Check for updates</string>
+    <string name="data_update_checking">Checking for updates…</string>
+    <string name="data_update_all_latest">All data is up to date</string>
+    <string name="data_update_available">Updates available: %d</string>
+    <string name="data_update_available_detail">Game data %1$d · Resources %2$d</string>
+    <string name="data_update_last_checked">Last checked: %s</string>
+    <string name="data_update_in_progress">Updating · %1$d/%2$d</string>
+    <string name="data_update_in_progress_hint">Downloads continue even if you leave this screen.</string>
+    <string name="data_update_failed_title">Download failed: %d</string>
+    <string name="data_update_not_ready_title">Some data is not ready on the server yet</string>
+    <string name="data_update_not_ready_hint">Please try again in a few minutes.</string>
+    <string name="data_update_check_failed">Could not check for updates</string>
+    <string name="data_update_check_failed_server">Could not connect to the update server.</string>
+    <string name="data_update_check_failed_offline">No internet connection.</string>
+    <string name="data_update_all">Update all</string>
+    <string name="data_update_retry">Retry</string>
+    <string name="data_update_check_at_start">Check at app start</string>
+    <string name="data_update_section_game">Game data</string>
+    <string name="data_update_section_resource">Resources</string>
+    <string name="data_update_section_installed">Installed data</string>
+    <string name="data_update_state_update">Update</string>
+    <string name="data_update_state_latest">Up to date</string>
+    <string name="data_update_state_queued">Waiting</string>
+    <string name="data_update_state_done">Done</string>
+    <string name="data_update_state_failed">Failed</string>
+    <string name="data_update_state_not_ready">Not ready</string>
+    <string name="data_update_files_outdated">Files to update: %1$d of %2$d</string>
+    <string name="data_update_cat_game">Game data (api_start2)</string>
+    <string name="data_update_cat_translation">Translations</string>
+    <string name="data_update_cat_map">Map data</string>
+    <string name="data_update_cat_akashi">Akashi\'s improvement arsenal</string>
+    <string name="data_update_cat_quest">Quest tracker</string>
+    <string name="data_update_cat_ship">Ship data</string>
+    <string name="data_update_cat_expedition">Expeditions</string>
+    <string name="data_update_cat_fairy">Fairy icons</string>
+    <string name="data_update_cat_other">Other</string>
+    <string name="data_reset_menu">Reset data…</string>
+    <string name="data_reset_title">Reset data?</string>
+    <string name="data_reset_message">Downloaded resources (translations, map data, etc.) and game data (api_start2) will be removed and replaced with the data included in the app.\n\nBattle and drop logs and settings are kept.</string>
+    <string name="data_reset_confirm">Reset</string>
+    <string name="data_reset_download_after">Download the latest data after reset</string>
 </resources>

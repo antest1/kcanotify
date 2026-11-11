@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material 3 color roles derived from colorPrimary (#313447), used by the data update screen.
+         The app theme overrides only a few roles; the rest fall back to the M3 baseline (purple). -->
+    <color name="m3_dataupdate_primary">#313447</color>
+    <color name="m3_dataupdate_on_primary">#FFFFFF</color>
+    <color name="m3_dataupdate_primary_container">#DDE1FF</color>
+    <color name="m3_dataupdate_on_primary_container">#141B37</color>
+    <color name="m3_dataupdate_secondary">#5A5D72</color>
+    <color name="m3_dataupdate_on_secondary">#FFFFFF</color>
+    <color name="m3_dataupdate_secondary_container">#E0E1F3</color>
+    <color name="m3_dataupdate_on_secondary_container">#181B2C</color>
+    <color name="m3_dataupdate_tertiary">#006493</color>
+    <color name="m3_dataupdate_on_tertiary">#FFFFFF</color>
+    <color name="m3_dataupdate_tertiary_container">#CAE6FF</color>
+    <color name="m3_dataupdate_on_tertiary_container">#001E30</color>
+    <color name="m3_dataupdate_error">#BA1A1A</color>
+    <color name="m3_dataupdate_on_error">#FFFFFF</color>
+    <color name="m3_dataupdate_error_container">#FFDAD6</color>
+    <color name="m3_dataupdate_on_error_container">#410002</color>
+    <color name="m3_dataupdate_surface">#FBF8FF</color>
+    <color name="m3_dataupdate_on_surface">#1B1B21</color>
+    <color name="m3_dataupdate_on_surface_variant">#46464F</color>
+    <color name="m3_dataupdate_surface_container_lowest">#FFFFFF</color>
+    <color name="m3_dataupdate_surface_container_low">#F5F2FA</color>
+    <color name="m3_dataupdate_surface_container">#EFEDF4</color>
+    <color name="m3_dataupdate_surface_container_high">#E9E7EF</color>
+    <color name="m3_dataupdate_surface_container_highest">#E3E1E9</color>
+    <color name="m3_dataupdate_outline">#767680</color>
+    <color name="m3_dataupdate_outline_variant">#C6C5D0</color>
+    <color name="m3_dataupdate_inverse_surface">#303036</color>
+    <color name="m3_dataupdate_inverse_on_surface">#F2F0F7</color>
+    <color name="m3_dataupdate_inverse_primary">#BBC3FA</color>
+    <color name="m3_dataupdate_success">#1B5E20</color>
+
+    <style name="AppTheme.DataUpdate">
+        <item name="colorPrimary">@color/m3_dataupdate_primary</item>
+        <item name="colorOnPrimary">@color/m3_dataupdate_on_primary</item>
+        <item name="colorPrimaryContainer">@color/m3_dataupdate_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/m3_dataupdate_on_primary_container</item>
+        <item name="colorSecondary">@color/m3_dataupdate_secondary</item>
+        <item name="colorOnSecondary">@color/m3_dataupdate_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/m3_dataupdate_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/m3_dataupdate_on_secondary_container</item>
+        <item name="colorTertiary">@color/m3_dataupdate_tertiary</item>
+        <item name="colorOnTertiary">@color/m3_dataupdate_on_tertiary</item>
+        <item name="colorTertiaryContainer">@color/m3_dataupdate_tertiary_container</item>
+        <item name="colorOnTertiaryContainer">@color/m3_dataupdate_on_tertiary_container</item>
+        <item name="colorError">@color/m3_dataupdate_error</item>
+        <item name="colorOnError">@color/m3_dataupdate_on_error</item>
+        <item name="colorErrorContainer">@color/m3_dataupdate_error_container</item>
+        <item name="colorOnErrorContainer">@color/m3_dataupdate_on_error_container</item>
+        <item name="colorSurface">@color/m3_dataupdate_surface</item>
+        <item name="colorOnSurface">@color/m3_dataupdate_on_surface</item>
+        <item name="colorOnSurfaceVariant">@color/m3_dataupdate_on_surface_variant</item>
+        <item name="colorSurfaceContainerLowest">@color/m3_dataupdate_surface_container_lowest</item>
+        <item name="colorSurfaceContainerLow">@color/m3_dataupdate_surface_container_low</item>
+        <item name="colorSurfaceContainer">@color/m3_dataupdate_surface_container</item>
+        <item name="colorSurfaceContainerHigh">@color/m3_dataupdate_surface_container_high</item>
+        <item name="colorSurfaceContainerHighest">@color/m3_dataupdate_surface_container_highest</item>
+        <item name="colorOutline">@color/m3_dataupdate_outline</item>
+        <item name="colorOutlineVariant">@color/m3_dataupdate_outline_variant</item>
+        <item name="colorSurfaceInverse">@color/m3_dataupdate_inverse_surface</item>
+        <item name="colorOnSurfaceInverse">@color/m3_dataupdate_inverse_on_surface</item>
+        <item name="colorPrimaryInverse">@color/m3_dataupdate_inverse_primary</item>
+        <item name="android:colorBackground">@color/m3_dataupdate_surface</item>
+        <item name="android:windowBackground">@color/m3_dataupdate_surface</item>
+    </style>
+</resources>

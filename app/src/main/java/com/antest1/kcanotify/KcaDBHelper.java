@@ -69,6 +69,10 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         return db_name;
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         StringBuffer sb = new StringBuffer();

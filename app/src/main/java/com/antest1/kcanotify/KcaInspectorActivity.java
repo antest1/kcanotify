@@ -25,6 +25,7 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_PACKETLOG_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_BOOLEAN_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_PACKET_LOG;
 import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
@@ -39,6 +40,7 @@ public class KcaInspectorActivity extends BaseActivity {
     final String DB_PREFIX = "DB ";
     final String DQ_PREFIX = "DQ ";
     final String QT_PREFIX = "QT ";
+    final String FILE_PREFIX = "FILE ";
 
     Toolbar toolbar;
     static Gson gson = new Gson();
@@ -65,6 +67,10 @@ public class KcaInspectorActivity extends BaseActivity {
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
         packetLogger = new KcaPacketLogger(getApplicationContext(), null, KCANOTIFY_PACKETLOG_VERSION);
+        long gamedata_length = KcaGameDataStore.length(getApplicationContext());
+        listViewItemList.add(new AbstractMap.SimpleEntry<>(FILE_PREFIX.concat(KcaGameDataStore.FILE_NAME),
+                gamedata_length < 0 ? "<null>" : KcaUtils.format("%d bytes, %s", gamedata_length,
+                        getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION))));
         for (String db_key: DB_KEY_ARRAY) {
             String db_value = dbHelper.getValue(db_key);
             if (db_value == null) db_value = "<null>";

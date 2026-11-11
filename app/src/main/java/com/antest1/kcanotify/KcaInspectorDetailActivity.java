@@ -38,6 +38,7 @@ public class KcaInspectorDetailActivity extends BaseActivity {
     final String DB_PREFIX = "DB ";
     final String DQ_PREFIX = "DQ ";
     final String QT_PREFIX = "QT ";
+    final String FILE_PREFIX = "FILE ";
     private static final int MAX_DISPLAY_LENGTH = 50000;
 
     String key, value_text= "";
@@ -100,6 +101,9 @@ public class KcaInspectorDetailActivity extends BaseActivity {
                 if (value_text != null) {
                     if (type_key.startsWith(DB_PREFIX)) {
                         dbHelper.deleteValue(key);
+                    } else if (type_key.startsWith(FILE_PREFIX)) {
+                        // the bundled game data is written again at the next start
+                        KcaGameDataStore.delete(getApplicationContext());
                     } else if (type_key.startsWith(QT_PREFIX)) {
                         questTracker.clearQuestTrack();
                     } else if (type_key.startsWith(DQ_PREFIX)) {
@@ -158,6 +162,9 @@ public class KcaInspectorDetailActivity extends BaseActivity {
     public void setText(String type_key) {
         if (type_key.startsWith(DB_PREFIX)) {
             value_text = dbHelper.getValue(key);
+            if (value_text == null) value_text = "<null>";
+        } else if (type_key.startsWith(FILE_PREFIX)) {
+            value_text = KcaGameDataStore.readText(getApplicationContext());
             if (value_text == null) value_text = "<null>";
         } else if (type_key.startsWith(PREF_PREFIX)) {
             if (PREFS_BOOLEAN_LIST.contains(key)) {

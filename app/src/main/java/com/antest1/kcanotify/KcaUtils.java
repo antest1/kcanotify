@@ -99,7 +99,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_DATALOAD;
 import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_MIXED;
 import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_MUTE;
@@ -273,13 +272,15 @@ public class KcaUtils {
         String current_version = getStringPreferences(context, PREF_KCA_DATA_VERSION);
         String default_version = context.getString(R.string.default_gamedata_version);
 
-        // start data is several MB: check the cheap conditions before reading and parsing it
+        // game data is about 2MB: check the cheap conditions before reading and parsing it
         if (KcaUtils.compareVersion(current_version, default_version)) {
             if (KcaApiData.isGameDataLoaded()) return 1;
-            JsonObject start_data = helper.getJsonObjectValue(DB_KEY_STARTDATA);
-            if (start_data != null && start_data.has("api_data") && start_data.get("api_data").isJsonObject()) {
-                KcaApiData.getKcGameData(start_data.getAsJsonObject("api_data"));
+            JsonObject api_data = KcaGameDataStore.loadApiData(context);
+            if (api_data != null) {
+                KcaApiData.getKcGameData(api_data);
                 valid_data = true;
+            } else if (helper != null && KcaGameDataStore.exists(context)) {
+                helper.recordErrorLog(ERROR_TYPE_DATALOAD, KcaGameDataStore.FILE_NAME, "setDefaultGameData", "", "not readable");
             }
         }
 
@@ -291,7 +292,7 @@ public class KcaUtils {
                 byte[] bytes = KcaUtils.gzipdecompress(ByteStreams.toByteArray(ais));
                 String start_data_str = new String(bytes);
                 bytes = null;
-                helper.putValue(DB_KEY_STARTDATA, start_data_str);
+                KcaGameDataStore.save(context, start_data_str);
                 JsonObject api_data = JsonParser.parseString(start_data_str).getAsJsonObject().getAsJsonObject("api_data");
                 KcaApiData.getKcGameData(api_data);
                 setPreferences(context, PREF_KCA_VERSION, default_version);
@@ -568,7 +569,7 @@ public class KcaUtils {
         }
     }
 
-    public static KcaDownloader getInfoDownloader(Context context){
+    public static OkHttpClient buildUpdateHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(1, TimeUnit.MINUTES);
@@ -579,8 +580,11 @@ public class KcaUtils {
                     .method(original.method(), original.body()).build();
             return chain.proceed(request);
         });
+        return builder.build();
+    }
 
-        OkHttpClient okHttpClient = builder.build();
+    public static KcaDownloader getInfoDownloader(Context context){
+        OkHttpClient okHttpClient = buildUpdateHttpClient();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(KcaUtils.getUpdateServer(context))
@@ -830,11 +834,30 @@ public class KcaUtils {
         return BitmapFactory.decodeResource(res, resId, options);
     }
 
+    // resource files used by the current language: "common" + this language's "langpacks" in resources_config.json
+    public static List<String> getResourceFilter(Context context) {
+        List<String> filter = new ArrayList<>();
+        try (InputStream is = context.getAssets().open("resources_config.json")) {
+            JsonObject config = JsonParser.parseString(new String(ByteStreams.toByteArray(is))).getAsJsonObject();
+            for (JsonElement item : config.getAsJsonArray("common")) {
+                filter.add(item.getAsString());
+            }
+            for (JsonElement item : config.getAsJsonObject("langpacks").getAsJsonArray(LocaleUtils.getResourceLocaleCode())) {
+                filter.add(item.getAsString());
+            }
+        } catch (IOException e) {
+            // do nothing
+        }
+        return filter;
+    }
+
     public static boolean validateResourceFiles(Context context, KcaDBHelper helper) {
         int count = 0;
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("data", Context.MODE_PRIVATE);
         for (final File entry : directory.listFiles()) {
+            // skip unfinished downloads (*.download), which are not resource files yet
+            if (!entry.getName().endsWith(".json")) continue;
             try {
                 Reader reader = new FileReader(entry);
                 JsonParser.parseReader(reader);

@@ -89,7 +89,8 @@ public class DropLogActivity extends BaseActivity {
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();
 
-        JsonArray appWorldListData = KcaUtils.getJsonArrayFromAsset(getApplicationContext(), "world_list.json", dbHelper);
+        // downloaded file first (falls back to the bundled asset)
+        JsonArray appWorldListData = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "world_list.json", dbHelper);
         if (appWorldListData != null) {
             world_list = new String[appWorldListData.size()];
             for (int i = 0; i < world_list.length; i++) {

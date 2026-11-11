@@ -5,6 +5,7 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonObject;
@@ -18,6 +19,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.net.VpnService;
@@ -32,6 +37,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.ActivityCompat;
@@ -45,6 +51,7 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -349,6 +356,44 @@ public class MainActivity extends BaseActivity {
         setCheckBtn();
         // after setCheckBtn, which would otherwise turn the toggle back off
         handleRestartServiceIntent(getIntent());
+        setUpdateDot();
+    }
+
+    // a small red dot (M3 small badge) on the icon of the update chip while the last check found updates;
+    // on the icon, since the end of the chip can be under the GAME START button
+    private Drawable updateChipIcon;
+    private ColorStateList updateChipIconTint;
+
+    private void setUpdateDot() {
+        if (!(textMainUpdate instanceof Chip)) return;
+        Chip chip = (Chip) textMainUpdate;
+        if (updateChipIcon == null) {
+            updateChipIcon = chip.getChipIcon();
+            updateChipIconTint = chip.getChipIconTint();
+        }
+        int count = KcaDataUpdateManager.getPendingCount(getApplicationContext());
+        String title = getString(R.string.setting_menu_kand_title_game_data_down);
+        if (count > 0) {
+            chip.setContentDescription(title + ", " + KcaUtils.format(getString(R.string.data_update_available), count));
+            Drawable icon = AppCompatResources.getDrawable(this, R.drawable.ic_download);
+            GradientDrawable dot = new GradientDrawable();
+            dot.setShape(GradientDrawable.OVAL);
+            dot.setColor(KcaDataUpdateAdapter.getThemeColor(this, androidx.appcompat.R.attr.colorError));
+            // outlined in the chip's text color, to stand out on the blue chip
+            float density = getResources().getDisplayMetrics().density;
+            dot.setStroke(Math.round(density), chip.getCurrentTextColor());
+            LayerDrawable badged = new LayerDrawable(new Drawable[]{icon, dot});
+            int size = Math.round(8 * density);
+            badged.setLayerSize(1, size, size);
+            badged.setLayerGravity(1, Gravity.TOP | Gravity.END);
+            // the icon is white by itself; a tint would also cover the dot
+            chip.setChipIconTint(null);
+            chip.setChipIcon(badged);
+        } else {
+            chip.setContentDescription(title);
+            chip.setChipIcon(updateChipIcon);
+            chip.setChipIconTint(updateChipIconTint);
+        }
     }
 
     @Override
