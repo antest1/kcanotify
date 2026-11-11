@@ -76,7 +76,7 @@ public class InitStartActivity extends BaseActivity {
     boolean is_destroyed = false;
     int fairy_flag;
     boolean reset_flag = false;
-    boolean validated_flag = false;
+    volatile boolean validated_flag = false;
     boolean is_skipped = false;
 
     @Override
@@ -120,12 +120,6 @@ public class InitStartActivity extends BaseActivity {
         File backup_dir = new File(getExternalFilesDir(null), "backup");
         if (!backup_dir.exists()) backup_dir.mkdirs();
 
-        // Initialize resources
-        setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, false);
-        loadDefaultAsset();
-
-        validated_flag = KcaUtils.validateResourceFiles(getApplicationContext(), dbHelper);
-        setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, false);
         findViewById(R.id.init_layout).setOnClickListener(v -> {
             if (validated_flag && !reset_flag) {
                 startMainActivity(false);
@@ -134,6 +128,13 @@ public class InitStartActivity extends BaseActivity {
         });
 
         new Thread(() -> {
+            // Initialize resources: copying and checking the bundled data reads and writes several MB,
+            // so it runs here instead of on the main thread
+            setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, false);
+            loadDefaultAsset();
+            // sets PREF_DATALOAD_ERROR_FLAG itself when a file is broken, so the flag is not cleared after it
+            validated_flag = KcaUtils.validateResourceFiles(getApplicationContext(), dbHelper);
+
             runOnUiThread(() -> appmessage.setText("Loading Translation Data..."));
             // after a reset, reload even if translation data is already in memory
             int tl_result = loadTranslationData(getApplicationContext(), reset_flag);
@@ -209,6 +210,9 @@ public class InitStartActivity extends BaseActivity {
                     } else {
                         dataCheck(response_data);
                     }
+                } else {
+                    // version info not available (server or network error): go on without the check
+                    startMainActivity(true);
                 }
             }
         }).start();
