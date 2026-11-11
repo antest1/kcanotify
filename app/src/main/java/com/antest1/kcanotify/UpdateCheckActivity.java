@@ -56,7 +56,6 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE_START;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 import static com.antest1.kcanotify.KcaResCheckItemAdpater.RESCHK_KEY;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
@@ -277,31 +276,27 @@ public class UpdateCheckActivity extends BaseActivity {
             load_version.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    String info_version;
                     try {
-                        String ver_result = response.body();
-                        JsonObject ver_data = gson.fromJson(ver_result, JsonObject.class);
-                        latest_gamedata_version = ver_data.get("data_version").getAsString();
-
-                        JsonObject gamedata = new JsonObject();
-                        gamedata.addProperty("name", "api_start2");
-                        gamedata.addProperty("desc", "kancolle game data for kcanotify");
-                        String current_gd_v = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
-                        String latest_gd_v = latest_gamedata_version;
-                        gamedata.addProperty("version", latest_gd_v);
-                        gamedata.addProperty("version_str", getVersionString(current_gd_v, latest_gd_v));
-                        gamedata.addProperty("highlight", !KcaUtils.compareVersion(current_gd_v, latest_gd_v));
-                        gamedata.addProperty("url", "call_kcadata_download");
-                        gamedata_info.clear();
-                        gamedata_info.add(gamedata);
-                        gamedata_adapter.setContext(getApplicationContext());
-                        gamedata_adapter.setListItem(gamedata_info);
-                        gamedata_adapter.notifyDataSetChanged();
-
-                        gamedata_load.setVisibility(View.GONE);
-                        data_list.setVisibility(View.VISIBLE);
+                        JsonObject ver_data = gson.fromJson(response.body(), JsonObject.class);
+                        info_version = ver_data.get("data_version").getAsString();
                     } catch (Exception e) {
                         gamedata_load.setText("Error: " + e.getMessage());
+                        return;
                     }
+                    final Context context = getApplicationContext();
+                    // the update server itself is the source of truth (KCAINFO can lag behind on the CDN);
+                    // a version-only update (same content) is recorded here without a download
+                    new Thread(() -> {
+                        KcaGameDataChecker.Info latest = KcaGameDataChecker.syncVersion(context, downloader);
+                        String latest_version = latest == null ? info_version
+                                : KcaGameDataChecker.newerVersion(info_version, latest.version);
+                        runOnUiThread(() -> {
+                            if (isFinishing() || isDestroyed()) return;
+                            latest_gamedata_version = latest_version;
+                            showGameDataItem();
+                        });
+                    }).start();
                 }
 
                 @Override
@@ -310,6 +305,26 @@ public class UpdateCheckActivity extends BaseActivity {
                 }
             });
         }
+    }
+
+    private void showGameDataItem() {
+        JsonObject gamedata = new JsonObject();
+        gamedata.addProperty("name", "api_start2");
+        gamedata.addProperty("desc", "kancolle game data for kcanotify");
+        String current_gd_v = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
+        String latest_gd_v = latest_gamedata_version;
+        gamedata.addProperty("version", latest_gd_v);
+        gamedata.addProperty("version_str", getVersionString(current_gd_v, latest_gd_v));
+        gamedata.addProperty("highlight", !KcaUtils.compareVersion(current_gd_v, latest_gd_v));
+        gamedata.addProperty("url", "call_kcadata_download");
+        gamedata_info.clear();
+        gamedata_info.add(gamedata);
+        gamedata_adapter.setContext(getApplicationContext());
+        gamedata_adapter.setListItem(gamedata_info);
+        gamedata_adapter.notifyDataSetChanged();
+
+        gamedata_load.setVisibility(View.GONE);
+        data_list.setVisibility(View.VISIBLE);
     }
 
     private void checkResourceUpdate() {
@@ -415,45 +430,44 @@ public class UpdateCheckActivity extends BaseActivity {
     }
 
     private void downloadGameData() {
-        final Call<String> down_gamedata = downloader.getGameData("recent");
+        // ask for the exact version shown as latest, so the recorded version always matches the data
+        final String target_version = latest_gamedata_version;
+        final Call<String> down_gamedata = downloader.getGameData(target_version);
         down_gamedata.enqueue(new retrofit2.Callback<String>() {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
-                JsonObject response_data;
+                if (response.code() == 404) {
+                    // this version is not on the server yet
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.kca_toast_inconsistent_data),
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
                 try {
-                    if (response.body() != null) {
-                        response_data = JsonParser.parseString(response.body()).getAsJsonObject();
-                        String kca_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
-                        String server_kca_version = response.headers().get("X-Api-Version");
-                        Log.e("KCA", "api_version: " + server_kca_version);
-                        if (kca_version == null || compareVersion(server_kca_version, kca_version)) {
-                            dbHelper.putValue(DB_KEY_STARTDATA, response_data.toString());
-                            KcaApiData.getKcGameData(response_data.getAsJsonObject("api_data"));
-                            KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, server_kca_version);
-                            KcaApiData.setDataLoadTriggered();
-                            Toast.makeText(getApplicationContext(),
-                                    getString(R.string.sa_getupdate_finished),
-                                    Toast.LENGTH_LONG).show();
-
-                            JsonObject gamedata = gamedata_info.get(0);
-                            String latest_gd_v = latest_gamedata_version;
-                            gamedata.addProperty("version", latest_gd_v);
-                            gamedata.addProperty("version_str", getVersionString(server_kca_version, latest_gd_v));
-                            gamedata.addProperty("highlight", !KcaUtils.compareVersion(server_kca_version, latest_gd_v));
-                            gamedata_adapter.setContext(getApplicationContext());
-                            gamedata_adapter.setListItem(gamedata_info);
-                            gamedata_adapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    getString(R.string.kca_toast_inconsistent_data),
-                                    Toast.LENGTH_LONG).show();;
-                        }
+                    String server_version = response.headers().get(KcaGameDataChecker.HEADER_VERSION);
+                    Log.e("KCA", "api_version: " + server_version);
+                    if (!response.isSuccessful() || response.body() == null
+                            || server_version == null || !server_version.trim().equals(target_version)) {
+                        throw new IllegalStateException("unexpected response: " + response.code() + " " + server_version);
                     }
+                    String start_data = response.body();
+                    JsonObject api_data = JsonParser.parseString(start_data).getAsJsonObject().getAsJsonObject("api_data");
+                    if (api_data == null) throw new IllegalStateException("no api_data");
+
+                    // save the data and its version together, then apply it
+                    dbHelper.putValue(DB_KEY_STARTDATA, start_data);
+                    KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, target_version);
+                    KcaApiData.getKcGameData(api_data);
+                    KcaApiData.setDataLoadTriggered();
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.sa_getupdate_finished),
+                            Toast.LENGTH_LONG).show();
+                    showGameDataItem();
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(),
                             "Error: not valid data.",
-                            Toast.LENGTH_LONG).show();;
-                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "fairy_queue", "", "", getStringFromException(e));
+                            Toast.LENGTH_LONG).show();
+                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "gamedata_download", target_version, "", getStringFromException(e));
                 }
             }
 
@@ -462,8 +476,8 @@ public class UpdateCheckActivity extends BaseActivity {
                 if (KcaUtils.checkOnline(getApplicationContext())) {
                     Toast.makeText(getApplicationContext(),
                             KcaUtils.format(getString(R.string.sa_getupdate_servererror), t.getMessage()),
-                            Toast.LENGTH_LONG).show();;
-                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "fairy_queue", "", "", t.getMessage());
+                            Toast.LENGTH_LONG).show();
+                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "gamedata_download", target_version, "", t.getMessage());
                 }
             }
         });

@@ -152,19 +152,9 @@ public class InitStartActivity extends BaseActivity {
 
             boolean is_default_written = KcaUtils.getStringPreferences(getApplicationContext(), PREF_DEFAULT_APIVER).equals(BuildConfig.VERSION_NAME);
             if (!is_default_written) {
-                runOnUiThread(() -> appmessage.setText("Writing Default Data..."));
-                String internal_kca_version = getString(R.string.default_gamedata_version);
-                try {
-                    InputStream api_ais = getAssets().open("api_start2");
-                    byte[] bytes = gzipdecompress(ByteStreams.toByteArray(api_ais));
-                    String asset_start2_data = new String(bytes);
-                    dbHelper.putValue(DB_KEY_STARTDATA, asset_start2_data);
-                    KcaUtils.setPreferences(getApplicationContext(), PREF_DEFAULT_APIVER, BuildConfig.VERSION_NAME);
-                    KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_VERSION, internal_kca_version);
-                    KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, internal_kca_version);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                // loadDefaultAsset() has already applied the bundled game data if it is newer than the
+                // recorded one; overwriting here would roll back data downloaded before this app update
+                KcaUtils.setPreferences(getApplicationContext(), PREF_DEFAULT_APIVER, BuildConfig.VERSION_NAME);
             }
 
             // main update check
@@ -240,10 +230,16 @@ public class InitStartActivity extends BaseActivity {
         // checks below use the network; this is also called from a dialog button on the main thread
         new Thread(() -> {
             boolean latest_flag = true;
+            // checks the game data on the update server directly (KCAINFO can lag behind on the CDN),
+            // and records a version-only update (same content) without a download
+            KcaGameDataChecker.Info latestGameData = KcaGameDataChecker.syncVersion(getApplicationContext(), downloader);
             String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
 
-            if (response_data.has("data_version")) {
-                String recentVersion = response_data.get("data_version").getAsString();
+            String recentVersion = response_data.has("data_version") ? response_data.get("data_version").getAsString() : null;
+            if (latestGameData != null) {
+                recentVersion = KcaGameDataChecker.newerVersion(recentVersion, latestGameData.version);
+            }
+            if (recentVersion != null) {
                 latest_flag = compareVersion(currentDataVersion, recentVersion);
             }
 
@@ -335,7 +331,8 @@ public class InitStartActivity extends BaseActivity {
         String kca_data_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
         String internal_kca_version = getString(R.string.default_gamedata_version);
         try {
-            if (kca_data_version == null || compareVersion(internal_kca_version, kca_data_version)) {
+            // only when the bundled game data is newer than the recorded one (not when the same)
+            if (kca_data_version == null || !compareVersion(kca_data_version, internal_kca_version)) {
                 InputStream api_ais = am.open("api_start2");
                 bytes = gzipdecompress(ByteStreams.toByteArray(api_ais));
                 String asset_start2_data = new String(bytes);

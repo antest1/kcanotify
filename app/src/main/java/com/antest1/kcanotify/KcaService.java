@@ -143,7 +143,6 @@ public class KcaService extends BaseService {
     private BroadcastReceiver receiver;
 
     String kcaFirstDeckInfo;
-    static String kca_version;
     boolean api_start2_init = false;
     Gson gson = new GsonBuilder().setLenient().create();
 
@@ -773,10 +772,8 @@ public class KcaService extends BaseService {
                 if (jsonDataObj.has("api_data")) {
                     dbHelper.putValue(DB_KEY_STARTDATA, jsonDataObj.toString());
                     //Toast.makeText(this, "Load Kancolle Data", Toast.LENGTH_LONG).show();
+                    // the game does not tell the data version; KcaGameDataChecker syncs it with the server
                     KcaApiData.getKcGameData(jsonDataObj.getAsJsonObject("api_data"));
-                    if (kca_version != null) {
-                        setPreferences(getApplicationContext(), "kca_version", kca_version);
-                    }
                 }
                 return;
             }
