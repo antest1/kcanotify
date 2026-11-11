@@ -716,8 +716,15 @@ public class KcaFleetViewService extends BaseService {
                                     shipIndex = i;
                                 }
                                 if (shipIndex < data.size()) {
-                                    JsonObject udata = data.get(shipIndex).getAsJsonObject().getAsJsonObject("user");
-                                    JsonObject kcdata = data.get(shipIndex).getAsJsonObject().getAsJsonObject("kc");
+                                    JsonObject shipInfo = data.get(shipIndex).getAsJsonObject();
+                                    if (!isJsonObjectField(shipInfo, "user") || !isJsonObjectField(shipInfo, "kc")) {
+                                        // "kc" is null for ships missing from the loaded game data
+                                        itemView.setVisibility(GONE);
+                                        selected = -1;
+                                        return true;
+                                    }
+                                    JsonObject udata = shipInfo.getAsJsonObject("user");
+                                    JsonObject kcdata = shipInfo.getAsJsonObject("kc");
 
                                     String ship_id = udata.get("ship_id").getAsString();
                                     int ship_married = udata.get("lv").getAsInt() >= 100 ? 1 : 0;
@@ -1243,6 +1250,10 @@ public class KcaFleetViewService extends BaseService {
 
         KcaDBHelper helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         helper.recordErrorLog(ERROR_TYPE_FLEETVIEW, "fleetview", "FV_".concat(String.valueOf(type)), data_str, getStringFromException(e));
+    }
+
+    private static boolean isJsonObjectField(JsonObject obj, String key) {
+        return obj.has(key) && obj.get(key).isJsonObject();
     }
 
     private void startPopupService(Class<?> target, String action) {
