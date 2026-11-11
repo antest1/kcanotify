@@ -8,6 +8,7 @@ import android.app.AppOpsManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -247,7 +248,12 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, DEFAULT_NOTIFICATION_URI);
             }
             currentActivity = REQUEST_ALERT_RINGTONE;
-            startActivityResult.launch(intent);
+            try {
+                startActivityResult.launch(intent);
+            } catch (ActivityNotFoundException e) {
+                // some devices (e.g. Android TV boxes) have no ringtone picker
+                showToast(getActivity(), getString(R.string.sa_ringtone_picker_unavailable), Toast.LENGTH_LONG);
+            }
         }
 
         if (PREF_CHECK_UPDATE.equals(key)) {

@@ -842,4 +842,5 @@
     <string name="svc_stopped_battery_hint">Desactivar la optimización de batería ayuda a evitarlo.</string>
     <string name="svc_stopped_action_restart">Reiniciar</string>
     <string name="svc_stopped_action_battery">Optimización de batería</string>
+    <string name="sa_ringtone_picker_unavailable">Este dispositivo no tiene un selector de tonos.</string>
 </resources>

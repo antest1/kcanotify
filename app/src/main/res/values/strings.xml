@@ -916,4 +916,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="svc_stopped_battery_hint">Turning off battery optimization helps prevent this.</string>
     <string name="svc_stopped_action_restart">Restart</string>
     <string name="svc_stopped_action_battery">Battery settings</string>
+    <string name="sa_ringtone_picker_unavailable">No ringtone picker is available on this device.</string>
 </resources>
