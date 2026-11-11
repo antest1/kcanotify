@@ -263,6 +263,11 @@ public class InitStartActivity extends BaseActivity {
             }
 
             int outdatedResources = countOutdatedResources();
+            if (recentVersion != null && outdatedResources >= 0) {
+                // shown as a dot on the update chip of the main screen
+                KcaDataUpdateManager.saveCheckResult(getApplicationContext(),
+                        (latest_flag ? 0 : 1) + outdatedResources);
+            }
             if (outdatedResources >= 0) {
                 latest_flag = latest_flag && outdatedResources == 0;
             } else if (response_data.has("kcadata_version")) {

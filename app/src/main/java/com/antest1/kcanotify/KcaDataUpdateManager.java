@@ -218,6 +218,12 @@ public class KcaDataUpdateManager {
         }
     }
 
+    // an update counted by the last check is installed
+    private void onUpdateInstalled() {
+        int count = getPendingCount(context);
+        if (count > 0) setPreferences(context, PREF_DATA_UPDATE_PENDING, count - 1);
+    }
+
     public static String getSummaryText(Context context, Summary summary) {
         if (summary.done + summary.failed + summary.notReady == 0) return null;
         if (summary.failed == 0 && summary.notReady == 0) {
@@ -272,6 +278,7 @@ public class KcaDataUpdateManager {
                     KcaApiData.setDataLoadTriggered();
                 });
                 doneCount += 1;
+                onUpdateInstalled();
                 setState(GAME_DATA_KEY, State.DONE, 100);
                 return;
             } catch (Exception e) {
@@ -311,6 +318,7 @@ public class KcaDataUpdateManager {
                 helper.close();
                 mainHandler.post(() -> KcaApiData.reloadResource(context, name));
                 doneCount += 1;
+                onUpdateInstalled();
                 if (isTranslationFile(name)) translationInstalled = true;
                 setState(name, State.DONE, 100);
                 return;
