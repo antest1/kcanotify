@@ -13,9 +13,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import static com.antest1.kcanotify.KcaConstants.PREF_PACKAGE_ALLOW;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -45,7 +47,6 @@ public class PackageFilterActivity extends BaseActivity {
 
         final PackageManager pm = getPackageManager();
         adapter = new KcaPackageListViewAdpater();
-        adapter.setList(pm);
         adapter.setHandler(handler);
         listview = findViewById(R.id.package_listview);
         listview.setAdapter(adapter);
@@ -53,6 +54,14 @@ public class PackageFilterActivity extends BaseActivity {
         countview = findViewById(R.id.package_count);
         setAllowCount();
 
+        new Thread(() -> {
+            List<JsonObject> list = KcaPackageListViewAdpater.buildList(pm);
+            runOnUiThread(() -> {
+                if (isFinishing() || isDestroyed()) return;
+                adapter.setList(list);
+                adapter.notifyDataSetChanged();
+            });
+        }).start();
     }
 
     @Override

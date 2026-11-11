@@ -436,8 +436,11 @@ public class KcaService extends BaseService {
         nHandler = null;
 
         if (mediaPlayer != null) {
-            mediaPlayer.release();
+            // release() can block on the audio service binder, so keep it off the main thread
+            final MediaPlayer player = mediaPlayer;
             mediaPlayer = null;
+            player.setOnCompletionListener(null);
+            new Thread(player::release).start();
         }
 
         isServiceOn = false;
