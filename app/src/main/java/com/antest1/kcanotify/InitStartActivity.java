@@ -66,6 +66,8 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 public class InitStartActivity extends BaseActivity {
     private static final String TAG = "InitStartActivity";
     public static final String ACTION_RESET = "ACTION_RESET";
+    // with ACTION_RESET: opens the update screen and downloads the latest data after the reset
+    public static final String EXTRA_UPDATE_AFTER_RESET = "update_after_reset";
 
     Handler handler = new Handler(Looper.getMainLooper());
     KcaDBHelper dbHelper;
@@ -76,6 +78,7 @@ public class InitStartActivity extends BaseActivity {
     boolean is_destroyed = false;
     int fairy_flag;
     boolean reset_flag = false;
+    boolean update_after_reset = false;
     volatile boolean validated_flag = false;
     boolean is_skipped = false;
 
@@ -92,6 +95,7 @@ public class InitStartActivity extends BaseActivity {
 
         Intent mainIntent = getIntent();
         reset_flag = mainIntent.getBooleanExtra(ACTION_RESET, false);
+        update_after_reset = reset_flag && mainIntent.getBooleanExtra(EXTRA_UPDATE_AFTER_RESET, false);
         is_destroyed = false;
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
@@ -168,7 +172,9 @@ public class InitStartActivity extends BaseActivity {
             }
 
             // main update check
-            if (!KcaUtils.checkOnline(getApplicationContext()) || !getBooleanPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START)) {
+            if (update_after_reset && KcaUtils.checkOnline(getApplicationContext())) {
+                startUpdateActivity(true);
+            } else if (!KcaUtils.checkOnline(getApplicationContext()) || !getBooleanPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START)) {
                 startMainActivity(true);
             } else {
                 if (is_skipped) return;
@@ -283,7 +289,7 @@ public class InitStartActivity extends BaseActivity {
                         alertDialog.setMessage(getString(R.string.download_description_head).trim());
                         alertDialog.setCancelable(false);
                         alertDialog.setPositiveButton(getString(R.string.dialog_ok), (dialog, which) -> {
-                            startUpdateActivity();
+                            startUpdateActivity(false);
                         });
                         alertDialog.setNegativeButton(getString(R.string.dialog_cancel), (dialog, which) -> {
                             startMainActivity(true);
@@ -327,11 +333,12 @@ public class InitStartActivity extends BaseActivity {
         //if(transition) overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-    private void startUpdateActivity() {
+    private void startUpdateActivity(boolean autoUpdate) {
         if (!is_destroyed) {
             runOnUiThread(() -> {
                 Intent updateIntent = new Intent(getApplicationContext(), UpdateCheckActivity.class);
-                updateIntent.putExtra("main_flag", true);
+                updateIntent.putExtra(UpdateCheckActivity.EXTRA_MAIN_FLAG, true);
+                updateIntent.putExtra(UpdateCheckActivity.EXTRA_AUTO_UPDATE, autoUpdate);
                 startActivity(updateIntent);
                 finish();
             });

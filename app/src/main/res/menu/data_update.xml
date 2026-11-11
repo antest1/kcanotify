@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_data_refresh"
+        android:icon="@drawable/ic_refresh"
+        android:title="@string/data_update_refresh"
+        app:showAsAction="always" />
+    <group android:id="@+id/group_data_settings">
+        <item
+            android:id="@+id/action_data_check_at_start"
+            android:checkable="true"
+            android:title="@string/data_update_check_at_start"
+            app:showAsAction="never" />
+    </group>
+    <group android:id="@+id/group_data_reset">
+        <item
+            android:id="@+id/action_data_reset"
+            android:title="@string/data_reset_menu"
+            app:showAsAction="never" />
+    </group>
+</menu>

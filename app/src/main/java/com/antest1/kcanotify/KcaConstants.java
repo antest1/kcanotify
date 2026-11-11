@@ -481,6 +481,9 @@ public final class KcaConstants {
     public static final String PREF_SHOW_CONSTRSHIP_NAME = "show_constrship_name";
     public static final String PREF_VIEW_YLOC = "view_yloc";
     public static final String PREF_LAST_UPDATE_CHECK = "last_update_check";
+    // result of the last data update check (not settings, so not in PREF_ARRAY)
+    public static final String PREF_DATA_UPDATE_CHECKED = "data_update_checked";
+    public static final String PREF_DATA_UPDATE_PENDING = "data_update_pending";
     public static final String PREF_TIMER_WIDGET_STATE = "timer_widget_state";
     public static final String PREF_DATALOAD_ERROR_FLAG = "dataload_error_flag";
     public static final String PREF_FIX_VIEW_LOC = "fix_view_loc";

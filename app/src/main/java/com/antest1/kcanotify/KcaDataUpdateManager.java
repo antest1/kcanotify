@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -39,7 +40,10 @@ import okhttp3.ResponseBody;
 
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_DATA_UPDATE_CHECKED;
+import static com.antest1.kcanotify.KcaConstants.PREF_DATA_UPDATE_PENDING;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
+import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 // Downloads game data and resource files one at a time, independent of any screen, so a download
@@ -88,6 +92,7 @@ public class KcaDataUpdateManager {
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private final Set<String> pending = Collections.synchronizedSet(new LinkedHashSet<>());
+    private final Set<String> batch = Collections.synchronizedSet(new LinkedHashSet<>());
     private final Map<String, State> states = new ConcurrentHashMap<>();
     private final List<Listener> listeners = new CopyOnWriteArrayList<>();
     private volatile boolean cancelled = false;
@@ -137,8 +142,27 @@ public class KcaDataUpdateManager {
         if (gameDataCall != null) gameDataCall.cancel();
     }
 
+    // keys of the downloads requested since the queue was last empty, for the progress of the batch
+    public List<String> getBatchKeys() {
+        synchronized (batch) {
+            return new ArrayList<>(batch);
+        }
+    }
+
+    // forgets the results of finished downloads (shown as "done" or "failed") before a new check
+    public void clearFinishedStates() {
+        if (isRunning()) return;
+        states.clear();
+        batch.clear();
+    }
+
     private void enqueue(String key, Runnable task) {
-        if (!pending.add(key)) return; // already queued or downloading
+        synchronized (pending) {
+            if (pending.contains(key)) return; // already queued or downloading
+            if (pending.isEmpty()) batch.clear();
+            pending.add(key);
+        }
+        batch.add(key);
         cancelled = false;
         setState(key, State.QUEUED, 0);
         worker.execute(() -> {
@@ -169,6 +193,29 @@ public class KcaDataUpdateManager {
                 for (Listener listener : listeners) listener.onFinished(summary);
             }
         });
+    }
+
+    // saves the result of an update check: when it was done and how many updates were found
+    public static void saveCheckResult(Context context, int pendingCount) {
+        setPreferences(context, PREF_DATA_UPDATE_CHECKED, String.valueOf(System.currentTimeMillis()));
+        setPreferences(context, PREF_DATA_UPDATE_PENDING, Math.max(0, pendingCount));
+    }
+
+    public static int getPendingCount(Context context) {
+        try {
+            return Integer.parseInt(getStringPreferences(context, PREF_DATA_UPDATE_PENDING));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    // 0 if never checked
+    public static long getLastCheckTime(Context context) {
+        try {
+            return Long.parseLong(getStringPreferences(context, PREF_DATA_UPDATE_CHECKED));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     public static String getSummaryText(Context context, Summary summary) {
