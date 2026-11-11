@@ -829,7 +829,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="export_ca_certificate">匯出「Kcanotify CA」證書，然後開啟 Android 「加密與憑證」設定並選擇將其安裝為「CA 憑證」</string>
     <string name="install_ca_certificate">安裝「Kcanotify CA」證書，選擇「VPN 和應用程式」。 </string>
     <string name="checking_the_certificate">檢查憑證…</string>
-    <string name="ca_cert_export_failed">匯出CA憑證時出錯\n\n如果您的裝置實施了自動啟動或類似軟體來限制後台服務執行，請務必將<a href='%1$ s'>Kcanotify 列入白名單</a></string>
+    <string name="ca_cert_export_failed">匯出CA憑證時出錯\n\n如果您的裝置實施了自動啟動或類似軟體來限制後台服務執行，請務必將<a href='%1$s'>Kcanotify 列入白名單</a></string>
     <string name="cert_exported_now_installed">憑證已匯出，現在從Android設定中安裝它</string>
     <string name="cert_installed_correctly">CA憑證已安裝</string>
     <string name="cert_reinstall_required">CA憑證未安裝，請執行 mitm 安裝精靈</string>
