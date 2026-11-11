@@ -38,7 +38,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_DATA_UPDATE_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_DATA_UPDATE_PENDING;
@@ -269,9 +268,7 @@ public class KcaDataUpdateManager {
 
                 // save the data and its version together, then apply it on the main thread,
                 // where the game data in memory is used
-                KcaDBHelper helper = new KcaDBHelper(context, null, KCANOTIFY_DB_VERSION);
-                helper.putValue(DB_KEY_STARTDATA, startData);
-                helper.close();
+                if (!KcaGameDataStore.save(context, startData)) throw new IOException("cannot save game data");
                 setPreferences(context, PREF_KCA_DATA_VERSION, version);
                 mainHandler.post(() -> {
                     KcaApiData.getKcGameData(apiData);

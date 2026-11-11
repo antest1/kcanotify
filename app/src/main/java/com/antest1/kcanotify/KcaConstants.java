@@ -39,13 +39,8 @@ public final class KcaConstants {
     public static final int KCANOTIFY_RESOURCELOG_VERSION = 1;
     public static final int KCANOTIFY_PACKETLOG_VERSION = 2;
 
-    public static final String DB_KEY_STARTDATA = "key_startdata";
     public static final String DB_KEY_DECKPORT = "key_deckport";
     public static final String DB_KEY_USEITEMS = "key_useitems";
-    public static final String DB_KEY_MAPEDGES = "key_mapedges";
-    public static final String DB_KEY_MAPSUBDT = "key_mapsubdt";
-    public static final String DB_KEY_EXPDINFO = "key_expdinfo";
-    public static final String DB_KEY_QUESTTRACK = "key_questtrack";
     public static final String DB_KEY_BATTLEINFO = "key_battleinfo";
     public static final String DB_KEY_BATTLENODE = "key_battlenode";
     public static final String DB_KEY_QTRACKINFO = "key_qtrackinfo";
@@ -66,13 +61,19 @@ public final class KcaConstants {
     public static final String DB_KEY_QUESTNCHK = "key_questnchk";
     public static final String DB_KEY_MATERIALS = "key_materials";
 
+    // keys not used any more, removed from the DB at startup: game data is in a file (KcaGameDataStore), and
+    // map edges, sub nodes and tracked quests are read from the resource files into memory
+    public static final String[] DB_KEY_REMOVED_ARRAY = {
+            "key_startdata",
+            "key_mapedges",
+            "key_mapsubdt",
+            "key_questtrack",
+            "key_expdinfo"
+    };
+
     public static final String[] DB_KEY_ARRAY = {
-            DB_KEY_STARTDATA,
             DB_KEY_DECKPORT,
             DB_KEY_USEITEMS,
-            DB_KEY_MAPEDGES,
-            DB_KEY_EXPDINFO,
-            DB_KEY_QUESTTRACK,
             DB_KEY_BATTLEINFO,
             DB_KEY_BATTLENODE,
             DB_KEY_QTRACKINFO,

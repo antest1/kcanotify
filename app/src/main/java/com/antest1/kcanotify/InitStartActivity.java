@@ -37,7 +37,7 @@ import java.util.Locale;
 import retrofit2.Call;
 
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_REMOVED_ARRAY;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_MAIN;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
@@ -153,10 +153,8 @@ public class InitStartActivity extends BaseActivity {
             }
             if (reset_flag) {
                 // the old data is still in memory (also used by a running service): apply the restored ones
-                JsonObject start_data = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
-                if (start_data != null && start_data.has("api_data") && start_data.get("api_data").isJsonObject()) {
-                    KcaApiData.getKcGameData(start_data.getAsJsonObject("api_data"));
-                }
+                JsonObject api_data = KcaGameDataStore.loadApiData(getApplicationContext());
+                if (api_data != null) KcaApiData.getKcGameData(api_data);
                 KcaApiData.reloadAllResources(getApplicationContext());
             }
 
@@ -356,14 +354,20 @@ public class InitStartActivity extends BaseActivity {
         String kca_data_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
         String internal_kca_version = getString(R.string.default_gamedata_version);
         try {
-            // only when the bundled game data is newer than the recorded one (not when the same)
-            if (kca_data_version == null || !compareVersion(kca_data_version, internal_kca_version)) {
+            // data kept in the DB before is not moved: game data is written below from the bundled one
+            // (a newer one is offered by the update check), and resources are read from their files
+            for (String key : DB_KEY_REMOVED_ARRAY) dbHelper.deleteValue(key);
+
+            // when there is no game data yet, or the bundled one is newer than the recorded one (not when the same)
+            if (!KcaGameDataStore.exists(getApplicationContext())
+                    || kca_data_version == null || !compareVersion(kca_data_version, internal_kca_version)) {
                 InputStream api_ais = am.open("api_start2");
                 bytes = gzipdecompress(ByteStreams.toByteArray(api_ais));
                 String asset_start2_data = new String(bytes);
-                dbHelper.putValue(DB_KEY_STARTDATA, asset_start2_data);
-                KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_VERSION, internal_kca_version);
-                KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, internal_kca_version);
+                if (KcaGameDataStore.save(getApplicationContext(), asset_start2_data)) {
+                    KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_VERSION, internal_kca_version);
+                    KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, internal_kca_version);
+                }
             }
 
             AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("list.json");

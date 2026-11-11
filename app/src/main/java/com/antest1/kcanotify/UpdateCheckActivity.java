@@ -44,7 +44,6 @@ import java.util.Set;
 import retrofit2.Response;
 
 import static com.antest1.kcanotify.InitStartActivity.ACTION_RESET;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE_START;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
@@ -763,7 +762,7 @@ public class UpdateCheckActivity extends BaseActivity {
         }
         helper.clearResVer();
         setPreferences(context, PREF_KCARESOURCE_VERSION, 0);
-        helper.deleteValue(DB_KEY_STARTDATA);
+        KcaGameDataStore.delete(context);
         setPreferences(context, PREF_KCA_DATA_VERSION, "");
     }
 }

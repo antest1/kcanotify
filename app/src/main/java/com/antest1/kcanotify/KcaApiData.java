@@ -65,6 +65,9 @@ public class KcaApiData {
     public static JsonObject kcShipFilterData = new JsonObject();
     public static JsonObject kcShipNationalityData = new JsonObject();
     public static JsonObject kcShipInitEquipCount = new JsonObject();
+    private static volatile JsonObject kcMapEdgeData = null;
+    private static volatile JsonObject kcMapSubData = null;
+    private static volatile JsonObject kcQuestTrackData = null;
     public static Set<Integer> kcNotCountItemData = new HashSet<>();
     public static Set<Integer> kcTaisenOverPlaneItemData = new HashSet<>();
 
@@ -213,9 +216,21 @@ public class KcaApiData {
         dataLoadTriggered = true;
     }
 
+    // Tables of the game data (api_data of api_start2) used by the app. Only these are kept in memory: the others,
+    // such as api_mst_shipgraph, take about half of the memory of the whole data (12MB of 25MB). The game data file
+    // keeps the whole response, so add a table here to use it.
+    private static final String[] GAME_DATA_TABLES = {
+            "api_mst_ship", "api_mst_slotitem", "api_mst_maparea", "api_mst_useitem", "api_mst_mission"
+    };
+
+    // api_data is not changed (it can be saved after this)
     public static int getKcGameData(JsonObject api_data) {
         Log.e("KCA", "getKcGameData Called");
-        kcGameData = api_data;
+        JsonObject tables = new JsonObject();
+        for (String table : GAME_DATA_TABLES) {
+            if (api_data.has(table)) tables.add(table, api_data.get(table));
+        }
+        kcGameData = tables;
         if (kcGameData.has("api_mst_ship")) {
             JsonArray shipStatusArray = kcGameData.getAsJsonArray("api_mst_ship");
             for (JsonElement jsonElement : shipStatusArray) {
@@ -545,19 +560,18 @@ public class KcaApiData {
     }
 
 
-    // Reload a resource file kept in memory (or copied to the DB) when the service starts, so a newly
-    // downloaded or restored file applies right away. Other files are read when needed, and translation
-    // files are reloaded by loadTranslationData.
+    // Reload a resource file kept in memory, so a newly downloaded or restored file applies right away.
+    // Other files are read when needed, and translation files are reloaded by loadTranslationData.
     public static void reloadResource(Context context, String name) {
         switch (name) {
             case "edges.json":
-                if (helper != null) loadMapEdgeInfoFromStorage(context);
+                loadMapEdgeInfoFromStorage(context);
                 break;
             case "map_sub.json":
-                if (helper != null) loadSubMapInfoFromStorage(context);
+                loadSubMapInfoFromStorage(context);
                 break;
             case "quest_track.json":
-                if (helper != null) loadQuestTrackDataFromStorage(helper, context);
+                loadQuestTrackDataFromStorage(context);
                 break;
             case "ships_filter_data.json":
                 loadShipFilterDataFromStorage(context);
@@ -587,7 +601,7 @@ public class KcaApiData {
     public static int loadMapEdgeInfoFromStorage(Context context) {
         JsonObject data = getJsonObjectFromStorage(context, "edges.json");
         if (data != null) {
-            helper.putValue(DB_KEY_MAPEDGES, data.toString());
+            kcMapEdgeData = data;
             return 1;
         } else {
             return -1;
@@ -597,7 +611,7 @@ public class KcaApiData {
     public static int loadSubMapInfoFromStorage(Context context) {
         JsonObject data = getJsonObjectFromStorage(context, "map_sub.json");
         if (data != null) {
-            helper.putValue(DB_KEY_MAPSUBDT, data.toString());
+            kcMapSubData = data;
             return 1;
         } else {
             return -1;
@@ -769,10 +783,10 @@ public class KcaApiData {
         }
     }
 
-    public static int loadQuestTrackDataFromStorage(KcaDBHelper helper, Context context) {
+    public static int loadQuestTrackDataFromStorage(Context context) {
         JsonObject data = getJsonObjectFromStorage(context, "quest_track.json");
         if (data != null) {
-            helper.putValue(DB_KEY_QUESTTRACK, data.toString());
+            kcQuestTrackData = data;
             return 1;
         } else {
             return -1;
@@ -796,17 +810,30 @@ public class KcaApiData {
     }
 
     public static boolean isQuestTrackable(String id) {
-        JsonObject kcQuestTrackData = helper.getJsonObjectValue(DB_KEY_QUESTTRACK);
-        return kcQuestTrackData.has(id);
+        JsonObject data = getQuestTrackData();
+        return data != null && data.has(id);
     }
 
     public static JsonObject getQuestTrackInfo(String id) {
-        JsonObject kcQuestTrackData = helper.getJsonObjectValue(DB_KEY_QUESTTRACK);
-        if (kcQuestTrackData.has(id)) {
-            return kcQuestTrackData.getAsJsonObject(id);
+        JsonObject data = getQuestTrackData();
+        if (data != null && data.has(id)) {
+            return data.getAsJsonObject(id);
         } else {
             return null;
         }
+    }
+
+    // Map edges (edges.json), sub nodes (map_sub.json) and tracked quests (quest_track.json) are read from the
+    // resource files when first used (a screen can be opened while the service has not loaded them), and again
+    // after a download (reloadResource). They are shared: callers must not change them.
+    private static JsonObject getQuestTrackData() {
+        if (kcQuestTrackData == null && helper != null) loadQuestTrackDataFromStorage(helper.getContext());
+        return kcQuestTrackData;
+    }
+
+    private static JsonObject getMapSubData() {
+        if (kcMapSubData == null && helper != null) loadSubMapInfoFromStorage(helper.getContext());
+        return kcMapSubData;
     }
 
     public static int getUseitemCount(int id) {
@@ -845,8 +872,8 @@ public class KcaApiData {
     }
 
     public static JsonObject getMapEdgeInfo() {
-        if (helper == null) return null;
-        return helper.getJsonObjectValue(DB_KEY_MAPEDGES);
+        if (kcMapEdgeData == null && helper != null) loadMapEdgeInfoFromStorage(helper.getContext());
+        return kcMapEdgeData;
     }
 
     public static String getCurrentNodeAlphabet(int maparea, int mapno, int no) {
@@ -869,12 +896,10 @@ public class KcaApiData {
 
     public static boolean getCurrentNodeSubExist(int maparea, int mapno, int no) {
         String currentMapString = KcaUtils.format("%d-%d", maparea, mapno);
-        if (helper != null) {
-            JsonObject subEdgeInfo = helper.getJsonObjectValue(DB_KEY_MAPSUBDT);
-            if (subEdgeInfo != null && subEdgeInfo.has(currentMapString)) {
-                JsonArray sub_edges = subEdgeInfo.getAsJsonArray(currentMapString);
-                return sub_edges.contains(new JsonPrimitive(no));
-            }
+        JsonObject subEdgeInfo = getMapSubData();
+        if (subEdgeInfo != null && subEdgeInfo.has(currentMapString)) {
+            JsonArray sub_edges = subEdgeInfo.getAsJsonArray(currentMapString);
+            return sub_edges.contains(new JsonPrimitive(no));
         }
         return false;
     }
