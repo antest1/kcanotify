@@ -837,4 +837,9 @@
     <string name="mitm_addon_new_version">El kcanotify mitm addon debe actualizarse</string>
     <string name="mitm_doze_notice">La optimización de la batería puede interferir con el mitm addon</string>
 
+    <string name="svc_stopped_title">El servicio de %s se ha detenido</string>
+    <string name="svc_stopped_text">Android no permitió que el servicio se reiniciara en segundo plano. Toca para iniciarlo de nuevo.</string>
+    <string name="svc_stopped_battery_hint">Desactivar la optimización de batería ayuda a evitarlo.</string>
+    <string name="svc_stopped_action_restart">Reiniciar</string>
+    <string name="svc_stopped_action_battery">Optimización de batería</string>
 </resources>

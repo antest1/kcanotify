@@ -78,6 +78,7 @@ public class MainActivity extends BaseActivity {
     private final static String TAG = "MainActivity";
     public static boolean[] warnType = new boolean[8];
     public static final String ACTION_OPEN_TOOL = "open_tool";
+    public static final String ACTION_RESTART_SERVICE = "restart_service";
     private static final int REQUEST_VPN = 1;
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
     public static final int REQUEST_EXTERNAL_PERMISSION = 3;
@@ -116,6 +117,10 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_vpn_main);
+        // a recreated activity gets the original intent again; the restart request was already handled
+        if (savedInstanceState != null && ACTION_RESTART_SERVICE.equals(getIntent().getAction())) {
+            getIntent().setAction(null);
+        }
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         assetManager = getAssets();
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
@@ -342,6 +347,8 @@ public class MainActivity extends BaseActivity {
         }
         setVpnBtn();
         setCheckBtn();
+        // after setCheckBtn, which would otherwise turn the toggle back off
+        handleRestartServiceIntent(getIntent());
     }
 
     @Override
@@ -359,8 +366,18 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        setIntent(intent);
         mToolOpened = false;
         handleOpenToolIntent(intent);
+    }
+
+    // from the "service stopped" notification: turn the service toggle on, which also asks
+    // for missing permissions like a manual tap does
+    private void handleRestartServiceIntent(Intent intent) {
+        if (intent == null || !ACTION_RESTART_SERVICE.equals(intent.getAction())) return;
+        intent.setAction(null);
+        if ((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) return;
+        if (!svcbtn.isChecked()) svcbtn.setChecked(true);
     }
 
     public void setWarning() {

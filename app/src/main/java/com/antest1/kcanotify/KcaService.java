@@ -2,6 +2,7 @@ package com.antest1.kcanotify;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.ForegroundServiceStartNotAllowedException;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -33,6 +34,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -85,6 +87,9 @@ public class KcaService extends BaseService {
     public static final String SERVICE_CHANNEL_ID = "kcaservice_noti_channel_";
     public static final String SERVICE_CHANNEL_ID_OLD = "noti_service_channel";
     public static final String SERVICE_CHANNEL_NAME = "Kcanotify Service";
+    public static final String SERVICE_STATUS_CHANNEL_ID = "kcaservice_status_channel";
+    public static final String SERVICE_STATUS_CHANNEL_NAME = "Kcanotify Service Status";
+    private boolean foregroundStartBlocked = false;
 
     public static boolean isInitState = false;
     public static boolean isFirstState;
@@ -251,6 +256,7 @@ public class KcaService extends BaseService {
                 mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                 notifiManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 createServiceChannel();
+                notifiManager.cancel(getNotificationId(NOTI_SERVICE_STATUS, 0));
 
                 handler = new kcaServiceHandler(this);
                 nHandler = new kcaNotificationHandler(this);
@@ -306,9 +312,7 @@ public class KcaService extends BaseService {
 
                 Handler toForegroundHandler = new Handler(getMainLooper());
                 toForegroundHandler.removeCallbacksAndMessages(null);
-                toForegroundHandler.postDelayed(() ->
-                        startForeground(getNotificationId(NOTI_FRONT, 1),
-                                notifyBuilder.build()), 24);
+                toForegroundHandler.postDelayed(this::startForegroundOrStop, 24);
 
                 if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_AUTOHIDE)) {
                     foregroundCheck = new KcaForegroundCheck(this);
@@ -331,26 +335,95 @@ public class KcaService extends BaseService {
                 runTimer();
 
             } else if (KCASERVICE_STOP.equals(intent.getAction())) {
-                if (dbHelper != null) dbHelper.close();
-                stopService(new Intent(this, KcaBattleViewService.class));
-                stopService(new Intent(this, KcaQuestViewService.class));
-                stopService(new Intent(this, KcaFleetViewService.class));
-                stopService(new Intent(this, KcaAkashiViewService.class));
-                stopService(new Intent(this, KcaMapHpPopupService.class));
-                stopService(new Intent(this, KcaConstructPopupService.class));
-                stopService(new Intent(this, KcaDevelopPopupService.class));
-                stopService(new Intent(this, KcaLandAirBasePopupService.class));
-                stopService(new Intent(this, KcaViewButtonService.class));
-                stopService(new Intent(this, KcaExpeditionCheckViewService.class));
-                stopService(new Intent(this, KcaCustomToastService.class));
-                stopService(new Intent(this, KcaFleetCheckPopupService.class));
-                stopService(new Intent(this, KcaDockingPopupService.class));
-                setServiceDown();
-                KcaAlarmService.clearAlarmCount();
+                shutdownService();
                 stopSelfResult(startId);
             }
         }
         return START_REDELIVER_INTENT;
+    }
+
+    private void shutdownService() {
+        if (dbHelper != null) dbHelper.close();
+        stopService(new Intent(this, KcaBattleViewService.class));
+        stopService(new Intent(this, KcaQuestViewService.class));
+        stopService(new Intent(this, KcaFleetViewService.class));
+        stopService(new Intent(this, KcaAkashiViewService.class));
+        stopService(new Intent(this, KcaMapHpPopupService.class));
+        stopService(new Intent(this, KcaConstructPopupService.class));
+        stopService(new Intent(this, KcaDevelopPopupService.class));
+        stopService(new Intent(this, KcaLandAirBasePopupService.class));
+        stopService(new Intent(this, KcaViewButtonService.class));
+        stopService(new Intent(this, KcaExpeditionCheckViewService.class));
+        stopService(new Intent(this, KcaCustomToastService.class));
+        stopService(new Intent(this, KcaFleetCheckPopupService.class));
+        stopService(new Intent(this, KcaDockingPopupService.class));
+        setServiceDown();
+        KcaAlarmService.clearAlarmCount();
+    }
+
+    private void startForegroundOrStop() {
+        try {
+            startForeground(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
+        } catch (IllegalStateException e) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S
+                    || !(e instanceof ForegroundServiceStartNotAllowedException)) throw e;
+            // The system restarted this service in background (START_REDELIVER_INTENT), where
+            // Android 12+ does not let it become a foreground service. Stop cleanly and let the
+            // user restart it from a notification instead of crashing.
+            Log.w("KCA", "startForeground not allowed: " + e.getMessage());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            foregroundStartBlocked = true;
+            PreferenceManager.getDefaultSharedPreferences(this).edit()
+                    .putBoolean(PREF_SVC_ENABLED, false).apply();
+            shutdownService();
+            stopSelf();
+        }
+    }
+
+    // Shown after the service is destroyed, since onDestroy cancels all notifications
+    private void showServiceStoppedNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(SERVICE_STATUS_CHANNEL_ID,
+                    SERVICE_STATUS_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setSound(null, null);
+            channel.enableVibration(false);
+            notifiManager.createNotificationChannel(channel);
+        }
+
+        Intent restartIntent = new Intent(this, MainActivity.class)
+                .setAction(MainActivity.ACTION_RESTART_SERVICE)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent restartPendingIntent = PendingIntent.getActivity(this, 0, restartIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        String title = KcaUtils.format(getString(R.string.svc_stopped_title), getString(R.string.app_name));
+        String text = getString(R.string.svc_stopped_text);
+        NotificationCompat.Builder builder = createBuilder(this, SERVICE_STATUS_CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_stat_notify_0)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setContentIntent(restartPendingIntent)
+                .setAutoCancel(true)
+                .addAction(new NotificationCompat.Action(0,
+                        getString(R.string.svc_stopped_action_restart), restartPendingIntent));
+
+        // battery optimization exemption also lets the service restart in background
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        if (powerManager != null && !powerManager.isIgnoringBatteryOptimizations(getPackageName())) {
+            Intent batteryIntent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+            if (batteryIntent.resolveActivity(getPackageManager()) == null) {
+                batteryIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.parse("package:" + getPackageName()));
+            }
+            batteryIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent batteryPendingIntent = PendingIntent.getActivity(this, 1, batteryIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            text = text.concat("\n").concat(getString(R.string.svc_stopped_battery_hint));
+            builder.addAction(new NotificationCompat.Action(0,
+                    getString(R.string.svc_stopped_action_battery), batteryPendingIntent));
+        }
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(text));
+        notifiManager.notify(getNotificationId(NOTI_SERVICE_STATUS, 0), builder.build());
     }
 
     public void setServiceDown() {
@@ -380,6 +453,7 @@ public class KcaService extends BaseService {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 notifiManager.deleteNotificationChannel(getServiceChannelId());
             }
+            if (foregroundStartBlocked) showServiceStoppedNotification();
         }
         notifiManager = null;
         super.onDestroy();

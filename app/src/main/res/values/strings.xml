@@ -911,4 +911,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="mitm_addon_update_available">A new mitm addon update is available.</string>
     <string name="mitm_addon_new_version">The kcanotify mitm addon must be updated</string>
     <string name="mitm_doze_notice">Battery optimization may interfere with the mitm addon</string>
+    <string name="svc_stopped_title">%s service has stopped</string>
+    <string name="svc_stopped_text">Android didn\'t allow the service to restart in the background. Tap to start it again.</string>
+    <string name="svc_stopped_battery_hint">Turning off battery optimization helps prevent this.</string>
+    <string name="svc_stopped_action_restart">Restart</string>
+    <string name="svc_stopped_action_battery">Battery settings</string>
 </resources>

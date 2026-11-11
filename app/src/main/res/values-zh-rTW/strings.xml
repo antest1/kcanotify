@@ -838,4 +838,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="mitm_addon_update_available">有新的 mitm 外掛程式更新可用。 </string>
     <string name="mitm_addon_new_version">必須更新 kcanotify mitm 外掛程式</string>
     <string name="mitm_doze_notice">電池最佳化可能會幹擾 mitm 外掛程式</string>
+    <string name="svc_stopped_title">%s 服務已停止</string>
+    <string name="svc_stopped_text">Android 不允許服務在背景重新啟動。點擊即可重新啟動。</string>
+    <string name="svc_stopped_battery_hint">關閉電池優化有助於避免此問題。</string>
+    <string name="svc_stopped_action_restart">重新啟動</string>
+    <string name="svc_stopped_action_battery">電池優化</string>
 </resources>

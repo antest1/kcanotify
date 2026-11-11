@@ -833,4 +833,9 @@
     <string name="mitm_addon_update_available">새로운 mitm addon 업데이트를 설치할 수 있습니다.</string>
     <string name="mitm_addon_new_version">mitm addon의 업데이트가 필요합니다.</string>
     <string name="mitm_doze_notice">배터리 최적화 기능이 mitm addon과 충돌할 수 있습니다.</string>
+    <string name="svc_stopped_title">%s 서비스가 중지되었습니다</string>
+    <string name="svc_stopped_text">안드로이드가 백그라운드에서의 재시작을 허용하지 않았습니다. 탭하면 다시 시작합니다.</string>
+    <string name="svc_stopped_battery_hint">배터리 최적화를 해제하면 이런 일을 줄일 수 있습니다.</string>
+    <string name="svc_stopped_action_restart">다시 시작</string>
+    <string name="svc_stopped_action_battery">배터리 최적화 설정</string>
 </resources>
