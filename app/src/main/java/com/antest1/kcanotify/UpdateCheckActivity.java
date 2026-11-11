@@ -313,18 +313,16 @@ public class UpdateCheckActivity extends BaseActivity {
     private void applyCheckResult(String gameVersion, JsonArray list, String lastModified) {
         latestGameDataVersion = gameVersion;
         listLastModified = lastModified;
-        Map<String, JsonObject> items = new HashMap<>();
+        // entries not in the expected form are skipped, and their files are shown as up to date
+        Map<String, KcaDataUpdateManager.ListItem> items = new HashMap<>();
         for (JsonElement element : list) {
-            if (!element.isJsonObject()) continue;
-            JsonObject item = element.getAsJsonObject();
-            if (item.has("name") && item.has("version") && item.has("url")) {
-                items.put(item.get("name").getAsString(), item);
-            }
+            KcaDataUpdateManager.ListItem item = KcaDataUpdateManager.ListItem.parse(element);
+            if (item != null) items.put(item.name, item);
         }
         for (ResourceFile file : files) {
-            JsonObject item = items.get(file.name);
-            file.latest = item != null ? item.get("version").getAsInt() : -1;
-            file.url = item != null ? item.get("url").getAsString() : null;
+            KcaDataUpdateManager.ListItem item = items.get(file.name);
+            file.latest = item != null ? item.version : -1;
+            file.url = item != null ? item.url : null;
         }
         loadCurrentVersions();
         checkState = CheckState.READY;
@@ -687,6 +685,10 @@ public class UpdateCheckActivity extends BaseActivity {
         if (version <= 0) return "-";
         String value = String.valueOf(version);
         if (value.length() != 10) return value;
+        // shown as is if it is not a date
+        int month = Integer.parseInt(value.substring(4, 6));
+        int day = Integer.parseInt(value.substring(6, 8));
+        if (month < 1 || month > 12 || day < 1 || day > 31) return value;
         return value.substring(0, 4) + "-" + value.substring(4, 6) + "-" + value.substring(6, 8);
     }
 

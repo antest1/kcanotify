@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -221,6 +222,33 @@ public class KcaDataUpdateManager {
     private void onUpdateInstalled() {
         int count = getPendingCount(context);
         if (count > 0) setPreferences(context, PREF_DATA_UPDATE_PENDING, count - 1);
+    }
+
+    // an entry of the resource list (list.json) of the update server
+    public static class ListItem {
+        public final String name;
+        public final int version;
+        public final String url;
+
+        private ListItem(String name, int version, String url) {
+            this.name = name;
+            this.version = version;
+            this.url = url;
+        }
+
+        // null if the entry is not in the expected form (name, positive int version, url)
+        public static ListItem parse(JsonElement element) {
+            try {
+                JsonObject item = element.getAsJsonObject();
+                String name = item.get("name").getAsString();
+                String url = item.get("url").getAsString();
+                int version = Integer.parseInt(item.get("version").getAsString().trim());
+                if (name.isEmpty() || url.isEmpty() || version <= 0) return null;
+                return new ListItem(name, version, url);
+            } catch (RuntimeException e) {
+                return null;
+            }
+        }
     }
 
     public static String getSummaryText(Context context, Summary summary) {

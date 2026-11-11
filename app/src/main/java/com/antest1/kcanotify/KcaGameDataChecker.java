@@ -57,12 +57,13 @@ public class KcaGameDataChecker {
 
     // the newer of two versions; either may be null
     public static String newerVersion(String a, String b) {
-        if (!isVersion(a)) return isVersion(b) ? b : null;
-        if (!isVersion(b)) return a;
-        return compareVersion(a, b) ? a : b;
+        if (!isVersion(a)) return isVersion(b) ? b.trim() : null;
+        if (!isVersion(b)) return a.trim();
+        return compareVersion(a.trim(), b.trim()) ? a.trim() : b.trim();
     }
 
     public static boolean isVersion(String value) {
-        return value != null && value.trim().matches("\\d+(\\.\\d+)+");
+        // each part fits in an int, as compareVersion parses them
+        return value != null && value.trim().matches("\\d{1,9}(\\.\\d{1,9})+");
     }
 }

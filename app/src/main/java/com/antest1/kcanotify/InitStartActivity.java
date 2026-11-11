@@ -252,12 +252,16 @@ public class InitStartActivity extends BaseActivity {
             KcaGameDataChecker.Info latestGameData = KcaGameDataChecker.syncVersion(getApplicationContext(), downloader);
             String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
 
-            String recentVersion = response_data.has("data_version") ? response_data.get("data_version").getAsString() : null;
-            if (latestGameData != null) {
-                recentVersion = KcaGameDataChecker.newerVersion(recentVersion, latestGameData.version);
+            String infoVersion = null;
+            if (response_data.has("data_version") && response_data.get("data_version").isJsonPrimitive()) {
+                infoVersion = response_data.get("data_version").getAsString();
             }
+            // null if neither is a valid version
+            String recentVersion = KcaGameDataChecker.newerVersion(infoVersion,
+                    latestGameData != null ? latestGameData.version : null);
             if (recentVersion != null) {
-                latest_flag = compareVersion(currentDataVersion, recentVersion);
+                latest_flag = KcaGameDataChecker.isVersion(currentDataVersion)
+                        && compareVersion(currentDataVersion, recentVersion);
             }
 
             int outdatedResources = countOutdatedResources();
@@ -314,10 +318,10 @@ public class InitStartActivity extends BaseActivity {
             List<String> targets = KcaUtils.getResourceFilter(getApplicationContext());
             int count = 0;
             for (JsonElement element : list) {
-                JsonObject item = element.getAsJsonObject();
-                String name = item.get("name").getAsString();
-                if (!targets.contains(name)) continue;
-                if (dbHelper.getResVer(name) < item.get("version").getAsInt()) count += 1;
+                // entries not in the expected form are skipped
+                KcaDataUpdateManager.ListItem item = KcaDataUpdateManager.ListItem.parse(element);
+                if (item == null || !targets.contains(item.name)) continue;
+                if (dbHelper.getResVer(item.name) < item.version) count += 1;
             }
             return count;
         } catch (Exception e) {
