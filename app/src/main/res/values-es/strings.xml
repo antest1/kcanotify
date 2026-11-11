@@ -843,4 +843,7 @@
     <string name="svc_stopped_action_restart">Reiniciar</string>
     <string name="svc_stopped_action_battery">Optimización de batería</string>
     <string name="sa_ringtone_picker_unavailable">Este dispositivo no tiene un selector de tonos.</string>
+    <string name="data_update_result_done">Actualización de datos completada (%d)</string>
+    <string name="data_update_result_failed">%1$d actualizados, %2$d fallidos. Inténtalo de nuevo más tarde.</string>
+    <string name="data_update_result_not_ready">Algunos datos aún no están listos en el servidor. Inténtalo de nuevo en unos minutos.</string>
 </resources>

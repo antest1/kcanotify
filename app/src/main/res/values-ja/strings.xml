@@ -839,4 +839,7 @@
     <string name="svc_stopped_action_restart">再開</string>
     <string name="svc_stopped_action_battery">電池の最適化</string>
     <string name="sa_ringtone_picker_unavailable">この端末には通知音の選択画面がありません。</string>
+    <string name="data_update_result_done">データの更新が完了しました（%d件）</string>
+    <string name="data_update_result_failed">%1$d件完了、%2$d件失敗しました。しばらくしてから再試行してください。</string>
+    <string name="data_update_result_not_ready">一部のデータはまだサーバーで準備できていません。数分後に再試行してください。</string>
 </resources>

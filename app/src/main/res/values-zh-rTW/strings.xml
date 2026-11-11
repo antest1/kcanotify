@@ -844,4 +844,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="svc_stopped_action_restart">重新啟動</string>
     <string name="svc_stopped_action_battery">電池優化</string>
     <string name="sa_ringtone_picker_unavailable">此裝置上沒有可用的鈴聲選擇器。</string>
+    <string name="data_update_result_done">資料更新完成（%d項）</string>
+    <string name="data_update_result_failed">%1$d項完成，%2$d項失敗。請稍後再試。</string>
+    <string name="data_update_result_not_ready">部分資料尚未在伺服器上準備好。請幾分鐘後再試。</string>
 </resources>

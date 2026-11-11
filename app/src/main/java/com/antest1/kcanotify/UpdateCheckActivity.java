@@ -19,9 +19,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.downloader.Error;
-import com.downloader.OnDownloadListener;
-import com.downloader.PRDownloader;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
@@ -49,7 +46,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.antest1.kcanotify.InitStartActivity.ACTION_RESET;
-import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -66,9 +62,6 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class UpdateCheckActivity extends BaseActivity {
     public static final int LOAD_DELAY = 500;
-    private static final String DOWNLOAD_SUFFIX = ".download";
-    private static final ExecutorService fileWorker = Executors.newSingleThreadExecutor();
-    private static final Set<String> downloadingFiles = Collections.synchronizedSet(new HashSet<>());
 
     Toolbar toolbar;
     static Gson gson = new Gson();
@@ -92,7 +85,23 @@ public class UpdateCheckActivity extends BaseActivity {
     UpdateHandler handler;
     KcaDownloader downloader;
     KcaFairyDownloader fairyDownloader;
+    KcaDataUpdateManager updateManager;
+    // Last-Modified of list.json, to detect resource files served from an older CDN copy
+    String resource_list_last_modified = null;
     Type listType = new TypeToken<ArrayList<JsonObject>>(){}.getType();
+
+    private final KcaDataUpdateManager.Listener updateListener = new KcaDataUpdateManager.Listener() {
+        @Override
+        public void onItemChanged(String key, KcaDataUpdateManager.State state, int progress) {
+            onUpdateItemChanged(key, state, progress);
+        }
+
+        @Override
+        public void onFinished(KcaDataUpdateManager.Summary summary) {
+            String message = KcaDataUpdateManager.getSummaryText(getApplicationContext(), summary);
+            if (message != null) Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+    };
 
     private String getVersionString(int current, int latest) {
         if (current == latest) {
@@ -130,7 +139,8 @@ public class UpdateCheckActivity extends BaseActivity {
 
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
         fairyDownloader = new KcaFairyDownloader(this);
-        PRDownloader.initialize(getApplicationContext());
+        updateManager = KcaDataUpdateManager.getInstance(this);
+        updateManager.addListener(updateListener);
 
         handler = new UpdateHandler(this);
         gamedata_adapter.setHandler(handler);
@@ -227,13 +237,9 @@ public class UpdateCheckActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        // downloads keep going; the manager shows one result toast when no screen is listening
+        updateManager.removeListener(updateListener);
         super.onDestroy();
-    }
-
-    @Override
-    protected void onPause() {
-        loadTranslationData(getApplicationContext(), true);
-        super.onPause();
     }
 
     @Override
@@ -342,6 +348,7 @@ public class UpdateCheckActivity extends BaseActivity {
                     int num_count = 0;
                     try {
                         resource_info = new ArrayList<>();
+                        resource_list_last_modified = response.headers().get("Last-Modified");
                         List<JsonObject> res_result = gson.fromJson(response.body(), listType);
                         if (res_result == null) {
                             return;
@@ -392,7 +399,7 @@ public class UpdateCheckActivity extends BaseActivity {
                 String url = item.get("url").getAsString();
                 String name = item.get("name").getAsString();
                 int version = item.get("version").getAsInt();
-                downloadFile(url, name, version);
+                updateManager.enqueueResource(name, url, version, resource_list_last_modified);
             }
         }
     }
@@ -421,146 +428,63 @@ public class UpdateCheckActivity extends BaseActivity {
         String name = obj.get("name").getAsString();
         String url = obj.get("url").getAsString();
         if (url.equals("call_kcadata_download")) {
-            downloadGameData();
+            // the exact version shown as latest, so the recorded version always matches the data
+            updateManager.enqueueGameData(latest_gamedata_version);
         } else {
             int version = obj.get("version").getAsInt();
-            downloadFile(url, name, version);
+            updateManager.enqueueResource(name, url, version, resource_list_last_modified);
         }
     }
 
-    private void downloadGameData() {
-        // ask for the exact version shown as latest, so the recorded version always matches the data
-        final String target_version = latest_gamedata_version;
-        final Call<String> down_gamedata = downloader.getGameData(target_version);
-        down_gamedata.enqueue(new retrofit2.Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
-                if (response.code() == 404) {
-                    // this version is not on the server yet
-                    Toast.makeText(getApplicationContext(),
-                            getString(R.string.kca_toast_inconsistent_data),
-                            Toast.LENGTH_LONG).show();
-                    return;
-                }
-                try {
-                    String server_version = response.headers().get(KcaGameDataChecker.HEADER_VERSION);
-                    Log.e("KCA", "api_version: " + server_version);
-                    if (!response.isSuccessful() || response.body() == null
-                            || server_version == null || !server_version.trim().equals(target_version)) {
-                        throw new IllegalStateException("unexpected response: " + response.code() + " " + server_version);
-                    }
-                    String start_data = response.body();
-                    JsonObject api_data = JsonParser.parseString(start_data).getAsJsonObject().getAsJsonObject("api_data");
-                    if (api_data == null) throw new IllegalStateException("no api_data");
-
-                    // save the data and its version together, then apply it
-                    dbHelper.putValue(DB_KEY_STARTDATA, start_data);
-                    KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, target_version);
-                    KcaApiData.getKcGameData(api_data);
-                    KcaApiData.setDataLoadTriggered();
-                    Toast.makeText(getApplicationContext(),
-                            getString(R.string.sa_getupdate_finished),
-                            Toast.LENGTH_LONG).show();
-                    showGameDataItem();
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(),
-                            "Error: not valid data.",
-                            Toast.LENGTH_LONG).show();
-                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "gamedata_download", target_version, "", getStringFromException(e));
-                }
+    // shows the download state in the row of the item (texts are replaced with the new screen design)
+    private void onUpdateItemChanged(String key, KcaDataUpdateManager.State state, int progress) {
+        if (KcaDataUpdateManager.GAME_DATA_KEY.equals(key)) {
+            // DONE: shows the new version; null (cancelled before it started): shows the versions again
+            if (state == null || state == KcaDataUpdateManager.State.DONE) {
+                if (!gamedata_info.isEmpty()) showGameDataItem();
+            } else if (!gamedata_info.isEmpty()) {
+                gamedata_info.get(0).addProperty("version_str", getStateString(state, progress));
+                gamedata_adapter.notifyDataSetChanged();
             }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                if (KcaUtils.checkOnline(getApplicationContext())) {
-                    Toast.makeText(getApplicationContext(),
-                            KcaUtils.format(getString(R.string.sa_getupdate_servererror), t.getMessage()),
-                            Toast.LENGTH_LONG).show();
-                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "gamedata_download", target_version, "", t.getMessage());
-                }
-            }
-        });
-    }
-
-    private void downloadFile(String url, String name, int version) {
-        if (!downloadingFiles.add(name)) return; // already downloading
-        final Context context = getApplicationContext();
-        final Handler mainHandler = new Handler(Looper.getMainLooper());
-        long timestamp = System.currentTimeMillis() / 1000;
-        final File root_dir = getDir("data", Context.MODE_PRIVATE);
-        // download next to the file and replace it only after the download is valid
-        final String tempName = name + DOWNLOAD_SUFFIX;
-        new File(root_dir, tempName).delete();
-
-        PRDownloader.download(KcaUtils.format("%s?t=%d", url, timestamp), root_dir.getPath(), tempName)
-                .build()
-                .start(new OnDownloadListener() {
-                    @Override
-                    public void onDownloadComplete() {
-                        fileWorker.execute(() -> {
-                            boolean saved = saveDownloadedFile(context, root_dir, name, tempName, version);
-                            downloadingFiles.remove(name);
-                            mainHandler.post(() -> {
-                                if (saved) {
-                                    KcaApiData.reloadResource(context, name);
-                                    Toast.makeText(context, "Download Completed: " + name, Toast.LENGTH_LONG).show();
-                                } else {
-                                    Toast.makeText(context, "failed to read data", Toast.LENGTH_SHORT).show();
-                                }
-                                if (!isFinishing() && !isDestroyed()) onResourceDownloaded(name, version, saved);
-                            });
-                        });
-                    }
-
-                    @Override
-                    public void onError(Error error) {
-                        new File(root_dir, tempName).delete();
-                        downloadingFiles.remove(name);
-                        Toast.makeText(context, "Error when downloading " + name, Toast.LENGTH_LONG).show();
-                    }
-                });
-    }
-
-    private void onResourceDownloaded(String name, int version, boolean saved) {
-        if (!saved) return;
-        if (name.equals("icon_info.json")) {
-            Toast.makeText(getApplicationContext(), "Download Completed: " + name + "\nRetrieving Fairy Images..", Toast.LENGTH_LONG).show();
-            final Handler handler1 = new Handler(Looper.getMainLooper());
-            handler1.postDelayed(() -> fairyDownloader.run(false), LOAD_DELAY);
+            return;
         }
         int num_count = 0;
-        for (int i = 0; i < resource_info.size(); i++) {
-            JsonObject item = resource_info.get(i).getAsJsonObject();
-            int latest_res_v = item.get("version").getAsInt();
-            if (item.get("name").getAsString().equals(name)) {
-                item.addProperty("version_str", getVersionString(version, latest_res_v));
-                item.addProperty("highlight", version < latest_res_v);
+        for (JsonObject item : resource_info) {
+            if (item.get("name").getAsString().equals(key)) {
+                int latest_res_v = item.get("version").getAsInt();
+                if (state == KcaDataUpdateManager.State.DONE) {
+                    item.addProperty("version_str", getVersionString(latest_res_v, latest_res_v));
+                    item.addProperty("highlight", false);
+                } else if (state != null) {
+                    item.addProperty("version_str", getStateString(state, progress));
+                }
             }
             if (item.get("highlight").getAsBoolean()) num_count += 1;
         }
-        resource_adapter.setListItem(resource_info);
         resource_adapter.notifyDataSetChanged();
         resource_downall.setVisibility(num_count > 0 ? View.VISIBLE : View.GONE);
+
+        if (state == KcaDataUpdateManager.State.DONE && key.equals("icon_info.json")) {
+            Toast.makeText(getApplicationContext(), "Retrieving Fairy Images..", Toast.LENGTH_LONG).show();
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                if (!isFinishing() && !isDestroyed()) fairyDownloader.run(false);
+            }, LOAD_DELAY);
+        }
     }
 
-    // Replace the resource file with the download only when it is valid JSON, then record its version.
-    // Runs whether or not this screen is still open, so the file and its version stay in sync.
-    private static boolean saveDownloadedFile(Context context, File dir, String name, String tempName, int version) {
-        File temp = new File(dir, tempName);
-        try (Reader reader = new FileReader(temp)) {
-            JsonParser.parseReader(reader);
-        } catch (Exception e) {
-            temp.delete();
-            return false;
+    private static String getStateString(KcaDataUpdateManager.State state, int progress) {
+        switch (state) {
+            case QUEUED:
+                return "QUEUED";
+            case DOWNLOADING:
+                return progress >= 0 ? KcaUtils.format("DOWNLOADING %d%%", progress) : "DOWNLOADING";
+            case NOT_READY:
+                return "NOT READY ON SERVER - TRY LATER";
+            case FAILED:
+                return "FAILED";
+            default:
+                return "";
         }
-        if (!temp.renameTo(new File(dir, name))) {
-            temp.delete();
-            return false;
-        }
-        KcaDBHelper helper = new KcaDBHelper(context, null, KCANOTIFY_DB_VERSION);
-        helper.putResVer(name, version);
-        helper.close();
-        return true;
     }
 
     // Remove downloaded resources and game data, so that InitStartActivity (ACTION_RESET) restores

@@ -568,7 +568,7 @@ public class KcaUtils {
         }
     }
 
-    public static KcaDownloader getInfoDownloader(Context context){
+    public static OkHttpClient buildUpdateHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(1, TimeUnit.MINUTES);
@@ -579,8 +579,11 @@ public class KcaUtils {
                     .method(original.method(), original.body()).build();
             return chain.proceed(request);
         });
+        return builder.build();
+    }
 
-        OkHttpClient okHttpClient = builder.build();
+    public static KcaDownloader getInfoDownloader(Context context){
+        OkHttpClient okHttpClient = buildUpdateHttpClient();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(KcaUtils.getUpdateServer(context))
