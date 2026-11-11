@@ -944,7 +944,15 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
         Intent intent = new Intent(context, KcaVpnService.class);
         intent.putExtra(EXTRA_COMMAND, Command.stop);
         intent.putExtra(EXTRA_REASON, reason);
-        context.startService(intent);
+        if (context instanceof KcaVpnService) {
+            // called from inside the running service (e.g. MitmReceiver): startService() throws
+            // while the app is in background, so handle the command as onStartCommand would
+            KcaVpnService service = (KcaVpnService) context;
+            if (VPN_STOP_REASON.equals(reason)) service.stopSelf();
+            service.commandHandler.queue(intent);
+        } else {
+            context.startService(intent);
+        }
     }
 
     public static void reload(String reason, Context context) {

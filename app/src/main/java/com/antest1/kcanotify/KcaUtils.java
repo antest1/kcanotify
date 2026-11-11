@@ -525,7 +525,12 @@ public class KcaUtils {
         Intent toastIntent = new Intent(context, KcaCustomToastService.class);
         toastIntent.setAction(KcaCustomToastService.TOAST_SHOW_ACTION);
         toastIntent.putExtra("data", data.toString());
-        context.startService(toastIntent);
+        try {
+            context.startService(toastIntent);
+        } catch (IllegalStateException e) {
+            // not allowed while the app is in background; dropping the toast is fine
+            Log.w("KCA", "showCustomToast: " + e.getMessage());
+        }
     }
 
     public static String getOrientationPrefix(int value) {

@@ -1264,7 +1264,12 @@ public class KcaFleetViewService extends BaseService {
         if (label != null) sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat(label), null);
         Intent popupIntent = new Intent(getBaseContext(), target);
         if (action != null) popupIntent.setAction(action);
-        startService(popupIntent);
+        try {
+            startService(popupIntent);
+        } catch (IllegalStateException e) {
+            // not allowed while the app is in background (e.g. config change while hidden)
+            Log.w("KCA", "startPopupService: " + e.getMessage());
+        }
     }
 
     @Override
