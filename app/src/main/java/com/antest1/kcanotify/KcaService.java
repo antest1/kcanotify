@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager;
 import android.os.Vibrator;
 
 import androidx.annotation.NonNull;
@@ -125,6 +126,10 @@ public class KcaService extends BaseService {
     private String notifyTitle = "";
     private String notifyContent = "";
     private NotificationCompat.Builder notifyBuilder;
+    private String postedNotifyTitle = null;
+    private String postedNotifyContent = null;
+    // notifyBuilder is only touched on the main thread; timer ticks are posted here
+    private final Handler notificationUpdateHandler = new Handler(Looper.getMainLooper());
 
     kcaServiceHandler handler;
     kcaNotificationHandler nHandler;
@@ -293,6 +298,8 @@ public class KcaService extends BaseService {
 
                 kcaFirstDeckInfo = getString(R.string.kca_init_content);
                 initViewNotificationBuilder(notifyTitle, notifyContent);
+                postedNotifyTitle = null;
+                postedNotifyContent = null;
 
                 KcaMoraleInfo.initMoraleValue(Integer.parseInt(
                         getStringPreferences(getApplicationContext(), PREF_KCA_MORALE_MIN)));
@@ -311,11 +318,7 @@ public class KcaService extends BaseService {
                 notificationTimeCounter = -1;
                 timer = () -> {
                     if (isMissionTimerViewEnabled()) {
-                        notificationTimeCounter += 1;
-                        if (notificationTimeCounter == 120) {
-                            notificationTimeCounter = 0;
-                        }
-                        updateExpViewNotification();
+                        notificationUpdateHandler.post(this::onNotificationTimerTick);
                     }
                     if (KcaAkashiRepairInfo.getAkashiTimerValue() > 0) {
                         int second = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
@@ -353,6 +356,7 @@ public class KcaService extends BaseService {
     public void setServiceDown() {
         isPortAccessed = false;
         stopTimer();
+        notificationUpdateHandler.removeCallbacksAndMessages(null);
         stopForeground(STOP_FOREGROUND_REMOVE);
 
         handler = null;
@@ -472,9 +476,26 @@ public class KcaService extends BaseService {
         updateNotification(true);
     }
 
+    private void onNotificationTimerTick() {
+        if (!isServiceOn || notifiManager == null || notifyBuilder == null) return;
+        notificationTimeCounter += 1;
+        if (notificationTimeCounter == 120) {
+            notificationTimeCounter = 0;
+        }
+        // no one sees the notification text while the screen is off
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        if (powerManager != null && !powerManager.isInteractive()) return;
+        updateExpViewNotification();
+    }
+
     private void updateNotification(boolean change_content) {
         if (change_content) {
+            // avoid re-posting unchanged content: frequent updates of the same notification
+            // make SystemUI fail to inflate it on Android 8-11 ("Bad notification posted")
+            if (notifyTitle.equals(postedNotifyTitle) && notifyContent.equals(postedNotifyContent)) return;
             updateViewNotificationBuilder(notifyTitle, notifyContent);
+            postedNotifyTitle = notifyTitle;
+            postedNotifyContent = notifyContent;
         }
         notifiManager.notify(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
     }
