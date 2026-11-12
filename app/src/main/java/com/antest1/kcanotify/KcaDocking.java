@@ -3,6 +3,7 @@ package com.antest1.kcanotify;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import static com.antest1.kcanotify.KcaApiData.AKASHI_TIMER_20MIN;
 import static com.antest1.kcanotify.KcaApiData.STYPE_AR;
 import static com.antest1.kcanotify.KcaApiData.STYPE_AS;
 import static com.antest1.kcanotify.KcaApiData.STYPE_BB;
@@ -71,11 +72,16 @@ public class KcaDocking {
      *
      * @param level level of the ship to be repaired
      * @param stype ship type of the ship
+     * @param modifier repair time modifier (5/6 with two repair ships)
      * @param elapsed elapsed seconds
      * @return
      */
-    public static int getRepairedHp(int level, int stype, int elapsed) {
-        return (int) Math.floor(elapsed / getRepair1HpTime(level, stype));
+    public static int getRepairedHp(int level, int stype, double modifier, int elapsed) {
+        // the expected repair so far: all of it is applied at a port visit once 20 minutes have passed,
+        // and from 20 minutes it is at least 1 HP.
+        // the epsilon keeps exact multiples of a fractional time (with the 5/6 modifier) from rounding down
+        int repaired = (int) Math.floor(elapsed / (getRepair1HpTime(level, stype) * modifier) + 1e-6);
+        return elapsed >= AKASHI_TIMER_20MIN ? Math.max(1, repaired) : repaired;
 
         // 10秒たった
         // 3.1秒で1回復
@@ -90,11 +96,16 @@ public class KcaDocking {
      *
      * @param level level of the ship to be repaired
      * @param stype ship type of the ship
+     * @param modifier repair time modifier (5/6 with two repair ships)
      * @param elapsed elapsed seconds
      * @return
      */
-    public static int getNextRepair(int level, int stype, int elapsed) {
-        int need = (int) Math.ceil(getRepair1HpTime(level, stype) * (getRepairedHp(level, stype, elapsed) + 1));
+    public static int getNextRepair(int level, int stype, double modifier, int elapsed) {
+        double repair1HpTime = getRepair1HpTime(level, stype) * modifier;
+        int repaired = getRepairedHp(level, stype, modifier, elapsed);
+        int need = (int) Math.ceil(repair1HpTime * (repaired + 1) - 1e-6);
+        // the first HP comes at 20 minutes at the latest
+        if (repaired == 0 && elapsed < AKASHI_TIMER_20MIN) need = Math.min(need, AKASHI_TIMER_20MIN);
         return need - elapsed;
     }
 }

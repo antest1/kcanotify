@@ -2127,6 +2127,8 @@ public class KcaService extends BaseService {
                                 dbHelper.putValue(DB_KEY_DECKPORT, api_deck_data.toString());
                                 KcaApiData.updateUserShip(api_data.get("api_ship_data").getAsJsonArray().get(0).getAsJsonObject());
                                 KcaNosakiInfo.setNosakiData(deckInfoCalc.checkNosakiFlagship(api_deck_data));
+                                // equipment changes do not restart anchorage repair, but repair facilities change its reach and speed
+                                KcaAkashiRepairInfo.setAkashiData(deckInfoCalc.checkAkashiFlagship(api_deck_data));
                             }
                         }
                         if (kaisouProcessFlag) {

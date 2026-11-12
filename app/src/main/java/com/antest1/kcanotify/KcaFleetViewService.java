@@ -116,6 +116,7 @@ public class KcaFleetViewService extends BaseService {
     String fleetCalcInfoText = "";
     int akashiAvailableCount = 0;
     int nosakiMoraleGain = 0;
+    double akashiRepairModifier = 1.0;
     ScheduledExecutorService timeScheduler = null;
 
     static int view_status = 0;
@@ -876,6 +877,7 @@ public class KcaFleetViewService extends BaseService {
 
         akashiAvailableCount = KcaAkashiRepairInfo.getAkashiAvailableCount(idx);
         nosakiMoraleGain = KcaNosakiInfo.getNosakiMoraleGain(idx);
+        akashiRepairModifier = KcaAkashiRepairInfo.getAkashiRepairModifier(idx);
 
         infoList.add("LV ".concat(String.valueOf(sum_level)));
         fleetCalcInfoText = joinStr(infoList, " / ");
@@ -975,11 +977,12 @@ public class KcaFleetViewService extends BaseService {
 
                 long akashiTimerValue = KcaAkashiRepairInfo.getAkashiTimerValue();
                 boolean isAkashiActive = akashiTimerValue >= 0 && akashiAvailableCount > 0;
-                for (int i = 0; i < 6; i++) {
+                // up to 7 ships with two repair ships (the 7th of a striking force fleet is the first combined item)
+                for (int i = 0; i < 7; i++) {
                     if (i < akashiAvailableCount) {
-                        getFleetViewItem(i).setAkashiTimer(isAkashiActive);
+                        getFleetViewItem(i).setAkashiTimer(isAkashiActive, akashiRepairModifier);
                     } else {
-                        getFleetViewItem(i).setAkashiTimer(false);
+                        getFleetViewItem(i).setAkashiTimer(false, akashiRepairModifier);
                     }
                 }
 
