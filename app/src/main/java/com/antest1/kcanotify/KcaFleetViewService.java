@@ -126,7 +126,7 @@ public class KcaFleetViewService extends BaseService {
     private WindowManager.LayoutParams layoutParams;
 
     private View itemView, fleetHqInfoView;
-    private TextView fleetInfoTitle, fleetInfoLine, fleetCnChangeBtn, fleetSwitchBtn, fleetAkashiTimerBtn;
+    private TextView fleetInfoTitle, fleetInfoLine, fleetCnChangeBtn, fleetSwitchBtn, fleetAkashiTimerBtn, fleetNosakiTimerBtn;
     private WindowManager windowManager;
     private ScrollView fleetMenu;
     private ImageView fleetMenuArrowUp, fleetMenuArrowDown;
@@ -494,12 +494,14 @@ public class KcaFleetViewService extends BaseService {
         fleetHqInfoView = fleetView.findViewById(R.id.fleetview_hqinfo);
         fleetCnChangeBtn = fleetView.findViewById(R.id.fleetview_cn_change);
         fleetAkashiTimerBtn = fleetView.findViewById(R.id.fleetview_akashi_timer);
+        fleetNosakiTimerBtn = fleetView.findViewById(R.id.fleetview_nosaki_timer);
         fleetSwitchBtn = fleetView.findViewById(R.id.fleetview_fleetswitch);
         fleetMenu = fleetView.findViewById(R.id.fleetview_menu);
         fleetMenuArrowUp = fleetView.findViewById(R.id.fleetview_menu_up);
         fleetMenuArrowDown = fleetView.findViewById(R.id.fleetview_menu_down);
 
         fleetAkashiTimerBtn.setVisibility(View.GONE);
+        fleetNosakiTimerBtn.setVisibility(View.GONE);
         fleetSwitchBtn.setVisibility(View.GONE);
         fleetMenu.setOnTouchListener((view, motionEvent) -> {
             ViewTreeObserver observer = fleetMenu.getViewTreeObserver();
@@ -960,6 +962,8 @@ public class KcaFleetViewService extends BaseService {
         }
 
         final String akashi_timer_text = KcaUtils.getTimeStr(KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond());
+        final String nosaki_timer_text = getString(R.string.fleetview_nosaki_timer,
+                KcaUtils.getTimeStr(KcaNosakiInfo.getNosakiRemainingTimeInSecond()));
 
         mHandler.post(() -> {
             if (isReady && !displayText.isEmpty()) {
@@ -990,11 +994,24 @@ public class KcaFleetViewService extends BaseService {
                     }
                     fleetAkashiTimerBtn.setVisibility(VISIBLE);
                 }
+
+                long nosakiTimerValue = KcaNosakiInfo.getNosakiTimerValue();
+                boolean isNosakiActive = nosakiTimerValue >= 0 && KcaNosakiInfo.getNosakiInAnyFlagship();
+                if (isNosakiActive) {
+                    fleetNosakiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetNosakiTimerBtnActive));
+                    if (!nosaki_timer_text.contentEquals(fleetNosakiTimerBtn.getText())) {
+                        fleetNosakiTimerBtn.setText(nosaki_timer_text);
+                    }
+                    fleetNosakiTimerBtn.setVisibility(VISIBLE);
+                } else {
+                    fleetNosakiTimerBtn.setVisibility(View.GONE);
+                }
             } else {
                 if (!getString(R.string.kca_init_content).contentEquals(fleetInfoLine.getText())) {
                     fleetInfoLine.setText(getString(R.string.kca_init_content));
                 }
                 fleetAkashiTimerBtn.setVisibility(View.GONE);
+                fleetNosakiTimerBtn.setVisibility(View.GONE);
             }
         });
     }

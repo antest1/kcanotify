@@ -303,6 +303,7 @@ public final class KcaConstants {
     public static final String KCA_API_PREF_NOTICOUNT_CHANGED = "/kca_api/pref_noticount_changed";
     public static final String KCA_API_PREF_LANGUAGE_CHANGED = "/kca_api/pref_language_changed";
     public static final String KCA_API_PREF_ALARMDELAY_CHANGED = "/kca_api/pref_alarmdelay_changed";
+    public static final String KCA_API_PREF_MORALE_CHANGED = "/kca_api/pref_morale_changed";
     public static final String KCA_API_PREF_FAIRYSIZE_CHANGED = "/kca_api/pref_fairysize_changed";
     public static final String KCA_API_PREF_FAIRYALPHA_CHANGED = "/kca_api/pref_fairyalpha_changed";
     public static final String KCA_API_PREF_CHANGE_ON_ACTION = "/kca_api/pref_change_on_action";
