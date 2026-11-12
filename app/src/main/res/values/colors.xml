@@ -158,6 +158,7 @@
     <color name="colorFleetSeekCnBtn">#673ab7</color>
     <color name="colorFleetAkashiTimerBtnActive">#ff4081</color>
     <color name="colorFleetAkashiTimerBtnDeactive">#424242</color>
+    <color name="colorFleetNosakiTimerBtnActive">#26a69a</color>
     <color name="colorFleetShipKira">#ffff8d</color>
     <color name="colorFleetShipNormal">#c0d6d6d6</color>
     <color name="colorFleetShipFatigue1">#f98b25</color>

@@ -408,6 +408,7 @@
             android:key="morale_min"
             android:inputType="phone"
             android:digits="0123456789"
+            android:summary="@string/setting_menu_noti_desc_morale_min"
             android:title="@string/setting_menu_noti_title_morale_min" />
 
         <CheckBoxPreference

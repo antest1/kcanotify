@@ -212,6 +212,8 @@
     <string name="setting_menu_noti_title_morale">疲労回復通知</string>
     <string name="setting_menu_noti_desc_morale">艦隊の疲労度が回復したときに通知</string>
     <string name="setting_menu_noti_title_morale_min">疲労度ボーダー</string>
+    <string name="setting_menu_noti_desc_morale_min">範囲1〜54。自然回復は49まで、野埼/野埼改(APF)で最大54、49超はAPFを除外。</string>
+    <string name="setting_menu_noti_morale_min_range">1〜54の範囲で入力してください。</string>
     <string name="setting_menu_noti_title_akashirepair">泊地修理</string>
     <string name="setting_menu_noti_desc_akashirepair">泊地修理を始めるときに通知</string>
     <string name="setting_menu_noti_title_hdmg_vib">大破通知</string>

@@ -96,6 +96,25 @@
                 android:textColor="@color/white"
                 android:textSize="12dp" />
 
+            <TextView
+                android:id="@+id/fleetview_nosaki_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:alpha="0.9"
+                android:background="@color/colorFleetNosakiTimerBtnActive"
+                android:ellipsize="marquee"
+                android:paddingStart="4dp"
+                android:paddingLeft="4dp"
+                android:paddingEnd="4dp"
+                android:paddingRight="4dp"
+                android:singleLine="true"
+                android:text="N 00:00"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+
             <ImageView
                 android:id="@+id/imageView5"
                 android:layout_width="match_parent"

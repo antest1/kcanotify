@@ -534,11 +534,20 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             String valueString = ((String) newValue);
             if (valueString.isEmpty() || !TextUtils.isDigitsOnly(valueString)) return false;
             int value = Integer.parseInt(valueString);
-            if (value > 100) {
-                showToast(getActivity(), "value must be in 0~100", Toast.LENGTH_LONG);
+            // 54 is the hard cap for passive morale gain; higher targets are unreachable.
+            if (value < 1 || value > KcaMoraleInfo.APF_MORALE_CAP) {
+                showToast(getActivity(), getString(R.string.setting_menu_noti_morale_min_range), Toast.LENGTH_LONG);
                 return false;
             }
             KcaMoraleInfo.setMinMorale(value);
+            if (sHandler != null) {
+                Bundle bundle = new Bundle();
+                bundle.putString("url", KCA_API_PREF_MORALE_CHANGED);
+                bundle.putString("data", "");
+                Message sMsg = sHandler.obtainMessage();
+                sMsg.setData(bundle);
+                sHandler.sendMessage(sMsg);
+            }
         }
 
         if (PREF_FAIRY_OPACITY.equals(key)) {
@@ -565,6 +574,10 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                 return KcaUtils.format("%s (%s)", value,
                         getString(R.string.setting_menu_view_desc_hdmg_minlevel));
             }
+        }
+        if (PREF_KCA_MORALE_MIN.equals(key)) {
+            return KcaUtils.format("%s · %s", value,
+                    getString(R.string.setting_menu_noti_desc_morale_min));
         }
         return value;
     }

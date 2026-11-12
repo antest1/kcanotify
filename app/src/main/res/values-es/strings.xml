@@ -222,6 +222,8 @@
     <string name="setting_menu_noti_title_morale">Moral</string>
     <string name="setting_menu_noti_desc_morale">Notificación en pantalla cuando una flota recupere moral mínima.</string>
     <string name="setting_menu_noti_title_morale_min">Moral Mínima</string>
+    <string name="setting_menu_noti_desc_morale_min">Rango 1–54; natural hasta 49, Nosaki/Nosaki Kai (APF) hasta 54, APF no cuenta sobre 49.</string>
+    <string name="setting_menu_noti_morale_min_range">El valor debe estar entre 1 y 54.</string>
     <string name="setting_menu_noti_title_akashirepair">Reparaciones por Akashi</string>
     <string name="setting_menu_noti_desc_akashirepair">Notificación en pantalla cuando Akashi comienza a reparar.</string>
     <string name="setting_menu_noti_title_hdmg_vib">Alerta por Daños Graves</string>

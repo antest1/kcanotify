@@ -832,14 +832,21 @@ public class KcaDeckInfo {
         return -1;
     }
 
-    public int checkMinimumMorale(JsonArray deckPortData, int deckid) {
+    public int checkMinimumMorale(JsonArray deckPortData, int deckid, boolean excludeApf) {
         JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().getAsJsonArray("api_ship");
         int min_cond_value = 100;
         for (int i = 0; i < deckShipIdList.size(); i++) {
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
-                JsonObject shipData = getUserShipDataById(shipId, "cond");
-                if (shipData != null) {
+                JsonObject shipData = getUserShipDataById(shipId, excludeApf ? "cond,ship_id" : "cond");
+                if (shipData != null && shipData.has("cond")) {
+                    if (excludeApf && shipData.has("ship_id")) {
+                        int kcShipId = shipData.get("ship_id").getAsInt();
+                        if (kcShipId == KcaNosakiInfo.SHIP_ID_NOSAKI
+                                || kcShipId == KcaNosakiInfo.SHIP_ID_NOSAKI_KAI) {
+                            continue;
+                        }
+                    }
                     int cond = shipData.get("cond").getAsInt();
                     min_cond_value = Math.min(cond, min_cond_value);
                 }
@@ -877,6 +884,32 @@ public class KcaDeckInfo {
                         deck_id_list.add(repairInfo);
                     }
                 }
+            }
+        }
+        return deck_id_list;
+    }
+
+    public JsonArray checkNosakiFlagship(JsonArray deckPortData) {
+        JsonArray deck_id_list = new JsonArray();
+        for (int i = 0; i < deckPortData.size(); i++) {
+            JsonArray deckShipIdList = deckPortData.get(i).getAsJsonObject().getAsJsonArray("api_ship");
+            int max_gain = 0;
+            for (int j = 0; j < Math.min(2, deckShipIdList.size()); j++) {
+                int shipId = deckShipIdList.get(j).getAsInt();
+                if (shipId == -1) continue;
+                JsonObject shipData = getUserShipDataById(shipId, "ship_id");
+                if (shipData != null && shipData.has("ship_id")) {
+                    int kc_ship_id = shipData.get("ship_id").getAsInt();
+                    int gain = kc_ship_id == KcaNosakiInfo.SHIP_ID_NOSAKI ? 2
+                            : kc_ship_id == KcaNosakiInfo.SHIP_ID_NOSAKI_KAI ? 3 : 0;
+                    max_gain = Math.max(max_gain, gain);
+                }
+            }
+            if (max_gain > 0) {
+                JsonObject info = new JsonObject();
+                info.addProperty("id", i);
+                info.addProperty("gain", max_gain);
+                deck_id_list.add(info);
             }
         }
         return deck_id_list;

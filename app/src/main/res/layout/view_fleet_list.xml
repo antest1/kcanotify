@@ -337,6 +337,24 @@
                 android:textSize="@dimen/fleetview_text_statusarea" />
 
             <TextView
+                android:id="@+id/fleetview_nosaki_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@color/colorFleetNosakiTimerBtnActive"
+                android:ellipsize="marquee"
+                android:paddingBottom="2dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
+                android:singleLine="true"
+                android:text="N 00:00"
+                android:textColor="@color/white"
+                android:textSize="@dimen/fleetview_text_statusarea" />
+
+            <TextView
                 android:id="@+id/fleetview_cn_change"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
