@@ -221,7 +221,6 @@
     <string name="setting_menu_noti_desc_morale">함대의 피로도 회복 시 상단 알림 설정</string>
     <string name="setting_menu_noti_title_morale_min">최소 피로도</string>
     <string name="setting_menu_noti_desc_morale_min">범위 1~54, 자연 회복은 49까지. 급양함(노사키)이 기함·2번함이면 54까지 오르며, 49 초과 시 급양함 자신은 제외</string>
-    <string name="setting_menu_noti_morale_min_range">1~54 사이의 값을 입력해 주세요.</string>
     <string name="setting_menu_noti_title_akashirepair">박지수리 알림 (아카시 타이머)</string>
     <string name="setting_menu_noti_desc_akashirepair">박지수리 시작 시(20분) 상단 알림 설정</string>
     <string name="setting_menu_noti_title_nosakigain">모항급양 알림 (노사키 타이머)</string>

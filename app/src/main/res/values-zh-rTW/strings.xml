@@ -245,7 +245,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_morale">艦隊疲勞恢復時通知</string>
     <string name="setting_menu_noti_title_morale_min">提醒最低值</string>
     <string name="setting_menu_noti_desc_morale_min">範圍 1~54，自然恢復至 49。給糧艦(野埼)為旗艦或二號艦時可至 54，超過 49 時不計給糧艦本身。</string>
-    <string name="setting_menu_noti_morale_min_range">請輸入 1~54 之間的數值。</string>
     <string name="setting_menu_noti_title_akashirepair">泊地修理</string>
     <string name="setting_menu_noti_desc_akashirepair">泊地修理開始時發出通知及提示</string>
     <string name="setting_menu_noti_title_nosakigain">母港給糧 (野埼計時器)</string>

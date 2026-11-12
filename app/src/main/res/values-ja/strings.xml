@@ -215,7 +215,6 @@
     <string name="setting_menu_noti_desc_morale">艦隊の疲労度が回復したときに通知</string>
     <string name="setting_menu_noti_title_morale_min">疲労度ボーダー</string>
     <string name="setting_menu_noti_desc_morale_min">範囲1〜54、自然回復は49まで。給糧艦(野埼)が旗艦・2番艦なら54まで上がり、49超では給糧艦自身を除外</string>
-    <string name="setting_menu_noti_morale_min_range">1〜54の範囲で入力してください。</string>
     <string name="setting_menu_noti_title_akashirepair">泊地修理</string>
     <string name="setting_menu_noti_desc_akashirepair">泊地修理を始めるときに通知</string>
     <string name="setting_menu_noti_title_nosakigain">母港給糧 (野埼タイマー)</string>

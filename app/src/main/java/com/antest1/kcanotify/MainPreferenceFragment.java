@@ -204,6 +204,22 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         setSettingDisabledWhenServiceRunning();
     }
 
+    private static final String SLIDER_DIALOG_TAG = "KcaSliderPreferenceDialog";
+
+    // the dialog of a slider setting; other dialog settings are handled by the base class
+    @SuppressWarnings("deprecation") // the preference dialog finds its preference through the target fragment
+    @Override
+    public void onDisplayPreferenceDialog(@NonNull Preference preference) {
+        if (preference instanceof KcaSliderPreference) {
+            if (getParentFragmentManager().findFragmentByTag(SLIDER_DIALOG_TAG) != null) return;
+            KcaSliderPreferenceDialog dialog = KcaSliderPreferenceDialog.newInstance(preference.getKey());
+            dialog.setTargetFragment(this, 0);
+            dialog.show(getParentFragmentManager(), SLIDER_DIALOG_TAG);
+            return;
+        }
+        super.onDisplayPreferenceDialog(preference);
+    }
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         getPreferenceManager().setSharedPreferencesName("pref");
@@ -531,14 +547,8 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         }
 
         if (PREF_KCA_MORALE_MIN.equals(key)) {
-            String valueString = ((String) newValue);
-            if (valueString.isEmpty() || !TextUtils.isDigitsOnly(valueString)) return false;
-            int value = Integer.parseInt(valueString);
-            // 54 is the hard cap for passive morale gain; higher targets are unreachable.
-            if (value < 1 || value > KcaMoraleInfo.APF_MORALE_CAP) {
-                showToast(getActivity(), getString(R.string.setting_menu_noti_morale_min_range), Toast.LENGTH_LONG);
-                return false;
-            }
+            // from the slider, within 1 to 54 (the cap of the APF morale gain)
+            int value = (Integer) newValue;
             KcaMoraleInfo.setMinMorale(value);
             if (sHandler != null) {
                 Bundle bundle = new Bundle();
@@ -574,10 +584,6 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                 return KcaUtils.format("%s (%s)", value,
                         getString(R.string.setting_menu_view_desc_hdmg_minlevel));
             }
-        }
-        if (PREF_KCA_MORALE_MIN.equals(key)) {
-            return KcaUtils.format("%s · %s", value,
-                    getString(R.string.setting_menu_noti_desc_morale_min));
         }
         return value;
     }

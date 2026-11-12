@@ -401,14 +401,15 @@
             android:summary="@string/setting_menu_noti_desc_morale"
             android:title="@string/setting_menu_noti_title_morale" />
 
-        <EditTextPreference
+        <!-- picked with a slider in a dialog so no number can be mistyped; 54 is the cap of the APF morale gain -->
+        <com.antest1.kcanotify.KcaSliderPreference
             android:defaultValue="40"
             app:iconSpaceReserved="false"
             android:dependency="notify_morale"
             android:key="morale_min"
-            android:inputType="phone"
-            android:digits="0123456789"
-            android:summary="@string/setting_menu_noti_desc_morale_min"
+            app:sliderMin="1"
+            app:sliderMax="54"
+            android:dialogMessage="@string/setting_menu_noti_desc_morale_min"
             android:title="@string/setting_menu_noti_title_morale_min" />
 
         <CheckBoxPreference

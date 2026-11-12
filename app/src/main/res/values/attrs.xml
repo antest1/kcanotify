@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- range of KcaSliderPreference -->
+    <declare-styleable name="KcaSliderPreference">
+        <attr name="sliderMin" format="integer" />
+        <attr name="sliderMax" format="integer" />
+    </declare-styleable>
+</resources>
