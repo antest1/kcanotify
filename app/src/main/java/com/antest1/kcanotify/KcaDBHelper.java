@@ -421,7 +421,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                     String api_slotitem_id = item_data.get("api_slotitem_id").getAsString();
                     statement.bindString(column++, api_id);
                     statement.bindString(column++, api_slotitem_id);
-                    statement.bindString(column++, item_data.toString());
+                    statement.bindString(column++, KcaJson.toJson(item_data));
                     statement.execute();
                 }
                 statement.close();
