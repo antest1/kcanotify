@@ -410,8 +410,8 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         try {
             if (api_data.size() > 0) {
                 db = getWritableDatabase();
-                db.delete(slotitem_table_name, null, null);
                 db.beginTransaction();
+                db.delete(slotitem_table_name, null, null);
                 statement = db.compileStatement("INSERT INTO ".concat(slotitem_table_name).concat(" (KEY, KCID, VALUE) values (?, ?, ?)"));
 
                 for (JsonElement item: api_data) {
