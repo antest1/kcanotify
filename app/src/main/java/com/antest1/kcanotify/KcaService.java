@@ -956,10 +956,7 @@ public class KcaService extends BaseService {
                                 reqPortApiData.getAsJsonArray("api_deck_port").toString());
                     }
                     if (reqPortApiData.has("api_ship")) {
-                        final String ship_data = KcaJson.toJson(reqPortApiData.get("api_ship"));
-                        Thread ship_data_thread = new Thread(()
-                                -> dbHelper.putValue(DB_KEY_SHIPIFNO, ship_data));
-                        ship_data_thread.start();
+                        dbHelper.putValue(DB_KEY_SHIPIFNO, KcaJson.toJson(reqPortApiData.get("api_ship")));
                     }
                     if (reqPortApiData.has("api_ndock")) {
                         dbHelper.putValue(DB_KEY_NDOCKDATA, reqPortApiData.getAsJsonArray("api_ndock").toString());

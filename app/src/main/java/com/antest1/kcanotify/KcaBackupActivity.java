@@ -135,6 +135,7 @@ public class KcaBackupActivity extends BaseActivity {
             File exportFolder = new File(exportPath);
 
             try {
+                waitForPendingWrites();
                 for (String name: db_paths) {
                     File src = new File(getDatabasePath(name).getAbsolutePath());
                     File dst = new File(exportPath.concat("/").concat(name));
@@ -176,6 +177,15 @@ public class KcaBackupActivity extends BaseActivity {
         });
     }
 
+    // values written off the main thread must be in the DB file before it is copied
+    private static void waitForPendingWrites() {
+        try {
+            KcaDBHelper.flushWrites();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
     private void loadBackup(String backup_fn) {
         Handler handler = new Handler(Looper.getMainLooper());
         File savedir = new File(getExternalFilesDir(null), FILE_PATH);
@@ -187,6 +197,8 @@ public class KcaBackupActivity extends BaseActivity {
                 if (!exportFolder.exists()) exportFolder.mkdirs();
                 new ZipFile(savedir.getAbsolutePath().concat("/").concat(backup_fn)).extractAll(savedir.getAbsolutePath());
 
+                // a value written after the copy would overwrite the restored one
+                waitForPendingWrites();
                 for (String name: db_paths) {
                     File src = new File(exportFolder.getAbsolutePath().concat("/").concat(name));
                     File dst = new File(getDatabasePath(name).getAbsolutePath());
