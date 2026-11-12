@@ -23,6 +23,8 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.StrictMode;
+import android.os.SystemClock;
 import android.os.Vibrator;
 
 import androidx.annotation.NonNull;
@@ -42,17 +44,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -88,6 +89,10 @@ public class KcaService extends BaseService {
     public static final String SERVICE_CHANNEL_NAME = "Kcanotify Service";
     public static final String SERVICE_STATUS_CHANNEL_ID = "kcaservice_status_channel";
     public static final String SERVICE_STATUS_CHANNEL_NAME = "Kcanotify Service Status";
+    private static final String CRASHLYTICS_KEY_PACKET_API = "packet_api";
+    private static final long SLOW_PACKET_MILLIS = 200;
+    // writes responses as received off the main thread, in the order they came
+    private static final ExecutorService responseWriter = Executors.newSingleThreadExecutor();
     private boolean foregroundStartBlocked = false;
 
     public static boolean isInitState = false;
@@ -194,6 +199,11 @@ public class KcaService extends BaseService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.getAction() != null) {
             if (KCASERVICE_START.equals(intent.getAction())) {
+                if (BuildConfig.DEBUG) {
+                    // list disk access on the main thread in logcat
+                    StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                            .detectDiskReads().detectDiskWrites().penaltyLog().build());
+                }
                 isServiceOn = true;
                 isFirstState = true;
                 restartFlag = true;
@@ -664,9 +674,33 @@ public class KcaService extends BaseService {
         @Override
         public void handleMessage(@NonNull Message msg) {
             KcaService service = mService.get();
-            if (service != null) {
+            if (service == null) return;
+
+            // an ANR happens while a packet is handled: keep its API in the report, and log slow ones
+            String api = getApiPath(msg.getData().getString("url"));
+            FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
+            crashlytics.setCustomKey(CRASHLYTICS_KEY_PACKET_API, api);
+            long startTime = SystemClock.uptimeMillis();
+            long startWriteNanos = KcaDBHelper.getMainThreadWriteNanos();
+            try {
                 service.handleServiceMessage(msg);
+            } finally {
+                crashlytics.setCustomKey(CRASHLYTICS_KEY_PACKET_API, "");
+                long time = SystemClock.uptimeMillis() - startTime;
+                if (time >= SLOW_PACKET_MILLIS) {
+                    long writeTime = TimeUnit.NANOSECONDS.toMillis(KcaDBHelper.getMainThreadWriteNanos() - startWriteNanos);
+                    String message = KcaUtils.format("slow packet %s: %dms (db write %dms)", api, time, writeTime);
+                    crashlytics.log(message);
+                    Log.w("KCA", message);
+                }
             }
+        }
+
+        // only the path of the API, without the host, parameters or body, so no game data goes to Crashlytics
+        private static String getApiPath(String url) {
+            if (url == null) return "";
+            String path = Uri.parse(url).getPath();
+            return path != null ? path : "";
         }
     }
 
@@ -684,26 +718,20 @@ public class KcaService extends BaseService {
         boolean dev_flag = msg.getData().getBoolean("dev_flag");
 
         try {
-            Reader data = new InputStreamReader(new ByteArrayInputStream(raw));
-            String init = new String(Arrays.copyOfRange(raw, 0, 7));
-            if (init.contains("svdata=")) {
-                data.skip("svdata=".length());
-            }
-            if (raw.length > 0) {
-                JsonElement jsonData = gson.fromJson(data, JsonElement.class);
-                if (jsonData.isJsonObject()) {
-                    jsonDataObj = jsonData.getAsJsonObject();
-                } else {
-                    jsonDataObj = new JsonObject();
-                }
-            }
-            else jsonDataObj = new JsonObject();
+            // failed in KcaHandler: record it like a response that cannot be handled
+            if (msg.obj instanceof Exception) throw (Exception) msg.obj;
+            // parsed in KcaHandler, off the main thread
+            jsonDataObj = msg.obj instanceof JsonObject ? (JsonObject) msg.obj : KcaHandler.parseResponse(raw);
             if (url.equals(KCA_API_RESOURCE_URL)) {
                 dbHelper.recordErrorLog(ERROR_TYPE_VPN, KCA_API_RESOURCE_URL, "", "", request);
                 return;
             }
             if (getBooleanPreferences(getApplicationContext(), PREF_PACKET_LOG)) {
-                packetLogger.log(url, request, jsonDataObj.toString());
+                // the response as received, written off the main thread
+                KcaPacketLogger logger = packetLogger;
+                int offset = KcaHandler.getJsonOffset(raw);
+                responseWriter.execute(() -> logger.log(url, request,
+                        new String(raw, offset, raw.length - offset, StandardCharsets.UTF_8)));
             }
 
             if (poiApiClient != null) poiApiClient.setDevFlag(dev_flag);
@@ -767,7 +795,10 @@ public class KcaService extends BaseService {
 
             if (url.equals(API_START2) || url.equals(API_START2_NEW)) {
                 if (jsonDataObj.has("api_data")) {
-                    KcaGameDataStore.save(getApplicationContext(), jsonDataObj);
+                    // the response as received, so it is not written back to text from the parsed object
+                    Context context = getApplicationContext();
+                    int offset = KcaHandler.getJsonOffset(raw);
+                    responseWriter.execute(() -> KcaGameDataStore.save(context, raw, offset));
                     //Toast.makeText(this, "Load Kancolle Data", Toast.LENGTH_LONG).show();
                     // the game does not tell the data version; KcaGameDataChecker syncs it with the server
                     KcaApiData.getKcGameData(jsonDataObj.getAsJsonObject("api_data"));
@@ -925,10 +956,7 @@ public class KcaService extends BaseService {
                                 reqPortApiData.getAsJsonArray("api_deck_port").toString());
                     }
                     if (reqPortApiData.has("api_ship")) {
-                        final String ship_data = reqPortApiData.get("api_ship").toString();
-                        Thread ship_data_thread = new Thread(()
-                                -> dbHelper.putValue(DB_KEY_SHIPIFNO, ship_data));
-                        ship_data_thread.start();
+                        dbHelper.putValue(DB_KEY_SHIPIFNO, KcaJson.toJson(reqPortApiData.get("api_ship")));
                     }
                     if (reqPortApiData.has("api_ndock")) {
                         dbHelper.putValue(DB_KEY_NDOCKDATA, reqPortApiData.getAsJsonArray("api_ndock").toString());

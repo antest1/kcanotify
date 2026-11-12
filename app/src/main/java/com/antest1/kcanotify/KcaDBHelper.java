@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -23,24 +24,35 @@ import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static android.R.attr.timeZone;
 import static android.R.attr.value;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 import static com.antest1.kcanotify.KcaApiData.kcQuestInfoData;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_APIMAPINFO;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_BASICIFNO;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPCRNT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPTDAY;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPTIME;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_KDOCKDATA;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_LABSIFNO;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_MATERIALS;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_NDOCKDATA;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_QUESTNCHK;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_USEITEMS;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_DB;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_VPN;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
@@ -58,6 +70,31 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     private static final String questlist_table_name = "kca_questlist";
 
     private KcaQuestTracker qt;
+
+    // time spent in putValue and putBulkItemValue on the main thread, for slow packet logs
+    private static long mainThreadWriteNanos = 0;
+
+    public static long getMainThreadWriteNanos() {
+        return mainThreadWriteNanos;
+    }
+
+    private static void addMainThreadWriteTime(long startNanos) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            mainThreadWriteNanos += System.nanoTime() - startNanos;
+        }
+    }
+
+    // values the server sends again (at port, login or the sortie menu) are written off the calling thread.
+    // one lost when the process is killed before it is written comes back with the next packet
+    private static final Set<String> WRITE_BEHIND_KEYS = new HashSet<>(Arrays.asList(
+            DB_KEY_SHIPIFNO, DB_KEY_DECKPORT, DB_KEY_NDOCKDATA, DB_KEY_MATERIALS, DB_KEY_BASICIFNO,
+            DB_KEY_USEITEMS, DB_KEY_KDOCKDATA, DB_KEY_APIMAPINFO, DB_KEY_LABSIFNO));
+    private static final KcaWriteQueue writeQueue = new KcaWriteQueue(Executors.newSingleThreadExecutor());
+
+    // waits until the values written off the calling thread are in the DB, e.g. before copying the DB file
+    public static void flushWrites() throws InterruptedException {
+        writeQueue.flush();
+    }
 
     public KcaDBHelper(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, db_name, factory, version);
@@ -241,6 +278,10 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     // for kca_userdata
     public String getValue(String key) {
+        // a value not written yet is the latest one
+        KcaWriteQueue.Pending pending = writeQueue.get(key);
+        if (pending != null) return pending.value;
+
         String value = null;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(table_name, null, "KEY=?", new String[]{key}, null, null, null, null);
@@ -260,6 +301,10 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void deleteValue(String key) {
+        if (WRITE_BEHIND_KEYS.contains(key)) {
+            writeQueue.schedule(key, null, this::writeInBackground);
+            return;
+        }
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(table_name, "KEY=?", new String[]{key});
     }
@@ -298,6 +343,33 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void putValue(String key, String value) {
+        if (WRITE_BEHIND_KEYS.contains(key)) {
+            writeQueue.schedule(key, value, this::writeInBackground);
+        } else {
+            writeValue(key, value);
+        }
+    }
+
+    // runs on the write queue: a failure is recorded instead of crashing the app
+    private void writeInBackground(String key, String value) {
+        try {
+            if (value != null) {
+                writeValue(key, value);
+            } else {
+                getWritableDatabase().delete(table_name, "KEY=?", new String[]{key});
+            }
+        } catch (RuntimeException e) {
+            Log.w("KCA-DB", "write " + key + ": " + e);
+            try {
+                recordErrorLog(ERROR_TYPE_DB, "putValue", key, "", getStringFromException(e));
+            } catch (RuntimeException ignored) {
+                // the DB cannot be written at all
+            }
+        }
+    }
+
+    private void writeValue(String key, String value) {
+        long startNanos = System.nanoTime();
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("KEY", key);
@@ -306,6 +378,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         if (u == 0) {
             db.insertWithOnConflict(table_name, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         }
+        addMainThreadWriteTime(startNanos);
     }
 
     public int getShipCount() {
@@ -388,13 +461,14 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void putBulkItemValue(JsonArray api_data) {
+        long startNanos = System.nanoTime();
         SQLiteDatabase db = null;
         SQLiteStatement statement;
         try {
             if (api_data.size() > 0) {
                 db = getWritableDatabase();
-                db.delete(slotitem_table_name, null, null);
                 db.beginTransaction();
+                db.delete(slotitem_table_name, null, null);
                 statement = db.compileStatement("INSERT INTO ".concat(slotitem_table_name).concat(" (KEY, KCID, VALUE) values (?, ?, ?)"));
 
                 for (JsonElement item: api_data) {
@@ -404,7 +478,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                     String api_slotitem_id = item_data.get("api_slotitem_id").getAsString();
                     statement.bindString(column++, api_id);
                     statement.bindString(column++, api_slotitem_id);
-                    statement.bindString(column++, item_data.toString());
+                    statement.bindString(column++, KcaJson.toJson(item_data));
                     statement.execute();
                 }
                 statement.close();
@@ -416,6 +490,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             if (db != null) {
                 db.endTransaction();
             }
+            addMainThreadWriteTime(startNanos);
         }
     }
 
