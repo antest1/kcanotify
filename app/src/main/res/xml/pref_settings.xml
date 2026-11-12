@@ -419,6 +419,13 @@
             android:title="@string/setting_menu_noti_title_akashirepair" />
 
         <CheckBoxPreference
+            android:defaultValue="false"
+            app:iconSpaceReserved="false"
+            android:key="notify_nosaki"
+            android:summary="@string/setting_menu_noti_desc_nosakigain"
+            android:title="@string/setting_menu_noti_title_nosakigain" />
+
+        <CheckBoxPreference
             android:defaultValue="true"
             app:iconSpaceReserved="false"
             android:key="notify_vibrate_heavydamaged"

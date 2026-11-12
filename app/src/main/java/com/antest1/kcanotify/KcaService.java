@@ -655,6 +655,20 @@ public class KcaService extends BaseService {
         if (complete_time > 0) setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_AKASHI, 0), false);
     }
 
+    private void setNosakiAlarm(Intent aIntent) {
+        JsonObject nosakiAlarmData = new JsonObject();
+        nosakiAlarmData.addProperty("type", KcaAlarmService.TYPE_NOSAKI);
+        aIntent.putExtra("data", nosakiAlarmData.toString());
+        PendingIntent pendingIntent = PendingIntent.getService(
+                getApplicationContext(),
+                getNotificationId(NOTI_NOSAKI, 0),
+                aIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+        long gain_time = KcaNosakiInfo.getNosakiGainTime();
+        if (gain_time > 0) setAlarm(gain_time, pendingIntent, getNotificationId(NOTI_NOSAKI, 0), false);
+    }
+
     private void toastInfo() {
         if (KcaFleetCheckPopupService.isActive()) {
             Intent qintent = new Intent(getBaseContext(), KcaFleetCheckPopupService.class);
@@ -1096,8 +1110,14 @@ public class KcaService extends BaseService {
                                     !nosaki_flagship_deck.isEmpty(),
                                     KcaNosakiInfo.getNosakiTimerValue() < 0,
                                     KcaNosakiInfo.isNosakiTimerOver(),
-                                    KcaNosakiInfo::setNosakiTimer,
-                                    KcaNosakiInfo::initNosakiTimer);
+                                    () -> {
+                                        KcaNosakiInfo.setNosakiTimer();
+                                        processNosakiTimerInfo();
+                                    },
+                                    () -> {
+                                        KcaNosakiInfo.initNosakiTimer();
+                                        processNosakiTimerInfo();
+                                    });
                             KcaNosakiInfo.setNosakiData(nosaki_flagship_deck);
 
                             KcaMoraleInfo.setDeckCount(portdeckdata.size());
@@ -1984,6 +2004,7 @@ public class KcaService extends BaseService {
                                 } else {
                                     KcaNosakiInfo.setNosakiTimer();
                                 }
+                                processNosakiTimerInfo();
                             }
 
                             for (int i = 0; i < portdeckdata.size(); i++) {
@@ -2812,6 +2833,22 @@ public class KcaService extends BaseService {
         Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
         notifiManager.cancel(nid);
         setAkashiAlarm(aIntent);
+    }
+
+    // replaces the port food supply alarm after the Nosaki timer starts again or stops
+    private void processNosakiTimerInfo() {
+        int nid = getNotificationId(NOTI_NOSAKI, 0);
+        PendingIntent pendingIntent = PendingIntent.getService(
+                getApplicationContext(),
+                nid,
+                new Intent(getApplicationContext(), KcaAlarmService.class),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+        pendingIntent.cancel();
+        alarmManager.cancel(pendingIntent);
+        Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
+        notifiManager.cancel(nid);
+        setNosakiAlarm(aIntent);
     }
 
     private boolean isCurrentPortDeckDataReady() {

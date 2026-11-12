@@ -20,6 +20,12 @@ public class KcaNosakiInfo {
     public static Map<Integer, Integer> nosaki_data = new HashMap<>();
     public static long nosaki_register_time = -1;
 
+    // when the first gain is ready, 15 minutes after the timer started; 0 if it is not running
+    public static long getNosakiGainTime() {
+        if (nosaki_register_time < 0) return 0;
+        return nosaki_register_time + TIMER_MS;
+    }
+
     public static void initNosakiTimer() {
         setNosakiTimer(-1);
         nosaki_data.clear();

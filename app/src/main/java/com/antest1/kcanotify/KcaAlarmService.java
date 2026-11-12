@@ -38,6 +38,7 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_NOTICOUNT_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_UPDATE_FRONTVIEW;
 import static com.antest1.kcanotify.KcaConstants.NOTI_AKASHI;
+import static com.antest1.kcanotify.KcaConstants.NOTI_NOSAKI;
 import static com.antest1.kcanotify.KcaConstants.NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.NOTI_EXP;
 import static com.antest1.kcanotify.KcaConstants.NOTI_MORALE;
@@ -45,6 +46,7 @@ import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_MUTE;
 import static com.antest1.kcanotify.KcaConstants.NOTI_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_ALARM_DELAY;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_AKASHI;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_NOSAKI;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_MORALE;
@@ -71,6 +73,7 @@ public class KcaAlarmService extends BaseService {
     public static final int TYPE_UPDATE = 3;
     public static final int TYPE_MORALE = 4;
     public static final int TYPE_AKASHI = 5;
+    public static final int TYPE_NOSAKI = 6;
 
     public static final int NOTI_ICON_SIZE = 128;
 
@@ -113,6 +116,10 @@ public class KcaAlarmService extends BaseService {
 
     private boolean isAkashiAlarmEnabled() {
         return getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_AKASHI);
+    }
+
+    private boolean isNosakiAlarmEnabled() {
+        return getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_NOSAKI);
     }
 
     public static int getAlarmCount() {
@@ -239,6 +246,14 @@ public class KcaAlarmService extends BaseService {
                             int nid = getNotificationId(NOTI_AKASHI, 0);
                             if (KcaAkashiRepairInfo.getAkashiInAnyFlagship()) {
                                 show_notification(nid, createAkashiRepairNotification(nid));
+                                alarm_set.add(nid);
+                            }
+                        }
+                    } else if (type == TYPE_NOSAKI) {
+                        if (isNosakiAlarmEnabled()) {
+                            int nid = getNotificationId(NOTI_NOSAKI, 0);
+                            if (KcaNosakiInfo.getNosakiInAnyFlagship()) {
+                                show_notification(nid, createNosakiGainNotification(nid));
                                 alarm_set.add(nid);
                             }
                         }
@@ -467,6 +482,44 @@ public class KcaAlarmService extends BaseService {
         NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
                 .setSmallIcon(R.mipmap.docking_notify_icon)
                 .setLargeIcon(akashiRepairBitmap)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setAutoCancel(false)
+                .setTicker(title)
+                .setDeleteIntent(deletePendingIntent)
+                .setContentIntent(contentPendingIntent);
+
+        builder = setSoundSetting(getApplicationContext(), mAudioManager, builder);
+        Notification Notifi = builder.build();
+        Notifi.flags = Notification.FLAG_AUTO_CANCEL;
+
+        if (sHandler != null) {
+            bundle = new Bundle();
+            bundle.putString("url", KCA_API_UPDATE_FRONTVIEW);
+            bundle.putString("data", "");
+            sMsg = sHandler.obtainMessage();
+            sMsg.setData(bundle);
+            sHandler.sendMessage(sMsg);
+        }
+        return Notifi;
+    }
+
+    private Notification createNosakiGainNotification(int nid) {
+        PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
+                new Intent(this, KcaAlarmService.class)
+                        .setAction(CLICK_ACTION.concat(String.valueOf(nid))),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
+                new Intent(this, KcaAlarmService.class)
+                        .setAction(DELETE_ACTION.concat(String.valueOf(nid))),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        String title = getString(R.string.kca_noti_title_nosaki_gain);
+        String content = getString(R.string.kca_noti_content_nosaki_gain);
+
+        Bitmap nosakiBitmap = KcaUtils.decodeSampledBitmapFromResource(getResources(), R.mipmap.nosaki_notify_bigicon, NOTI_ICON_SIZE, NOTI_ICON_SIZE);
+        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
+                .setSmallIcon(R.mipmap.nosaki_notify_icon)
+                .setLargeIcon(nosakiBitmap)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setAutoCancel(false)
