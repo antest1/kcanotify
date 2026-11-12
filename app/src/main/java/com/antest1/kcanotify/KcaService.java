@@ -44,9 +44,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
@@ -717,20 +714,10 @@ public class KcaService extends BaseService {
         boolean dev_flag = msg.getData().getBoolean("dev_flag");
 
         try {
-            Reader data = new InputStreamReader(new ByteArrayInputStream(raw));
-            String init = new String(Arrays.copyOfRange(raw, 0, 7));
-            if (init.contains("svdata=")) {
-                data.skip("svdata=".length());
-            }
-            if (raw.length > 0) {
-                JsonElement jsonData = gson.fromJson(data, JsonElement.class);
-                if (jsonData.isJsonObject()) {
-                    jsonDataObj = jsonData.getAsJsonObject();
-                } else {
-                    jsonDataObj = new JsonObject();
-                }
-            }
-            else jsonDataObj = new JsonObject();
+            // failed in KcaHandler: record it like a response that cannot be handled
+            if (msg.obj instanceof Exception) throw (Exception) msg.obj;
+            // parsed in KcaHandler, off the main thread
+            jsonDataObj = msg.obj instanceof JsonObject ? (JsonObject) msg.obj : KcaHandler.parseResponse(raw);
             if (url.equals(KCA_API_RESOURCE_URL)) {
                 dbHelper.recordErrorLog(ERROR_TYPE_VPN, KCA_API_RESOURCE_URL, "", "", request);
                 return;
