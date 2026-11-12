@@ -288,8 +288,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_title_morale">Morale</string>
     <string name="setting_menu_noti_desc_morale">Screen notification when a fleet recovers the morale minimum.</string>
     <string name="setting_menu_noti_title_morale_min">Morale Minimum</string>
-    <string name="setting_menu_noti_desc_morale_min">Range 1–54; natural cap 49, Nosaki/Nosaki Kai (APF) up to 54, APF not counted above 49.</string>
-    <string name="setting_menu_noti_morale_min_range">Value must be between 1 and 54.</string>
+    <string name="setting_menu_noti_desc_morale_min">Range 1–54, 49 naturally. An APF (Nosaki) as flagship or 2nd ship raises it to 54, excluding the APF itself above 49.</string>
+    <string name="setting_menu_noti_morale_min_range">Enter a value between 1 and 54.</string>
     <string name="setting_menu_noti_title_akashirepair">Anchorage Repair (Akashi Repair Timer)</string>
     <string name="setting_menu_noti_desc_akashirepair">Screen notification when anchorage repair begins.</string>
     <string name="setting_menu_noti_title_hdmg_vib">Heavy Damage Alert</string>
