@@ -889,20 +889,26 @@ public class KcaDeckInfo {
         return deck_id_list;
     }
 
+    // fleets with an APF (Nosaki) as the flagship or 2nd ship that meets the conditions
+    // (see KcaNosakiInfo.isNosakiEffective), and the morale gain per 15 minutes
     public JsonArray checkNosakiFlagship(JsonArray deckPortData) {
         JsonArray deck_id_list = new JsonArray();
         for (int i = 0; i < deckPortData.size(); i++) {
-            JsonArray deckShipIdList = deckPortData.get(i).getAsJsonObject().getAsJsonArray("api_ship");
+            JsonObject deck = deckPortData.get(i).getAsJsonObject();
+            JsonArray deckShipIdList = deck.getAsJsonArray("api_ship");
+            boolean onExpedition = deck.has("api_mission") && deck.getAsJsonArray("api_mission").get(0).getAsInt() != 0;
             int max_gain = 0;
             for (int j = 0; j < Math.min(2, deckShipIdList.size()); j++) {
                 int shipId = deckShipIdList.get(j).getAsInt();
                 if (shipId == -1) continue;
-                JsonObject shipData = getUserShipDataById(shipId, "ship_id");
+                JsonObject shipData = getUserShipDataById(shipId, "ship_id,nowhp,maxhp,cond,fuel,bull");
                 if (shipData != null && shipData.has("ship_id")) {
                     int kc_ship_id = shipData.get("ship_id").getAsInt();
                     int gain = kc_ship_id == KcaNosakiInfo.SHIP_ID_NOSAKI ? 2
                             : kc_ship_id == KcaNosakiInfo.SHIP_ID_NOSAKI_KAI ? 3 : 0;
-                    max_gain = Math.max(max_gain, gain);
+                    if (gain > 0 && isNosakiEffective(shipId, kc_ship_id, shipData, onExpedition)) {
+                        max_gain = Math.max(max_gain, gain);
+                    }
                 }
             }
             if (max_gain > 0) {
@@ -913,6 +919,20 @@ public class KcaDeckInfo {
             }
         }
         return deck_id_list;
+    }
+
+    private boolean isNosakiEffective(int shipId, int kcShipId, JsonObject shipData, boolean onExpedition) {
+        JsonObject kcShipData = getKcShipDataById(kcShipId, "fuel_max,bull_max");
+        String[] keys = {"nowhp", "maxhp", "cond", "fuel", "bull"};
+        for (String key : keys) {
+            if (!shipData.has(key)) return true; // not known: do not hide the gain
+        }
+        if (kcShipData == null || !kcShipData.has("fuel_max") || !kcShipData.has("bull_max")) return true;
+        return KcaNosakiInfo.isNosakiEffective(
+                shipData.get("nowhp").getAsInt(), shipData.get("maxhp").getAsInt(), shipData.get("cond").getAsInt(),
+                shipData.get("fuel").getAsInt(), kcShipData.get("fuel_max").getAsInt(),
+                shipData.get("bull").getAsInt(), kcShipData.get("bull_max").getAsInt(),
+                onExpedition, KcaDocking.checkShipInDock(shipId));
     }
 
     // Reference: http://kancolle.wikia.com/wiki/Land_Base_Aerial_Support#Fighter_Power_Calculations

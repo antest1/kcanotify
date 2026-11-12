@@ -1371,6 +1371,11 @@ public class KcaService extends BaseService {
                     if (jsonDataObj.has("api_data")) {
                         JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                         KcaApiData.updateSuppliedUserShip(api_data.getAsJsonArray("api_ship"));
+                        // supply is one of the conditions of the APF morale gain
+                        JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+                        if (portdeckdata != null) {
+                            KcaNosakiInfo.setNosakiData(deckInfoCalc.checkNosakiFlagship(portdeckdata));
+                        }
                     }
                 }
 

@@ -115,6 +115,7 @@ public class KcaFleetViewService extends BaseService {
     Runnable timer;
     String fleetCalcInfoText = "";
     int akashiAvailableCount = 0;
+    int nosakiMoraleGain = 0;
     ScheduledExecutorService timeScheduler = null;
 
     static int view_status = 0;
@@ -874,6 +875,7 @@ public class KcaFleetViewService extends BaseService {
         }
 
         akashiAvailableCount = KcaAkashiRepairInfo.getAkashiAvailableCount(idx);
+        nosakiMoraleGain = KcaNosakiInfo.getNosakiMoraleGain(idx);
 
         infoList.add("LV ".concat(String.valueOf(sum_level)));
         fleetCalcInfoText = joinStr(infoList, " / ");
@@ -962,8 +964,8 @@ public class KcaFleetViewService extends BaseService {
         }
 
         final String akashi_timer_text = KcaUtils.getTimeStr(KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond());
-        final String nosaki_timer_text = getString(R.string.fleetview_nosaki_timer,
-                KcaUtils.getTimeStr(KcaNosakiInfo.getNosakiRemainingTimeInSecond()));
+        // counts up like the Akashi timer: the gain stacks every 15 minutes until the next port visit
+        final String nosaki_timer_text = KcaUtils.getTimeStr(KcaNosakiInfo.getNosakiElapsedTimeInSecond());
 
         mHandler.post(() -> {
             if (isReady && !displayText.isEmpty()) {
@@ -996,15 +998,18 @@ public class KcaFleetViewService extends BaseService {
                 }
 
                 long nosakiTimerValue = KcaNosakiInfo.getNosakiTimerValue();
-                boolean isNosakiActive = nosakiTimerValue >= 0 && KcaNosakiInfo.getNosakiInAnyFlagship();
-                if (isNosakiActive) {
-                    fleetNosakiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetNosakiTimerBtnActive));
+                if (nosakiTimerValue < 0) {
+                    fleetNosakiTimerBtn.setVisibility(View.GONE);
+                } else {
+                    if (nosakiMoraleGain > 0) {
+                        fleetNosakiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetNosakiTimerBtnActive));
+                    } else {
+                        fleetNosakiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetNosakiTimerBtnDeactive));
+                    }
                     if (!nosaki_timer_text.contentEquals(fleetNosakiTimerBtn.getText())) {
                         fleetNosakiTimerBtn.setText(nosaki_timer_text);
                     }
                     fleetNosakiTimerBtn.setVisibility(VISIBLE);
-                } else {
-                    fleetNosakiTimerBtn.setVisibility(View.GONE);
                 }
             } else {
                 if (!getString(R.string.kca_init_content).contentEquals(fleetInfoLine.getText())) {
