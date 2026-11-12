@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -58,6 +59,19 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     private static final String questlist_table_name = "kca_questlist";
 
     private KcaQuestTracker qt;
+
+    // time spent in putValue and putBulkItemValue on the main thread, for slow packet logs
+    private static long mainThreadWriteNanos = 0;
+
+    public static long getMainThreadWriteNanos() {
+        return mainThreadWriteNanos;
+    }
+
+    private static void addMainThreadWriteTime(long startNanos) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            mainThreadWriteNanos += System.nanoTime() - startNanos;
+        }
+    }
 
     public KcaDBHelper(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, db_name, factory, version);
@@ -298,6 +312,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void putValue(String key, String value) {
+        long startNanos = System.nanoTime();
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("KEY", key);
@@ -306,6 +321,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         if (u == 0) {
             db.insertWithOnConflict(table_name, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         }
+        addMainThreadWriteTime(startNanos);
     }
 
     public int getShipCount() {
@@ -388,6 +404,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void putBulkItemValue(JsonArray api_data) {
+        long startNanos = System.nanoTime();
         SQLiteDatabase db = null;
         SQLiteStatement statement;
         try {
@@ -416,6 +433,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             if (db != null) {
                 db.endTransaction();
             }
+            addMainThreadWriteTime(startNanos);
         }
     }
 

@@ -23,6 +23,8 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.StrictMode;
+import android.os.SystemClock;
 import android.os.Vibrator;
 
 import androidx.annotation.NonNull;
@@ -88,6 +90,8 @@ public class KcaService extends BaseService {
     public static final String SERVICE_CHANNEL_NAME = "Kcanotify Service";
     public static final String SERVICE_STATUS_CHANNEL_ID = "kcaservice_status_channel";
     public static final String SERVICE_STATUS_CHANNEL_NAME = "Kcanotify Service Status";
+    private static final String CRASHLYTICS_KEY_PACKET_API = "packet_api";
+    private static final long SLOW_PACKET_MILLIS = 200;
     private boolean foregroundStartBlocked = false;
 
     public static boolean isInitState = false;
@@ -194,6 +198,11 @@ public class KcaService extends BaseService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.getAction() != null) {
             if (KCASERVICE_START.equals(intent.getAction())) {
+                if (BuildConfig.DEBUG) {
+                    // list disk access on the main thread in logcat
+                    StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                            .detectDiskReads().detectDiskWrites().penaltyLog().build());
+                }
                 isServiceOn = true;
                 isFirstState = true;
                 restartFlag = true;
@@ -664,9 +673,33 @@ public class KcaService extends BaseService {
         @Override
         public void handleMessage(@NonNull Message msg) {
             KcaService service = mService.get();
-            if (service != null) {
+            if (service == null) return;
+
+            // an ANR happens while a packet is handled: keep its API in the report, and log slow ones
+            String api = getApiPath(msg.getData().getString("url"));
+            FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
+            crashlytics.setCustomKey(CRASHLYTICS_KEY_PACKET_API, api);
+            long startTime = SystemClock.uptimeMillis();
+            long startWriteNanos = KcaDBHelper.getMainThreadWriteNanos();
+            try {
                 service.handleServiceMessage(msg);
+            } finally {
+                crashlytics.setCustomKey(CRASHLYTICS_KEY_PACKET_API, "");
+                long time = SystemClock.uptimeMillis() - startTime;
+                if (time >= SLOW_PACKET_MILLIS) {
+                    long writeTime = TimeUnit.NANOSECONDS.toMillis(KcaDBHelper.getMainThreadWriteNanos() - startWriteNanos);
+                    String message = KcaUtils.format("slow packet %s: %dms (db write %dms)", api, time, writeTime);
+                    crashlytics.log(message);
+                    Log.w("KCA", message);
+                }
             }
+        }
+
+        // only the path of the API, without the host, parameters or body, so no game data goes to Crashlytics
+        private static String getApiPath(String url) {
+            if (url == null) return "";
+            String path = Uri.parse(url).getPath();
+            return path != null ? path : "";
         }
     }
 
