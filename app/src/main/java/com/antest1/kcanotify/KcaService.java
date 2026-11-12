@@ -46,12 +46,14 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -89,6 +91,8 @@ public class KcaService extends BaseService {
     public static final String SERVICE_STATUS_CHANNEL_NAME = "Kcanotify Service Status";
     private static final String CRASHLYTICS_KEY_PACKET_API = "packet_api";
     private static final long SLOW_PACKET_MILLIS = 200;
+    // writes responses as received off the main thread, in the order they came
+    private static final ExecutorService responseWriter = Executors.newSingleThreadExecutor();
     private boolean foregroundStartBlocked = false;
 
     public static boolean isInitState = false;
@@ -723,7 +727,11 @@ public class KcaService extends BaseService {
                 return;
             }
             if (getBooleanPreferences(getApplicationContext(), PREF_PACKET_LOG)) {
-                packetLogger.log(url, request, jsonDataObj.toString());
+                // the response as received, written off the main thread
+                KcaPacketLogger logger = packetLogger;
+                int offset = KcaHandler.getJsonOffset(raw);
+                responseWriter.execute(() -> logger.log(url, request,
+                        new String(raw, offset, raw.length - offset, StandardCharsets.UTF_8)));
             }
 
             if (poiApiClient != null) poiApiClient.setDevFlag(dev_flag);
@@ -787,7 +795,10 @@ public class KcaService extends BaseService {
 
             if (url.equals(API_START2) || url.equals(API_START2_NEW)) {
                 if (jsonDataObj.has("api_data")) {
-                    KcaGameDataStore.save(getApplicationContext(), jsonDataObj);
+                    // the response as received, so it is not written back to text from the parsed object
+                    Context context = getApplicationContext();
+                    int offset = KcaHandler.getJsonOffset(raw);
+                    responseWriter.execute(() -> KcaGameDataStore.save(context, raw, offset));
                     //Toast.makeText(this, "Load Kancolle Data", Toast.LENGTH_LONG).show();
                     // the game does not tell the data version; KcaGameDataChecker syncs it with the server
                     KcaApiData.getKcGameData(jsonDataObj.getAsJsonObject("api_data"));

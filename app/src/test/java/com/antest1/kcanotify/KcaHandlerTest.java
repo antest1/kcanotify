@@ -17,6 +17,13 @@ public class KcaHandlerTest {
     }
 
     @Test
+    public void findsJsonAfterSvdataPrefix() {
+        assertEquals(7, KcaHandler.getJsonOffset("svdata={}".getBytes(StandardCharsets.UTF_8)));
+        assertEquals(0, KcaHandler.getJsonOffset("{}".getBytes(StandardCharsets.UTF_8)));
+        assertEquals(0, KcaHandler.getJsonOffset(new byte[0]));
+    }
+
+    @Test
     public void removesSvdataPrefix() throws IOException {
         assertEquals(JsonParser.parseString("{\"api_result\":1,\"api_data\":{\"api_id\":[1,2]}}"),
                 parse("svdata={\"api_result\":1,\"api_data\":{\"api_id\":[1,2]}}"));

@@ -53,15 +53,18 @@ public class KcaHandler implements Runnable {
         gzipped = gz;
     }
 
+    // where the JSON of a response starts: game API responses begin with "svdata="
+    static int getJsonOffset(byte[] raw) {
+        String init = new String(Arrays.copyOfRange(raw, 0, 7));
+        return init.contains("svdata=") ? "svdata=".length() : 0;
+    }
+
     // parses a response off the main thread, the way the service did: lenient, without the "svdata=" prefix.
     // an empty response or one that is not an object gives an empty object
-    static JsonObject parseResponse(byte[] raw) throws IOException {
+    static JsonObject parseResponse(byte[] raw) {
         if (raw.length == 0) return new JsonObject();
-        Reader data = new InputStreamReader(new ByteArrayInputStream(raw));
-        String init = new String(Arrays.copyOfRange(raw, 0, 7));
-        if (init.contains("svdata=")) {
-            data.skip("svdata=".length());
-        }
+        int offset = getJsonOffset(raw);
+        Reader data = new InputStreamReader(new ByteArrayInputStream(raw, offset, raw.length - offset));
         JsonElement jsonData = gson.fromJson(data, JsonElement.class);
         return jsonData.isJsonObject() ? jsonData.getAsJsonObject() : new JsonObject();
     }
