@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.view.MenuCompat;
@@ -165,6 +166,12 @@ public class UpdateCheckActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rescheck);
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                goBack();
+            }
+        });
 
         Intent intent = getIntent();
         mainFlag = intent.getBooleanExtra(EXTRA_MAIN_FLAG, false);
@@ -232,15 +239,6 @@ public class UpdateCheckActivity extends BaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mainFlag) {
-            goBack();
-        } else {
-            super.onBackPressed();
-        }
     }
 
     private void goBack() {

@@ -28,6 +28,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import androidx.activity.OnBackPressedCallback;
 import android.provider.Settings;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -259,6 +260,12 @@ public class MainActivity extends BaseActivity {
         textDescription.setText(fromHtml);
 
         backPressCloseHandler = new BackPressCloseHandler();
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                backPressCloseHandler.onBackPressed();
+            }
+        });
 
         ImageView specialImage = findViewById(R.id.special_image);
         specialImage.setImageResource(R.mipmap.special_image);
@@ -521,11 +528,6 @@ public class MainActivity extends BaseActivity {
                 Toast.makeText(getApplicationContext(), getString(R.string.ma_permission_service_restart), Toast.LENGTH_LONG).show();
             setWarning();
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        backPressCloseHandler.onBackPressed();
     }
 
     private void showWebPage(String url) {

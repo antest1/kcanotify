@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import androidx.activity.OnBackPressedCallback;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.widget.Toolbar;
 import android.util.SparseArray;
@@ -53,6 +54,12 @@ public class ShipInfoSortActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipinfo_sort);
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                setValueAndFinish();
+            }
+        });
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.shipinfo_btn_sort));
@@ -167,11 +174,6 @@ public class ShipInfoSortActivity extends BaseActivity {
         finish();
     }
 
-
-    @Override
-    public void onBackPressed() {
-        setValueAndFinish();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
