@@ -186,6 +186,13 @@
                 android:value="com.antest1.kcanotify.SettingActivity" />
         </activity>
         <activity
+            android:name="com.antest1.kcanotify.KcaNotificationLaunchActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:exported="false" />
+        <activity
             android:name="com.antest1.kcanotify.InitStartActivity"
             android:exported="true"
             android:launchMode="singleTask">

@@ -234,10 +234,9 @@ public class MitmAddon {
         intent.setComponent(new ComponentName(MitmAPI.PACKAGE_NAME, MitmAPI.MITM_SERVICE));
 
         int flags = Context.BIND_AUTO_CREATE | extra_flags;
-        /* TODO: add BIND_ALLOW_ACTIVITY_STARTS for API 34+
-        if (Build.VERSION.SDK_INT >= 34) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             flags |= Context.BIND_ALLOW_ACTIVITY_STARTS;
-        }*/
+        }
         if(!mContext.bindService(intent, mConnection, flags)) {
             try {
                 mContext.unbindService(mConnection);

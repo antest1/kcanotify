@@ -61,7 +61,6 @@ import static com.antest1.kcanotify.KcaUtils.createBuilder;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getUriFromContent;
 import static com.antest1.kcanotify.KcaUtils.getId;
-import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getNotificationId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -86,9 +85,10 @@ public class KcaAlarmService extends BaseService {
     private static Queue<String> alarmChannelList = EvictingQueue.create(4);
 
     public static final String ACTION_PREFIX = "action_";
-    public static final String CLICK_ACTION = "action_click_";
     public static final String DELETE_ACTION = "action_delete_";
-    public static final String UPDATE_ACTION = "action_update_";
+    // sent by notifications posted before the app was updated
+    private static final String LEGACY_CLICK_ACTION = "action_click_";
+    private static final String LEGACY_UPDATE_ACTION = "action_update_";
     public static final String REFRESH_CHANNEL = "refresh_channel";
 
     AudioManager mAudioManager;
@@ -161,22 +161,15 @@ public class KcaAlarmService extends BaseService {
                 Log.e("KCA-A", REFRESH_CHANNEL + " recv: " + uri);
                 createAlarmChannel(uri);
             } else if (action.startsWith(ACTION_PREFIX)) {
-                if (action.startsWith(CLICK_ACTION)) {
-                    Intent kcintent = getKcIntent(getApplicationContext());
-                    if (kcintent != null) {
-                        kcintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        PendingIntent pintent = PendingIntent.getActivity(getApplicationContext(), 0, kcintent, PendingIntent.FLAG_IMMUTABLE);
-                        try {
-                            pintent.send();
-                        } catch (PendingIntent.CanceledException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                if (action.startsWith(UPDATE_ACTION)) {
-                    Intent i = new Intent(this, MainActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(i);
+                // notifications posted before the app was updated still open through this
+                // service; Android 12 and above block that, as they did before
+                if (action.startsWith(LEGACY_CLICK_ACTION) || action.startsWith(LEGACY_UPDATE_ACTION)) {
+                    String target = action.startsWith(LEGACY_UPDATE_ACTION)
+                            ? KcaNotificationLaunchActivity.TARGET_MAIN
+                            : KcaNotificationLaunchActivity.TARGET_GAME;
+                    startActivity(new Intent(this, KcaNotificationLaunchActivity.class)
+                            .putExtra(KcaNotificationLaunchActivity.EXTRA_TARGET, target)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
                 String[] action_list = action.split("_");
                 if (action_list.length == 3) {
@@ -335,10 +328,19 @@ public class KcaAlarmService extends BaseService {
         createAlarmChannel(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
     }
 
-    private Notification createExpeditionNotification(int missionNo, String missionName, String kantaiName, boolean cancelFlag, boolean caFlag, int nid) {
-        PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION.concat(String.valueOf(nid))),
+    // Notifications open an activity directly; see KcaNotificationLaunchActivity
+    private PendingIntent createContentIntent(int nid, String target) {
+        Intent intent = new Intent(this, KcaNotificationLaunchActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                .putExtra(KcaNotificationLaunchActivity.EXTRA_NID, nid)
+                .putExtra(KcaNotificationLaunchActivity.EXTRA_TARGET, target);
+        // extras do not tell PendingIntents apart, so each notification needs its own request code
+        return PendingIntent.getActivity(this, nid, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+    }
+
+    private Notification createExpeditionNotification(int missionNo, String missionName, String kantaiName, boolean cancelFlag, boolean caFlag, int nid) {
+        PendingIntent contentPendingIntent = createContentIntent(nid, KcaNotificationLaunchActivity.TARGET_GAME);
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
                 new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
@@ -384,9 +386,7 @@ public class KcaAlarmService extends BaseService {
     }
 
     private Notification createDockingNotification(int dockId, String shipName, int nid) {
-        PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION.concat(String.valueOf(nid))),
-                PendingIntent.FLAG_UPDATE_CURRENT| PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent contentPendingIntent = createContentIntent(nid, KcaNotificationLaunchActivity.TARGET_GAME);
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
                 new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
@@ -426,10 +426,7 @@ public class KcaAlarmService extends BaseService {
     }
 
     private Notification createMoraleNotification(int idx, String kantaiName, int nid) {
-        PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class)
-                        .setAction(CLICK_ACTION.concat(String.valueOf(nid))),
-                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent contentPendingIntent = createContentIntent(nid, KcaNotificationLaunchActivity.TARGET_GAME);
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
                 new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
@@ -463,10 +460,7 @@ public class KcaAlarmService extends BaseService {
     }
 
     private Notification createAkashiRepairNotification(int nid) {
-        PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class)
-                        .setAction(CLICK_ACTION.concat(String.valueOf(nid))),
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent contentPendingIntent = createContentIntent(nid, KcaNotificationLaunchActivity.TARGET_GAME);
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
                 new Intent(this, KcaAlarmService.class)
                         .setAction(DELETE_ACTION.concat(String.valueOf(nid))),
@@ -501,10 +495,7 @@ public class KcaAlarmService extends BaseService {
     }
 
     private Notification createNosakiGainNotification(int nid) {
-        PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class)
-                        .setAction(CLICK_ACTION.concat(String.valueOf(nid))),
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent contentPendingIntent = createContentIntent(nid, KcaNotificationLaunchActivity.TARGET_GAME);
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
                 new Intent(this, KcaAlarmService.class)
                         .setAction(DELETE_ACTION.concat(String.valueOf(nid))),
@@ -539,10 +530,7 @@ public class KcaAlarmService extends BaseService {
     }
 
     private Notification createUpdateNotification(int type, String version, int nid) {
-        PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class)
-                        .setAction(UPDATE_ACTION.concat(String.valueOf(nid))),
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent contentPendingIntent = createContentIntent(nid, KcaNotificationLaunchActivity.TARGET_MAIN);
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
                 new Intent(this, KcaAlarmService.class)
                         .setAction(DELETE_ACTION.concat(String.valueOf(nid))),
