@@ -46,10 +46,6 @@ public class SettingActivity extends BaseActivity implements MainPreferenceFragm
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     public void onNestedPreferenceSelected(int key) {

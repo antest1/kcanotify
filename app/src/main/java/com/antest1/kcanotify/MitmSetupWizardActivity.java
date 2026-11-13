@@ -39,10 +39,6 @@ public class MitmSetupWizardActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

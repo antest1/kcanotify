@@ -94,10 +94,6 @@ public class KcaBackupActivity extends BaseActivity {
         backup_list.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

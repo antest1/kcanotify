@@ -1,13 +1,13 @@
 package com.antest1.kcanotify;
 
 import com.antest1.kcanotify.remote_capture.MitmAddon;
+import com.antest1.kcanotify.viewmodel.MainViewModel;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.common.io.ByteStreams;
 import com.google.gson.JsonObject;
 
 import android.Manifest;
@@ -18,19 +18,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.AssetManager;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
-import android.media.AudioManager;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.preference.PreferenceManager;
 import android.provider.Settings;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -44,6 +41,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.text.HtmlCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.text.Html;
 import android.text.Spanned;
@@ -59,8 +57,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -92,12 +88,8 @@ public class MainActivity extends BaseActivity {
     public static final int REQUEST_NOTIFICATION_PERMISSION = 4;
     public static final int REQUEST_EXACT_ALARM_PERMISSION = 5;
 
-    AudioManager audioManager;
-    AssetManager assetManager;
-    KcaDBHelper dbHelper;
     Toolbar toolbar;
     Snackbar snackbar;
-    KcaDownloader downloader;
     MaterialButton vpnbtn, svcbtn;
     Button kcbtn;
     MenuItem fairyButton;
@@ -110,7 +102,7 @@ public class MainActivity extends BaseActivity {
 
     ActivityResultLauncher<Intent> vpnPrepareLauncher, exactAlarmPrepareLauncher;
 
-    SharedPreferences prefs;
+    MainViewModel viewModel;
     private BackPressCloseHandler backPressCloseHandler;
     private boolean mToolOpened = false;
     private boolean vpnFirstPrepared = false;
@@ -128,17 +120,11 @@ public class MainActivity extends BaseActivity {
         if (savedInstanceState != null && ACTION_RESTART_SERVICE.equals(getIntent().getAction())) {
             getIntent().setAction(null);
         }
-        prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        assetManager = getAssets();
-        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        viewModel.refreshStatusFromServices();
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
-        prefs.edit().putBoolean(PREF_SVC_ENABLED, KcaService.getServiceStatus()).apply();
-        prefs.edit().putBoolean(PREF_VPN_ENABLED, KcaVpnService.checkOn()).apply();
-
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        downloader = KcaUtils.getInfoDownloader(getApplicationContext());
 
         vpnPrepareLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -158,8 +144,10 @@ public class MainActivity extends BaseActivity {
                 svcbtn.setText(isChecked ? getString(R.string.ma_svc_toggleon) : getString(R.string.ma_svc_toggleoff));
                 if (isChecked) {
                     if (checkNotificationPermission() && checkExactAlarmPermission()) {
-                        if (!prefs.getBoolean(PREF_SVC_ENABLED, false))
-                            startKcaService();
+                        if (!viewModel.isServiceEnabled()) {
+                            sendUserAnalytics(getApplicationContext(), START_SERVICE, null);
+                            viewModel.startKcaService(getApplicationContext());
+                        }
                     } else {
                         if (!checkNotificationPermission())
                             grantNotificationPermission();
@@ -167,7 +155,8 @@ public class MainActivity extends BaseActivity {
                             grantExactAlarmPermission();
                     }
                 } else {
-                    stopKcaService();
+                    viewModel.stopKcaService(getApplicationContext());
+                    sendUserAnalytics(getApplicationContext(), END_SERVICE, null);
                 }
             } else if (checkedId == R.id.vpnbtn) {
                 vpnbtn.setText(isChecked ? getString(R.string.ma_vpn_toggleon) : getString(R.string.ma_vpn_toggleoff));
@@ -183,7 +172,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        int sniffer_mode = getSnifferMode();
+        int sniffer_mode = viewModel.getSnifferMode();
         vpnbtn.setEnabled(sniffer_mode == SNIFFER_ACTIVE);
         if (sniffer_mode != SNIFFER_ACTIVE) {
             vpnbtn.setText("PASSIVE");
@@ -256,14 +245,7 @@ public class MainActivity extends BaseActivity {
         }
 
 
-        String main_html;
-        try {
-            InputStream ais = assetManager.open("main-".concat(getResourceLocaleCode()).concat(".html"));
-            byte[] bytes = ByteStreams.toByteArray(ais);
-            main_html = new String(bytes);
-        } catch (IOException e) {
-            main_html = "Error loading html file.";
-        }
+        String main_html = viewModel.loadMainHtml();
 
         textMainUpdate = findViewById(R.id.textMainUpdate);
         textMainUpdate.setText(getString(R.string.setting_menu_kand_title_game_data_down));
@@ -294,25 +276,6 @@ public class MainActivity extends BaseActivity {
         textSpecial2 = findViewById(R.id.textSpecial2);
         textSpecial2.setText(getString(R.string.notification_message));
         textSpecial2.setOnClickListener(v -> showWebPage(KCANOTIFY_NOTICE_LINK));
-    }
-
-    private void startKcaService() {
-        Intent serviceIntent = new Intent(MainActivity.this, KcaService.class);
-        sendUserAnalytics(getApplicationContext(), START_SERVICE, null);
-        serviceIntent.setAction(KcaService.KCASERVICE_START);
-        if (Build.VERSION.SDK_INT >= 26) {
-            startForegroundService(serviceIntent);
-        } else {
-            startService(serviceIntent);
-        }
-    }
-
-    private void stopKcaService() {
-        Intent serviceIntent = new Intent(MainActivity.this, KcaService.class);
-        serviceIntent.setAction(KcaService.KCASERVICE_STOP);
-        startService(serviceIntent);
-        sendUserAnalytics(getApplicationContext(), END_SERVICE, null);
-        prefs.edit().putBoolean(PREF_SVC_ENABLED, false).apply();
     }
 
     @Override
@@ -348,9 +311,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!vpnFirstPrepared && getSnifferMode() == SNIFFER_ACTIVE) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            prefs.edit().putBoolean(PREF_VPN_ENABLED, KcaVpnService.checkOn()).commit();
+        if (!vpnFirstPrepared && viewModel.getSnifferMode() == SNIFFER_ACTIVE) {
+            viewModel.setVpnEnabledSync(KcaVpnService.checkOn());
         }
         setVpnBtn();
         setCheckBtn();
@@ -396,15 +358,10 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
 
     @Override
     protected void onDestroy() {
         sendUserAnalytics(getApplicationContext(), END_APP, null);
-        dbHelper.close();
         super.onDestroy();
     }
 
@@ -458,19 +415,14 @@ public class MainActivity extends BaseActivity {
     }
 
     public final int getSnifferMode() {
-        if (KC_PACKAGE_NAME.equals(getStringPreferences(getApplicationContext(), PREF_KC_PACKAGE))) {
-            return SNIFFER_ACTIVE;
-        } else {
-            return Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE));
-        }
+        return viewModel.getSnifferMode();
     }
     public void setVpnBtn() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (getSnifferMode() == SNIFFER_ACTIVE) {
-            boolean isChecked = prefs.getBoolean(PREF_VPN_ENABLED, false);
-            vpnbtn.setText(isChecked ? getString(R.string.ma_vpn_toggleon) : getString(R.string.ma_vpn_toggleoff));
+        MainViewModel.VpnButtonState state = viewModel.getVpnButtonState();
+        if (state.enabled) {
+            vpnbtn.setText(getString(state.textResId));
             vpnbtn.setEnabled(true);
-            vpnbtn.setChecked(isChecked);
+            vpnbtn.setChecked(state.checked);
         } else {
             vpnbtn.setText("PASSIVE");
             vpnbtn.setEnabled(false);
@@ -478,8 +430,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void setCheckBtn() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        svcbtn.setChecked(prefs.getBoolean(PREF_SVC_ENABLED, false));
+        svcbtn.setChecked(viewModel.isServiceChecked());
     }
 
     @Override
@@ -506,23 +457,15 @@ public class MainActivity extends BaseActivity {
     }
 
     private boolean checkOverlayPermission() {
-        return Settings.canDrawOverlays(getApplicationContext());
+        return viewModel.checkOverlayPermission();
     }
 
     private boolean checkNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
-        }
-        return true;
+        return viewModel.checkNotificationPermission();
     }
 
     private boolean checkExactAlarmPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            return alarmManager.canScheduleExactAlarms();
-        }
-        return true;
+        return viewModel.checkExactAlarmPermission();
     }
 
     private void grantNotificationPermission() {
@@ -565,8 +508,7 @@ public class MainActivity extends BaseActivity {
 
     public void startActivityResultCallback(int type, int resultCode) {
         if (type == REQUEST_VPN) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            prefs.edit().putBoolean(PREF_VPN_ENABLED, resultCode == RESULT_OK).apply();
+            viewModel.setVpnEnabled(resultCode == RESULT_OK);
             if (resultCode == RESULT_OK) {
                 vpnFirstPrepared = true;
                 KcaVpnService.start("prepared", this);
@@ -627,8 +569,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void stopVpnService() {
-        KcaVpnService.stop(VPN_STOP_REASON, MainActivity.this);
-        prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+        viewModel.stopVpnService(getApplicationContext());
         vpnbtn.setChecked(false);
         sendUserAnalytics(getApplicationContext(), END_SNIFFER, null);
     }

@@ -64,10 +64,6 @@ public class PackageFilterActivity extends BaseActivity {
         }).start();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

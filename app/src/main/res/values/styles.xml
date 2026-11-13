@@ -16,10 +16,6 @@
     <style name="AppThemeDark" parent="Theme.Material3.Dark.NoActionBar">
     </style>
 
-    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-    </style>
-
     <style name="TextAppearance.AppCompat.Button.Custom">
         <item name="android:textColor">@color/colorBtnText</item>
     </style>

@@ -58,10 +58,6 @@ public class KcaFleetViewItemSelectActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     private int getUseItemIdByIndex(int idx) {
        if (idx == 0) return -1;

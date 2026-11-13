@@ -3,10 +3,7 @@
     <dimen name="activity_horizontal_margin">18dp</dimen>
     <dimen name="activity_vertical_margin">18dp</dimen>
 
-    <dimen name="activity_main_btn_size_top">64dp</dimen>
     <dimen name="activity_main_btn_textsize">22sp</dimen>
-    <dimen name="activity_main_btn_fairy_padding">12dp</dimen>
-    <dimen name="activity_main_btn_tools_padding">14dp</dimen>
     <dimen name="activity_text_size">22sp</dimen>
 
     <dimen name="view_text_title">22dp</dimen>
@@ -43,7 +40,6 @@
     <dimen name="battleview_hp_height">6dp</dimen>
     <dimen name="battleview_padding">12dp</dimen>
     <dimen name="battleview_nodeinfo_minwidth">96dp</dimen>
-    <dimen name="battleview_nodeinfo_margin">20dp</dimen>
 
     <dimen name="item_popup_icon_size">20dp</dimen>
     <dimen name="item_popup_text_size_large">16dp</dimen>
@@ -57,12 +53,8 @@
     <dimen name="button_size_xlarge">144dp</dimen>
     <dimen name="button_select_size">72dp</dimen>
 
-    <dimen name="text_description_medium">20dp</dimen>
-    <dimen name="text_description_small">15dp</dimen>
-
     <dimen name="excheckview_text_tbutton">20dp</dimen>
     <dimen name="excheckview_text_statusarea">18dp</dimen>
-    <dimen name="excheckview_text_cbutton">20dp</dimen>
     <dimen name="excheckview_popup_width">350dp</dimen>
     <dimen name="excheckview_label_width">96dp</dimen>
 
@@ -70,7 +62,6 @@
     <dimen name="popup_text_normal">20dp</dimen>
     <dimen name="popup_text_small">16dp</dimen>
     <dimen name="popup_text_xsmall">13dp</dimen>
-    <dimen name="popup_text_xxsmall">10dp</dimen>
     <dimen name="popup_item_icon_size">28dp</dimen>
     <dimen name="popup_item_icon_size_large">35dp</dimen>
     <dimen name="popup_t2_width">350dp</dimen>
@@ -80,7 +71,6 @@
 
 
     <dimen name="aircombat_text_mid">12dp</dimen>
-    <dimen name="aircombat_mid_width">140dp</dimen>
 
     <dimen name="toast_text_size">24dp</dimen>
     <dimen name="toast_margin_tb">6dp</dimen>

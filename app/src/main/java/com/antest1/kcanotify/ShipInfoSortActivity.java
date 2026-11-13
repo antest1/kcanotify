@@ -167,10 +167,6 @@ public class ShipInfoSortActivity extends BaseActivity {
         finish();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     public void onBackPressed() {
