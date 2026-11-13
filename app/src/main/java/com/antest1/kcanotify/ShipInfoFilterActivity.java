@@ -525,10 +525,6 @@ public class ShipInfoFilterActivity extends BaseActivity {
         finish();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     public void onBackPressed() {

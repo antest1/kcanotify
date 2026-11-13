@@ -106,10 +106,6 @@ public class EquipmentListFilterActivity extends BaseActivity {
     @Override
     public void onBackPressed() { setValueAndFinish(); }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

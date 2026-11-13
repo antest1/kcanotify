@@ -274,10 +274,6 @@ public class KcaAlarmService extends BaseService {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
     public static String createAlarmId(String uri, String sound_kind) {
         if (NOTI_SOUND_KIND_VIBRATE.equals(sound_kind) || NOTI_SOUND_KIND_MUTE.equals(sound_kind)) {

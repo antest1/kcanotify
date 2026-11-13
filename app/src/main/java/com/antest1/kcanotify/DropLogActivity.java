@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -23,80 +24,45 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.antest1.kcanotify.viewmodel.DropLogViewModel;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DROPLOG_VERSION;
-
 
 public class DropLogActivity extends BaseActivity {
-    public static final long DAY_MILLISECOND = 86400000;
-
-    public static final int RANK_S = 32;
-    public static final int RANK_A = 16;
-    public static final int RANK_B = 8;
-    public static final int RANK_C = 4;
-    public static final int RANK_D = 2;
-    public static final int RANK_E = 1;
 
     Toolbar toolbar;
-    KcaDBHelper dbHelper;
-    KcaDropLogger dropLogger;
     KcaDroplogItemAdpater adapter;
     String[] maprank_info = new String[5];
-    String[] map_list = {};
-    String[] node_list = {};
 
-    JsonObject condition_data = new JsonObject();
     TextView start_date, end_date, row_count;
     Spinner sp_world, sp_map, sp_node, sp_maprank;
     ImageView showhide_btn;
     CheckBox chkbox_desc, chkbox_boss, chkbox_s, chkbox_a, chkbox_b, chkbox_x;
     boolean is_hidden = false;
     boolean is_exporting = false;
-    int rank_flag = RANK_S | RANK_A | RANK_B;
-    int current_world, current_map, current_node;
     Button btn_search;
     ListView droplog_listview;
     String[] world_list = {"*", "1", "2", "3", "4", "5", "6", "7"};
+
+    DropLogViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_droplog_list);
+        viewModel = new ViewModelProvider(this).get(DropLogViewModel.class);
+        viewModel.init();
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.action_droplog));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-        dropLogger = new KcaDropLogger(getApplicationContext(), null, KCANOTIFY_DROPLOG_VERSION);
-        KcaApiData.setDBHelper(dbHelper);
-        setDefaultGameData();
-
-        // downloaded file first (falls back to the bundled asset)
-        JsonArray appWorldListData = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "world_list.json", dbHelper);
-        if (appWorldListData != null) {
-            world_list = new String[appWorldListData.size()];
-            for (int i = 0; i < world_list.length; i++) {
-                world_list[i] = appWorldListData.get(i).getAsString();
-            }
-        }
+        world_list = viewModel.getWorldList();
 
         showhide_btn = findViewById(R.id.droplog_showhide);
         showhide_btn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
@@ -113,13 +79,7 @@ public class DropLogActivity extends BaseActivity {
             }
         });
 
-        maprank_info[0] = "-";
-        for (int i = 1; i < maprank_info.length; i++) {
-            maprank_info[i] = getString(KcaUtils.getId("maprank_" + i, R.string.class));
-        }
-        KcaDropLogger.maprank_info = maprank_info;
-        KcaDropLogger.ship_none = getString(R.string.droplog_ship_none);
-        KcaDropLogger.ship_full = getString(R.string.droplog_ship_full);
+        maprank_info = viewModel.getMaprankInfo();
         KcaDroplogItemAdpater.color_normal = ContextCompat.getColor(getApplicationContext(), R.color.black);
         KcaDroplogItemAdpater.color_none = ContextCompat.getColor(getApplicationContext(), R.color.grey);
         KcaDroplogItemAdpater.color_item = ContextCompat.getColor(getApplicationContext(), R.color.colorListItemBack);
@@ -157,7 +117,7 @@ public class DropLogActivity extends BaseActivity {
         sp_maprank.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                condition_data.addProperty("maprank", position);
+                viewModel.setMapRank(position);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -180,41 +140,18 @@ public class DropLogActivity extends BaseActivity {
         chkbox_x = findViewById(R.id.droplog_rank_x);
         chkbox_x.setOnCheckedChangeListener(chkboxListener);
         chkbox_boss = findViewById(R.id.droplog_isboss);
-        chkbox_boss.setOnCheckedChangeListener((compoundButton, b) -> setConditionData("isboss", b ? 1 : 0));
+        chkbox_boss.setOnCheckedChangeListener((compoundButton, b) -> viewModel.setConditionData("isboss", b ? 1 : 0));
         chkbox_desc = findViewById(R.id.droplog_isdesc);
         chkbox_desc.setOnCheckedChangeListener((compoundButton, b) -> {
-            setConditionData("isdesc", b ? 1 : 0);
+            viewModel.setConditionData("isdesc", b ? 1 : 0);
             chkbox_desc.setText(getString(b ? R.string.droplog_sort_desc : R.string.droplog_sort_asc));
         });
         chkbox_desc.setChecked(true);
 
         btn_search = findViewById(R.id.droplog_search);
 
-        long current_time = System.currentTimeMillis();
-        current_time = KcaUtils.getCurrentDateTimestamp(current_time);
-
-        start_date.setText(convertMillsToDate(current_time - DAY_MILLISECOND * 7));
-        end_date.setText(convertMillsToDate(current_time + DAY_MILLISECOND - 1));
-
-        current_world = 0;
-        current_map = 0;
-        current_node = 0;
-
-        condition_data.addProperty("startdate", current_time - DAY_MILLISECOND * 7); // 7 days before
-        condition_data.addProperty("enddate", current_time + DAY_MILLISECOND - 1);
-        condition_data.addProperty("isboss", 0);
-        condition_data.addProperty("isdesc", 1);
-        condition_data.addProperty("maprank", 0);
-        condition_data.addProperty("rank", "B,A,S");
-    }
-
-    private int setDefaultGameData() {
-        return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+        start_date.setText(viewModel.getStartDateText());
+        end_date.setText(viewModel.getEndDateText());
     }
 
     @Override
@@ -233,7 +170,7 @@ public class DropLogActivity extends BaseActivity {
             case R.id.action_droplog_clear:
                 AlertDialog.Builder alert = new AlertDialog.Builder(DropLogActivity.this);
                 alert.setPositiveButton(getString(R.string.dialog_ok), (dialog, which) -> {
-                    dropLogger.clearDropLog();
+                    viewModel.clearDropLog();
                     setListView();
                     dialog.dismiss();
                 }).setNegativeButton(getString(R.string.dialog_cancel), (dialog, which) -> dialog.cancel());
@@ -251,59 +188,21 @@ public class DropLogActivity extends BaseActivity {
     private void saveLogData() {
         Handler handler = new Handler(Looper.getMainLooper());
 
-        final File[] file = new File[1];
         is_exporting = true;
         row_count.setText(getString(R.string.action_save_msg));
         row_count.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPanelWarning));
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
-            int result;
-            File savedir = new File(getExternalFilesDir(null), "export_data");
-            if (!savedir.exists()) savedir.mkdirs();
-            String exportPath = savedir.getPath();
+            DropLogViewModel.ExportResult exportResult = viewModel.exportCsv();
 
-            String label_date = getString(R.string.droplog_item_label_time);
-            String label_area = getString(R.string.droplog_item_label_area);
-            String label_isboss = getString(R.string.droplog_label_isboss);
-            String label_rank = getString(R.string.droplog_label_rank);
-            String label_name = getString(R.string.droplog_item_label_name);
-
-            String label_line = KcaUtils.format("%s,%s,%s,%s,%s", label_date, label_area, label_isboss, label_rank, label_name);
-
-            List<String> loglist = dropLogger.getFullStringDropLog();
-            if (!loglist.isEmpty()) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
-                String timetext = dateFormat.format(new Date());
-
-                String filename = KcaUtils.format("/kca_droplog_%s.csv", timetext);
-                file[0] = new File(exportPath.concat(filename));
-                try {
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(file[0], false));
-                    bw.write(label_line);
-                    bw.write("\r\n");
-                    for(String line: loglist) {
-                        bw.write(line);
-                        bw.write("\r\n");
-                    }
-                    bw.close();
-                    result = 0;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    result = 2;
-                }
-            } else {
-                result = 1;
-            }
-
-            final int resultFinal = result;
             handler.post(() -> {
                 is_exporting = false;
                 row_count.setText(KcaUtils.format(getString(R.string.droplog_total_format), adapter.getCount()));
                 row_count.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
-                switch (resultFinal) {
+                switch (exportResult.status) {
                     case 0:
-                        Toast.makeText(getApplicationContext(), "Exported to ".concat(file[0].getPath()), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Exported to ".concat(exportResult.path), Toast.LENGTH_LONG).show();
                         break;
                     case 1:
                         Toast.makeText(getApplicationContext(), "No log to export.", Toast.LENGTH_LONG).show();
@@ -319,7 +218,7 @@ public class DropLogActivity extends BaseActivity {
     }
 
     public void setListView() {
-        adapter.setListViewItemList(dropLogger.getDropLogWithCondition(condition_data), 0);
+        adapter.setListViewItemList(viewModel.getDropLog(), 0);
         droplog_listview.setAdapter(adapter);
         if (!is_exporting) row_count.setText(KcaUtils.format(getString(R.string.droplog_total_format), adapter.getCount()));
         findViewById(R.id.droplog_infoline).setVisibility(View.VISIBLE);
@@ -331,66 +230,26 @@ public class DropLogActivity extends BaseActivity {
         }
     }
 
-    public void setConditionData(String key, int value) {
-        condition_data.addProperty(key, value);
-    }
-
-    public void setConditionData(String key, String value) {
-        condition_data.addProperty(key, value);
-    }
-
     public static int rank_bitop(int source, int target, boolean b) {
-        if (b) return source | target;
-        else return source & ~target;
-    }
-
-    public String convertRankFlagToText(int r) {
-        List<String> data = new ArrayList<>();
-        String[] rank_list = {"E", "D", "C", "B", "A", "S"};
-        for (int i = 0; i < 6; i++) {
-            if (r % 2 == 1) data.add(rank_list[i]);
-            r /= 2;
-        }
-        return KcaUtils.joinStr(data, ",");
+        return DropLogViewModel.rank_bitop(source, target, b);
     }
 
     public static String convertMillsToDate(long timestamp) {
-        Date d = new Date(timestamp);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
-        return dateFormat.format(d);
+        return DropLogViewModel.convertMillsToDate(timestamp);
     }
 
     View.OnClickListener dateViewListener = view -> {
         DatePickerDialog.OnDateSetListener listener = (v, year, monthOfYear, dayOfMonth) -> {
-            boolean valid_flag = true;
-            String text = KcaUtils.format("%02d-%02d-%04d", monthOfYear + 1, dayOfMonth, year);
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
-                long timestamp = dateFormat.parse(text).getTime();
-                long new_value = timestamp;
-                if (view.getId() == R.id.droplog_date_start) {
-                    if (new_value < condition_data.get("enddate").getAsLong()) {
-                        condition_data.addProperty("startdate", timestamp);
-                    } else {
-                        valid_flag = false;
-                    }
-                } else if (view.getId() == R.id.droplog_date_end) {
-                    new_value = timestamp + (DAY_MILLISECOND - 1);
-                    if (new_value > condition_data.get("startdate").getAsLong()) {
-                        condition_data.addProperty("enddate", timestamp + (DAY_MILLISECOND - 1));
-                    } else {
-                        valid_flag = false;
-                    }
-                }
-                if (valid_flag) ((TextView) view).setText(convertMillsToDate(timestamp));
-            } catch (ParseException e) {
-                e.printStackTrace();
+            Long timestamp = viewModel.applyDateSelection(view.getId() == R.id.droplog_date_start,
+                    year, monthOfYear, dayOfMonth);
+            if (timestamp != null) {
+                ((TextView) view).setText(DropLogViewModel.convertMillsToDate(timestamp));
             }
         };
 
         long current_time = System.currentTimeMillis();
         current_time = KcaUtils.getCurrentDateTimestamp(current_time);
-        if (view.getId() == R.id.droplog_date_end) current_time += (DAY_MILLISECOND - 1);
+        if (view.getId() == R.id.droplog_date_end) current_time += (DropLogViewModel.DAY_MILLISECOND - 1);
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date(current_time));
@@ -401,51 +260,24 @@ public class DropLogActivity extends BaseActivity {
         dialog.show();
     };
 
-    CompoundButton.OnCheckedChangeListener chkboxListener = (compoundButton, b) -> {
-        int id = compoundButton.getId();
-        switch (id) {
-            case R.id.droplog_rank_s:
-                rank_flag = rank_bitop(rank_flag, RANK_S, b);
-                break;
-            case R.id.droplog_rank_a:
-                rank_flag = rank_bitop(rank_flag, RANK_A, b);
-                break;
-            case R.id.droplog_rank_b:
-                rank_flag = rank_bitop(rank_flag, RANK_B, b);
-                break;
-            case R.id.droplog_rank_x:
-                rank_flag = rank_bitop(rank_flag, RANK_C | RANK_D | RANK_E, b);
-                break;
-            default:
-                break;
-        }
-        setConditionData("rank", convertRankFlagToText(rank_flag));
-    };
+    CompoundButton.OnCheckedChangeListener chkboxListener = (compoundButton, b) ->
+            viewModel.updateRankFlag(compoundButton.getId(), b);
 
 
     AdapterView.OnItemSelectedListener sp_world_listener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-            String value = world_list[position];
-            if (position == 0) {
-                current_world = 0;
-                current_map = 0;
-                current_node = 0;
-                condition_data.remove("world");
-                condition_data.remove("map");
-                condition_data.remove("node");
-                setSpinnerEnable(sp_map, false);
-                sp_map.setAdapter(null);
-            } else {
-                current_world = Integer.parseInt(value);
-                condition_data.addProperty("world", current_world);
-                map_list = dropLogger.getMapList(current_world);
+            boolean mapEnabled = viewModel.selectWorld(position);
+            if (mapEnabled) {
                 ArrayAdapter<CharSequence> sp_map_adapter =
                         new ArrayAdapter<CharSequence>(getBaseContext(),
-                                android.R.layout.simple_spinner_item, map_list);
+                                android.R.layout.simple_spinner_item, viewModel.getMapList());
                 sp_map_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
                 sp_map.setAdapter(sp_map_adapter);
                 setSpinnerEnable(sp_map, true);
+            } else {
+                setSpinnerEnable(sp_map, false);
+                sp_map.setAdapter(null);
             }
             sp_node.setAdapter(null);
             setSpinnerEnable(sp_node, false);
@@ -459,24 +291,17 @@ public class DropLogActivity extends BaseActivity {
     AdapterView.OnItemSelectedListener sp_map_listener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-            String value = map_list[position];
-            if (position == 0) {
-                current_map = 0;
-                current_node = 0;
-                condition_data.remove("map");
-                condition_data.remove("node");
-                sp_node.setAdapter(null);
-                setSpinnerEnable(sp_node, false);
-            } else {
-                current_map = Integer.parseInt(value);
-                condition_data.addProperty("map", current_map);
-                node_list = dropLogger.getNodeList(current_world, current_map);
+            boolean nodeEnabled = viewModel.selectMap(position);
+            if (nodeEnabled) {
                 ArrayAdapter<CharSequence> sp_node_adapter =
                         new ArrayAdapter<CharSequence>(getBaseContext(),
-                                android.R.layout.simple_spinner_item, node_list);
+                                android.R.layout.simple_spinner_item, viewModel.getNodeList());
                 sp_node_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
                 sp_node.setAdapter(sp_node_adapter);
                 setSpinnerEnable(sp_node, true);
+            } else {
+                sp_node.setAdapter(null);
+                setSpinnerEnable(sp_node, false);
             }
         }
         @Override
@@ -488,14 +313,7 @@ public class DropLogActivity extends BaseActivity {
     AdapterView.OnItemSelectedListener sp_node_listener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-            String value = node_list[position];
-            if (position == 0) {
-                current_node = 0;
-                condition_data.remove("node");
-            } else {
-                current_node = Integer.parseInt(value.split("\\(")[0]);
-                condition_data.addProperty("node", current_node);
-            }
+            viewModel.selectNode(position);
         }
         @Override
         public void onNothingSelected(AdapterView<?> adapterView) {
