@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ServiceInfo;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
@@ -31,6 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import android.provider.Settings;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.ServiceCompat;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
@@ -368,7 +370,8 @@ public class KcaService extends BaseService {
 
     private void startForegroundOrStop() {
         try {
-            startForeground(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
+            ServiceCompat.startForeground(this, getNotificationId(NOTI_FRONT, 1), notifyBuilder.build(),
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
         } catch (IllegalStateException e) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S
                     || !(e instanceof ForegroundServiceStartNotAllowedException)) throw e;
@@ -413,13 +416,8 @@ public class KcaService extends BaseService {
                         getString(R.string.svc_stopped_action_restart), restartPendingIntent));
 
         // battery optimization exemption also lets the service restart in background
-        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        if (powerManager != null && !powerManager.isIgnoringBatteryOptimizations(getPackageName())) {
-            Intent batteryIntent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
-            if (batteryIntent.resolveActivity(getPackageManager()) == null) {
-                batteryIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                        Uri.parse("package:" + getPackageName()));
-            }
+        if (!KcaUtils.isIgnoringBatteryOptimizations(this)) {
+            Intent batteryIntent = KcaUtils.getBatteryOptimizationSettingsIntent(this);
             batteryIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent batteryPendingIntent = PendingIntent.getActivity(this, 1, batteryIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);

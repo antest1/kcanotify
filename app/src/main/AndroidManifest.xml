@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
@@ -186,6 +187,13 @@
                 android:value="com.antest1.kcanotify.SettingActivity" />
         </activity>
         <activity
+            android:name="com.antest1.kcanotify.KcaNotificationLaunchActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:exported="false" />
+        <activity
             android:name="com.antest1.kcanotify.InitStartActivity"
             android:exported="true"
             android:launchMode="singleTask">
@@ -198,7 +206,11 @@
         <service
             android:name=".KcaService"
             android:exported="true"
+            android:foregroundServiceType="specialUse"
             android:configChanges="locale|layoutDirection" >
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Shows game timers, notifications and overlay views while KanColle is running" />
             <intent-filter>
                 <action android:name="com.antest1.kcasniffer.broadcast"/>
                 <action android:name="com.antest1.gotobrowser.broadcast"/>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import androidx.activity.OnBackPressedCallback;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
@@ -93,6 +94,12 @@ public class ShipInfoFilterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipinfo_filter);
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                setValueAndFinish();
+            }
+        });
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.shipinfo_btn_filter));
@@ -525,11 +532,6 @@ public class ShipInfoFilterActivity extends BaseActivity {
         finish();
     }
 
-
-    @Override
-    public void onBackPressed() {
-        setValueAndFinish();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

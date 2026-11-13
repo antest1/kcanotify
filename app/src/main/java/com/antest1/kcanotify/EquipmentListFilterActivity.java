@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +39,12 @@ public class EquipmentListFilterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_equipment_list_filter);
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                setValueAndFinish();
+            }
+        });
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.equipinfo_filter));
@@ -102,10 +109,6 @@ public class EquipmentListFilterActivity extends BaseActivity {
         setResult(RESULT_OK, intent);
         finish();
     }
-
-    @Override
-    public void onBackPressed() { setValueAndFinish(); }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -841,6 +841,8 @@
     <string name="svc_stopped_battery_hint">Desactivar la optimización de batería ayuda a evitarlo.</string>
     <string name="svc_stopped_action_restart">Reiniciar</string>
     <string name="svc_stopped_action_battery">Optimización de batería</string>
+    <string name="ma_battery_optimization_on">Desactiva la optimización de batería para que el servicio pueda reiniciarse cuando Android lo detenga.</string>
+    <string name="ma_exact_alarm_settings_unavailable">Este dispositivo no tiene la pantalla de ajustes de alarmas y recordatorios, por lo que el servicio no puede iniciarse.</string>
     <string name="sa_ringtone_picker_unavailable">Este dispositivo no tiene un selector de tonos.</string>
     <string name="data_update_result_done">Actualización de datos completada (%d)</string>
     <string name="data_update_result_failed">%1$d actualizados, %2$d fallidos. Inténtalo de nuevo más tarde.</string>

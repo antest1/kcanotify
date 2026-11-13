@@ -25,10 +25,12 @@ import android.net.NetworkCapabilities;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.os.VibratorManager;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -261,6 +263,22 @@ public class KcaUtils {
         String package_name = getStringPreferences(context, PREF_KC_PACKAGE);
         Intent kcIntent = context.getPackageManager().getLaunchIntentForPackage(package_name);
         return kcIntent;
+    }
+
+    // the exemption also lets the service restart in background
+    public static boolean isIgnoringBatteryOptimizations(Context context) {
+        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        return powerManager == null || powerManager.isIgnoringBatteryOptimizations(context.getPackageName());
+    }
+
+    // the battery optimization list of apps, or the app's own page where the device has no list
+    public static Intent getBatteryOptimizationSettingsIntent(Context context) {
+        Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+        if (intent.resolveActivity(context.getPackageManager()) == null) {
+            intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.parse("package:" + context.getPackageName()));
+        }
+        return intent;
     }
 
     public static JsonObject getJsonObjectCopy(JsonObject data) {

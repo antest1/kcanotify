@@ -518,6 +518,7 @@ public final class KcaConstants {
     public static final String PREF_MITM_SETUP_WIZARD = "mitm_setup_wizard";
     public static final String PREF_DECRYPTION_LIST = "decryption_list";
     public static final String PREF_VPNSERVICE_USAGE_AGREE = "vpnservice_usage_agree";
+    public static final String PREF_BATTERY_WARNING_DISMISSED = "battery_warning_dismissed";
 
     public static final String NOTI_SOUND_KIND_MIXED = "mixed";
     public static final String NOTI_SOUND_KIND_NORMAL = "sound";
