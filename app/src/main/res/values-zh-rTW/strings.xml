@@ -846,6 +846,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="svc_stopped_battery_hint">關閉電池優化有助於避免此問題。</string>
     <string name="svc_stopped_action_restart">重新啟動</string>
     <string name="svc_stopped_action_battery">電池優化</string>
+    <string name="ma_battery_optimization_on">關閉電池優化後，服務被 Android 停止時可以重新啟動。</string>
+    <string name="ma_exact_alarm_settings_unavailable">此裝置沒有鬧鐘和提醒設定頁面，無法啟動服務。</string>
     <string name="sa_ringtone_picker_unavailable">此裝置上沒有可用的鈴聲選擇器。</string>
     <string name="data_update_result_done">資料更新完成（%d項）</string>
     <string name="data_update_result_failed">%1$d項完成，%2$d項失敗。請稍後再試。</string>

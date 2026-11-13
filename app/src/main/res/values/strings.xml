@@ -919,6 +919,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="svc_stopped_battery_hint">Turning off battery optimization helps prevent this.</string>
     <string name="svc_stopped_action_restart">Restart</string>
     <string name="svc_stopped_action_battery">Battery settings</string>
+    <string name="ma_battery_optimization_on">Turn off battery optimization so the service can restart when Android stops it.</string>
+    <string name="ma_exact_alarm_settings_unavailable">This device has no settings screen for alarms and reminders, so the service cannot start.</string>
     <string name="sa_ringtone_picker_unavailable">No ringtone picker is available on this device.</string>
     <string name="data_update_result_done">Data update finished (%d)</string>
     <string name="data_update_result_failed">%1$d updated, %2$d failed. Please try again later.</string>

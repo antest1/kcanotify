@@ -841,6 +841,8 @@
     <string name="svc_stopped_battery_hint">배터리 최적화를 해제하면 이런 일을 줄일 수 있습니다.</string>
     <string name="svc_stopped_action_restart">다시 시작</string>
     <string name="svc_stopped_action_battery">배터리 최적화 설정</string>
+    <string name="ma_battery_optimization_on">배터리 최적화를 해제하면 안드로이드가 서비스를 멈췄을 때 다시 시작할 수 있습니다.</string>
+    <string name="ma_exact_alarm_settings_unavailable">이 기기에는 알람 및 리마인더 설정 화면이 없어 서비스를 시작할 수 없습니다.</string>
     <string name="sa_ringtone_picker_unavailable">이 기기에는 알림음 선택 화면이 없습니다.</string>
     <string name="data_update_result_done">데이터 업데이트 완료 (%d건)</string>
     <string name="data_update_result_failed">%1$d건 완료, %2$d건 실패. 잠시 후 다시 시도해 주세요.</string>

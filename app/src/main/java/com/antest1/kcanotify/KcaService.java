@@ -413,13 +413,8 @@ public class KcaService extends BaseService {
                         getString(R.string.svc_stopped_action_restart), restartPendingIntent));
 
         // battery optimization exemption also lets the service restart in background
-        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        if (powerManager != null && !powerManager.isIgnoringBatteryOptimizations(getPackageName())) {
-            Intent batteryIntent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
-            if (batteryIntent.resolveActivity(getPackageManager()) == null) {
-                batteryIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                        Uri.parse("package:" + getPackageName()));
-            }
+        if (!KcaUtils.isIgnoringBatteryOptimizations(this)) {
+            Intent batteryIntent = KcaUtils.getBatteryOptimizationSettingsIntent(this);
             batteryIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent batteryPendingIntent = PendingIntent.getActivity(this, 1, batteryIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);

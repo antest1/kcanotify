@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -414,11 +415,41 @@ public class MainActivity extends BaseActivity {
             warnText = getString(R.string.ma_permission_external_denied);
             // not called in general situation, implement grant permission when required
             snackbar = Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE);
+        } else if (!getBooleanPreferences(this, PREF_BATTERY_WARNING_DISMISSED)
+                && !KcaUtils.isIgnoringBatteryOptimizations(this)) {
+            // the exemption lets the service come back when Android restarts it in background
+            warnText = getString(R.string.ma_battery_optimization_on);
+            snackbar = Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE)
+                    .setTextMaxLines(4)
+                    .setAction(getString(R.string.svc_stopped_action_battery), view -> {
+                        try {
+                            startActivity(KcaUtils.getBatteryOptimizationSettingsIntent(this));
+                        } catch (ActivityNotFoundException e) {
+                            // the device has neither the list of apps nor the app's own page
+                        }
+                    })
+                    .addCallback(new Snackbar.Callback() {
+                        // swiping it away hides it for good; after the settings action it shows
+                        // again on return only while optimization is still on
+                        @Override
+                        public void onDismissed(Snackbar bar, int event) {
+                            if (event == DISMISS_EVENT_SWIPE) {
+                                setPreferences(getApplicationContext(), PREF_BATTERY_WARNING_DISMISSED, true);
+                            }
+                        }
+                    });
         } else {
             snackbar = null;
         }
 
-        if (snackbar != null) snackbar.show();
+        if (snackbar != null) {
+            // above the bottom bar, so GAME START does not move out of the way: once moved,
+            // it would lag behind the tool sheet the next time the sheet opens
+            snackbar.setAnchorView(bottomAppBar);
+            // the bar may not be laid out yet when this runs from onStart
+            snackbar.setAnchorViewLayoutListenerEnabled(true);
+            snackbar.show();
+        }
     }
 
     public final int getSnifferMode() {
@@ -487,8 +518,19 @@ public class MainActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             if (!alarmManager.canScheduleExactAlarms()) {
-                Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
-                exactAlarmPrepareLauncher.launch(intent);
+                // the app's own page when the device has one, otherwise the list of apps
+                Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
+                        Uri.parse("package:" + getPackageName()));
+                if (intent.resolveActivity(getPackageManager()) == null) {
+                    intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                }
+                try {
+                    exactAlarmPrepareLauncher.launch(intent);
+                } catch (ActivityNotFoundException e) {
+                    // the service still needs the permission, so it stays off on such a device
+                    Toast.makeText(getApplicationContext(), getString(R.string.ma_exact_alarm_settings_unavailable),
+                            Toast.LENGTH_LONG).show();
+                }
             }
         }
     }

@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.PowerManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -300,11 +299,9 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
     @TargetApi(Build.VERSION_CODES.M)
     public void showObtainingPermissionBatteryOptimization() {
-        String package_name = getContext().getPackageName();
-        Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
-
-        if (intent.resolveActivity(getContext().getPackageManager()) == null) {
-            intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + package_name));
+        Intent intent = KcaUtils.getBatteryOptimizationSettingsIntent(getContext());
+        // the app's own page, where the device has no list of apps
+        if (Settings.ACTION_APPLICATION_DETAILS_SETTINGS.equals(intent.getAction())) {
             showToast(getActivity(), getString(R.string.sa_batteryoptim_appearontop), Toast.LENGTH_LONG);
         }
         currentActivity = REQUEST_BATOPTIM_PERMISSION;
@@ -357,8 +354,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 Context context = getContext();
                 if (context != null) {
-                    PowerManager manager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-                    if (manager.isIgnoringBatteryOptimizations(context.getPackageName())) {
+                    if (KcaUtils.isIgnoringBatteryOptimizations(context)) {
                         showToast(getActivity(), getString(R.string.sa_batteryoptim_ok), Toast.LENGTH_SHORT);
                     } else {
                         showToast(getActivity(), getString(R.string.sa_batteryoptim_no), Toast.LENGTH_SHORT);
