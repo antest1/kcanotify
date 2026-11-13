@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "com.antest1.kcanotify"
         minSdkVersion 24
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 301006
         versionName "3.1r6"
 
