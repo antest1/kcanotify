@@ -855,6 +855,16 @@ public class KcaDeckInfo {
         return min_cond_value;
     }
 
+    // whether two api_ship lists hold the same ships in the same order; empty slots (-1) at the end do not count
+    public static boolean isSameShipList(JsonArray before, JsonArray after) {
+        for (int i = 0; i < Math.max(before.size(), after.size()); i++) {
+            int beforeId = i < before.size() ? before.get(i).getAsInt() : -1;
+            int afterId = i < after.size() ? after.get(i).getAsInt() : -1;
+            if (beforeId != afterId) return false;
+        }
+        return true;
+    }
+
     // fleets that can do anchorage repair: ships repaired and the repair time modifier (see KcaAkashiRepairInfo)
     public JsonArray checkAkashiFlagship(JsonArray deckPortData) {
         JsonArray deck_id_list = new JsonArray();

@@ -2054,9 +2054,26 @@ public class KcaService extends BaseService {
                                         break;
                                     }
                                 }
+                                boolean same_ships = KcaDeckInfo.isSameShipList(before_ship_list, after_ship_list);
                                 portdeckdata.set(deckIdx, api_data);
                                 dbHelper.putValue(DB_KEY_DECKPORT, portdeckdata.toString());
-                                KcaNosakiInfo.setNosakiData(deckInfoCalc.checkNosakiFlagship(portdeckdata));
+                                // a preset with a repair ship or APF resets the timer unless it keeps the same ships;
+                                // one without leaves the timer as it is, even when it takes them out
+                                JsonArray nosaki_after = deckInfoCalc.checkNosakiFlagship(portdeckdata);
+                                KcaNosakiInfo.setNosakiData(nosaki_after);
+                                if (containsDeck(nosaki_after, deckIdx, -1)
+                                        && (!same_ships || KcaNosakiInfo.getNosakiTimerValue() < 0)) {
+                                    KcaNosakiInfo.setNosakiTimer();
+                                    processNosakiTimerInfo();
+                                }
+                                JsonArray akashi_after = deckInfoCalc.checkAkashiFlagship(portdeckdata);
+                                KcaAkashiRepairInfo.setAkashiData(akashi_after);
+                                if (containsDeck(akashi_after, deckIdx, -1)
+                                        && (!same_ships || KcaAkashiRepairInfo.getAkashiTimerValue() < 0)) {
+                                    KcaAkashiRepairInfo.setAkashiTimer();
+                                    processAkashiTimerInfo();
+                                    isAkashiTimerNotiWait = true;
+                                }
                                 boolean result = setMoraleValueForDeck(deckIdx, portdeckdata, false, is_same);
                                 processMoraleInfo(deckIdx, portdeckdata, result);
                             }
