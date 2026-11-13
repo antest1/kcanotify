@@ -56,7 +56,6 @@ public class EquipmentInfoViewModel extends AndroidViewModel {
         KcaApiData.setDBHelper(dbHelper);
         KcaUtils.setDefaultGameData(getApplication(), dbHelper);
 
-        // init() runs again whenever the activity is recreated, so clear the accumulated data first
         seikuukenData = new JsonArray();
         counter = new HashMap<>();
         shipEquipInfo = new JsonObject();

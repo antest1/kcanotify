@@ -28,7 +28,6 @@ public class FleetInfoViewModel extends AndroidViewModel {
     private final KcaDBHelper dbHelper;
     private final KcaDeckInfo deckInfoCalc;
     private final Context localizedContext;
-    // static so the screen reopens on the last chosen fleet, like it did before the refactor
     private static int currentFleet = 0;
 
     public FleetInfoViewModel(@NonNull Application application) {

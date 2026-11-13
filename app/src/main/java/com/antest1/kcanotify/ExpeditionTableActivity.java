@@ -40,6 +40,8 @@ public class ExpeditionTableActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         adapter = new KcaExpeditionTableViewAdpater(getBaseContext());
+        adapter.setGreatSuccess(viewModel.isGreatSuccess());
+        adapter.setDaihatsuCount(viewModel.getDaihatsuCount());
 
         for (int i = 0; i <= 7; i++) {
             final int target = i;
@@ -63,7 +65,7 @@ public class ExpeditionTableActivity extends BaseActivity {
         });
 
         daihatsubtn = findViewById(R.id.btn_daihatsu);
-        daihatsubtn.setText(ExpeditionTableViewModel.getDaihatsuCountString(0));
+        daihatsubtn.setText(ExpeditionTableViewModel.getDaihatsuCountString(viewModel.getDaihatsuCount()));
         daihatsubtn.setOnClickListener(view -> {
             viewModel.cycleDaihatsuCount();
             ((Chip) view).setText(ExpeditionTableViewModel.getDaihatsuCountString(viewModel.getDaihatsuCount()));
