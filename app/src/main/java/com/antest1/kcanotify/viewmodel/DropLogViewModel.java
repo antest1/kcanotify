@@ -1,6 +1,7 @@
 package com.antest1.kcanotify.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -10,6 +11,7 @@ import com.antest1.kcanotify.KcaConstants;
 import com.antest1.kcanotify.KcaDBHelper;
 import com.antest1.kcanotify.KcaDropLogger;
 import com.antest1.kcanotify.KcaUtils;
+import com.antest1.kcanotify.LocaleUtils;
 import com.antest1.kcanotify.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -42,6 +44,7 @@ public class DropLogViewModel extends AndroidViewModel {
 
     private final KcaDBHelper dbHelper;
     private final KcaDropLogger dropLogger;
+    private final Context localizedContext;
     private final JsonObject conditionData = new JsonObject();
     private final String[] maprankInfo = new String[5];
     private String[] worldList = {"*", "1", "2", "3", "4", "5", "6", "7"};
@@ -56,6 +59,7 @@ public class DropLogViewModel extends AndroidViewModel {
         super(application);
         dbHelper = new KcaDBHelper(application, null, KcaConstants.KCANOTIFY_DB_VERSION);
         dropLogger = new KcaDropLogger(application, null, KcaConstants.KCANOTIFY_DROPLOG_VERSION);
+        localizedContext = LocaleUtils.getLocalizedContext(application);
     }
 
     public void init() {
@@ -73,11 +77,11 @@ public class DropLogViewModel extends AndroidViewModel {
 
         maprankInfo[0] = "-";
         for (int i = 1; i < maprankInfo.length; i++) {
-            maprankInfo[i] = getApplication().getString(getId("maprank_" + i, R.string.class));
+            maprankInfo[i] = localizedContext.getString(getId("maprank_" + i, R.string.class));
         }
         KcaDropLogger.maprank_info = maprankInfo;
-        KcaDropLogger.ship_none = getApplication().getString(R.string.droplog_ship_none);
-        KcaDropLogger.ship_full = getApplication().getString(R.string.droplog_ship_full);
+        KcaDropLogger.ship_none = localizedContext.getString(R.string.droplog_ship_none);
+        KcaDropLogger.ship_full = localizedContext.getString(R.string.droplog_ship_full);
 
         long currentTime = KcaUtils.getCurrentDateTimestamp(System.currentTimeMillis());
         currentWorld = 0;
@@ -269,11 +273,11 @@ public class DropLogViewModel extends AndroidViewModel {
         if (!savedir.exists()) savedir.mkdirs();
         String exportPath = savedir.getPath();
 
-        String label_date = getApplication().getString(R.string.droplog_item_label_time);
-        String label_area = getApplication().getString(R.string.droplog_item_label_area);
-        String label_isboss = getApplication().getString(R.string.droplog_label_isboss);
-        String label_rank = getApplication().getString(R.string.droplog_label_rank);
-        String label_name = getApplication().getString(R.string.droplog_item_label_name);
+        String label_date = localizedContext.getString(R.string.droplog_item_label_time);
+        String label_area = localizedContext.getString(R.string.droplog_item_label_area);
+        String label_isboss = localizedContext.getString(R.string.droplog_label_isboss);
+        String label_rank = localizedContext.getString(R.string.droplog_label_rank);
+        String label_name = localizedContext.getString(R.string.droplog_item_label_name);
 
         String label_line = KcaUtils.format("%s,%s,%s,%s,%s", label_date, label_area, label_isboss, label_rank, label_name);
 

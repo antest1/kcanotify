@@ -1,6 +1,7 @@
 package com.antest1.kcanotify.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -10,6 +11,7 @@ import com.antest1.kcanotify.KcaConstants;
 import com.antest1.kcanotify.KcaDBHelper;
 import com.antest1.kcanotify.KcaDeckInfo;
 import com.antest1.kcanotify.KcaUtils;
+import com.antest1.kcanotify.LocaleUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -25,11 +27,14 @@ public class FleetInfoViewModel extends AndroidViewModel {
 
     private final KcaDBHelper dbHelper;
     private final KcaDeckInfo deckInfoCalc;
-    private int currentFleet = 0;
+    private final Context localizedContext;
+    // static so the screen reopens on the last chosen fleet, like it did before the refactor
+    private static int currentFleet = 0;
 
     public FleetInfoViewModel(@NonNull Application application) {
         super(application);
-        deckInfoCalc = new KcaDeckInfo(application);
+        localizedContext = LocaleUtils.getLocalizedContext(application);
+        deckInfoCalc = new KcaDeckInfo(localizedContext);
         dbHelper = new KcaDBHelper(application, null, KcaConstants.KCANOTIFY_DB_VERSION);
     }
 
@@ -59,7 +64,7 @@ public class FleetInfoViewModel extends AndroidViewModel {
         }
 
         if (currentFleet == 4) {
-            result.fleetName = getApplication().getString(com.antest1.kcanotify.R.string.fleetlist_combined_fleet);
+            result.fleetName = localizedContext.getString(com.antest1.kcanotify.R.string.fleetlist_combined_fleet);
             if (deckData.size() < 2) {
                 result.passed = false;
             } else {
@@ -77,7 +82,7 @@ public class FleetInfoViewModel extends AndroidViewModel {
                 result.data = data;
                 result.passed = true;
                 result.fp = deckInfoCalc.getAirPowerRangeString(deckData, 0, null);
-                result.seek = KcaUtils.format(getApplication().getString(com.antest1.kcanotify.R.string.fleetview_seekvalue_f),
+                result.seek = KcaUtils.format(localizedContext.getString(com.antest1.kcanotify.R.string.fleetview_seekvalue_f),
                         deckInfoCalc.getSeekValue(deckData, "0,1", SEEK_33CN1, null));
             }
         } else {
@@ -91,7 +96,7 @@ public class FleetInfoViewModel extends AndroidViewModel {
                 result.data = deckInfoCalc.getDeckListInfo(deckData, currentFleet, "all", KC_REQ_LIST);
                 result.passed = true;
                 result.fp = deckInfoCalc.getAirPowerRangeString(deckData, currentFleet, null);
-                result.seek = KcaUtils.format(getApplication().getString(com.antest1.kcanotify.R.string.fleetview_seekvalue_f),
+                result.seek = KcaUtils.format(localizedContext.getString(com.antest1.kcanotify.R.string.fleetview_seekvalue_f),
                         deckInfoCalc.getSeekValue(deckData, String.valueOf(currentFleet), SEEK_33CN1, null));
             }
         }

@@ -1,6 +1,7 @@
 package com.antest1.kcanotify.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -9,6 +10,7 @@ import com.antest1.kcanotify.KcaApiData;
 import com.antest1.kcanotify.KcaConstants;
 import com.antest1.kcanotify.KcaDBHelper;
 import com.antest1.kcanotify.KcaUtils;
+import com.antest1.kcanotify.LocaleUtils;
 import com.antest1.kcanotify.R;
 import com.google.gson.JsonArray;
 
@@ -19,6 +21,7 @@ import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromStora
  */
 public class ExpeditionTableViewModel extends AndroidViewModel {
     private final KcaDBHelper dbHelper;
+    private final Context localizedContext;
     private JsonArray expeditionData = new JsonArray();
     private int worldIdx = 0;
     private boolean greatSuccess;
@@ -27,6 +30,7 @@ public class ExpeditionTableViewModel extends AndroidViewModel {
     public ExpeditionTableViewModel(@NonNull Application application) {
         super(application);
         dbHelper = new KcaDBHelper(application, null, KcaConstants.KCANOTIFY_DB_VERSION);
+        localizedContext = LocaleUtils.getLocalizedContext(application);
     }
 
     public void init() {
@@ -57,7 +61,7 @@ public class ExpeditionTableViewModel extends AndroidViewModel {
     }
 
     public String getGreatSuccessText() {
-        return getApplication().getString(greatSuccess ? R.string.expdtable_btn_s2 : R.string.expdtable_btn_s1);
+        return localizedContext.getString(greatSuccess ? R.string.expdtable_btn_s2 : R.string.expdtable_btn_s1);
     }
 
     public int getDaihatsuCount() {

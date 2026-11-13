@@ -1,6 +1,7 @@
 package com.antest1.kcanotify.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -40,12 +41,14 @@ public class AkashiDetailViewModel extends AndroidViewModel {
     private static JsonArray requiredItemTranslation;
 
     private final KcaDBHelper dbHelper;
+    private final Context localizedContext;
     private JsonObject itemImprovementData;
     private JsonObject useritemCount = new JsonObject();
 
     public AkashiDetailViewModel(@NonNull Application application) {
         super(application);
         dbHelper = new KcaDBHelper(application, null, KcaConstants.KCANOTIFY_DB_VERSION);
+        localizedContext = LocaleUtils.getLocalizedContext(application);
     }
 
     public static void setRequiredItemTranslation(JsonArray data) {
@@ -244,13 +247,13 @@ public class AkashiDetailViewModel extends AndroidViewModel {
                 JsonArray day = item.get(0).getAsJsonArray();
                 for (int j = 0; j < day.size(); j++) {
                     if (day.get(j).getAsBoolean()) {
-                        daylist.add(getApplication().getString(getId("akashi_term_day_".concat(String.valueOf(j)), R.string.class)));
+                        daylist.add(localizedContext.getString(getId("akashi_term_day_".concat(String.valueOf(j)), R.string.class)));
                     }
                 }
 
                 String daytext;
                 if (daylist.isEmpty()) {
-                    daytext = getApplication().getString(R.string.akashi_term_day_none);
+                    daytext = localizedContext.getString(R.string.akashi_term_day_none);
                 } else {
                     daytext = joinStr(daylist, ",");
                 }

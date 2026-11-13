@@ -5,6 +5,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.util.Log;
 
 import java.util.Locale;
@@ -16,6 +17,15 @@ public class LocaleUtils {
 
     public static Locale getLocale() {
         return sLocale;
+    }
+
+    public static Context getLocalizedContext(Context context) {
+        if (sLocale == null) {
+            return context;
+        }
+        Configuration config = new Configuration(context.getResources().getConfiguration());
+        config.setLocale(sLocale);
+        return context.createConfigurationContext(config);
     }
 
     public static void setLocale(Locale locale) {

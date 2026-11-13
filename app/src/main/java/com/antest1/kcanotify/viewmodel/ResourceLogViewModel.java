@@ -1,6 +1,7 @@
 package com.antest1.kcanotify.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -10,6 +11,7 @@ import com.antest1.kcanotify.KcaConstants;
 import com.antest1.kcanotify.KcaDBHelper;
 import com.antest1.kcanotify.KcaResourceLogger;
 import com.antest1.kcanotify.KcaUtils;
+import com.antest1.kcanotify.LocaleUtils;
 import com.antest1.kcanotify.R;
 import com.google.gson.JsonObject;
 
@@ -42,6 +44,7 @@ public class ResourceLogViewModel extends AndroidViewModel {
 
     private final KcaDBHelper dbHelper;
     private final KcaResourceLogger resourceLogger;
+    private final Context localizedContext;
     private List<JsonObject> resourceLog = new ArrayList<>();
     private long startTimestamp;
     private long endTimestamp;
@@ -51,6 +54,7 @@ public class ResourceLogViewModel extends AndroidViewModel {
         super(application);
         dbHelper = new KcaDBHelper(application, null, KcaConstants.KCANOTIFY_DB_VERSION);
         resourceLogger = new KcaResourceLogger(application, null, KcaConstants.KCANOTIFY_RESOURCELOG_VERSION);
+        localizedContext = LocaleUtils.getLocalizedContext(application);
     }
 
     public void init() {
@@ -178,15 +182,15 @@ public class ResourceLogViewModel extends AndroidViewModel {
         if (!savedir.exists()) savedir.mkdirs();
         String exportPath = savedir.getPath();
 
-        String label_date = getApplication().getString(R.string.reslog_label_time);
-        String label_1 = getApplication().getString(R.string.item_fuel);
-        String label_2 = getApplication().getString(R.string.item_ammo);
-        String label_3 = getApplication().getString(R.string.item_stel);
-        String label_4 = getApplication().getString(R.string.item_baux);
-        String label_5 = getApplication().getString(R.string.item_bgtz);
-        String label_6 = getApplication().getString(R.string.item_brnr);
-        String label_7 = getApplication().getString(R.string.item_mmat);
-        String label_8 = getApplication().getString(R.string.item_kmat);
+        String label_date = localizedContext.getString(R.string.reslog_label_time);
+        String label_1 = localizedContext.getString(R.string.item_fuel);
+        String label_2 = localizedContext.getString(R.string.item_ammo);
+        String label_3 = localizedContext.getString(R.string.item_stel);
+        String label_4 = localizedContext.getString(R.string.item_baux);
+        String label_5 = localizedContext.getString(R.string.item_bgtz);
+        String label_6 = localizedContext.getString(R.string.item_brnr);
+        String label_7 = localizedContext.getString(R.string.item_mmat);
+        String label_8 = localizedContext.getString(R.string.item_kmat);
 
         String label_line = KcaUtils.format("%s,%s,%s,%s,%s,%s,%s,%s,%s",
                 label_date, label_1, label_2, label_3, label_4, label_5, label_6, label_7, label_8);
