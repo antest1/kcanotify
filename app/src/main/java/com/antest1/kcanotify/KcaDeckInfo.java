@@ -874,6 +874,20 @@ public class KcaDeckInfo {
         return deck_id_list;
     }
 
+    // fleets with a repair ship (AR) as the flagship, whether or not she can repair
+    public JsonArray checkAkashiInFleet(JsonArray deckPortData) {
+        JsonArray deck_id_list = new JsonArray();
+        for (int i = 0; i < deckPortData.size(); i++) {
+            JsonArray deckShipIdList = deckPortData.get(i).getAsJsonObject().getAsJsonArray("api_ship");
+            if (getRepairFacilities(deckShipIdList, 0) != null) {
+                JsonObject info = new JsonObject();
+                info.addProperty("id", i);
+                deck_id_list.add(info);
+            }
+        }
+        return deck_id_list;
+    }
+
     // {equipped, total, usable} ship repair facilities of the ship at the position if it is a repair ship (AR),
     // otherwise null; usable is 0 when it is moderately damaged or worse (see KcaAkashiRepairInfo)
     private int[] getRepairFacilities(JsonArray deckShipIdList, int position) {
@@ -929,6 +943,28 @@ public class KcaDeckInfo {
                 info.addProperty("id", i);
                 info.addProperty("gain", max_gain);
                 deck_id_list.add(info);
+            }
+        }
+        return deck_id_list;
+    }
+
+    // fleets with an APF (Nosaki) as the flagship or 2nd ship, whether or not she meets the conditions
+    public JsonArray checkNosakiInFleet(JsonArray deckPortData) {
+        JsonArray deck_id_list = new JsonArray();
+        for (int i = 0; i < deckPortData.size(); i++) {
+            JsonArray deckShipIdList = deckPortData.get(i).getAsJsonObject().getAsJsonArray("api_ship");
+            for (int j = 0; j < Math.min(2, deckShipIdList.size()); j++) {
+                int shipId = deckShipIdList.get(j).getAsInt();
+                if (shipId == -1) continue;
+                JsonObject shipData = getUserShipDataById(shipId, "ship_id");
+                if (shipData == null || !shipData.has("ship_id")) continue;
+                int kc_ship_id = shipData.get("ship_id").getAsInt();
+                if (kc_ship_id == KcaNosakiInfo.SHIP_ID_NOSAKI || kc_ship_id == KcaNosakiInfo.SHIP_ID_NOSAKI_KAI) {
+                    JsonObject info = new JsonObject();
+                    info.addProperty("id", i);
+                    deck_id_list.add(info);
+                    break;
+                }
             }
         }
         return deck_id_list;

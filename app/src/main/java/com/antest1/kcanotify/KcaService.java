@@ -1947,7 +1947,9 @@ public class KcaService extends BaseService {
                         }
                         if (deckIdx != -1) {
                             JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-                            JsonArray nosaki_before = deckInfoCalc.checkNosakiFlagship(portdeckdata);
+                            // taken out by hand: whether she was there, whatever her state
+                            JsonArray nosaki_before = deckInfoCalc.checkNosakiInFleet(portdeckdata);
+                            JsonArray akashi_before = deckInfoCalc.checkAkashiInFleet(portdeckdata);
                             JsonObject targetDeckIdxData = portdeckdata.get(deckIdx).getAsJsonObject();
                             JsonArray targetDeckIdxShipIdata = targetDeckIdxData.get("api_ship").getAsJsonArray();
 
@@ -1996,14 +1998,13 @@ public class KcaService extends BaseService {
                             JsonArray nosaki_after = deckInfoCalc.checkNosakiFlagship(portdeckdata);
                             KcaNosakiInfo.setNosakiData(nosaki_after);
 
-                            if (shipId != -2 // "Remove All but Flagship" does not reset the timer
-                                    && (containsDeck(nosaki_before, deckIdx, originalDeckIdx)
-                                    || containsDeck(nosaki_after, deckIdx, originalDeckIdx))) {
-                                if (nosaki_after.isEmpty()) {
-                                    KcaNosakiInfo.initNosakiTimer();
-                                } else {
-                                    KcaNosakiInfo.setNosakiTimer();
-                                }
+                            // like the repair timer, a fleet change resets the timer when the changed fleet has an APF;
+                            // taking her out stops it when no fleet has one any more
+                            if (containsDeck(nosaki_after, deckIdx, originalDeckIdx)) {
+                                KcaNosakiInfo.setNosakiTimer();
+                                processNosakiTimerInfo();
+                            } else if (containsDeck(nosaki_before, deckIdx, originalDeckIdx) && nosaki_after.isEmpty()) {
+                                KcaNosakiInfo.initNosakiTimer();
                                 processNosakiTimerInfo();
                             }
 
@@ -2012,22 +2013,18 @@ public class KcaService extends BaseService {
                                 processMoraleInfo(i, portdeckdata, result);
                             }
 
-                            JsonArray akashi_flagship_deck = deckInfoCalc.checkAkashiFlagship(portdeckdata);
-                            KcaAkashiRepairInfo.setAkashiData(akashi_flagship_deck);
+                            JsonArray akashi_after = deckInfoCalc.checkAkashiFlagship(portdeckdata);
+                            KcaAkashiRepairInfo.setAkashiData(akashi_after);
 
-                            boolean akashi_nochange_flag = true;
-                            for (int i = 0; i < akashi_flagship_deck.size(); i++) {
-                                JsonObject item = akashi_flagship_deck.get(i).getAsJsonObject();
-                                int deckid = item.get("id").getAsInt();
-                                if (deckid == deckIdx || deckid == originalDeckIdx) {
-                                    akashi_nochange_flag = false;
-                                    break;
-                                }
-                            }
-                            if (!akashi_nochange_flag) {
+                            // taking the repair ship out stops the timer when no fleet can repair any more
+                            if (containsDeck(akashi_after, deckIdx, originalDeckIdx)) {
                                 KcaAkashiRepairInfo.setAkashiTimer();
                                 processAkashiTimerInfo();
                                 isAkashiTimerNotiWait = true;
+                            } else if (containsDeck(akashi_before, deckIdx, originalDeckIdx) && akashi_after.isEmpty()) {
+                                KcaAkashiRepairInfo.initAkashiTimer();
+                                processAkashiTimerInfo();
+                                isAkashiTimerNotiWait = false;
                             }
                         }
                         updateFleetView();
