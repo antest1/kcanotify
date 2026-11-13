@@ -341,6 +341,7 @@ public final class KcaConstants {
     public static final int NOTI_MORALE = 4;
     public static final int NOTI_AKASHI = 5;
     public static final int NOTI_SERVICE_STATUS = 6;
+    public static final int NOTI_NOSAKI = 7;
 
     public static final int FRONT_NONE = 0;
     public static final int FRONT_EXP_SET = 2;
@@ -469,6 +470,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_NOTI_MORALE = "notify_morale";
     public static final String PREF_KCA_MORALE_MIN = "morale_min";
     public static final String PREF_KCA_NOTI_AKASHI = "notify_akashi";
+    public static final String PREF_KCA_NOTI_NOSAKI = "notify_nosaki";
     public static final String PREF_SHIPINFO_SORTKEY = "shipinfo_sortkey";
     public static final String PREF_SHIPINFO_FILTCOND = "shipinfo_filtcond";
     public static final String PREF_SHIPINFO_SHIPSTAT = "shipinfo_shipstat";
@@ -570,6 +572,7 @@ public final class KcaConstants {
             PREF_KCA_NOTI_MORALE,
             PREF_KCA_MORALE_MIN,
             PREF_KCA_NOTI_AKASHI,
+            PREF_KCA_NOTI_NOSAKI,
             PREF_SHIPINFO_SORTKEY,
             PREF_SHIPINFO_FILTCOND,
             PREF_SHIPINFO_SHIPSTAT,
@@ -632,6 +635,7 @@ public final class KcaConstants {
             PREF_KCA_NOTI_QUEST_FAIRY_GLOW,
             PREF_KCA_NOTI_MORALE,
             PREF_KCA_NOTI_AKASHI,
+            PREF_KCA_NOTI_NOSAKI,
             PREF_KCA_ACTIVATE_DROPLOG,
             PREF_KCA_ACTIVATE_RESLOG,
             PREF_SHOW_CONSTRSHIP_NAME,

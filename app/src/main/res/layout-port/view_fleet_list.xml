@@ -111,8 +111,8 @@
                 android:paddingEnd="4dp"
                 android:paddingRight="4dp"
                 android:singleLine="true"
-                android:text="N 00:00"
-                android:textColor="@color/white"
+                android:text="00:00:00"
+                android:textColor="@color/colorFleetNosakiTimerText"
                 android:textSize="12dp" />
 
             <ImageView

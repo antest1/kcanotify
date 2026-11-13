@@ -655,6 +655,20 @@ public class KcaService extends BaseService {
         if (complete_time > 0) setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_AKASHI, 0), false);
     }
 
+    private void setNosakiAlarm(Intent aIntent) {
+        JsonObject nosakiAlarmData = new JsonObject();
+        nosakiAlarmData.addProperty("type", KcaAlarmService.TYPE_NOSAKI);
+        aIntent.putExtra("data", nosakiAlarmData.toString());
+        PendingIntent pendingIntent = PendingIntent.getService(
+                getApplicationContext(),
+                getNotificationId(NOTI_NOSAKI, 0),
+                aIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+        long gain_time = KcaNosakiInfo.getNosakiGainTime();
+        if (gain_time > 0) setAlarm(gain_time, pendingIntent, getNotificationId(NOTI_NOSAKI, 0), false);
+    }
+
     private void toastInfo() {
         if (KcaFleetCheckPopupService.isActive()) {
             Intent qintent = new Intent(getBaseContext(), KcaFleetCheckPopupService.class);
@@ -1096,9 +1110,16 @@ public class KcaService extends BaseService {
                                     !nosaki_flagship_deck.isEmpty(),
                                     KcaNosakiInfo.getNosakiTimerValue() < 0,
                                     KcaNosakiInfo.isNosakiTimerOver(),
-                                    KcaNosakiInfo::setNosakiTimer,
-                                    KcaNosakiInfo::initNosakiTimer);
+                                    () -> {
+                                        KcaNosakiInfo.setNosakiTimer();
+                                        processNosakiTimerInfo();
+                                    },
+                                    () -> {
+                                        KcaNosakiInfo.initNosakiTimer();
+                                        processNosakiTimerInfo();
+                                    });
                             KcaNosakiInfo.setNosakiData(nosaki_flagship_deck);
+                            stopNosakiTimerWithoutEffect(portdeckdata, nosaki_flagship_deck, false);
 
                             KcaMoraleInfo.setDeckCount(portdeckdata.size());
                             for (int i = 0; i < portdeckdata.size(); i++) {
@@ -1122,6 +1143,7 @@ public class KcaService extends BaseService {
                                         isAkashiTimerNotiWait = false;
                                     });
                             KcaAkashiRepairInfo.setAkashiData(akashi_flagship_deck);
+                            stopAkashiTimerWithoutEffect(portdeckdata, akashi_flagship_deck, false);
 
                             updateFleetView();
                         }
@@ -1371,6 +1393,11 @@ public class KcaService extends BaseService {
                     if (jsonDataObj.has("api_data")) {
                         JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                         KcaApiData.updateSuppliedUserShip(api_data.getAsJsonArray("api_ship"));
+                        // supply is one of the conditions of the APF morale gain
+                        JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+                        if (portdeckdata != null) {
+                            KcaNosakiInfo.setNosakiData(deckInfoCalc.checkNosakiFlagship(portdeckdata));
+                        }
                     }
                 }
 
@@ -1922,7 +1949,9 @@ public class KcaService extends BaseService {
                         }
                         if (deckIdx != -1) {
                             JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-                            JsonArray nosaki_before = deckInfoCalc.checkNosakiFlagship(portdeckdata);
+                            // taken out by hand: whether she was there, whatever her state
+                            JsonArray nosaki_before = deckInfoCalc.checkNosakiInFleet(portdeckdata);
+                            JsonArray akashi_before = deckInfoCalc.checkAkashiInFleet(portdeckdata);
                             JsonObject targetDeckIdxData = portdeckdata.get(deckIdx).getAsJsonObject();
                             JsonArray targetDeckIdxShipIdata = targetDeckIdxData.get("api_ship").getAsJsonArray();
 
@@ -1971,14 +2000,14 @@ public class KcaService extends BaseService {
                             JsonArray nosaki_after = deckInfoCalc.checkNosakiFlagship(portdeckdata);
                             KcaNosakiInfo.setNosakiData(nosaki_after);
 
-                            if (shipId != -2 // "Remove All but Flagship" does not reset the timer
-                                    && (containsDeck(nosaki_before, deckIdx, originalDeckIdx)
-                                    || containsDeck(nosaki_after, deckIdx, originalDeckIdx))) {
-                                if (nosaki_after.isEmpty()) {
-                                    KcaNosakiInfo.initNosakiTimer();
-                                } else {
-                                    KcaNosakiInfo.setNosakiTimer();
-                                }
+                            // like the repair timer, a fleet change resets the timer when the changed fleet has an APF;
+                            // taking her out stops it when no fleet has one any more
+                            if (containsDeck(nosaki_after, deckIdx, originalDeckIdx)) {
+                                KcaNosakiInfo.setNosakiTimer();
+                                processNosakiTimerInfo();
+                            } else {
+                                stopNosakiTimerWithoutEffect(portdeckdata, nosaki_after,
+                                        containsDeck(nosaki_before, deckIdx, originalDeckIdx));
                             }
 
                             for (int i = 0; i < portdeckdata.size(); i++) {
@@ -1986,22 +2015,17 @@ public class KcaService extends BaseService {
                                 processMoraleInfo(i, portdeckdata, result);
                             }
 
-                            JsonArray akashi_flagship_deck = deckInfoCalc.checkAkashiFlagship(portdeckdata);
-                            KcaAkashiRepairInfo.setAkashiData(akashi_flagship_deck);
+                            JsonArray akashi_after = deckInfoCalc.checkAkashiFlagship(portdeckdata);
+                            KcaAkashiRepairInfo.setAkashiData(akashi_after);
 
-                            boolean akashi_nochange_flag = true;
-                            for (int i = 0; i < akashi_flagship_deck.size(); i++) {
-                                JsonObject item = akashi_flagship_deck.get(i).getAsJsonObject();
-                                int deckid = item.get("id").getAsInt();
-                                if (deckid == deckIdx || deckid == originalDeckIdx) {
-                                    akashi_nochange_flag = false;
-                                    break;
-                                }
-                            }
-                            if (!akashi_nochange_flag) {
+                            // taking the repair ship out stops the timer when no fleet can repair any more
+                            if (containsDeck(akashi_after, deckIdx, originalDeckIdx)) {
                                 KcaAkashiRepairInfo.setAkashiTimer();
                                 processAkashiTimerInfo();
                                 isAkashiTimerNotiWait = true;
+                            } else {
+                                stopAkashiTimerWithoutEffect(portdeckdata, akashi_after,
+                                        containsDeck(akashi_before, deckIdx, originalDeckIdx));
                             }
                         }
                         updateFleetView();
@@ -2031,9 +2055,28 @@ public class KcaService extends BaseService {
                                         break;
                                     }
                                 }
+                                boolean same_ships = KcaDeckInfo.isSameShipList(before_ship_list, after_ship_list);
                                 portdeckdata.set(deckIdx, api_data);
                                 dbHelper.putValue(DB_KEY_DECKPORT, portdeckdata.toString());
-                                KcaNosakiInfo.setNosakiData(deckInfoCalc.checkNosakiFlagship(portdeckdata));
+                                // a preset with a repair ship or APF resets the timer unless it keeps the same ships;
+                                // one without leaves the timer as it is, even when it takes them out
+                                JsonArray nosaki_after = deckInfoCalc.checkNosakiFlagship(portdeckdata);
+                                KcaNosakiInfo.setNosakiData(nosaki_after);
+                                if (containsDeck(nosaki_after, deckIdx, -1)
+                                        && (!same_ships || KcaNosakiInfo.getNosakiTimerValue() < 0)) {
+                                    KcaNosakiInfo.setNosakiTimer();
+                                    processNosakiTimerInfo();
+                                }
+                                stopNosakiTimerWithoutEffect(portdeckdata, nosaki_after, false);
+                                JsonArray akashi_after = deckInfoCalc.checkAkashiFlagship(portdeckdata);
+                                KcaAkashiRepairInfo.setAkashiData(akashi_after);
+                                if (containsDeck(akashi_after, deckIdx, -1)
+                                        && (!same_ships || KcaAkashiRepairInfo.getAkashiTimerValue() < 0)) {
+                                    KcaAkashiRepairInfo.setAkashiTimer();
+                                    processAkashiTimerInfo();
+                                    isAkashiTimerNotiWait = true;
+                                }
+                                stopAkashiTimerWithoutEffect(portdeckdata, akashi_after, false);
                                 boolean result = setMoraleValueForDeck(deckIdx, portdeckdata, false, is_same);
                                 processMoraleInfo(deckIdx, portdeckdata, result);
                             }
@@ -2101,6 +2144,11 @@ public class KcaService extends BaseService {
                                 dbHelper.putValue(DB_KEY_DECKPORT, api_deck_data.toString());
                                 KcaApiData.updateUserShip(api_data.get("api_ship_data").getAsJsonArray().get(0).getAsJsonObject());
                                 KcaNosakiInfo.setNosakiData(deckInfoCalc.checkNosakiFlagship(api_deck_data));
+                                // equipment changes do not restart anchorage repair, but repair facilities change its reach and speed,
+                                // and taking them all off a repair ship that has no built-in ones stops it
+                                JsonArray akashi_flagship_deck = deckInfoCalc.checkAkashiFlagship(api_deck_data);
+                                KcaAkashiRepairInfo.setAkashiData(akashi_flagship_deck);
+                                stopAkashiTimerWithoutEffect(api_deck_data, akashi_flagship_deck, false);
                             }
                         }
                         if (kaisouProcessFlag) {
@@ -2794,6 +2842,27 @@ public class KcaService extends BaseService {
         }
     }
 
+    // Stops the timer when no fleet has a repair ship that can repair, and either she was taken out
+    // of the changed fleet by hand or one is left that cannot (anchorage repair is invalid then).
+    // With none left after a preset, the timer is left to the port visit.
+    private void stopAkashiTimerWithoutEffect(JsonArray portdeckdata, JsonArray akashi_flagship_deck, boolean takenOut) {
+        if (KcaAkashiRepairInfo.getAkashiTimerValue() < 0 || !akashi_flagship_deck.isEmpty()) return;
+        if (takenOut || !deckInfoCalc.checkAkashiInFleet(portdeckdata).isEmpty()) {
+            KcaAkashiRepairInfo.initAkashiTimer();
+            processAkashiTimerInfo();
+            isAkashiTimerNotiWait = false;
+        }
+    }
+
+    // Same as the repair timer, with an APF that does not meet the conditions of the morale gain.
+    private void stopNosakiTimerWithoutEffect(JsonArray portdeckdata, JsonArray nosaki_flagship_deck, boolean takenOut) {
+        if (KcaNosakiInfo.getNosakiTimerValue() < 0 || !nosaki_flagship_deck.isEmpty()) return;
+        if (takenOut || !deckInfoCalc.checkNosakiInFleet(portdeckdata).isEmpty()) {
+            KcaNosakiInfo.initNosakiTimer();
+            processNosakiTimerInfo();
+        }
+    }
+
     private void processAkashiTimerInfo() {
         int nid = getNotificationId(NOTI_AKASHI, 0);
         PendingIntent pendingIntent = PendingIntent.getService(
@@ -2807,6 +2876,22 @@ public class KcaService extends BaseService {
         Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
         notifiManager.cancel(nid);
         setAkashiAlarm(aIntent);
+    }
+
+    // replaces the port food supply alarm after the Nosaki timer starts again or stops
+    private void processNosakiTimerInfo() {
+        int nid = getNotificationId(NOTI_NOSAKI, 0);
+        PendingIntent pendingIntent = PendingIntent.getService(
+                getApplicationContext(),
+                nid,
+                new Intent(getApplicationContext(), KcaAlarmService.class),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+        pendingIntent.cancel();
+        alarmManager.cancel(pendingIntent);
+        Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
+        notifiManager.cancel(nid);
+        setNosakiAlarm(aIntent);
     }
 
     private boolean isCurrentPortDeckDataReady() {

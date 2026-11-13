@@ -13,10 +13,18 @@ public class KcaNosakiInfo {
     public static final int SHIP_ID_NOSAKI = 996;
     public static final int SHIP_ID_NOSAKI_KAI = 1002;
     public static final int TIMER_SEC = 900;
+    public static final int MIN_MORALE = 30;
     private static final long TIMER_MS = TIMER_SEC * 1000L;
 
+    // fleets with an APF as the flagship or 2nd ship that meets the conditions -> morale gain
     public static Map<Integer, Integer> nosaki_data = new HashMap<>();
     public static long nosaki_register_time = -1;
+
+    // when the first gain is ready, 15 minutes after the timer started; 0 if it is not running
+    public static long getNosakiGainTime() {
+        if (nosaki_register_time < 0) return 0;
+        return nosaki_register_time + TIMER_MS;
+    }
 
     public static void initNosakiTimer() {
         setNosakiTimer(-1);
@@ -43,6 +51,16 @@ public class KcaNosakiInfo {
         return !nosaki_data.isEmpty();
     }
 
+    // conditions of the APF, as for a repair ship: fully supplied, better than lightly damaged (HP over 75%),
+    // morale 30 or more, and not on expedition or in docking
+    public static boolean isNosakiEffective(int nowHp, int maxHp, int cond, int fuel, int fuelMax, int bull, int bullMax,
+                                            boolean onExpedition, boolean inDock) {
+        return nowHp * 4 > maxHp * 3
+                && cond >= MIN_MORALE
+                && fuel >= fuelMax && bull >= bullMax
+                && !onExpedition && !inDock;
+    }
+
     public static int getNosakiMoraleGain(int index) {
         Integer result = nosaki_data.get(index);
         return result != null ? result : 0;
@@ -52,10 +70,6 @@ public class KcaNosakiInfo {
 
     public static int getNosakiElapsedTimeInSecond() {
         return (int) ((System.currentTimeMillis() - nosaki_register_time) / 1000);
-    }
-
-    public static int getNosakiRemainingTimeInSecond() {
-        return Math.max(0, TIMER_SEC - getNosakiElapsedTimeInSecond());
     }
 
     // The absolute time of the next passive morale gain tick. Past ticks are

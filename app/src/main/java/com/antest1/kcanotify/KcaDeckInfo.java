@@ -855,54 +855,97 @@ public class KcaDeckInfo {
         return min_cond_value;
     }
 
+    // whether two api_ship lists hold the same ships in the same order; empty slots (-1) at the end do not count
+    public static boolean isSameShipList(JsonArray before, JsonArray after) {
+        for (int i = 0; i < Math.max(before.size(), after.size()); i++) {
+            int beforeId = i < before.size() ? before.get(i).getAsInt() : -1;
+            int afterId = i < after.size() ? after.get(i).getAsInt() : -1;
+            if (beforeId != afterId) return false;
+        }
+        return true;
+    }
+
+    // fleets that can do anchorage repair: ships repaired and the repair time modifier (see KcaAkashiRepairInfo)
     public JsonArray checkAkashiFlagship(JsonArray deckPortData) {
         JsonArray deck_id_list = new JsonArray();
         for (int i = 0; i < deckPortData.size(); i++) {
             JsonArray deckShipIdList = deckPortData.get(i).getAsJsonObject().getAsJsonArray("api_ship");
-            int flagship = deckShipIdList.get(0).getAsInt();
-            if (flagship != -1) {
-                JsonObject shipData = getUserShipDataById(flagship, "ship_id,slot");
-                if (shipData != null) {
-                    int kc_ship_id = shipData.get("ship_id").getAsInt();
-                    if (kc_ship_id == 182 || kc_ship_id == 187 || kc_ship_id == 985) {
-                        int available = 1;
-                        if (kc_ship_id == 182 || kc_ship_id == 187) available += 1;
-
-                        JsonArray shipItem = (JsonArray) shipData.get("slot");
-                        for (int j = 0; j < shipItem.size(); j++) {
-                            int item_id = shipItem.get(j).getAsInt();
-                            if (item_id != -1) {
-                                JsonObject itemData = getUserItemStatusById(item_id, "level", "type");
-                                if (itemData == null) continue;
-                                int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
-                                if (itemType == T2_REPAIR_INFRA) available += 1;
-                            }
-                        }
-                        JsonObject repairInfo = new JsonObject();
-                        repairInfo.addProperty("id", i);
-                        repairInfo.addProperty("count", available);
-                        deck_id_list.add(repairInfo);
-                    }
-                }
+            int[] first = getRepairFacilities(deckShipIdList, 0);
+            int[] second = getRepairFacilities(deckShipIdList, 1);
+            int count = KcaAkashiRepairInfo.getRepairReach(first, second);
+            if (count > 0) {
+                JsonObject repairInfo = new JsonObject();
+                repairInfo.addProperty("id", i);
+                repairInfo.addProperty("count", count);
+                repairInfo.addProperty("modifier", KcaAkashiRepairInfo.getRepairModifier(first, second));
+                deck_id_list.add(repairInfo);
             }
         }
         return deck_id_list;
     }
 
-    public JsonArray checkNosakiFlagship(JsonArray deckPortData) {
+    // fleets with a repair ship (AR) as the flagship, whether or not she can repair
+    public JsonArray checkAkashiInFleet(JsonArray deckPortData) {
         JsonArray deck_id_list = new JsonArray();
         for (int i = 0; i < deckPortData.size(); i++) {
             JsonArray deckShipIdList = deckPortData.get(i).getAsJsonObject().getAsJsonArray("api_ship");
+            if (getRepairFacilities(deckShipIdList, 0) != null) {
+                JsonObject info = new JsonObject();
+                info.addProperty("id", i);
+                deck_id_list.add(info);
+            }
+        }
+        return deck_id_list;
+    }
+
+    // {equipped, total, usable} ship repair facilities of the ship at the position if it is a repair ship (AR),
+    // otherwise null; usable is 0 when it is moderately damaged or worse (see KcaAkashiRepairInfo)
+    private int[] getRepairFacilities(JsonArray deckShipIdList, int position) {
+        if (position >= deckShipIdList.size()) return null;
+        int shipId = deckShipIdList.get(position).getAsInt();
+        if (shipId == -1) return null;
+        JsonObject shipData = getUserShipDataById(shipId, "ship_id,slot,nowhp,maxhp");
+        if (shipData == null || !shipData.has("ship_id") || !shipData.has("slot")) return null;
+        int kc_ship_id = shipData.get("ship_id").getAsInt();
+        JsonObject kcShipData = getKcShipDataById(kc_ship_id, "stype");
+        if (kcShipData == null || !kcShipData.has("stype") || kcShipData.get("stype").getAsInt() != STYPE_AR) return null;
+
+        int equipped = 0;
+        JsonArray shipItem = shipData.getAsJsonArray("slot");
+        for (int j = 0; j < shipItem.size(); j++) {
+            int item_id = shipItem.get(j).getAsInt();
+            if (item_id != -1) {
+                JsonObject itemData = getUserItemStatusById(item_id, "level", "type");
+                if (itemData == null) continue;
+                int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                if (itemType == T2_REPAIR_INFRA) equipped += 1;
+            }
+        }
+        boolean usable = !shipData.has("nowhp") || !shipData.has("maxhp")
+                || shipData.get("nowhp").getAsInt() * 2 > shipData.get("maxhp").getAsInt();
+        return new int[]{equipped, equipped + KcaAkashiRepairInfo.getBuiltInFacilities(kc_ship_id), usable ? 1 : 0};
+    }
+
+    // fleets with an APF (Nosaki) as the flagship or 2nd ship that meets the conditions
+    // (see KcaNosakiInfo.isNosakiEffective), and the morale gain per 15 minutes
+    public JsonArray checkNosakiFlagship(JsonArray deckPortData) {
+        JsonArray deck_id_list = new JsonArray();
+        for (int i = 0; i < deckPortData.size(); i++) {
+            JsonObject deck = deckPortData.get(i).getAsJsonObject();
+            JsonArray deckShipIdList = deck.getAsJsonArray("api_ship");
+            boolean onExpedition = deck.has("api_mission") && deck.getAsJsonArray("api_mission").get(0).getAsInt() != 0;
             int max_gain = 0;
             for (int j = 0; j < Math.min(2, deckShipIdList.size()); j++) {
                 int shipId = deckShipIdList.get(j).getAsInt();
                 if (shipId == -1) continue;
-                JsonObject shipData = getUserShipDataById(shipId, "ship_id");
+                JsonObject shipData = getUserShipDataById(shipId, "ship_id,nowhp,maxhp,cond,fuel,bull");
                 if (shipData != null && shipData.has("ship_id")) {
                     int kc_ship_id = shipData.get("ship_id").getAsInt();
                     int gain = kc_ship_id == KcaNosakiInfo.SHIP_ID_NOSAKI ? 2
                             : kc_ship_id == KcaNosakiInfo.SHIP_ID_NOSAKI_KAI ? 3 : 0;
-                    max_gain = Math.max(max_gain, gain);
+                    if (gain > 0 && isNosakiEffective(shipId, kc_ship_id, shipData, onExpedition)) {
+                        max_gain = Math.max(max_gain, gain);
+                    }
                 }
             }
             if (max_gain > 0) {
@@ -913,6 +956,42 @@ public class KcaDeckInfo {
             }
         }
         return deck_id_list;
+    }
+
+    // fleets with an APF (Nosaki) as the flagship or 2nd ship, whether or not she meets the conditions
+    public JsonArray checkNosakiInFleet(JsonArray deckPortData) {
+        JsonArray deck_id_list = new JsonArray();
+        for (int i = 0; i < deckPortData.size(); i++) {
+            JsonArray deckShipIdList = deckPortData.get(i).getAsJsonObject().getAsJsonArray("api_ship");
+            for (int j = 0; j < Math.min(2, deckShipIdList.size()); j++) {
+                int shipId = deckShipIdList.get(j).getAsInt();
+                if (shipId == -1) continue;
+                JsonObject shipData = getUserShipDataById(shipId, "ship_id");
+                if (shipData == null || !shipData.has("ship_id")) continue;
+                int kc_ship_id = shipData.get("ship_id").getAsInt();
+                if (kc_ship_id == KcaNosakiInfo.SHIP_ID_NOSAKI || kc_ship_id == KcaNosakiInfo.SHIP_ID_NOSAKI_KAI) {
+                    JsonObject info = new JsonObject();
+                    info.addProperty("id", i);
+                    deck_id_list.add(info);
+                    break;
+                }
+            }
+        }
+        return deck_id_list;
+    }
+
+    private boolean isNosakiEffective(int shipId, int kcShipId, JsonObject shipData, boolean onExpedition) {
+        JsonObject kcShipData = getKcShipDataById(kcShipId, "fuel_max,bull_max");
+        String[] keys = {"nowhp", "maxhp", "cond", "fuel", "bull"};
+        for (String key : keys) {
+            if (!shipData.has(key)) return true; // not known: do not hide the gain
+        }
+        if (kcShipData == null || !kcShipData.has("fuel_max") || !kcShipData.has("bull_max")) return true;
+        return KcaNosakiInfo.isNosakiEffective(
+                shipData.get("nowhp").getAsInt(), shipData.get("maxhp").getAsInt(), shipData.get("cond").getAsInt(),
+                shipData.get("fuel").getAsInt(), kcShipData.get("fuel_max").getAsInt(),
+                shipData.get("bull").getAsInt(), kcShipData.get("bull_max").getAsInt(),
+                onExpedition, KcaDocking.checkShipInDock(shipId));
     }
 
     // Reference: http://kancolle.wikia.com/wiki/Land_Base_Aerial_Support#Fighter_Power_Calculations

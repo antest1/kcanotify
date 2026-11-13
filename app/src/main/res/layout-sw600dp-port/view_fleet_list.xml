@@ -387,8 +387,8 @@
                                 android:paddingStart="8dp"
                                 android:paddingTop="3dp"
                                 android:singleLine="true"
-                                android:text="N 00:00"
-                                android:textColor="@color/white"
+                                android:text="00:00:00"
+                                android:textColor="@color/colorFleetNosakiTimerText"
                                 android:textSize="16dp" />
 
                             <TextView

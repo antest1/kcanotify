@@ -115,6 +115,8 @@ public class KcaFleetViewService extends BaseService {
     Runnable timer;
     String fleetCalcInfoText = "";
     int akashiAvailableCount = 0;
+    int nosakiMoraleGain = 0;
+    double akashiRepairModifier = 1.0;
     ScheduledExecutorService timeScheduler = null;
 
     static int view_status = 0;
@@ -874,6 +876,8 @@ public class KcaFleetViewService extends BaseService {
         }
 
         akashiAvailableCount = KcaAkashiRepairInfo.getAkashiAvailableCount(idx);
+        nosakiMoraleGain = KcaNosakiInfo.getNosakiMoraleGain(idx);
+        akashiRepairModifier = KcaAkashiRepairInfo.getAkashiRepairModifier(idx);
 
         infoList.add("LV ".concat(String.valueOf(sum_level)));
         fleetCalcInfoText = joinStr(infoList, " / ");
@@ -961,9 +965,9 @@ public class KcaFleetViewService extends BaseService {
             displayText = "";
         }
 
-        final String akashi_timer_text = KcaUtils.getTimeStr(KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond());
-        final String nosaki_timer_text = getString(R.string.fleetview_nosaki_timer,
-                KcaUtils.getTimeStr(KcaNosakiInfo.getNosakiRemainingTimeInSecond()));
+        final String akashi_timer_text = KcaUtils.getElapsedTimeStr(KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond());
+        // counts up like the Akashi timer: the gain stacks every 15 minutes until the next port visit
+        final String nosaki_timer_text = KcaUtils.getElapsedTimeStr(KcaNosakiInfo.getNosakiElapsedTimeInSecond());
 
         mHandler.post(() -> {
             if (isReady && !displayText.isEmpty()) {
@@ -973,11 +977,12 @@ public class KcaFleetViewService extends BaseService {
 
                 long akashiTimerValue = KcaAkashiRepairInfo.getAkashiTimerValue();
                 boolean isAkashiActive = akashiTimerValue >= 0 && akashiAvailableCount > 0;
-                for (int i = 0; i < 6; i++) {
+                // up to 7 ships with two repair ships (the 7th of a striking force fleet is the first combined item)
+                for (int i = 0; i < 7; i++) {
                     if (i < akashiAvailableCount) {
-                        getFleetViewItem(i).setAkashiTimer(isAkashiActive);
+                        getFleetViewItem(i).setAkashiTimer(isAkashiActive, akashiRepairModifier);
                     } else {
-                        getFleetViewItem(i).setAkashiTimer(false);
+                        getFleetViewItem(i).setAkashiTimer(false, akashiRepairModifier);
                     }
                 }
 
@@ -996,15 +1001,18 @@ public class KcaFleetViewService extends BaseService {
                 }
 
                 long nosakiTimerValue = KcaNosakiInfo.getNosakiTimerValue();
-                boolean isNosakiActive = nosakiTimerValue >= 0 && KcaNosakiInfo.getNosakiInAnyFlagship();
-                if (isNosakiActive) {
-                    fleetNosakiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetNosakiTimerBtnActive));
+                if (nosakiTimerValue < 0) {
+                    fleetNosakiTimerBtn.setVisibility(View.GONE);
+                } else {
+                    if (nosakiMoraleGain > 0) {
+                        fleetNosakiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetNosakiTimerBtnActive));
+                    } else {
+                        fleetNosakiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetNosakiTimerBtnDeactive));
+                    }
                     if (!nosaki_timer_text.contentEquals(fleetNosakiTimerBtn.getText())) {
                         fleetNosakiTimerBtn.setText(nosaki_timer_text);
                     }
                     fleetNosakiTimerBtn.setVisibility(VISIBLE);
-                } else {
-                    fleetNosakiTimerBtn.setVisibility(View.GONE);
                 }
             } else {
                 if (!getString(R.string.kca_init_content).contentEquals(fleetInfoLine.getText())) {
