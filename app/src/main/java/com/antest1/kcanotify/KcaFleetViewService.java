@@ -965,9 +965,9 @@ public class KcaFleetViewService extends BaseService {
             displayText = "";
         }
 
-        final String akashi_timer_text = KcaUtils.getTimeStr(KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond());
+        final String akashi_timer_text = KcaUtils.getElapsedTimeStr(KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond());
         // counts up like the Akashi timer: the gain stacks every 15 minutes until the next port visit
-        final String nosaki_timer_text = KcaUtils.getTimeStr(KcaNosakiInfo.getNosakiElapsedTimeInSecond());
+        final String nosaki_timer_text = KcaUtils.getElapsedTimeStr(KcaNosakiInfo.getNosakiElapsedTimeInSecond());
 
         mHandler.post(() -> {
             if (isReady && !displayText.isEmpty()) {

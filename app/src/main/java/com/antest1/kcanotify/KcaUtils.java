@@ -470,6 +470,13 @@ public class KcaUtils {
         return getTimeStr(left_time, false);
     }
 
+    // count-up timers stop at 99:59:59 so the hours keep two digits; nobody leaves the game longer than that
+    public static final int MAX_ELAPSED_TIME_SECOND = 99 * 3600 + 59 * 60 + 59;
+
+    public static String getElapsedTimeStr(int elapsed_time) {
+        return getTimeStr(Math.min(elapsed_time, MAX_ELAPSED_TIME_SECOND));
+    }
+
     public static Calendar getJapanCalendarInstance() {
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"), Locale.JAPAN);
         c.setFirstDayOfWeek(Calendar.MONDAY);
