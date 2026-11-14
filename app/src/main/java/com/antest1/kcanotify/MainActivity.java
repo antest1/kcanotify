@@ -544,6 +544,7 @@ public class MainActivity extends BaseActivity {
             case REQUEST_EXTERNAL_PERMISSION: {
                 warnType[REQUEST_EXTERNAL_PERMISSION] = !granted;
                 setWarning();
+                break;
             }
             case REQUEST_NOTIFICATION_PERMISSION: {
                 if (!checkExactAlarmPermission()) {
@@ -553,6 +554,7 @@ public class MainActivity extends BaseActivity {
                     if (granted)
                         Toast.makeText(getApplicationContext(), getString(R.string.ma_permission_service_restart), Toast.LENGTH_LONG).show();
                 }
+                break;
             }
         }
     }
