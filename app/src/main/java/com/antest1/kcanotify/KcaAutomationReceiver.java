@@ -23,12 +23,15 @@ public class KcaAutomationReceiver extends BroadcastReceiver {
             switch (action) {
                 case SNIFFER_ON_ACTION:
                     try {
-                        VpnService.prepare(context);
+                        // the VPN does not start until the user allows it once from the app
+                        if (VpnService.prepare(context) != null) {
+                            Log.w("KCA", "sniffer_on: VPN permission is not granted");
+                        }
                         prefs.edit().putBoolean(PREF_VPN_ENABLED, true).apply();
                         KcaVpnService.start("prepared", context);
                     } catch (Throwable ex) {
-                        // Prepare failed
-                        Log.e("KCA", ex.toString() + "\n" + Log.getStackTraceString(ex));
+                        // prepare failed, or the service start was refused while the app is in background
+                        Log.e("KCA", "sniffer_on: " + ex + "\n" + Log.getStackTraceString(ex));
                     }
                     break;
 
