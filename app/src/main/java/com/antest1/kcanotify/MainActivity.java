@@ -538,9 +538,11 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // the results are empty when the request was interrupted
+        boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
         switch (requestCode) {
             case REQUEST_EXTERNAL_PERMISSION: {
-                warnType[REQUEST_EXTERNAL_PERMISSION] = !(grantResults[0] == PackageManager.PERMISSION_GRANTED);
+                warnType[REQUEST_EXTERNAL_PERMISSION] = !granted;
                 setWarning();
             }
             case REQUEST_NOTIFICATION_PERMISSION: {
@@ -548,7 +550,7 @@ public class MainActivity extends BaseActivity {
                     grantExactAlarmPermission();
                 } else {
                     setWarning();
-                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    if (granted)
                         Toast.makeText(getApplicationContext(), getString(R.string.ma_permission_service_restart), Toast.LENGTH_LONG).show();
                 }
             }
