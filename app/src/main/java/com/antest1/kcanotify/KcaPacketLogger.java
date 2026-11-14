@@ -87,7 +87,8 @@ public class KcaPacketLogger extends SQLiteOpenHelper {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            if (db != null) {
+            // there is no transaction to end when beginTransaction itself failed
+            if (db != null && db.inTransaction()) {
                 db.endTransaction();
             }
         }
