@@ -650,7 +650,13 @@ public class KcaService extends BaseService {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
         long complete_time = KcaAkashiRepairInfo.getAkashiRepairTime();
-        if (complete_time > 0) setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_AKASHI, 0), false);
+        if (complete_time > 0 && hasAkashiRepairTarget()) setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_AKASHI, 0), false);
+    }
+
+    // checked with the fleets as they are when the alarm is set; without fleet data the alarm is kept
+    private boolean hasAkashiRepairTarget() {
+        JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+        return portdeckdata == null || deckInfoCalc.hasAkashiRepairTarget(portdeckdata);
     }
 
     private void setNosakiAlarm(Intent aIntent) {
@@ -664,7 +670,13 @@ public class KcaService extends BaseService {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
         long gain_time = KcaNosakiInfo.getNosakiGainTime();
-        if (gain_time > 0) setAlarm(gain_time, pendingIntent, getNotificationId(NOTI_NOSAKI, 0), false);
+        if (gain_time > 0 && hasNosakiGainTarget()) setAlarm(gain_time, pendingIntent, getNotificationId(NOTI_NOSAKI, 0), false);
+    }
+
+    // checked with the fleets as they are when the alarm is set; without fleet data the alarm is kept
+    private boolean hasNosakiGainTarget() {
+        JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+        return portdeckdata == null || deckInfoCalc.hasNosakiGainTarget(portdeckdata);
     }
 
     private void toastInfo() {

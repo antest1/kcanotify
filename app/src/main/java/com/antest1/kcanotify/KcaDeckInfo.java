@@ -884,6 +884,28 @@ public class KcaDeckInfo {
         return deck_id_list;
     }
 
+    // whether a fleet that can do anchorage repair (see checkAkashiFlagship) has a ship in the reach to repair
+    // (see KcaAkashiRepairInfo.isRepairable)
+    public boolean hasAkashiRepairTarget(JsonArray deckPortData) {
+        JsonArray akashiDecks = checkAkashiFlagship(deckPortData);
+        for (int i = 0; i < akashiDecks.size(); i++) {
+            JsonObject info = akashiDecks.get(i).getAsJsonObject();
+            JsonArray deckShipIdList = deckPortData.get(info.get("id").getAsInt()).getAsJsonObject().getAsJsonArray("api_ship");
+            int count = Math.min(info.get("count").getAsInt(), deckShipIdList.size());
+            for (int j = 0; j < count; j++) {
+                int shipId = deckShipIdList.get(j).getAsInt();
+                if (shipId == -1) continue;
+                JsonObject shipData = getUserShipDataById(shipId, "nowhp,maxhp");
+                if (shipData == null || !shipData.has("nowhp") || !shipData.has("maxhp")) continue;
+                if (KcaAkashiRepairInfo.isRepairable(shipData.get("nowhp").getAsInt(), shipData.get("maxhp").getAsInt(),
+                        KcaDocking.checkShipInDock(shipId))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     // fleets with a repair ship (AR) as the flagship, whether or not she can repair
     public JsonArray checkAkashiInFleet(JsonArray deckPortData) {
         JsonArray deck_id_list = new JsonArray();
@@ -978,6 +1000,17 @@ public class KcaDeckInfo {
             }
         }
         return deck_id_list;
+    }
+
+    // whether a fleet with the morale gain (see checkNosakiFlagship) has a ship other than the APF
+    // below the morale the gain raises to; with all of them there, the gain has nothing to raise
+    public boolean hasNosakiGainTarget(JsonArray deckPortData) {
+        JsonArray nosakiDecks = checkNosakiFlagship(deckPortData);
+        for (int i = 0; i < nosakiDecks.size(); i++) {
+            int deckIdx = nosakiDecks.get(i).getAsJsonObject().get("id").getAsInt();
+            if (checkMinimumMorale(deckPortData, deckIdx, true) < KcaMoraleInfo.APF_MORALE_CAP) return true;
+        }
+        return false;
     }
 
     private boolean isNosakiEffective(int shipId, int kcShipId, JsonObject shipData, boolean onExpedition) {

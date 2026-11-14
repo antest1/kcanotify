@@ -83,4 +83,19 @@ public class KcaAkashiRepairTest {
         assertEquals(2540 - 1200, KcaDocking.getNextRepair(99, KcaApiData.STYPE_BB, 1.0, 1200));
         assertEquals(2, KcaDocking.getRepairedHp(99, KcaApiData.STYPE_BB, 1.0, 2540));
     }
+
+    // nowHp, maxHp, inDock
+    @Test
+    public void repairsDamagedShipsBetterThanModeratelyDamaged() {
+        assertTrue(KcaAkashiRepairInfo.isRepairable(39, 40, false));
+        assertTrue(KcaAkashiRepairInfo.isRepairable(21, 40, false));
+    }
+
+    @Test
+    public void noRepairAtFullHpModeratelyDamagedOrInDocking() {
+        assertFalse(KcaAkashiRepairInfo.isRepairable(40, 40, false));
+        // 20/40 is exactly 50%: moderately damaged
+        assertFalse(KcaAkashiRepairInfo.isRepairable(20, 40, false));
+        assertFalse(KcaAkashiRepairInfo.isRepairable(39, 40, true));
+    }
 }
