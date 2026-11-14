@@ -742,7 +742,7 @@ public class KcaService extends BaseService {
                 // the response as received, written off the main thread
                 KcaPacketLogger logger = packetLogger;
                 int offset = KcaHandler.getJsonOffset(raw);
-                responseWriter.execute(() -> logger.log(url, request,
+                writeResponseInBackground("packet_log", () -> logger.log(url, request,
                         new String(raw, offset, raw.length - offset, StandardCharsets.UTF_8)));
             }
 
@@ -810,7 +810,7 @@ public class KcaService extends BaseService {
                     // the response as received, so it is not written back to text from the parsed object
                     Context context = getApplicationContext();
                     int offset = KcaHandler.getJsonOffset(raw);
-                    responseWriter.execute(() -> KcaGameDataStore.save(context, raw, offset));
+                    writeResponseInBackground("game_data", () -> KcaGameDataStore.save(context, raw, offset));
                     //Toast.makeText(this, "Load Kancolle Data", Toast.LENGTH_LONG).show();
                     // the game does not tell the data version; KcaGameDataChecker syncs it with the server
                     KcaApiData.getKcGameData(jsonDataObj.getAsJsonObject("api_data"));
@@ -2935,6 +2935,26 @@ public class KcaService extends BaseService {
             qintent.setAction(KcaLandAirBasePopupService.LAB_DATA_ACTION);
             startService(qintent);
         }
+    }
+
+    // an exception that leaves a task ends the process with the executor thread,
+    // so a failed write goes to the error log instead
+    private void writeResponseInBackground(String name, Runnable task) {
+        KcaDBHelper helper = dbHelper;
+        responseWriter.execute(() -> {
+            try {
+                task.run();
+            } catch (RuntimeException e) {
+                Log.w("KCA", name + ": " + e);
+                try {
+                    if (helper != null) {
+                        helper.recordErrorLog(ERROR_TYPE_SERVICE, name, "", "", getStringFromException(e));
+                    }
+                } catch (RuntimeException ignored) {
+                    // the DB cannot be written at all
+                }
+            }
+        });
     }
 
     public void recordDropLog(JsonObject data, boolean port_full) {
