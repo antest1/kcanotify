@@ -980,6 +980,17 @@ public class KcaDeckInfo {
         return deck_id_list;
     }
 
+    // whether a fleet with the morale gain (see checkNosakiFlagship) has a ship other than the APF
+    // below the morale the gain raises to; with all of them there, the gain has nothing to raise
+    public boolean hasNosakiGainTarget(JsonArray deckPortData) {
+        JsonArray nosakiDecks = checkNosakiFlagship(deckPortData);
+        for (int i = 0; i < nosakiDecks.size(); i++) {
+            int deckIdx = nosakiDecks.get(i).getAsJsonObject().get("id").getAsInt();
+            if (checkMinimumMorale(deckPortData, deckIdx, true) < KcaMoraleInfo.APF_MORALE_CAP) return true;
+        }
+        return false;
+    }
+
     private boolean isNosakiEffective(int shipId, int kcShipId, JsonObject shipData, boolean onExpedition) {
         JsonObject kcShipData = getKcShipDataById(kcShipId, "fuel_max,bull_max");
         String[] keys = {"nowhp", "maxhp", "cond", "fuel", "bull"};
