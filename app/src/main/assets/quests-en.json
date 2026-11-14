@@ -4295,6 +4295,14 @@
         "rewards": "¶First choice: Either three New Model Armament Materials OR a 12.7cm Single High-angle Gun Mount Kai 2 ★3 OR three New Model Aerial Armament Materials ¶Second choice: Either a 25mm Triple Autocannon Mount (Concentrated Deployment) ★4 OR a 12.7cm Single High-angle Gun Mount Kai 3 OR +5 Equipment Slots",
         "resources": [[0, 0, 300, 100], [0, 0, 0, 0]]
     },
+    "1172": {
+        "code": "F144",
+        "name": "Strengthening Night Battle Assault Equipment I",
+        "desc": "Have 60 Development Materials, 2 New Model Armament Materials and 2 Arsenal Resource. Set a flagship with 2 61cm Quintuple (Oxygen) Torpedo Mounts in her first and second slots, and a ★max 61cm Quadruple (Oxygen) Torpedo Mount in her third slot. Scrap 10 61cm Quadruple Torpedo Mounts.",
+        "memo": "※Consumes the items and resources.",
+        "rewards": "two 61cm Quintuple (Oxygen) Torpedo Mount ★maxes and either +6 Equipment Slots OR a 61cm Quadruple (Oxygen) Torpedo Mount Late Model ★4 OR 28 Flamethrowers",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
     "605": {
         "code": "Fd1",
         "name": "Daily Development 1",
@@ -4733,97 +4741,18 @@
         "rewards": "¶First choice: Either two SOC Seagulls OR two Ro.43 Reconnaissance Seaplanes OR two Laté 298BS ¶Second choice: Either two S9 Ospreys OR two Swordfish (Seaplane Model) OR a Medal",
         "resources": [[200, 200, 200, 200], [0, 0, 0, 0]]
     },
-    "199": {
-        "code": "L2606A1",
-        "name": "Monthly [Time-limited] 31st Squadron, Special Operations Formation!",
-        "desc": "Have any 5 of Kaya, Sugi, Kashi, Take, Ushio, Hibiki, Hanazuki, Kiri in your fleet.",
-        "rewards": "either three Combat Rations OR a Repair Godness",
-        "resources": [[31, 31, 31, 31], [0, 0, 0, 0]]
+    "381": {
+        "code": "L2611C1",
+        "name": "Weekly [Time-limited] Akizuki-class Exercise Mission 2026",
+        "desc": "Secure 3 A-Rank+ victories in Exercises within the same day using any 3 of Akizuki-class, Akigumo, Akishimo and Akitsushima, and up to 3 additional ships.",
+        "rewards": "¶First choice: Either 4 Development Materials OR two 25mm Single Autocannon Mounts OR an Arsenal Resource ¶Second choice: Either 4 Buckets OR two Screws OR +2 Equipment Slots",
+        "resources": [[100, 200, 100, 200], [0, 0, 0, 0]]
     },
-    "382": {
-        "code": "L2606C1",
-        "name": "Monthly [Time-limited] 31st Squadron, Emergency Exercises!",
-        "desc": "Secure 3 A-Rank+ victories in Exercises within the same day using any 5 of Kaya, Sugi, Kashi, Take, Ushio, Hibiki, Hanazuki, Kiri, and up to 1 additional ship.",
-        "rewards": "¶First choice: Either three Development Materials OR a Screw OR an Equipment Slots ¶Second choice: Either two 10cm Twin High-angle Gun Mounts OR two Screws OR 2900 Fuels",
-        "resources": [[300, 100, 300, 100], [0, 0, 0, 0]]
-    },
-    "984": {
-        "code": "L2610B1",
-        "name": "[Halloween] 14th Year Autumn Harvest, Pumpkin Festival Begins!",
-        "desc": "Sortie any 3 of Suzuya, Murasame, Yuudachi, Akebono, Oboro, Asashio, Nowaki, Jingei and Chougei, one as flagship, and up to 3 additional ships to [W1-3], [W1-4] and [W2-1]. S-Rank each boss node twice.",
-        "rewards": "a Pumpkin and either 8 Development Materials OR 6 Buckets OR a Medal",
-        "resources": [[370, 370, 0, 0], [0, 0, 0, 0]]
-    },
-    "985": {
-        "code": "L2610B2",
-        "name": "Weekly [Halloween] Special Escort Squadron, Weigh Anchor!",
-        "desc": "Sortie any 3 of Tsushima, Ukuru, Inagi, Ootomari, Jingei, Chougei, Asahi, Murasame, Makinami, Hayanami, Hamanami and Kashi, and up to 3 additional ships to [W1-2], [W1-5], [W2-2] and [W2-3]. S-Rank each boss node.",
-        "rewards": "¶First choice: Either two Mamiyas OR 20 Development Materials OR two Medals ¶Second choice: Either two Mamiyas OR two Pumpkins OR two New Model Aerial Armament Materials",
-        "resources": [[580, 580, 0, 0], [0, 0, 0, 0]]
-    },
-    "986": {
-        "code": "L2610B3",
-        "name": "[Halloween] USS Trick or Treat!",
-        "desc": "Sortie any 3 of Minneapolis, Tuscaloosa, Gambier Bay, Brooklyn, Johnston, Richard P. Leary and Indiana, and up to 3 additional ships to [W2-1], [W2-5] and [W3-1]. S-Rank each boss node twice.",
-        "rewards": "¶First choice: Either two Pumpkins OR 4 SK Radars OR two Medals ¶Second choice: Either three Pumpkins OR a Remodel Blueprint OR three Latest Overseas Warship Technologys",
-        "resources": [[0, 0, 800, 800], [0, 0, 0, 0]]
-    },
-    "987": {
-        "code": "L2610B4",
-        "name": "Monthly [Halloween] Western Pumpkin Festival! Buono!",
-        "desc": "Sortie any 3 of Roma, Luigi Torelli, Maestrale, Grecale, Libeccio, Scirocco, Jervis, I-47, I-201, Suzuya, Murasame, Oboro and Akebono, one as flagship, and up to 3 additional ships to [W4-2], [W4-3] and [W4-4]. S-Rank each boss node.",
-        "rewards": "¶First choice: Either 8 Development Materials OR a Medal OR a Latest Overseas Warship Technology ¶Second choice: Either two Ro.44 Seaplane Fighters OR two Pumpkins OR three Arsenal Resources",
-        "resources": [[880, 880, 0, 880], [0, 0, 0, 0]]
-    },
-    "1038": {
-        "code": "L2610B5",
-        "name": "[Halloween] Halloween Refills Have Begun!",
-        "desc": "Sortie any 4 of Suzuya, Akebono, Oboro, Kashi, Asahi, Jingei, Chougei, Mizuho, Johnston and Richard P. Leary, one as flagship, and up to 2 additional ships to [W1-1] and [W1-3]. S-Rank each boss node four times.",
-        "rewards": "a Pumpkin and either 16 Development Materials OR a Pumpkin OR +2 Equipment Slots",
-        "resources": [[300, 300, 0, 0], [0, 0, 0, 0]]
-    },
-    "1039": {
-        "code": "L2610B6",
-        "name": "Weekly [Halloween] Halloween Maritime Escort Squadron, Sortie!",
-        "desc": "Sortie any 4 of Tsushima, Kashi, Asashio, Makinami, Hamanami, Abukuma, Ukuru, Inagi, Noumi, Kaiboukan No.4, Kaiboukan No.22 and Kaiboukan No.30, and up to 2 additional ships to [W1-5], [W1-2] and [W1-4]. S-Rank each boss node.",
-        "rewards": "a Pumpkin and either 16 Development Materials OR a Pumpkin OR a Medal",
-        "resources": [[480, 0, 480, 0], [0, 0, 0, 0]]
-    },
-    "1040": {
-        "code": "L2610B7",
-        "name": "Monthly [Halloween] Halloween Wolf Squad, Night Raid!",
-        "desc": "Sortie any 3 of Oboro, Yuudachi, Nowaki, Hayanami, Kumano Maru, Jingei Kai, Tuscaloosa and Indiana, one as flagship, and up to 3 additional ships to [W2-1] and [W2-2]. S-Rank each boss node twice.",
-        "rewards": "¶First choice: Either a Pumpkin OR two Mamiyas ¶Second choice: Either three Medals OR two Pumpkins OR 36 Development Materials",
-        "resources": [[480, 0, 0, 480], [0, 0, 0, 0]]
-    },
-    "1002": {
-        "code": "L2610B8",
-        "name": "[Halloween] Pumpkin Festival 2026, Northern Operation!",
-        "desc": "Sortie any 3 of Minneapolis, Tuscaloosa, Gambier Bay, Johnston, Suzuya, Abukuma, Akebono, Oboro, Kiyoshimo and Kashi, one as flagship, and up to 3 additional ships to [W3-2], [W3-5] and [W3-4]. S-Rank each boss node.",
-        "rewards": "¶First choice: Either 9 Screws OR a Prototype Shusui OR three Arsenal Resources ¶Second choice: Either an Action Report OR three Pumpkins OR a Remodel Blueprint",
-        "resources": [[2026, 1031, 0, 0], [0, 0, 0, 0]]
-    },
-    "359": {
-        "code": "L2610C1",
-        "name": "Weekly [Halloween] Halloween Fleet Autumn Harvest Latest Exercises!",
-        "desc": "Secure 5 A-Rank+ victories in Exercises within the same day using any 4 of Suzuya, Abukuma, Oboro, Akebono, Murasame, Yuudachi, Nowaki, Asashio, Hayanami, Hamanami, I-201, Jervis, Minneapolis and Johnston, and up to 2 additional ships.",
-        "rewards": "¶First choice: Either a Mamiya OR 6 Flamethrowers OR a Medal ¶Second choice: Either a Pumpkin OR 4300 Fuels OR 2800 Bauxites",
-        "resources": [[500, 500, 0, 0], [0, 0, 0, 0]]
-    },
-    "1119": {
-        "code": "L2610F1",
-        "name": "Monthly [Halloween] Halloween Pumpkin, Wanna Eat Some?",
-        "desc": "Have 10 Type 99 Dive Bombers, 10 Type 97 Torpedo Bombers and 1031 Furniture Coins. Scrap 9 Small Caliber Main Guns, 9 Medium Caliber Main Guns and 9 Recon Seaplanes.",
-        "memo": "※Consumes the items and resources.",
-        "rewards": "¶First choice: Either two Medals OR a Pumpkin OR 14 Development Materials ¶Second choice: Either 2026 Bauxites OR three Medals OR two Pumpkins",
-        "resources": [[0, 0, 880, 0], [0, 0, 0, 0]]
-    },
-    "1171": {
-        "code": "L2610F2",
-        "name": "[Halloween] Organizing Anti-Submarine Equipment! 2026",
-        "desc": "Have 2 Pumpkins, 5 Type 3 Depth Charge Projectors and 30 Development Materials. Scrap 12 Type 94 Depth Charge Projectors, 8 Type 95 Depth Charges and 6 Type 93 Passive Sonars.",
-        "memo": "※Consumes the items and resources.",
-        "rewards": "¶First choice: Either 45 Development Materials OR 4 Pumpkins OR 10 Type 3 Active Sonars ¶Second choice: Either +15 Equipment Slots OR a Type124 ASDIC ★3 OR three Latest Overseas Warship Technologys",
-        "resources": [[0, 360, 0, 180], [0, 0, 0, 0]]
+    "386": {
+        "code": "L2611C2",
+        "name": "Weekly [Time-limited] Saury Festival Preparation Excercises!",
+        "desc": "Secure 3 S-Rank victories in Exercises within the same day using any 4 of Akebono, Amagiri, Murasame, Ooshio, Kumano Maru, Yamashio Maru, Kaiboukan No.4, Ranger and Heywood L. Edwards, one as flagship, and up to 2 additional ships.",
+        "rewards": "¶First choice: Either 4 Development Materials OR a Type 3 Active Sonar OR a Searchlight ¶Second choice: Either a Skilled Lookouts OR an Equipment Slots OR a Medal",
+        "resources": [[0, 280, 280, 280], [0, 0, 0, 0]]
     }
 }
