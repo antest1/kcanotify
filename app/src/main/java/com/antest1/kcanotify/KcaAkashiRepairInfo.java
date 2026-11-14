@@ -67,6 +67,11 @@ public class KcaAkashiRepairInfo {
         return isTwoRepairShips(first, second) ? TWO_AR_REPAIR_MODIFIER : 1.0;
     }
 
+    // a ship in the reach is repaired when it is damaged but better than moderately damaged, and not in docking
+    public static boolean isRepairable(int nowHp, int maxHp, boolean inDock) {
+        return !inDock && nowHp < maxHp && nowHp * 2 > maxHp;
+    }
+
     public static void setAkashiTimer() { setAkashiTimer(System.currentTimeMillis()); }
 
     public static void setAkashiTimer(long time) { akashi_register_time = time; }
