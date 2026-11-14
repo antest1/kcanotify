@@ -240,8 +240,8 @@ public class FleetInfoViewModel extends AndroidViewModel {
                     sitem.add("items", items);
                     sitem.addProperty("fp", user.getAsJsonArray("api_karyoku").get(0).getAsInt());
                     sitem.addProperty("tp", user.getAsJsonArray("api_raisou").get(0).getAsInt());
-                    sitem.addProperty("aa", user.getAsJsonArray("api_tyku").get(0).getAsInt());
-                    sitem.addProperty("ar", user.getAsJsonArray("api_souk").get(0).getAsInt());
+                    sitem.addProperty("aa", user.getAsJsonArray("api_taiku").get(0).getAsInt());
+                    sitem.addProperty("ar", user.getAsJsonArray("api_soukou").get(0).getAsInt());
                     sitem.addProperty("ev", user.getAsJsonArray("api_kaihi").get(0).getAsInt());
                     sitem.addProperty("los", user.getAsJsonArray("api_sakuteki").get(0).getAsInt());
                     fleet.add(KcaUtils.format("s%d", j + 1), sitem);
