@@ -17,6 +17,14 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onContentChanged() {
         super.onContentChanged();
+        applyEdgeToEdge();
+    }
+
+    /**
+     * Window inset setup for the screen's root view. Compose screens override this because their
+     * root is a {@code ComposeView} and they handle the insets themselves.
+     */
+    protected void applyEdgeToEdge() {
         KcaEdgeToEdge.apply(this);
     }
 
