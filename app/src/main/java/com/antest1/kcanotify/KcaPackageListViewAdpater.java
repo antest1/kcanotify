@@ -108,17 +108,22 @@ public class KcaPackageListViewAdpater extends BaseAdapter {
         TextView nameView, packageView;
     }
 
-    public void setList(PackageManager pm) {
+    // loads every app label, which is slow with many apps: call off the main thread
+    public static List<JsonObject> buildList(PackageManager pm) {
         List<PackageInfo> data = pm.getInstalledPackages(0);
-        listViewItemList = new ArrayList<>();
+        List<JsonObject> list = new ArrayList<>();
         for (PackageInfo p: data) {
             JsonObject item = new JsonObject();
             item.addProperty("name", pm.getApplicationLabel(p.applicationInfo).toString());
             item.addProperty("package", p.packageName);
-            listViewItemList.add(item);
+            list.add(item);
         }
-        PackageNameCompare cmp = new PackageNameCompare(pm);
-        Collections.sort(listViewItemList, cmp);
+        Collections.sort(list, new PackageNameCompare());
+        return list;
+    }
+
+    public void setList(List<JsonObject> list) {
+        listViewItemList = list;
     }
 
     private int getCheckedTextColor(boolean checked) {
@@ -126,11 +131,7 @@ public class KcaPackageListViewAdpater extends BaseAdapter {
         else return R.color.black;
     }
 
-    private class PackageNameCompare implements Comparator<JsonObject> {
-        PackageManager pm;
-        private PackageNameCompare(PackageManager pm) {
-            this.pm = pm;
-        }
+    private static class PackageNameCompare implements Comparator<JsonObject> {
         @Override
         public int compare(JsonObject o1, JsonObject o2) {
             String p1 = o1.get("name").getAsString();

@@ -48,6 +48,7 @@ public class KcaFleetViewListItem extends FrameLayout {
     private ShipInfo info;
 
     private boolean isAkashiActive = false;
+    private double akashiRepairModifier = 1.0;
 
     public KcaFleetViewListItem(Context context) {
         this(context, null);
@@ -144,9 +145,11 @@ public class KcaFleetViewListItem extends FrameLayout {
         container.setVisibility(View.VISIBLE);
     }
 
-    public void setAkashiTimer(boolean isActive) {
+    // modifier: repair time modifier of the fleet (5/6 with two repair ships)
+    public void setAkashiTimer(boolean isActive, double modifier) {
         if (!isActive && !isAkashiActive) return; // inactive -> inactive, no need to update
         isAkashiActive = isActive;
+        akashiRepairModifier = modifier;
         if (info != null) setHPText();
     }
 
@@ -157,8 +160,8 @@ public class KcaFleetViewListItem extends FrameLayout {
         if (isAkashiActive && !KcaDocking.checkShipInDock(info.ship_id) && damage > 0 && now * 2 > max) {
 
             int elapsed = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
-            int repaired = Math.min(damage, KcaDocking.getRepairedHp(lv, stype, elapsed));
-            int next = (repaired < damage) ? KcaDocking.getNextRepair(lv, stype, elapsed) : 0;
+            int repaired = Math.min(damage, KcaDocking.getRepairedHp(lv, stype, akashiRepairModifier, elapsed));
+            int next = (repaired < damage) ? KcaDocking.getNextRepair(lv, stype, akashiRepairModifier, elapsed) : 0;
 
             String str = format(
                     HP_FORMAT_LIST[hp_format_id],
@@ -239,7 +242,7 @@ public class KcaFleetViewListItem extends FrameLayout {
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
 
-        return new SavedState(superState, info, isAkashiActive);
+        return new SavedState(superState, info, isAkashiActive, akashiRepairModifier);
     }
 
     @Override
@@ -252,6 +255,7 @@ public class KcaFleetViewListItem extends FrameLayout {
         super.onRestoreInstanceState(state0.getSuperState());
 
         isAkashiActive = state0.isAkashiActive;
+        akashiRepairModifier = state0.akashiRepairModifier;
         setContent(state0.info);
     }
 
@@ -333,16 +337,19 @@ public class KcaFleetViewListItem extends FrameLayout {
     private static class SavedState extends View.BaseSavedState {
         final ShipInfo info;
         final boolean isAkashiActive;
+        final double akashiRepairModifier;
 
         public SavedState(
                 Parcelable superState,
                 ShipInfo info,
-                boolean isAkashiActive
+                boolean isAkashiActive,
+                double akashiRepairModifier
         ) {
             super(superState);
 
             this.info = info;
             this.isAkashiActive = isAkashiActive;
+            this.akashiRepairModifier = akashiRepairModifier;
         }
 
         public SavedState(Parcel source) {
@@ -350,6 +357,7 @@ public class KcaFleetViewListItem extends FrameLayout {
 
             info = new ShipInfo(source);
             isAkashiActive = source.readInt() == 1; // to avoid using read/writeBoolean
+            akashiRepairModifier = source.readDouble();
         }
 
         @Override
@@ -358,6 +366,7 @@ public class KcaFleetViewListItem extends FrameLayout {
 
             info.writeToParcel(out, flags);
             out.writeInt(isAkashiActive ? 1 : 0); // to avoid using read/writeBoolean
+            out.writeDouble(akashiRepairModifier);
         }
 
         @SuppressWarnings("hiding")

@@ -26,12 +26,14 @@ public class KcaResourceLogPageAdapter extends FragmentStateAdapter {
 
     @Override
     public long getItemId(int position) {
-        return KcaResoureLogFragment.getStateId() + position;
+        return (long) KcaResoureLogFragment.getStateId() + position;
     }
 
     @Override
     public boolean containsItem(long itemId) {
-        return KcaResoureLogFragment.getStateId() == itemId;
+        // must accept every id returned by getItemId, or the adapter drops the bound fragment
+        long position = itemId - KcaResoureLogFragment.getStateId();
+        return position >= 0 && position < tabCount;
     }
 
     @Override

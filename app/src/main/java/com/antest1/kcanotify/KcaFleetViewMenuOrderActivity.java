@@ -96,10 +96,6 @@ public class KcaFleetViewMenuOrderActivity extends BaseActivity {
         listview.setCanDragHorizontally(false);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

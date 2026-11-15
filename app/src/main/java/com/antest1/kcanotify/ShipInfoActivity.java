@@ -4,13 +4,13 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -23,24 +23,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.JsonArray;
+import com.antest1.kcanotify.viewmodel.ShipInfoViewModel;
 
 import static android.widget.Toast.makeText;
-import static com.antest1.kcanotify.KcaApiData.getNationalityData;
-import static com.antest1.kcanotify.KcaApiData.getSpecialEquipmentInfo;
-import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
-import static com.antest1.kcanotify.KcaApiData.loadShipFilterDataFromStorage;
-import static com.antest1.kcanotify.KcaApiData.loadShipNationalityDataFromStorage;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
-import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
-import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SHIPNAT;
-import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SHIPSTAT;
-import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SORTKEY;
-import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SPEQUIPS;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
-import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
 public class ShipInfoActivity extends BaseActivity {
@@ -52,7 +38,6 @@ public class ShipInfoActivity extends BaseActivity {
     ListView listview;
     TextView totalcountview, totalexpview;
 
-    KcaDBHelper dbHelper;
     Button sortButton, filterButton, searchButton;
     KcaShipListViewAdpater adapter;
     EditText searchEditText;
@@ -67,30 +52,26 @@ public class ShipInfoActivity extends BaseActivity {
     Button export_clipboard_1, export_openpage_1;
     Button export_clipboard_2, export_openpage_2;
 
+    ShipInfoViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipinfo_list);
+        viewModel = new ViewModelProvider(this).get(ShipInfoViewModel.class);
+        if (!viewModel.init()) {
+            makeText(this, "Error loading Exp Ship Info", Toast.LENGTH_LONG).show();
+            finish();
+        }
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.action_shipinfo));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         vibrator = KcaUtils.getVibrator(this);
 
-        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-        KcaApiData.setDBHelper(dbHelper);
-        setDefaultGameData();
-        loadShipFilterDataFromStorage(getApplicationContext());
-        loadShipNationalityDataFromStorage(getApplicationContext());
-
-        AssetManager assetManager = getAssets();
-        int loadExpShipInfoResult = loadShipExpInfoFromAssets(assetManager);
-        if (loadExpShipInfoResult != 1) {
-            makeText(this, "Error loading Exp Ship Info", Toast.LENGTH_LONG).show();
-            finish();
-        }
-
         adapter = new KcaShipListViewAdpater();
+        adapter.setViewModel(viewModel);
         totalcountview = findViewById(R.id.shipinfo_count);
         totalexpview = findViewById(R.id.shipinfo_total_exp);
         sortButton = findViewById(R.id.shipinfo_btn_sort);
@@ -142,23 +123,8 @@ public class ShipInfoActivity extends BaseActivity {
             }
         });
 
-        JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
-        if (data == null) data = new JsonArray();
-        JsonArray deckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-        if (deckdata == null) deckdata = new JsonArray();
-
-        String sortkey = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY);
-        String filtcond = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
-        String special_equip = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SPEQUIPS);
-        String ship_status = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SHIPSTAT);
-        String ship_nat = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SHIPNAT);
-        setButtonStyle(filterButton, filtcond.length() > 1
-                || !special_equip.trim().isEmpty()
-                || !ship_status.trim().isEmpty()
-                || !ship_nat.trim().isEmpty());
-        adapter.setSpecialEquipment(getSpecialEquipmentInfo());
-        adapter.setNationality(getNationalityData());
-        adapter.setListViewItemList(data, deckdata, sortkey, filtcond, special_equip, ship_status, ship_nat);
+        viewModel.loadList();
+        setButtonStyle(filterButton, viewModel.isFilterActive());
 
         totalcountview.setText(KcaUtils.format(getString(R.string.shipinfo_btn_total_format), adapter.getCount()));
         totalexpview.setText(KcaUtils.format(getString(R.string.shipinfo_btn_total_exp_format), adapter.getTotalExp()));
@@ -231,27 +197,13 @@ public class ShipInfoActivity extends BaseActivity {
     }
 
     private void setList(int requestCode) {
-        String sortkey = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY);
-        String filtcond = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
-        String special_equip = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SPEQUIPS);
-        String ship_status = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SHIPSTAT);
-        String ship_nat = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SHIPNAT);
         export_popup.setVisibility(View.GONE);
         if (requestCode == SHIPINFO_GET_SORT_KEY) {
-            adapter.resortListViewItem(sortkey);
-        }
-        else {
-            JsonArray deckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-            JsonArray shipdata = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
-            if (deckdata == null) deckdata = new JsonArray();
-            if (shipdata == null) shipdata = new JsonArray();
-
-            adapter.setListViewItemList(shipdata, deckdata, sortkey, filtcond, special_equip, ship_status, ship_nat);
+            viewModel.resort();
+        } else {
+            viewModel.loadList();
             if (requestCode == SHIPINFO_GET_FILTER_RESULT) {
-                setButtonStyle(filterButton, filtcond.length() > 1
-                        || !special_equip.trim().isEmpty()
-                        || !ship_status.trim().isEmpty()
-                        || !ship_nat.trim().isEmpty());
+                setButtonStyle(filterButton, viewModel.isFilterActive());
             }
         }
         adapter.notifyDataSetChanged();
@@ -261,7 +213,7 @@ public class ShipInfoActivity extends BaseActivity {
     }
 
     private void setSearchResult(String query) {
-        adapter.setSearchQuery(query);
+        viewModel.setSearchQuery(query);
         setList(SHIPINFO_SET_QUERY);
     }
 
@@ -282,16 +234,11 @@ public class ShipInfoActivity extends BaseActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_ship_export:
-                export_kanmusu_list = adapter.getKanmusuListText();
-                export_seikuuken = adapter.getSeikuukenSimulatorText();
+                export_kanmusu_list = viewModel.getKanmusuListText();
+                export_seikuuken = viewModel.getSeikuukenSimulatorText();
                 ((TextView) export_popup.findViewById(R.id.export_content_1)).setText(export_kanmusu_list);
                 ((TextView) export_popup.findViewById(R.id.export_content_2)).setText(export_seikuuken);
                 is_popup_on = true;
@@ -303,9 +250,5 @@ public class ShipInfoActivity extends BaseActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private int setDefaultGameData() {
-        return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
     }
 }

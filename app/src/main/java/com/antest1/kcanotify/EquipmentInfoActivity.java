@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -22,129 +23,44 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import com.antest1.kcanotify.viewmodel.EquipmentInfoViewModel;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
-import static com.antest1.kcanotify.KcaApiData.helper;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
-import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_EQUIPINFO_FILTCOND;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getId;
-import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
 public class EquipmentInfoActivity extends BaseActivity {
     static final int EQUIPINFO_GET_FILTER_RESULT = 2;
 
     Toolbar toolbar;
-    static Gson gson = new Gson();
     ListView listview;
     Button filterBtn;
     EditText searchEditText;
     TextView totalcountview, totalstarview;
 
-    KcaDBHelper dbHelper;
     KcaEquipListViewAdpater adapter;
-    JsonArray equipment_data = new JsonArray();
-    JsonArray seikuuken_data = new JsonArray();
-    JsonArray ship_data = new JsonArray();
-    JsonObject ship_equip_info = new JsonObject();
-    Map<String, AtomicInteger> counter = new HashMap<>();
 
     boolean is_popup_on;
     View export_popup, export_exit;
     Button export_clipboard, export_openpage2;
     Vibrator vibrator;
 
+    EquipmentInfoViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_equipment_list);
+        viewModel = new ViewModelProvider(this).get(EquipmentInfoViewModel.class);
+        viewModel.init();
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.action_equipmentinfo));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         vibrator = KcaUtils.getVibrator(this);
 
-        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-        KcaApiData.setDBHelper(dbHelper);
-        setDefaultGameData();
-
         is_popup_on = false;
-
-        equipment_data = KcaApiData.getKcSlotitemGameData();
-        JsonArray user_equipment_data = dbHelper.getItemData();
-        String filtcond = getStringPreferences(getApplicationContext(), PREF_EQUIPINFO_FILTCOND);
-
-        for (JsonElement data: user_equipment_data) {
-            JsonObject equip = data.getAsJsonObject();
-            JsonObject value = JsonParser.parseString(equip.get("value").getAsString()).getAsJsonObject();
-            seikuuken_data.add(getSeikuukenSimluatorData(value));
-            String id = getItemKey(value);
-            if(!counter.containsKey(id)) {
-                counter.put(id,  new AtomicInteger(1));
-            } else {
-                counter.get(id).incrementAndGet();
-            }
-        }
-
-        ship_data = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
-        if (ship_data != null) {
-            for (int i = 0; i < ship_data.size(); i++) {
-                List<String> item_list = new ArrayList<>();
-                JsonObject ship_info = ship_data.get(i).getAsJsonObject();
-                int ship_id = ship_info.get("api_id").getAsInt();
-                int ship_lv = ship_info.get("api_lv").getAsInt();
-                int ship_kc_id = ship_info.get("api_ship_id").getAsInt();
-                JsonObject ship_kc_info = getKcShipDataById(ship_kc_id, "name");
-                String ship_name = "";
-                if (ship_kc_info != null) ship_name = ship_kc_info.get("name").getAsString();
-
-                JsonObject ship_id_lv = new JsonObject();
-                ship_id_lv.addProperty("id", ship_id);
-                ship_id_lv.addProperty("kc_id", ship_kc_id);
-                ship_id_lv.addProperty("name", ship_name);
-                ship_id_lv.addProperty("lv", ship_lv);
-
-                JsonArray shipItem = ship_info.getAsJsonArray("api_slot");
-                for (int j = 0; j < shipItem.size(); j++) {
-                    int item_id = shipItem.get(j).getAsInt();
-                    if (item_id > 0) {
-                        String item_info_str = dbHelper.getItemValue(item_id);
-                        if (item_info_str != null) {
-                            JsonObject item_info = JsonParser.parseString(item_info_str).getAsJsonObject();
-                            item_list.add(getItemKey(item_info));
-                        }
-                    }
-                }
-                int ex_item_id = ship_info.get("api_slot_ex").getAsInt();
-                if (ex_item_id > 0) {
-                    String item_info_str = dbHelper.getItemValue(ex_item_id);
-                    if (item_info_str != null) {
-                        JsonObject item_info = JsonParser.parseString(item_info_str).getAsJsonObject();
-                        item_list.add(getItemKey(item_info));
-                    }
-                }
-
-                for (String item: item_list) {
-                    if (!ship_equip_info.has(item)) {
-                        ship_equip_info.add(item, new JsonArray());
-                    }
-                    ship_equip_info.getAsJsonArray(item).add(ship_id_lv);
-                }
-            }
-        }
 
         JsonObject itemStatTranslation = new JsonObject();
         for (String key: KcaEquipListViewAdpater.STAT_KEYS) {
@@ -160,9 +76,10 @@ public class EquipmentInfoActivity extends BaseActivity {
         totalstarview = findViewById(R.id.equipinfo_total_star);
 
         adapter = new KcaEquipListViewAdpater();
+        adapter.setViewModel(viewModel);
         adapter.setSummaryFormat(getString(R.string.equipinfo_summary));
         adapter.setStatTranslation(itemStatTranslation);
-        adapter.setListViewItemList(equipment_data, counter, ship_equip_info, filtcond);
+        viewModel.loadList();
 
         listview = findViewById(R.id.equipment_listview);
         listview.setAdapter(adapter);
@@ -173,7 +90,7 @@ public class EquipmentInfoActivity extends BaseActivity {
             Intent aIntent = new Intent(EquipmentInfoActivity.this, EquipmentListFilterActivity.class);
             startActivityForResult(aIntent, EQUIPINFO_GET_FILTER_RESULT);
         });
-        setFilterBtn(!filtcond.equals("all"));
+        setFilterBtn(!viewModel.getFilterCond().equals("all"));
 
         searchEditText = findViewById(R.id.equipinfo_search);
         searchEditText.addTextChangedListener(new TextWatcher() {
@@ -183,9 +100,8 @@ public class EquipmentInfoActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String filtcond = getStringPreferences(getApplicationContext(), PREF_EQUIPINFO_FILTCOND);
-                adapter.setSearchQuery(s.toString());
-                adapter.setListViewItemList(equipment_data, counter, ship_equip_info, filtcond);
+                viewModel.setSearchQuery(s.toString());
+                viewModel.loadList();
                 adapter.notifyDataSetChanged();
                 listview.setAdapter(adapter);
                 listview.invalidateViews();
@@ -236,23 +152,6 @@ public class EquipmentInfoActivity extends BaseActivity {
         totalstarview.setText(KcaUtils.format(getString(R.string.equipinfo_btn_total_star_format), adapter.getStarCount()));
     }
 
-    private String getItemKey(JsonObject item) {
-        if (item.has("api_alv")) {
-            return KcaUtils.format("%d_%d_%d", item.get("api_slotitem_id").getAsInt(),
-                    item.get("api_level").getAsInt(), item.get("api_alv").getAsInt());
-        } else {
-            return KcaUtils.format("%d_%d_n", item.get("api_slotitem_id").getAsInt(), item.get("api_level").getAsInt());
-        }
-    }
-
-    private JsonObject getSeikuukenSimluatorData(JsonObject item) {
-        JsonObject new_item = new JsonObject();
-        new_item.addProperty("id", item.get("api_slotitem_id").getAsInt());
-        new_item.addProperty("lv", item.get("api_level").getAsInt());
-        new_item.addProperty("locked", item.get("api_locked").getAsInt());
-        return new_item;
-    }
-
     private void setFilterBtn(boolean is_active) {
         if (is_active) {
             filterBtn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
@@ -266,22 +165,16 @@ public class EquipmentInfoActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String filtcond = getStringPreferences(getApplicationContext(), PREF_EQUIPINFO_FILTCOND);
 
         if (resultCode == RESULT_OK && adapter != null && requestCode > 0) {
             if (requestCode == EQUIPINFO_GET_FILTER_RESULT) {
-                adapter.setListViewItemList(equipment_data, counter, ship_equip_info, filtcond);
-                setFilterBtn(!filtcond.equals("all"));
+                viewModel.loadList();
+                setFilterBtn(!viewModel.getFilterCond().equals("all"));
             }
             adapter.notifyDataSetChanged();
             listview.setAdapter(adapter);
             setSummary();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     @Override
@@ -294,7 +187,7 @@ public class EquipmentInfoActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_equip_export:
-                String data = seikuuken_data.toString();
+                String data = viewModel.getSeikuukenData().toString();
                 ((TextView) export_popup.findViewById(R.id.export_content)).setText(data);
                 is_popup_on = true;
                 export_popup.setVisibility(View.VISIBLE);
@@ -305,9 +198,5 @@ public class EquipmentInfoActivity extends BaseActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private int setDefaultGameData() {
-        return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
     }
 }

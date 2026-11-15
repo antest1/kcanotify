@@ -2,6 +2,7 @@ package com.antest1.kcanotify;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.HEAD;
 import retrofit2.http.Headers;
 import retrofit2.http.Query;
 
@@ -35,4 +36,13 @@ public interface KcaDownloader {
     })
     @GET("/kcanotify/kca_api_start2.php?")
     Call<String> getGameData(@Query("v") String v);
+
+    // headers only: X-Api-Version and X-Api-Hash of the given version, 404 if the server does not have it
+    @Headers({
+            "X-Identify: app/kcanotify",
+            "Referer: app:/KCA/",
+            "Cache-Control: no-cache, no-store, must-revalidate"
+    })
+    @HEAD("/kcanotify/kca_api_start2.php")
+    Call<Void> getGameDataInfo(@Query("v") String v);
 }

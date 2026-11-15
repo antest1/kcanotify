@@ -38,6 +38,8 @@ public class KcaInspectorDetailActivity extends BaseActivity {
     final String DB_PREFIX = "DB ";
     final String DQ_PREFIX = "DQ ";
     final String QT_PREFIX = "QT ";
+    final String FILE_PREFIX = "FILE ";
+    private static final int MAX_DISPLAY_LENGTH = 50000;
 
     String key, value_text= "";
     boolean is_formatted = true;
@@ -99,6 +101,9 @@ public class KcaInspectorDetailActivity extends BaseActivity {
                 if (value_text != null) {
                     if (type_key.startsWith(DB_PREFIX)) {
                         dbHelper.deleteValue(key);
+                    } else if (type_key.startsWith(FILE_PREFIX)) {
+                        // the bundled game data is written again at the next start
+                        KcaGameDataStore.delete(getApplicationContext());
                     } else if (type_key.startsWith(QT_PREFIX)) {
                         questTracker.clearQuestTrack();
                     } else if (type_key.startsWith(DQ_PREFIX)) {
@@ -158,6 +163,9 @@ public class KcaInspectorDetailActivity extends BaseActivity {
         if (type_key.startsWith(DB_PREFIX)) {
             value_text = dbHelper.getValue(key);
             if (value_text == null) value_text = "<null>";
+        } else if (type_key.startsWith(FILE_PREFIX)) {
+            value_text = KcaGameDataStore.readText(getApplicationContext());
+            if (value_text == null) value_text = "<null>";
         } else if (type_key.startsWith(PREF_PREFIX)) {
             if (PREFS_BOOLEAN_LIST.contains(key)) {
                 value_text = String.valueOf(getBooleanPreferences(getApplicationContext(), key));
@@ -178,14 +186,24 @@ public class KcaInspectorDetailActivity extends BaseActivity {
             else gson = new GsonBuilder().create();
 
             try {
-                JsonElement data = gson.fromJson(value_text, JsonElement.class);
-                value_text = gson.toJson(data);
+                // formatting a value of several MB is itself slow, and it is truncated anyway
+                if (value_text.length() <= MAX_DISPLAY_LENGTH) {
+                    JsonElement data = gson.fromJson(value_text, JsonElement.class);
+                    value_text = gson.toJson(data);
+                }
             } catch (JsonSyntaxException ex) {
                 // Nothing to do
             } finally {
-                view_value.setText(value_text);
+                view_value.setText(getDisplayText(value_text));
             }
         }
+    }
+
+    // a TextView with the whole value (e.g. start data, several MB) freezes on layout and draw
+    private static String getDisplayText(String text) {
+        if (text.length() <= MAX_DISPLAY_LENGTH) return text;
+        return text.substring(0, MAX_DISPLAY_LENGTH)
+                .concat(KcaUtils.format("\n\n... (%d / %d)", MAX_DISPLAY_LENGTH, text.length()));
     }
 
     private Runnable auto_scroll(final int direction){

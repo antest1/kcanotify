@@ -145,6 +145,7 @@ public class KcaDropLogger extends SQLiteOpenHelper {
                 .concat(droplog_table_name)
                 .concat(" ORDER BY key "), null);
 
+        JsonObject mapEdgeInfo = KcaApiData.getMapEdgeInfo();
         while (c.moveToNext()) {
             JsonObject item = retrieveDataFromCursor(c);
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
@@ -155,7 +156,7 @@ public class KcaDropLogger extends SQLiteOpenHelper {
             int node = item.get("node").getAsInt();
             int maprank = item.get("maprank").getAsInt();
 
-            String node_alpha = KcaApiData.getCurrentNodeAlphabet(world, map, node);
+            String node_alpha = KcaApiData.getCurrentNodeAlphabet(mapEdgeInfo, world, map, node);
             String node_text = "";
             if (maprank > 0) node_text = KcaUtils.format("%d-%d[%s]-%s", world, map, maprank_info[maprank], node_alpha);
             else node_text = KcaUtils.format("%d-%d-%s", world, map, node_alpha);
@@ -213,14 +214,15 @@ public class KcaDropLogger extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         List<String> result = new ArrayList<>();
 
-        Cursor c = db.rawQuery("SELECT node from "
+        Cursor c = db.rawQuery("SELECT DISTINCT node from "
                 .concat(droplog_table_name)
                 .concat(KcaUtils.format(" WHERE world=%d AND map=%d", world, map)), null);
 
+        JsonObject mapEdgeInfo = KcaApiData.getMapEdgeInfo();
         result.add("*");
         while (c.moveToNext()) {
             String value = String.valueOf(c.getInt(c.getColumnIndex("node")));
-            String node_alpha = KcaApiData.getCurrentNodeAlphabet(world, map, Integer.parseInt(value));
+            String node_alpha = KcaApiData.getCurrentNodeAlphabet(mapEdgeInfo, world, map, Integer.parseInt(value));
             if (!value.equals(node_alpha)) value = KcaUtils.format("%s(%s)", value, node_alpha);
             if (!result.contains(value)) result.add(value);
         }

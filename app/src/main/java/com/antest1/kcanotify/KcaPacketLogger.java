@@ -34,6 +34,9 @@ public class KcaPacketLogger extends SQLiteOpenHelper {
     private static final String REQUEST = "0";
     private static final String RESPONSE = "1";
 
+    // log runs on a background thread: clear and dump wait for a write in progress
+    private static final Object lock = new Object();
+
     public KcaPacketLogger(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, packetlog_db_name, factory, version);
     }
@@ -57,6 +60,12 @@ public class KcaPacketLogger extends SQLiteOpenHelper {
 
 
     public void log(String url, String req, String resp) {
+        synchronized (lock) {
+            insert(url, req, resp);
+        }
+    }
+
+    private void insert(String url, String req, String resp) {
         SQLiteDatabase db = null;
         SQLiteStatement statement;
         long timestamp;
@@ -78,18 +87,27 @@ public class KcaPacketLogger extends SQLiteOpenHelper {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            if (db != null) {
+            // there is no transaction to end when beginTransaction itself failed
+            if (db != null && db.inTransaction()) {
                 db.endTransaction();
             }
         }
     }
 
     public void clear() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(packetlog_table_name, "", null);
+        synchronized (lock) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.delete(packetlog_table_name, "", null);
+        }
     }
 
-    public boolean dump(Context context){
+    public boolean dump(Context context) {
+        synchronized (lock) {
+            return copyTo(context);
+        }
+    }
+
+    private boolean copyTo(Context context) {
         File savedir = new File(context.getExternalFilesDir(null), "logs");
         if (!savedir.exists()) savedir.mkdirs();
         String exportPath = savedir.getPath();

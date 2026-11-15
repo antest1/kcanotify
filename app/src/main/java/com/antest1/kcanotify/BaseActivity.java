@@ -15,6 +15,12 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        KcaEdgeToEdge.apply(this);
+    }
+
+    @Override
     protected void attachBaseContext(Context newBase) {
         Configuration config = newBase.getResources().getConfiguration();
         config.setLocale(LocaleUtils.getLocale());

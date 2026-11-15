@@ -90,10 +90,6 @@ public class KcaResoureLogFragment extends Fragment {
         return v;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     public View setView(final View v) {
         Log.e("KCA", "setView " + position);

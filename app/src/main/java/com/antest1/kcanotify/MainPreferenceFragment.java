@@ -8,6 +8,7 @@ import android.app.AppOpsManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,7 +23,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.PowerManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -203,6 +203,22 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         setSettingDisabledWhenServiceRunning();
     }
 
+    private static final String SLIDER_DIALOG_TAG = "KcaSliderPreferenceDialog";
+
+    // the dialog of a slider setting; other dialog settings are handled by the base class
+    @SuppressWarnings("deprecation") // the preference dialog finds its preference through the target fragment
+    @Override
+    public void onDisplayPreferenceDialog(@NonNull Preference preference) {
+        if (preference instanceof KcaSliderPreference) {
+            if (getParentFragmentManager().findFragmentByTag(SLIDER_DIALOG_TAG) != null) return;
+            KcaSliderPreferenceDialog dialog = KcaSliderPreferenceDialog.newInstance(preference.getKey());
+            dialog.setTargetFragment(this, 0);
+            dialog.show(getParentFragmentManager(), SLIDER_DIALOG_TAG);
+            return;
+        }
+        super.onDisplayPreferenceDialog(preference);
+    }
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         getPreferenceManager().setSharedPreferencesName("pref");
@@ -247,7 +263,12 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, DEFAULT_NOTIFICATION_URI);
             }
             currentActivity = REQUEST_ALERT_RINGTONE;
-            startActivityResult.launch(intent);
+            try {
+                startActivityResult.launch(intent);
+            } catch (ActivityNotFoundException e) {
+                // some devices (e.g. Android TV boxes) have no ringtone picker
+                showToast(getActivity(), getString(R.string.sa_ringtone_picker_unavailable), Toast.LENGTH_LONG);
+            }
         }
 
         if (PREF_CHECK_UPDATE.equals(key)) {
@@ -278,11 +299,9 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
     @TargetApi(Build.VERSION_CODES.M)
     public void showObtainingPermissionBatteryOptimization() {
-        String package_name = getContext().getPackageName();
-        Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
-
-        if (intent.resolveActivity(getContext().getPackageManager()) == null) {
-            intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + package_name));
+        Intent intent = KcaUtils.getBatteryOptimizationSettingsIntent(getContext());
+        // the app's own page, where the device has no list of apps
+        if (Settings.ACTION_APPLICATION_DETAILS_SETTINGS.equals(intent.getAction())) {
             showToast(getActivity(), getString(R.string.sa_batteryoptim_appearontop), Toast.LENGTH_LONG);
         }
         currentActivity = REQUEST_BATOPTIM_PERMISSION;
@@ -335,8 +354,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 Context context = getContext();
                 if (context != null) {
-                    PowerManager manager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-                    if (manager.isIgnoringBatteryOptimizations(context.getPackageName())) {
+                    if (KcaUtils.isIgnoringBatteryOptimizations(context)) {
                         showToast(getActivity(), getString(R.string.sa_batteryoptim_ok), Toast.LENGTH_SHORT);
                     } else {
                         showToast(getActivity(), getString(R.string.sa_batteryoptim_no), Toast.LENGTH_SHORT);
@@ -525,14 +543,17 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         }
 
         if (PREF_KCA_MORALE_MIN.equals(key)) {
-            String valueString = ((String) newValue);
-            if (valueString.isEmpty() || !TextUtils.isDigitsOnly(valueString)) return false;
-            int value = Integer.parseInt(valueString);
-            if (value > 100) {
-                showToast(getActivity(), "value must be in 0~100", Toast.LENGTH_LONG);
-                return false;
-            }
+            // from the slider, within 1 to 54 (the cap of the APF morale gain)
+            int value = (Integer) newValue;
             KcaMoraleInfo.setMinMorale(value);
+            if (sHandler != null) {
+                Bundle bundle = new Bundle();
+                bundle.putString("url", KCA_API_PREF_MORALE_CHANGED);
+                bundle.putString("data", "");
+                Message sMsg = sHandler.obtainMessage();
+                sMsg.setData(bundle);
+                sHandler.sendMessage(sMsg);
+            }
         }
 
         if (PREF_FAIRY_OPACITY.equals(key)) {

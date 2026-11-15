@@ -39,13 +39,8 @@ public final class KcaConstants {
     public static final int KCANOTIFY_RESOURCELOG_VERSION = 1;
     public static final int KCANOTIFY_PACKETLOG_VERSION = 2;
 
-    public static final String DB_KEY_STARTDATA = "key_startdata";
     public static final String DB_KEY_DECKPORT = "key_deckport";
     public static final String DB_KEY_USEITEMS = "key_useitems";
-    public static final String DB_KEY_MAPEDGES = "key_mapedges";
-    public static final String DB_KEY_MAPSUBDT = "key_mapsubdt";
-    public static final String DB_KEY_EXPDINFO = "key_expdinfo";
-    public static final String DB_KEY_QUESTTRACK = "key_questtrack";
     public static final String DB_KEY_BATTLEINFO = "key_battleinfo";
     public static final String DB_KEY_BATTLENODE = "key_battlenode";
     public static final String DB_KEY_QTRACKINFO = "key_qtrackinfo";
@@ -66,13 +61,19 @@ public final class KcaConstants {
     public static final String DB_KEY_QUESTNCHK = "key_questnchk";
     public static final String DB_KEY_MATERIALS = "key_materials";
 
+    // keys not used any more, removed from the DB at startup: game data is in a file (KcaGameDataStore), and
+    // map edges, sub nodes and tracked quests are read from the resource files into memory
+    public static final String[] DB_KEY_REMOVED_ARRAY = {
+            "key_startdata",
+            "key_mapedges",
+            "key_mapsubdt",
+            "key_questtrack",
+            "key_expdinfo"
+    };
+
     public static final String[] DB_KEY_ARRAY = {
-            DB_KEY_STARTDATA,
             DB_KEY_DECKPORT,
             DB_KEY_USEITEMS,
-            DB_KEY_MAPEDGES,
-            DB_KEY_EXPDINFO,
-            DB_KEY_QUESTTRACK,
             DB_KEY_BATTLEINFO,
             DB_KEY_BATTLENODE,
             DB_KEY_QTRACKINFO,
@@ -302,6 +303,7 @@ public final class KcaConstants {
     public static final String KCA_API_PREF_NOTICOUNT_CHANGED = "/kca_api/pref_noticount_changed";
     public static final String KCA_API_PREF_LANGUAGE_CHANGED = "/kca_api/pref_language_changed";
     public static final String KCA_API_PREF_ALARMDELAY_CHANGED = "/kca_api/pref_alarmdelay_changed";
+    public static final String KCA_API_PREF_MORALE_CHANGED = "/kca_api/pref_morale_changed";
     public static final String KCA_API_PREF_FAIRYSIZE_CHANGED = "/kca_api/pref_fairysize_changed";
     public static final String KCA_API_PREF_FAIRYALPHA_CHANGED = "/kca_api/pref_fairyalpha_changed";
     public static final String KCA_API_PREF_CHANGE_ON_ACTION = "/kca_api/pref_change_on_action";
@@ -338,6 +340,8 @@ public final class KcaConstants {
     public static final int NOTI_UPDATE = 3;
     public static final int NOTI_MORALE = 4;
     public static final int NOTI_AKASHI = 5;
+    public static final int NOTI_SERVICE_STATUS = 6;
+    public static final int NOTI_NOSAKI = 7;
 
     public static final int FRONT_NONE = 0;
     public static final int FRONT_EXP_SET = 2;
@@ -466,6 +470,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_NOTI_MORALE = "notify_morale";
     public static final String PREF_KCA_MORALE_MIN = "morale_min";
     public static final String PREF_KCA_NOTI_AKASHI = "notify_akashi";
+    public static final String PREF_KCA_NOTI_NOSAKI = "notify_nosaki";
     public static final String PREF_SHIPINFO_SORTKEY = "shipinfo_sortkey";
     public static final String PREF_SHIPINFO_FILTCOND = "shipinfo_filtcond";
     public static final String PREF_SHIPINFO_SHIPSTAT = "shipinfo_shipstat";
@@ -480,6 +485,9 @@ public final class KcaConstants {
     public static final String PREF_SHOW_CONSTRSHIP_NAME = "show_constrship_name";
     public static final String PREF_VIEW_YLOC = "view_yloc";
     public static final String PREF_LAST_UPDATE_CHECK = "last_update_check";
+    // result of the last data update check (not settings, so not in PREF_ARRAY)
+    public static final String PREF_DATA_UPDATE_CHECKED = "data_update_checked";
+    public static final String PREF_DATA_UPDATE_PENDING = "data_update_pending";
     public static final String PREF_TIMER_WIDGET_STATE = "timer_widget_state";
     public static final String PREF_DATALOAD_ERROR_FLAG = "dataload_error_flag";
     public static final String PREF_FIX_VIEW_LOC = "fix_view_loc";
@@ -510,6 +518,7 @@ public final class KcaConstants {
     public static final String PREF_MITM_SETUP_WIZARD = "mitm_setup_wizard";
     public static final String PREF_DECRYPTION_LIST = "decryption_list";
     public static final String PREF_VPNSERVICE_USAGE_AGREE = "vpnservice_usage_agree";
+    public static final String PREF_BATTERY_WARNING_DISMISSED = "battery_warning_dismissed";
 
     public static final String NOTI_SOUND_KIND_MIXED = "mixed";
     public static final String NOTI_SOUND_KIND_NORMAL = "sound";
@@ -564,6 +573,7 @@ public final class KcaConstants {
             PREF_KCA_NOTI_MORALE,
             PREF_KCA_MORALE_MIN,
             PREF_KCA_NOTI_AKASHI,
+            PREF_KCA_NOTI_NOSAKI,
             PREF_SHIPINFO_SORTKEY,
             PREF_SHIPINFO_FILTCOND,
             PREF_SHIPINFO_SHIPSTAT,
@@ -626,6 +636,7 @@ public final class KcaConstants {
             PREF_KCA_NOTI_QUEST_FAIRY_GLOW,
             PREF_KCA_NOTI_MORALE,
             PREF_KCA_NOTI_AKASHI,
+            PREF_KCA_NOTI_NOSAKI,
             PREF_KCA_ACTIVATE_DROPLOG,
             PREF_KCA_ACTIVATE_RESLOG,
             PREF_SHOW_CONSTRSHIP_NAME,

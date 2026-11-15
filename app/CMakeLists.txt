@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4.1)
+cmake_minimum_required(VERSION 3.13)
 project(kcanotify)
 
 add_library( netguard
@@ -21,3 +21,9 @@ find_library( log-lib
 
 target_link_libraries( netguard
                        ${log-lib} )
+
+# 16 KB page size devices need 16 KB aligned LOAD segments
+target_link_options( netguard
+                     PRIVATE
+                     "-Wl,-z,max-page-size=16384"
+                     "-Wl,-z,common-page-size=16384" )

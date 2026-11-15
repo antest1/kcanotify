@@ -2,6 +2,7 @@ package com.antest1.kcanotify;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.ForegroundServiceStartNotAllowedException;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -11,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ServiceInfo;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
@@ -21,17 +23,22 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager;
+import android.os.StrictMode;
+import android.os.SystemClock;
 import android.os.Vibrator;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import android.provider.Settings;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.ServiceCompat;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -39,17 +46,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -61,7 +67,6 @@ import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaApiData.*;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaFleetViewService.REFRESH_FLEETVIEW_ACTION;
-import static com.antest1.kcanotify.KcaMoraleInfo.setMoraleValue;
 import static com.antest1.kcanotify.KcaQuestViewService.REFRESH_QUESTVIEW_ACTION;
 import static com.antest1.kcanotify.KcaTimerWidget.WIDGET_DATA_UPDATE;
 import static com.antest1.kcanotify.KcaUtils.createBuilder;
@@ -84,6 +89,13 @@ public class KcaService extends BaseService {
     public static final String SERVICE_CHANNEL_ID = "kcaservice_noti_channel_";
     public static final String SERVICE_CHANNEL_ID_OLD = "noti_service_channel";
     public static final String SERVICE_CHANNEL_NAME = "Kcanotify Service";
+    public static final String SERVICE_STATUS_CHANNEL_ID = "kcaservice_status_channel";
+    public static final String SERVICE_STATUS_CHANNEL_NAME = "Kcanotify Service Status";
+    private static final String CRASHLYTICS_KEY_PACKET_API = "packet_api";
+    private static final long SLOW_PACKET_MILLIS = 200;
+    // writes responses as received off the main thread, in the order they came
+    private static final ExecutorService responseWriter = Executors.newSingleThreadExecutor();
+    private boolean foregroundStartBlocked = false;
 
     public static boolean isInitState = false;
     public static boolean isFirstState;
@@ -125,6 +137,10 @@ public class KcaService extends BaseService {
     private String notifyTitle = "";
     private String notifyContent = "";
     private NotificationCompat.Builder notifyBuilder;
+    private String postedNotifyTitle = null;
+    private String postedNotifyContent = null;
+    // notifyBuilder is only touched on the main thread; timer ticks are posted here
+    private final Handler notificationUpdateHandler = new Handler(Looper.getMainLooper());
 
     kcaServiceHandler handler;
     kcaNotificationHandler nHandler;
@@ -133,8 +149,6 @@ public class KcaService extends BaseService {
     private BroadcastReceiver receiver;
 
     String kcaFirstDeckInfo;
-    static String kca_version;
-    String api_start2_data = null;
     boolean api_start2_init = false;
     Gson gson = new GsonBuilder().setLenient().create();
 
@@ -187,6 +201,11 @@ public class KcaService extends BaseService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.getAction() != null) {
             if (KCASERVICE_START.equals(intent.getAction())) {
+                if (BuildConfig.DEBUG) {
+                    // list disk access on the main thread in logcat
+                    StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                            .detectDiskReads().detectDiskWrites().penaltyLog().build());
+                }
                 isServiceOn = true;
                 isFirstState = true;
                 restartFlag = true;
@@ -201,11 +220,8 @@ public class KcaService extends BaseService {
                 deckInfoCalc = new KcaDeckInfo(getBaseContext());
                 KcaApiData.setDBHelper(dbHelper);
 
-                JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
-                //Log.e("KCA", kcDataObj.toJSONString());
-                if (kcDataObj != null && kcDataObj.has("api_data")) {
-                    KcaApiData.getKcGameData(kcDataObj.getAsJsonObject("api_data"));
-                }
+                JsonObject kcApiData = KcaGameDataStore.loadApiData(getApplicationContext());
+                if (kcApiData != null) KcaApiData.getKcGameData(kcApiData);
 
                 AssetManager assetManager = getResources().getAssets();
                 int loadMapEdgeInfoResult = loadMapEdgeInfoFromStorage(getApplicationContext());
@@ -230,7 +246,7 @@ public class KcaService extends BaseService {
 
                 loadSimpleExpeditionInfoFromStorage(getApplicationContext());
                 loadShipInitEquipCountFromStorage(getApplicationContext());
-                loadQuestTrackDataFromStorage(dbHelper, getApplicationContext());
+                loadQuestTrackDataFromStorage(getApplicationContext());
                 dbHelper.initExpScore();
 
                 showDataLoadErrorToast(getApplicationContext(), getString(R.string.download_check_error));
@@ -246,6 +262,7 @@ public class KcaService extends BaseService {
                 mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                 notifiManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 createServiceChannel();
+                notifiManager.cancel(getNotificationId(NOTI_SERVICE_STATUS, 0));
 
                 handler = new kcaServiceHandler(this);
                 nHandler = new kcaNotificationHandler(this);
@@ -274,6 +291,7 @@ public class KcaService extends BaseService {
                 KcaFairySelectActivity.setHandler(nHandler);
                 KcaViewButtonService.setHandler(nHandler);
                 KcaAkashiRepairInfo.initAkashiTimer();
+                KcaNosakiInfo.initNosakiTimer();
 
                 if (sniffer_mode == SNIFFER_PASSIVE) {
                     receiver = new KcaReceiver();
@@ -293,15 +311,15 @@ public class KcaService extends BaseService {
 
                 kcaFirstDeckInfo = getString(R.string.kca_init_content);
                 initViewNotificationBuilder(notifyTitle, notifyContent);
+                postedNotifyTitle = null;
+                postedNotifyContent = null;
 
                 KcaMoraleInfo.initMoraleValue(Integer.parseInt(
                         getStringPreferences(getApplicationContext(), PREF_KCA_MORALE_MIN)));
 
                 Handler toForegroundHandler = new Handler(getMainLooper());
                 toForegroundHandler.removeCallbacksAndMessages(null);
-                toForegroundHandler.postDelayed(() ->
-                        startForeground(getNotificationId(NOTI_FRONT, 1),
-                                notifyBuilder.build()), 24);
+                toForegroundHandler.postDelayed(this::startForegroundOrStop, 24);
 
                 if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_AUTOHIDE)) {
                     foregroundCheck = new KcaForegroundCheck(this);
@@ -311,11 +329,7 @@ public class KcaService extends BaseService {
                 notificationTimeCounter = -1;
                 timer = () -> {
                     if (isMissionTimerViewEnabled()) {
-                        notificationTimeCounter += 1;
-                        if (notificationTimeCounter == 120) {
-                            notificationTimeCounter = 0;
-                        }
-                        updateExpViewNotification();
+                        notificationUpdateHandler.post(this::onNotificationTimerTick);
                     }
                     if (KcaAkashiRepairInfo.getAkashiTimerValue() > 0) {
                         int second = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
@@ -328,39 +342,108 @@ public class KcaService extends BaseService {
                 runTimer();
 
             } else if (KCASERVICE_STOP.equals(intent.getAction())) {
-                if (dbHelper != null) dbHelper.close();
-                stopService(new Intent(this, KcaBattleViewService.class));
-                stopService(new Intent(this, KcaQuestViewService.class));
-                stopService(new Intent(this, KcaFleetViewService.class));
-                stopService(new Intent(this, KcaAkashiViewService.class));
-                stopService(new Intent(this, KcaMapHpPopupService.class));
-                stopService(new Intent(this, KcaConstructPopupService.class));
-                stopService(new Intent(this, KcaDevelopPopupService.class));
-                stopService(new Intent(this, KcaLandAirBasePopupService.class));
-                stopService(new Intent(this, KcaViewButtonService.class));
-                stopService(new Intent(this, KcaExpeditionCheckViewService.class));
-                stopService(new Intent(this, KcaCustomToastService.class));
-                stopService(new Intent(this, KcaFleetCheckPopupService.class));
-                stopService(new Intent(this, KcaDockingPopupService.class));
-                setServiceDown();
-                KcaAlarmService.clearAlarmCount();
+                shutdownService();
                 stopSelfResult(startId);
             }
         }
         return START_REDELIVER_INTENT;
     }
 
+    private void shutdownService() {
+        if (dbHelper != null) dbHelper.close();
+        stopService(new Intent(this, KcaBattleViewService.class));
+        stopService(new Intent(this, KcaQuestViewService.class));
+        stopService(new Intent(this, KcaFleetViewService.class));
+        stopService(new Intent(this, KcaAkashiViewService.class));
+        stopService(new Intent(this, KcaMapHpPopupService.class));
+        stopService(new Intent(this, KcaConstructPopupService.class));
+        stopService(new Intent(this, KcaDevelopPopupService.class));
+        stopService(new Intent(this, KcaLandAirBasePopupService.class));
+        stopService(new Intent(this, KcaViewButtonService.class));
+        stopService(new Intent(this, KcaExpeditionCheckViewService.class));
+        stopService(new Intent(this, KcaCustomToastService.class));
+        stopService(new Intent(this, KcaFleetCheckPopupService.class));
+        stopService(new Intent(this, KcaDockingPopupService.class));
+        setServiceDown();
+        KcaAlarmService.clearAlarmCount();
+    }
+
+    private void startForegroundOrStop() {
+        try {
+            ServiceCompat.startForeground(this, getNotificationId(NOTI_FRONT, 1), notifyBuilder.build(),
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+        } catch (IllegalStateException e) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S
+                    || !(e instanceof ForegroundServiceStartNotAllowedException)) throw e;
+            // The system restarted this service in background (START_REDELIVER_INTENT), where
+            // Android 12+ does not let it become a foreground service. Stop cleanly and let the
+            // user restart it from a notification instead of crashing.
+            Log.w("KCA", "startForeground not allowed: " + e.getMessage());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            foregroundStartBlocked = true;
+            PreferenceManager.getDefaultSharedPreferences(this).edit()
+                    .putBoolean(PREF_SVC_ENABLED, false).apply();
+            shutdownService();
+            stopSelf();
+        }
+    }
+
+    // Shown after the service is destroyed, since onDestroy cancels all notifications
+    private void showServiceStoppedNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(SERVICE_STATUS_CHANNEL_ID,
+                    SERVICE_STATUS_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setSound(null, null);
+            channel.enableVibration(false);
+            notifiManager.createNotificationChannel(channel);
+        }
+
+        Intent restartIntent = new Intent(this, MainActivity.class)
+                .setAction(MainActivity.ACTION_RESTART_SERVICE)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent restartPendingIntent = PendingIntent.getActivity(this, 0, restartIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        String title = KcaUtils.format(getString(R.string.svc_stopped_title), getString(R.string.app_name));
+        String text = getString(R.string.svc_stopped_text);
+        NotificationCompat.Builder builder = createBuilder(this, SERVICE_STATUS_CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_stat_notify_0)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setContentIntent(restartPendingIntent)
+                .setAutoCancel(true)
+                .addAction(new NotificationCompat.Action(0,
+                        getString(R.string.svc_stopped_action_restart), restartPendingIntent));
+
+        // battery optimization exemption also lets the service restart in background
+        if (!KcaUtils.isIgnoringBatteryOptimizations(this)) {
+            Intent batteryIntent = KcaUtils.getBatteryOptimizationSettingsIntent(this);
+            batteryIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent batteryPendingIntent = PendingIntent.getActivity(this, 1, batteryIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            text = text.concat("\n").concat(getString(R.string.svc_stopped_battery_hint));
+            builder.addAction(new NotificationCompat.Action(0,
+                    getString(R.string.svc_stopped_action_battery), batteryPendingIntent));
+        }
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(text));
+        notifiManager.notify(getNotificationId(NOTI_SERVICE_STATUS, 0), builder.build());
+    }
+
     public void setServiceDown() {
         isPortAccessed = false;
         stopTimer();
+        notificationUpdateHandler.removeCallbacksAndMessages(null);
         stopForeground(STOP_FOREGROUND_REMOVE);
 
         handler = null;
         nHandler = null;
 
         if (mediaPlayer != null) {
-            mediaPlayer.release();
+            // release() can block on the audio service binder, so keep it off the main thread
+            final MediaPlayer player = mediaPlayer;
             mediaPlayer = null;
+            player.setOnCompletionListener(null);
+            new Thread(player::release).start();
         }
 
         isServiceOn = false;
@@ -376,6 +459,7 @@ public class KcaService extends BaseService {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 notifiManager.deleteNotificationChannel(getServiceChannelId());
             }
+            if (foregroundStartBlocked) showServiceStoppedNotification();
         }
         notifiManager = null;
         super.onDestroy();
@@ -472,9 +556,26 @@ public class KcaService extends BaseService {
         updateNotification(true);
     }
 
+    private void onNotificationTimerTick() {
+        if (!isServiceOn || notifiManager == null || notifyBuilder == null) return;
+        notificationTimeCounter += 1;
+        if (notificationTimeCounter == 120) {
+            notificationTimeCounter = 0;
+        }
+        // no one sees the notification text while the screen is off
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        if (powerManager != null && !powerManager.isInteractive()) return;
+        updateExpViewNotification();
+    }
+
     private void updateNotification(boolean change_content) {
         if (change_content) {
+            // avoid re-posting unchanged content: frequent updates of the same notification
+            // make SystemUI fail to inflate it on Android 8-11 ("Bad notification posted")
+            if (notifyTitle.equals(postedNotifyTitle) && notifyContent.equals(postedNotifyContent)) return;
             updateViewNotificationBuilder(notifyTitle, notifyContent);
+            postedNotifyTitle = notifyTitle;
+            postedNotifyContent = notifyContent;
         }
         notifiManager.notify(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
     }
@@ -549,7 +650,33 @@ public class KcaService extends BaseService {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
         long complete_time = KcaAkashiRepairInfo.getAkashiRepairTime();
-        if (complete_time > 0) setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_AKASHI, 0), false);
+        if (complete_time > 0 && hasAkashiRepairTarget()) setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_AKASHI, 0), false);
+    }
+
+    // checked with the fleets as they are when the alarm is set; without fleet data the alarm is kept
+    private boolean hasAkashiRepairTarget() {
+        JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+        return portdeckdata == null || deckInfoCalc.hasAkashiRepairTarget(portdeckdata);
+    }
+
+    private void setNosakiAlarm(Intent aIntent) {
+        JsonObject nosakiAlarmData = new JsonObject();
+        nosakiAlarmData.addProperty("type", KcaAlarmService.TYPE_NOSAKI);
+        aIntent.putExtra("data", nosakiAlarmData.toString());
+        PendingIntent pendingIntent = PendingIntent.getService(
+                getApplicationContext(),
+                getNotificationId(NOTI_NOSAKI, 0),
+                aIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+        long gain_time = KcaNosakiInfo.getNosakiGainTime();
+        if (gain_time > 0 && hasNosakiGainTarget()) setAlarm(gain_time, pendingIntent, getNotificationId(NOTI_NOSAKI, 0), false);
+    }
+
+    // checked with the fleets as they are when the alarm is set; without fleet data the alarm is kept
+    private boolean hasNosakiGainTarget() {
+        JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+        return portdeckdata == null || deckInfoCalc.hasNosakiGainTarget(portdeckdata);
     }
 
     private void toastInfo() {
@@ -571,9 +698,33 @@ public class KcaService extends BaseService {
         @Override
         public void handleMessage(@NonNull Message msg) {
             KcaService service = mService.get();
-            if (service != null) {
+            if (service == null) return;
+
+            // an ANR happens while a packet is handled: keep its API in the report, and log slow ones
+            String api = getApiPath(msg.getData().getString("url"));
+            FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
+            crashlytics.setCustomKey(CRASHLYTICS_KEY_PACKET_API, api);
+            long startTime = SystemClock.uptimeMillis();
+            long startWriteNanos = KcaDBHelper.getMainThreadWriteNanos();
+            try {
                 service.handleServiceMessage(msg);
+            } finally {
+                crashlytics.setCustomKey(CRASHLYTICS_KEY_PACKET_API, "");
+                long time = SystemClock.uptimeMillis() - startTime;
+                if (time >= SLOW_PACKET_MILLIS) {
+                    long writeTime = TimeUnit.NANOSECONDS.toMillis(KcaDBHelper.getMainThreadWriteNanos() - startWriteNanos);
+                    String message = KcaUtils.format("slow packet %s: %dms (db write %dms)", api, time, writeTime);
+                    crashlytics.log(message);
+                    Log.w("KCA", message);
+                }
             }
+        }
+
+        // only the path of the API, without the host, parameters or body, so no game data goes to Crashlytics
+        private static String getApiPath(String url) {
+            if (url == null) return "";
+            String path = Uri.parse(url).getPath();
+            return path != null ? path : "";
         }
     }
 
@@ -591,26 +742,20 @@ public class KcaService extends BaseService {
         boolean dev_flag = msg.getData().getBoolean("dev_flag");
 
         try {
-            Reader data = new InputStreamReader(new ByteArrayInputStream(raw));
-            String init = new String(Arrays.copyOfRange(raw, 0, 7));
-            if (init.contains("svdata=")) {
-                data.skip("svdata=".length());
-            }
-            if (raw.length > 0) {
-                JsonElement jsonData = gson.fromJson(data, JsonElement.class);
-                if (jsonData.isJsonObject()) {
-                    jsonDataObj = jsonData.getAsJsonObject();
-                } else {
-                    jsonDataObj = new JsonObject();
-                }
-            }
-            else jsonDataObj = new JsonObject();
+            // failed in KcaHandler: record it like a response that cannot be handled
+            if (msg.obj instanceof Exception) throw (Exception) msg.obj;
+            // parsed in KcaHandler, off the main thread
+            jsonDataObj = msg.obj instanceof JsonObject ? (JsonObject) msg.obj : KcaHandler.parseResponse(raw);
             if (url.equals(KCA_API_RESOURCE_URL)) {
                 dbHelper.recordErrorLog(ERROR_TYPE_VPN, KCA_API_RESOURCE_URL, "", "", request);
                 return;
             }
             if (getBooleanPreferences(getApplicationContext(), PREF_PACKET_LOG)) {
-                packetLogger.log(url, request, jsonDataObj.toString());
+                // the response as received, written off the main thread
+                KcaPacketLogger logger = packetLogger;
+                int offset = KcaHandler.getJsonOffset(raw);
+                writeResponseInBackground("packet_log", () -> logger.log(url, request,
+                        new String(raw, offset, raw.length - offset, StandardCharsets.UTF_8)));
             }
 
             if (poiApiClient != null) poiApiClient.setDevFlag(dev_flag);
@@ -674,13 +819,13 @@ public class KcaService extends BaseService {
 
             if (url.equals(API_START2) || url.equals(API_START2_NEW)) {
                 if (jsonDataObj.has("api_data")) {
-                    api_start2_data = jsonDataObj.toString();
-                    dbHelper.putValue(DB_KEY_STARTDATA, api_start2_data);
+                    // the response as received, so it is not written back to text from the parsed object
+                    Context context = getApplicationContext();
+                    int offset = KcaHandler.getJsonOffset(raw);
+                    writeResponseInBackground("game_data", () -> KcaGameDataStore.save(context, raw, offset));
                     //Toast.makeText(this, "Load Kancolle Data", Toast.LENGTH_LONG).show();
+                    // the game does not tell the data version; KcaGameDataChecker syncs it with the server
                     KcaApiData.getKcGameData(jsonDataObj.getAsJsonObject("api_data"));
-                    if (kca_version != null) {
-                        setPreferences(getApplicationContext(), "kca_version", kca_version);
-                    }
                 }
                 return;
             }
@@ -835,10 +980,7 @@ public class KcaService extends BaseService {
                                 reqPortApiData.getAsJsonArray("api_deck_port").toString());
                     }
                     if (reqPortApiData.has("api_ship")) {
-                        final String ship_data = reqPortApiData.get("api_ship").toString();
-                        Thread ship_data_thread = new Thread(()
-                                -> dbHelper.putValue(DB_KEY_SHIPIFNO, ship_data));
-                        ship_data_thread.start();
+                        dbHelper.putValue(DB_KEY_SHIPIFNO, KcaJson.toJson(reqPortApiData.get("api_ship")));
                     }
                     if (reqPortApiData.has("api_ndock")) {
                         dbHelper.putValue(DB_KEY_NDOCKDATA, reqPortApiData.getAsJsonArray("api_ndock").toString());
@@ -970,29 +1112,49 @@ public class KcaService extends BaseService {
                         if (reqPortApiData.has("api_deck_port")) {
                             processExpeditionInfo();
                             JsonArray portdeckdata = reqPortApiData.getAsJsonArray("api_deck_port");
+
+                            // Update APF presence/timer before morale so the prediction uses the
+                            // current APF gain and the phase of the shared 15-minute timer.
+                            JsonArray nosaki_flagship_deck = deckInfoCalc.checkNosakiFlagship(portdeckdata);
+                            updateTimerOnPortVisit(
+                                    !nosaki_flagship_deck.isEmpty(),
+                                    KcaNosakiInfo.getNosakiTimerValue() < 0,
+                                    KcaNosakiInfo.isNosakiTimerOver(),
+                                    () -> {
+                                        KcaNosakiInfo.setNosakiTimer();
+                                        processNosakiTimerInfo();
+                                    },
+                                    () -> {
+                                        KcaNosakiInfo.initNosakiTimer();
+                                        processNosakiTimerInfo();
+                                    });
+                            KcaNosakiInfo.setNosakiData(nosaki_flagship_deck);
+                            stopNosakiTimerWithoutEffect(portdeckdata, nosaki_flagship_deck, false);
+
                             KcaMoraleInfo.setDeckCount(portdeckdata.size());
                             for (int i = 0; i < portdeckdata.size(); i++) {
-                                boolean result = KcaMoraleInfo.setMoraleValue(i, deckInfoCalc.checkMinimumMorale(portdeckdata, i), isInBattle, false);
+                                boolean result = setMoraleValueForDeck(i, portdeckdata, isInBattle, false);
                                 processMoraleInfo(i, portdeckdata, result);
                             }
 
                             JsonArray akashi_flagship_deck = deckInfoCalc.checkAkashiFlagship(portdeckdata);
-                            boolean is_init_state = KcaAkashiRepairInfo.getAkashiTimerValue() < 0;
-                            boolean over_20min = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond() >= AKASHI_TIMER_20MIN;
-                            if (!akashi_flagship_deck.isEmpty()) {
-                                if (is_init_state || over_20min) {
-                                    KcaAkashiRepairInfo.setAkashiTimer();
-                                    processAkashiTimerInfo();
-                                    isAkashiTimerNotiWait = true;
-                                }
-                            } else {
-                                if (!is_init_state && over_20min) {
-                                    KcaAkashiRepairInfo.initAkashiTimer();
-                                    processAkashiTimerInfo();
-                                    isAkashiTimerNotiWait = false;
-                                }
-                            }
+                            updateTimerOnPortVisit(
+                                    !akashi_flagship_deck.isEmpty(),
+                                    KcaAkashiRepairInfo.getAkashiTimerValue() < 0,
+                                    KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond() >= AKASHI_TIMER_20MIN,
+                                    () -> {
+                                        KcaAkashiRepairInfo.setAkashiTimer();
+                                        processAkashiTimerInfo();
+                                        isAkashiTimerNotiWait = true;
+                                    },
+                                    () -> {
+                                        KcaAkashiRepairInfo.initAkashiTimer();
+                                        processAkashiTimerInfo();
+                                        isAkashiTimerNotiWait = false;
+                                    });
                             KcaAkashiRepairInfo.setAkashiData(akashi_flagship_deck);
+                            stopAkashiTimerWithoutEffect(portdeckdata, akashi_flagship_deck, false);
+
                             updateFleetView();
                         }
                     }
@@ -1241,6 +1403,11 @@ public class KcaService extends BaseService {
                     if (jsonDataObj.has("api_data")) {
                         JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                         KcaApiData.updateSuppliedUserShip(api_data.getAsJsonArray("api_ship"));
+                        // supply is one of the conditions of the APF morale gain
+                        JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+                        if (portdeckdata != null) {
+                            KcaNosakiInfo.setNosakiData(deckInfoCalc.checkNosakiFlagship(portdeckdata));
+                        }
                     }
                 }
 
@@ -1282,7 +1449,7 @@ public class KcaService extends BaseService {
                     JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
                     int check_in_deck = deckInfoCalc.checkShipInDeck(portdeckdata, ship_id);
                     if (check_in_deck != -1) {
-                        boolean result = setMoraleValue(check_in_deck, deckInfoCalc.checkMinimumMorale(portdeckdata, check_in_deck), false, false);
+                        boolean result = setMoraleValueForDeck(check_in_deck, portdeckdata, false, false);
                         processMoraleInfo(check_in_deck, portdeckdata, result);
                     }
                     if (highspeed > 0) KcaApiData.updateShipHpFull(ship_id);
@@ -1792,6 +1959,9 @@ public class KcaService extends BaseService {
                         }
                         if (deckIdx != -1) {
                             JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+                            // taken out by hand: whether she was there, whatever her state
+                            JsonArray nosaki_before = deckInfoCalc.checkNosakiInFleet(portdeckdata);
+                            JsonArray akashi_before = deckInfoCalc.checkAkashiInFleet(portdeckdata);
                             JsonObject targetDeckIdxData = portdeckdata.get(deckIdx).getAsJsonObject();
                             JsonArray targetDeckIdxShipIdata = targetDeckIdxData.get("api_ship").getAsJsonArray();
 
@@ -1835,26 +2005,37 @@ public class KcaService extends BaseService {
                             portdeckdata.set(deckIdx, targetDeckIdxData);
                             dbHelper.putValue(DB_KEY_DECKPORT, portdeckdata.toString());
 
+                            // Update APF presence/timer before morale so predictions use the
+                            // current gain and the reset (if any) 15-minute timer phase.
+                            JsonArray nosaki_after = deckInfoCalc.checkNosakiFlagship(portdeckdata);
+                            KcaNosakiInfo.setNosakiData(nosaki_after);
+
+                            // like the repair timer, a fleet change resets the timer when the changed fleet has an APF;
+                            // taking her out stops it when no fleet has one any more
+                            if (containsDeck(nosaki_after, deckIdx, originalDeckIdx)) {
+                                KcaNosakiInfo.setNosakiTimer();
+                                processNosakiTimerInfo();
+                            } else {
+                                stopNosakiTimerWithoutEffect(portdeckdata, nosaki_after,
+                                        containsDeck(nosaki_before, deckIdx, originalDeckIdx));
+                            }
+
                             for (int i = 0; i < portdeckdata.size(); i++) {
-                                boolean result = setMoraleValue(i, deckInfoCalc.checkMinimumMorale(portdeckdata, i), false, in_change);
+                                boolean result = setMoraleValueForDeck(i, portdeckdata, false, in_change);
                                 processMoraleInfo(i, portdeckdata, result);
                             }
-                            JsonArray akashi_flagship_deck = deckInfoCalc.checkAkashiFlagship(portdeckdata);
-                            KcaAkashiRepairInfo.setAkashiData(akashi_flagship_deck);
 
-                            boolean akashi_nochange_flag = true;
-                            for (int i = 0; i < akashi_flagship_deck.size(); i++) {
-                                JsonObject item = akashi_flagship_deck.get(i).getAsJsonObject();
-                                int deckid = item.get("id").getAsInt();
-                                if (deckid == deckIdx || deckid == originalDeckIdx) {
-                                    akashi_nochange_flag = false;
-                                    break;
-                                }
-                            }
-                            if (!akashi_nochange_flag) {
+                            JsonArray akashi_after = deckInfoCalc.checkAkashiFlagship(portdeckdata);
+                            KcaAkashiRepairInfo.setAkashiData(akashi_after);
+
+                            // taking the repair ship out stops the timer when no fleet can repair any more
+                            if (containsDeck(akashi_after, deckIdx, originalDeckIdx)) {
                                 KcaAkashiRepairInfo.setAkashiTimer();
                                 processAkashiTimerInfo();
                                 isAkashiTimerNotiWait = true;
+                            } else {
+                                stopAkashiTimerWithoutEffect(portdeckdata, akashi_after,
+                                        containsDeck(akashi_before, deckIdx, originalDeckIdx));
                             }
                         }
                         updateFleetView();
@@ -1884,9 +2065,29 @@ public class KcaService extends BaseService {
                                         break;
                                     }
                                 }
+                                boolean same_ships = KcaDeckInfo.isSameShipList(before_ship_list, after_ship_list);
                                 portdeckdata.set(deckIdx, api_data);
                                 dbHelper.putValue(DB_KEY_DECKPORT, portdeckdata.toString());
-                                boolean result = setMoraleValue(deckIdx, deckInfoCalc.checkMinimumMorale(portdeckdata, deckIdx), false, is_same);
+                                // a preset with a repair ship or APF resets the timer unless it keeps the same ships;
+                                // one without leaves the timer as it is, even when it takes them out
+                                JsonArray nosaki_after = deckInfoCalc.checkNosakiFlagship(portdeckdata);
+                                KcaNosakiInfo.setNosakiData(nosaki_after);
+                                if (containsDeck(nosaki_after, deckIdx, -1)
+                                        && (!same_ships || KcaNosakiInfo.getNosakiTimerValue() < 0)) {
+                                    KcaNosakiInfo.setNosakiTimer();
+                                    processNosakiTimerInfo();
+                                }
+                                stopNosakiTimerWithoutEffect(portdeckdata, nosaki_after, false);
+                                JsonArray akashi_after = deckInfoCalc.checkAkashiFlagship(portdeckdata);
+                                KcaAkashiRepairInfo.setAkashiData(akashi_after);
+                                if (containsDeck(akashi_after, deckIdx, -1)
+                                        && (!same_ships || KcaAkashiRepairInfo.getAkashiTimerValue() < 0)) {
+                                    KcaAkashiRepairInfo.setAkashiTimer();
+                                    processAkashiTimerInfo();
+                                    isAkashiTimerNotiWait = true;
+                                }
+                                stopAkashiTimerWithoutEffect(portdeckdata, akashi_after, false);
+                                boolean result = setMoraleValueForDeck(deckIdx, portdeckdata, false, is_same);
                                 processMoraleInfo(deckIdx, portdeckdata, result);
                             }
                         }
@@ -1925,10 +2126,11 @@ public class KcaService extends BaseService {
                             JsonArray api_data_deck = jsonDataObj.getAsJsonArray("api_data_deck");
                             KcaApiData.updateUserShipData(api_data);
                             dbHelper.putValue(DB_KEY_DECKPORT, api_data_deck.toString());
+                            KcaNosakiInfo.setNosakiData(deckInfoCalc.checkNosakiFlagship(api_data_deck));
 
                             int itemuse_deck = KcaMoraleInfo.getItemUseDeckAndReset();
-                            if (itemuse_deck > 0) {
-                                boolean result = setMoraleValue(itemuse_deck, deckInfoCalc.checkMinimumMorale(api_data_deck, itemuse_deck), false, false);
+                            if (itemuse_deck >= 0) {
+                                boolean result = setMoraleValueForDeck(itemuse_deck, api_data_deck, false, false);
                                 processMoraleInfo(itemuse_deck, api_data_deck, result);
                             }
                         }
@@ -1948,8 +2150,15 @@ public class KcaService extends BaseService {
                         if (userShipId != -1) {
                             if (jsonDataObj.has("api_data")) {
                                 JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
-                                dbHelper.putValue(DB_KEY_DECKPORT, api_data.get("api_deck_data").getAsJsonArray().toString());
+                                JsonArray api_deck_data = api_data.get("api_deck_data").getAsJsonArray();
+                                dbHelper.putValue(DB_KEY_DECKPORT, api_deck_data.toString());
                                 KcaApiData.updateUserShip(api_data.get("api_ship_data").getAsJsonArray().get(0).getAsJsonObject());
+                                KcaNosakiInfo.setNosakiData(deckInfoCalc.checkNosakiFlagship(api_deck_data));
+                                // equipment changes do not restart anchorage repair, but repair facilities change its reach and speed,
+                                // and taking them all off a repair ship that has no built-in ones stops it
+                                JsonArray akashi_flagship_deck = deckInfoCalc.checkAkashiFlagship(api_deck_data);
+                                KcaAkashiRepairInfo.setAkashiData(akashi_flagship_deck);
+                                stopAkashiTimerWithoutEffect(api_deck_data, akashi_flagship_deck, false);
                             }
                         }
                         if (kaisouProcessFlag) {
@@ -2214,6 +2423,10 @@ public class KcaService extends BaseService {
                 processDockingInfo(true);
 
                 updateExpViewNotification();
+            }
+
+            if (url.startsWith(KCA_API_PREF_MORALE_CHANGED)) {
+                reprocessMoraleInfo();
             }
 
             if (url.startsWith(KCA_API_PREF_PRIORITY_CHANGED)) {
@@ -2570,6 +2783,39 @@ public class KcaService extends BaseService {
         alarmManager.cancel(pendingIntent);
     }
 
+    // Recomputes morale alarms after the morale threshold changes. The existing alarm may
+    // correspond to the previous (lower) threshold, so force every deck to reschedule.
+    private void reprocessMoraleInfo() {
+        JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+        if (portdeckdata == null) return;
+        KcaNosakiInfo.setNosakiData(deckInfoCalc.checkNosakiFlagship(portdeckdata));
+        KcaMoraleInfo.setDeckCount(portdeckdata.size());
+        for (int i = 0; i < portdeckdata.size(); i++) {
+            boolean result = setMoraleValueForDeck(i, portdeckdata, true, false);
+            processMoraleInfo(i, portdeckdata, result);
+        }
+        updateFleetView();
+    }
+
+    // Feeds the APF-aware minimum and passive gain into the morale predictor.
+    // KcaMoraleInfo detects gain/tick changes, so no extra snapshot is needed.
+    private boolean setMoraleValueForDeck(int deckIdx, JsonArray portdeckdata, boolean flag, boolean cflag) {
+        int apfGain = KcaNosakiInfo.getNosakiMoraleGain(deckIdx);
+        long apfNextTick = apfGain > 0 ? KcaNosakiInfo.getNextNosakiTickTime() : -1;
+        // The APF never receives her own passive gain, but still recovers naturally to 49.
+        boolean excludeApf = KcaMoraleInfo.min_morale > KcaMoraleInfo.NATURAL_MORALE_CAP;
+        int minMorale = deckInfoCalc.checkMinimumMorale(portdeckdata, deckIdx, excludeApf);
+        return KcaMoraleInfo.setMoraleValue(deckIdx, minMorale, apfGain, apfNextTick, flag, cflag);
+    }
+
+    private boolean containsDeck(JsonArray deckList, int deckId, int otherDeckId) {
+        for (JsonElement item : deckList) {
+            int id = item.getAsJsonObject().get("id").getAsInt();
+            if (id == deckId || id == otherDeckId) return true;
+        }
+        return false;
+    }
+
     private void processMoraleInfo(int idx, JsonArray deckportdata, boolean set_alarm) {
         if (KcaBattle.currentFleet == idx) return;
 
@@ -2595,6 +2841,38 @@ public class KcaService extends BaseService {
         }
     }
 
+    // Shared port-visit timer handling for Akashi Repair and Nosaki Passive Morale Gain.
+    // Starts the timer when the target ship is present and the timer is uninitialized or
+    // already completed, and clears it when no target ship is present and it has completed.
+    // Returns true when the timer state was changed.
+    private void updateTimerOnPortVisit(boolean hasTarget, boolean isInit, boolean isOver,
+                                        Runnable onStart, Runnable onClear) {
+        if (hasTarget ? (isInit || isOver) : (!isInit && isOver)) {
+            (hasTarget ? onStart : onClear).run();
+        }
+    }
+
+    // Stops the timer when no fleet has a repair ship that can repair, and either she was taken out
+    // of the changed fleet by hand or one is left that cannot (anchorage repair is invalid then).
+    // With none left after a preset, the timer is left to the port visit.
+    private void stopAkashiTimerWithoutEffect(JsonArray portdeckdata, JsonArray akashi_flagship_deck, boolean takenOut) {
+        if (KcaAkashiRepairInfo.getAkashiTimerValue() < 0 || !akashi_flagship_deck.isEmpty()) return;
+        if (takenOut || !deckInfoCalc.checkAkashiInFleet(portdeckdata).isEmpty()) {
+            KcaAkashiRepairInfo.initAkashiTimer();
+            processAkashiTimerInfo();
+            isAkashiTimerNotiWait = false;
+        }
+    }
+
+    // Same as the repair timer, with an APF that does not meet the conditions of the morale gain.
+    private void stopNosakiTimerWithoutEffect(JsonArray portdeckdata, JsonArray nosaki_flagship_deck, boolean takenOut) {
+        if (KcaNosakiInfo.getNosakiTimerValue() < 0 || !nosaki_flagship_deck.isEmpty()) return;
+        if (takenOut || !deckInfoCalc.checkNosakiInFleet(portdeckdata).isEmpty()) {
+            KcaNosakiInfo.initNosakiTimer();
+            processNosakiTimerInfo();
+        }
+    }
+
     private void processAkashiTimerInfo() {
         int nid = getNotificationId(NOTI_AKASHI, 0);
         PendingIntent pendingIntent = PendingIntent.getService(
@@ -2608,6 +2886,22 @@ public class KcaService extends BaseService {
         Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
         notifiManager.cancel(nid);
         setAkashiAlarm(aIntent);
+    }
+
+    // replaces the port food supply alarm after the Nosaki timer starts again or stops
+    private void processNosakiTimerInfo() {
+        int nid = getNotificationId(NOTI_NOSAKI, 0);
+        PendingIntent pendingIntent = PendingIntent.getService(
+                getApplicationContext(),
+                nid,
+                new Intent(getApplicationContext(), KcaAlarmService.class),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+        pendingIntent.cancel();
+        alarmManager.cancel(pendingIntent);
+        Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
+        notifiManager.cancel(nid);
+        setNosakiAlarm(aIntent);
     }
 
     private boolean isCurrentPortDeckDataReady() {
@@ -2653,6 +2947,26 @@ public class KcaService extends BaseService {
             qintent.setAction(KcaLandAirBasePopupService.LAB_DATA_ACTION);
             startService(qintent);
         }
+    }
+
+    // an exception that leaves a task ends the process with the executor thread,
+    // so a failed write goes to the error log instead
+    private void writeResponseInBackground(String name, Runnable task) {
+        KcaDBHelper helper = dbHelper;
+        responseWriter.execute(() -> {
+            try {
+                task.run();
+            } catch (RuntimeException e) {
+                Log.w("KCA", name + ": " + e);
+                try {
+                    if (helper != null) {
+                        helper.recordErrorLog(ERROR_TYPE_SERVICE, name, "", "", getStringFromException(e));
+                    }
+                } catch (RuntimeException ignored) {
+                    // the DB cannot be written at all
+                }
+            }
+        });
     }
 
     public void recordDropLog(JsonObject data, boolean port_full) {

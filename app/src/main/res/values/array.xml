@@ -104,14 +104,6 @@
         <item >2</item>
     </string-array>
 
-    <string-array name="ServerLocation" translatable="false">
-        <item>LIZA Server</item>
-    </string-array>
-
-    <string-array name="ServerLocationValue" translatable="false">
-        <item>@string/server_liza</item>
-    </string-array>
-
     <string-array name="ship_stat_array">
         <item>@string/ship_stat_sort_key_0</item>
         <item>@string/ship_stat_sort_key_1</item>

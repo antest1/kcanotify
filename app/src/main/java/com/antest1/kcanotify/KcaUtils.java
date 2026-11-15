@@ -25,10 +25,12 @@ import android.net.NetworkCapabilities;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.os.VibratorManager;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -49,7 +51,6 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.common.io.ByteStreams;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -100,7 +101,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_DATALOAD;
 import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_MIXED;
 import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_MUTE;
@@ -265,6 +265,22 @@ public class KcaUtils {
         return kcIntent;
     }
 
+    // the exemption also lets the service restart in background
+    public static boolean isIgnoringBatteryOptimizations(Context context) {
+        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        return powerManager == null || powerManager.isIgnoringBatteryOptimizations(context.getPackageName());
+    }
+
+    // the battery optimization list of apps, or the app's own page where the device has no list
+    public static Intent getBatteryOptimizationSettingsIntent(Context context) {
+        Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+        if (intent.resolveActivity(context.getPackageManager()) == null) {
+            intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.parse("package:" + context.getPackageName()));
+        }
+        return intent;
+    }
+
     public static JsonObject getJsonObjectCopy(JsonObject data) {
         return JsonParser.parseString(data.toString()).getAsJsonObject();
     }
@@ -274,12 +290,15 @@ public class KcaUtils {
         String current_version = getStringPreferences(context, PREF_KCA_DATA_VERSION);
         String default_version = context.getString(R.string.default_gamedata_version);
 
-        if (helper.getJsonObjectValue(DB_KEY_STARTDATA) != null && KcaUtils.compareVersion(current_version, default_version)) {
+        // game data is about 2MB: check the cheap conditions before reading and parsing it
+        if (KcaUtils.compareVersion(current_version, default_version)) {
             if (KcaApiData.isGameDataLoaded()) return 1;
-            JsonObject start_data = helper.getJsonObjectValue(DB_KEY_STARTDATA);
-            if (start_data.has("api_data") && start_data.get("api_data").isJsonObject()) {
-                KcaApiData.getKcGameData(start_data.getAsJsonObject("api_data"));
+            JsonObject api_data = KcaGameDataStore.loadApiData(context);
+            if (api_data != null) {
+                KcaApiData.getKcGameData(api_data);
                 valid_data = true;
+            } else if (helper != null && KcaGameDataStore.exists(context)) {
+                helper.recordErrorLog(ERROR_TYPE_DATALOAD, KcaGameDataStore.FILE_NAME, "setDefaultGameData", "", "not readable");
             }
         }
 
@@ -289,9 +308,10 @@ public class KcaUtils {
                 AssetManager.AssetInputStream ais =
                         (AssetManager.AssetInputStream) assetManager.open("api_start2");
                 byte[] bytes = KcaUtils.gzipdecompress(ByteStreams.toByteArray(ais));
-                helper.putValue(DB_KEY_STARTDATA, new String(bytes));
-                JsonElement data = JsonParser.parseString(new String(bytes));
-                JsonObject api_data = new Gson().fromJson(data, JsonObject.class).getAsJsonObject("api_data");
+                String start_data_str = new String(bytes);
+                bytes = null;
+                KcaGameDataStore.save(context, start_data_str);
+                JsonObject api_data = JsonParser.parseString(start_data_str).getAsJsonObject().getAsJsonObject("api_data");
                 KcaApiData.getKcGameData(api_data);
                 setPreferences(context, PREF_KCA_VERSION, default_version);
                 setPreferences(context, PREF_KCA_DATA_VERSION, default_version);
@@ -468,6 +488,13 @@ public class KcaUtils {
         return getTimeStr(left_time, false);
     }
 
+    // count-up timers stop at 99:59:59 so the hours keep two digits; nobody leaves the game longer than that
+    public static final int MAX_ELAPSED_TIME_SECOND = 99 * 3600 + 59 * 60 + 59;
+
+    public static String getElapsedTimeStr(int elapsed_time) {
+        return getTimeStr(Math.min(elapsed_time, MAX_ELAPSED_TIME_SECOND));
+    }
+
     public static Calendar getJapanCalendarInstance() {
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"), Locale.JAPAN);
         c.setFirstDayOfWeek(Calendar.MONDAY);
@@ -525,7 +552,12 @@ public class KcaUtils {
         Intent toastIntent = new Intent(context, KcaCustomToastService.class);
         toastIntent.setAction(KcaCustomToastService.TOAST_SHOW_ACTION);
         toastIntent.putExtra("data", data.toString());
-        context.startService(toastIntent);
+        try {
+            context.startService(toastIntent);
+        } catch (IllegalStateException e) {
+            // not allowed while the app is in background; dropping the toast is fine
+            Log.w("KCA", "showCustomToast: " + e.getMessage());
+        }
     }
 
     public static String getOrientationPrefix(int value) {
@@ -562,7 +594,7 @@ public class KcaUtils {
         }
     }
 
-    public static KcaDownloader getInfoDownloader(Context context){
+    public static OkHttpClient buildUpdateHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(1, TimeUnit.MINUTES);
@@ -573,8 +605,11 @@ public class KcaUtils {
                     .method(original.method(), original.body()).build();
             return chain.proceed(request);
         });
+        return builder.build();
+    }
 
-        OkHttpClient okHttpClient = builder.build();
+    public static KcaDownloader getInfoDownloader(Context context){
+        OkHttpClient okHttpClient = buildUpdateHttpClient();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(KcaUtils.getUpdateServer(context))
@@ -824,11 +859,30 @@ public class KcaUtils {
         return BitmapFactory.decodeResource(res, resId, options);
     }
 
+    // resource files used by the current language: "common" + this language's "langpacks" in resources_config.json
+    public static List<String> getResourceFilter(Context context) {
+        List<String> filter = new ArrayList<>();
+        try (InputStream is = context.getAssets().open("resources_config.json")) {
+            JsonObject config = JsonParser.parseString(new String(ByteStreams.toByteArray(is))).getAsJsonObject();
+            for (JsonElement item : config.getAsJsonArray("common")) {
+                filter.add(item.getAsString());
+            }
+            for (JsonElement item : config.getAsJsonObject("langpacks").getAsJsonArray(LocaleUtils.getResourceLocaleCode())) {
+                filter.add(item.getAsString());
+            }
+        } catch (IOException e) {
+            // do nothing
+        }
+        return filter;
+    }
+
     public static boolean validateResourceFiles(Context context, KcaDBHelper helper) {
         int count = 0;
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("data", Context.MODE_PRIVATE);
         for (final File entry : directory.listFiles()) {
+            // skip unfinished downloads (*.download), which are not resource files yet
+            if (!entry.getName().endsWith(".json")) continue;
             try {
                 Reader reader = new FileReader(entry);
                 JsonParser.parseReader(reader);

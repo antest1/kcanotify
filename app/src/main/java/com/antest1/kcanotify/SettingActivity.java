@@ -46,10 +46,6 @@ public class SettingActivity extends BaseActivity implements MainPreferenceFragm
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     public void onNestedPreferenceSelected(int key) {
@@ -71,6 +67,7 @@ public class SettingActivity extends BaseActivity implements MainPreferenceFragm
             case PREF_DISABLE_CUSTOMTOAST:
             case PREF_FAIRY_AUTOHIDE:
             case PREF_KCA_NOTI_AKASHI:
+            case PREF_KCA_NOTI_NOSAKI:
             case PREF_SHOW_CONSTRSHIP_NAME:
             case PREF_DATALOAD_ERROR_FLAG:
             case PREF_FIX_VIEW_LOC:

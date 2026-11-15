@@ -12,47 +12,38 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.common.collect.Collections2;
-import com.google.gson.Gson;
+import com.antest1.kcanotify.viewmodel.EquipmentInfoViewModel;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static android.media.CamcorderProfile.get;
 import static com.antest1.kcanotify.KcaApiData.T2_ITCP_FIGHTER;
 
 public class KcaEquipListViewAdpater extends BaseAdapter {
     public static final String[] STAT_KEYS = {"api_houg", "api_raig", "api_tyku", "api_souk", "api_tais",  "api_baku", "api_houk", "api_saku", "api_houm", "api_leng", "api_cost", "api_distance"};
-    private List<JsonObject> listViewItemList = new ArrayList<>();
-    private JsonObject shipEquipInfo = new JsonObject();
-    private Map<String, AtomicInteger> countInfo = new HashMap<>();
     private List<Integer> active = new ArrayList<>();
     private String summary_format = "";
-    private String searchQuery = "";
-    private int totalEquipment = 0;
-    private int totalStars = 0;
 
     private JsonObject shipStatTranslation = new JsonObject();
 
+    private EquipmentInfoViewModel viewModel;
+
+    public void setViewModel(EquipmentInfoViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
+
     @Override
     public int getCount() {
-        return listViewItemList.size();
+        return viewModel.getItems().size();
     }
 
     @Override
     public Object getItem(int position) {
-        return listViewItemList.get(position);
+        return viewModel.getItems().get(position);
     }
 
     @Override
@@ -60,12 +51,12 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
         return position;
     }
 
-    public int getTotalCount() { return totalEquipment; }
+    public int getTotalCount() { return viewModel.getTotalCount(); }
 
-    public int getStarCount() { return totalStars; }
+    public int getStarCount() { return viewModel.getStarCount(); }
 
     public void setSearchQuery(String query) {
-        searchQuery = query;
+        viewModel.setSearchQuery(query);
     }
 
     public void setStatTranslation(JsonObject data) {
@@ -100,13 +91,13 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
 
         final ViewHolder holder = (ViewHolder) v.getTag();
 
-        JsonObject item = listViewItemList.get(pos);
+        JsonObject item = viewModel.getItems().get(pos);
         int item_id = item.get("api_id").getAsInt();
         int item_type_2 = item.getAsJsonArray("api_type").get(2).getAsInt();
         int item_type_3 = item.getAsJsonArray("api_type").get(3).getAsInt();
         boolean is_item_aircraft = KcaApiData.isItemAircraft(item_type_2);
         String item_name = KcaApiData.getSlotItemTranslation(item.get("api_name").getAsString());
-        int item_count = getTotalCount(countInfo, item_id);
+        int item_count = getTotalCount(viewModel.getCountInfo(), item_id);
         final Integer target = item_id;
 
         holder.equipment_id.setText(String.valueOf(item_id));
@@ -123,15 +114,15 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
         int item_equipped_count = 0;
         for (int lv = 0; lv <= 10; lv++) {
             String key_noalv = getItemKey(item_id, lv, -1);
-            if (countInfo.containsKey(key_noalv)) {
-                if (shipEquipInfo.has(key_noalv)) item_equipped_count += shipEquipInfo.getAsJsonArray(key_noalv).size();
+            if (viewModel.getCountInfo().containsKey(key_noalv)) {
+                if (viewModel.getShipEquipInfo().has(key_noalv)) item_equipped_count += viewModel.getShipEquipInfo().getAsJsonArray(key_noalv).size();
                 LinearLayout ship_equip_item = getEquipmentShipDetailView(context, inflater, holder.equipment_item_detail_list, lv, -1, key_noalv, is_item_aircraft);
                 holder.equipment_item_detail_list.addView(ship_equip_item);
             }
             for (int alv = 0; alv <= 7; alv++) {
                 String key_alv = getItemKey(item_id, lv, alv);
-                if (countInfo.containsKey(key_alv)){
-                    if (shipEquipInfo.has(key_alv)) item_equipped_count += shipEquipInfo.getAsJsonArray(key_alv).size();
+                if (viewModel.getCountInfo().containsKey(key_alv)){
+                    if (viewModel.getShipEquipInfo().has(key_alv)) item_equipped_count += viewModel.getShipEquipInfo().getAsJsonArray(key_alv).size();
                     LinearLayout ship_equip_item = getEquipmentShipDetailView(context, inflater, holder.equipment_item_detail_list, lv, alv, key_alv, is_item_aircraft);
                     holder.equipment_item_detail_list.addView(ship_equip_item);
                 }
@@ -194,7 +185,7 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
 
     private JsonObject getEquipmentShipDetail(String key) {
         JsonObject ret_data = new JsonObject();
-        JsonArray data = shipEquipInfo.has(key) ? shipEquipInfo.getAsJsonArray(key) : new JsonArray();
+        JsonArray data = viewModel.getShipEquipInfo().has(key) ? viewModel.getShipEquipInfo().getAsJsonArray(key) : new JsonArray();
         SparseArray<AtomicInteger> counter = new SparseArray<>();
         int count_sum = 0;
         for (int k = 0; k < data.size(); k++) {
@@ -252,7 +243,7 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
             ship_equip_item_alv.setText("");
         }
 
-        int item_count = countInfo.get(key).get();
+        int item_count = viewModel.getCountInfo().get(key).get();
         int item_equip_count = ship_equip_detail.get("count").getAsInt();
         ship_equip_item_cnt_sum.setText(KcaUtils.format(summary_format,
                 item_count, item_equip_count, item_count - item_equip_count));
@@ -285,49 +276,7 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
     }
 
     public void setListViewItemList(JsonArray total_equip_list, Map<String, AtomicInteger> counter, JsonObject ship_equip_info, final String filtcond) {
-        shipEquipInfo = ship_equip_info;
-        countInfo = counter;
-        totalEquipment = 0;
-        totalStars = 0;
-        if (!filtcond.isEmpty()) {
-            Type listType = new TypeToken<List<JsonObject>>() {}.getType();
-            listViewItemList = new Gson().fromJson(total_equip_list, listType);
-            listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, input -> {
-                int key = input.get("api_id").getAsInt();
-                String item_name = KcaApiData.getSlotItemTranslation(input.get("api_name").getAsString());
-                if (!item_name.contains(searchQuery)) return false;
-                if (filtcond.equals("all")) {
-                    return checkCountExist(countInfo, key);
-                } else {
-                    Integer type_3 = input.getAsJsonArray("api_type").get(3).getAsInt();
-                    String[] position_list = filtcond.split(",");
-                    List<Integer> filt_list = new ArrayList<Integer>();
-                    for (String p: position_list) {
-                        filt_list.add(Integer.valueOf(p) + 1);
-                    }
-                    return filt_list.contains(type_3) && checkCountExist(countInfo, key);
-                }
-            }));
-            StatComparator cmp = new StatComparator();
-            Collections.sort(listViewItemList, cmp);
-            calculateStats(listViewItemList);
-        } else {
-            listViewItemList.clear();
-        }
-    }
-
-    private class StatComparator implements Comparator<JsonObject> {
-        @Override
-        public int compare(JsonObject o1, JsonObject o2) {
-            int o1_id = o1.get("api_id").getAsInt();
-            int o2_id = o2.get("api_id").getAsInt();
-
-            int o1_type_2 = o1.getAsJsonArray("api_type").get(2).getAsInt();
-            int o2_type_2 = o2.getAsJsonArray("api_type").get(2).getAsInt();
-
-            if (o1_type_2 != o2_type_2) return o1_type_2 - o2_type_2;
-            return o1_id - o2_id;
-        }
+        viewModel.setListViewItemList(total_equip_list, counter, ship_equip_info, filtcond);
     }
 
     private int getTotalCount(Map<String, AtomicInteger> count, int equip_id) {
@@ -338,33 +287,5 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
             if (target_equip_id == equip_id) cnt += count.get(key).get();
         }
         return cnt;
-    }
-
-    private void calculateStats(List<JsonObject> list) {
-        Set<String> check = new HashSet<>();
-        for (JsonObject item: list) {
-            String id = item.get("api_id").getAsString();
-            check.add(id);
-        }
-
-        for (String key: countInfo.keySet()) {
-            String[] key_split = key.split("_");
-            String id = key_split[0];
-            if (check.contains(id)) {
-                int star = Integer.parseInt(key_split[1]);
-                int count = countInfo.get(key).get();
-                totalEquipment += count;
-                totalStars += (star * count);
-            }
-        }
-    }
-
-    private boolean checkCountExist(Map<String, AtomicInteger> count, int equip_id) {
-        for (String key: count.keySet()) {
-            String[] key_split = key.split("_");
-            int target_equip_id = Integer.parseInt(key_split[0]);
-            if (target_equip_id == equip_id) return true;
-        }
-        return false;
     }
 }

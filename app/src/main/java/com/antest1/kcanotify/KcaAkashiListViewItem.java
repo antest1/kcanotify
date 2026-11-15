@@ -96,7 +96,12 @@ public class KcaAkashiListViewItem {
                         int[] filtered = removeKai(supportInfo.getAsJsonArray(), convert_exception);
                         for(int k = 0; k < filtered.length; k++) {
                             JsonObject kcShipData = getKcShipDataById(filtered[k], "name");
-                            shiplist.add(getShipTranslation(kcShipData.get("name").getAsString(), filtered[k], false));
+                            if (kcShipData == null) {
+                                // ship newer than the loaded game data
+                                shiplist.add(String.valueOf(filtered[k]));
+                            } else {
+                                shiplist.add(getShipTranslation(kcShipData.get("name").getAsString(), filtered[k], false));
+                            }
                         }
                     } else {
                         shiplist.add("-");

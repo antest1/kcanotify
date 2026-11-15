@@ -115,6 +115,8 @@ public class KcaFleetViewService extends BaseService {
     Runnable timer;
     String fleetCalcInfoText = "";
     int akashiAvailableCount = 0;
+    int nosakiMoraleGain = 0;
+    double akashiRepairModifier = 1.0;
     ScheduledExecutorService timeScheduler = null;
 
     static int view_status = 0;
@@ -126,7 +128,7 @@ public class KcaFleetViewService extends BaseService {
     private WindowManager.LayoutParams layoutParams;
 
     private View itemView, fleetHqInfoView;
-    private TextView fleetInfoTitle, fleetInfoLine, fleetCnChangeBtn, fleetSwitchBtn, fleetAkashiTimerBtn;
+    private TextView fleetInfoTitle, fleetInfoLine, fleetCnChangeBtn, fleetSwitchBtn, fleetAkashiTimerBtn, fleetNosakiTimerBtn;
     private WindowManager windowManager;
     private ScrollView fleetMenu;
     private ImageView fleetMenuArrowUp, fleetMenuArrowDown;
@@ -494,12 +496,14 @@ public class KcaFleetViewService extends BaseService {
         fleetHqInfoView = fleetView.findViewById(R.id.fleetview_hqinfo);
         fleetCnChangeBtn = fleetView.findViewById(R.id.fleetview_cn_change);
         fleetAkashiTimerBtn = fleetView.findViewById(R.id.fleetview_akashi_timer);
+        fleetNosakiTimerBtn = fleetView.findViewById(R.id.fleetview_nosaki_timer);
         fleetSwitchBtn = fleetView.findViewById(R.id.fleetview_fleetswitch);
         fleetMenu = fleetView.findViewById(R.id.fleetview_menu);
         fleetMenuArrowUp = fleetView.findViewById(R.id.fleetview_menu_up);
         fleetMenuArrowDown = fleetView.findViewById(R.id.fleetview_menu_down);
 
         fleetAkashiTimerBtn.setVisibility(View.GONE);
+        fleetNosakiTimerBtn.setVisibility(View.GONE);
         fleetSwitchBtn.setVisibility(View.GONE);
         fleetMenu.setOnTouchListener((view, motionEvent) -> {
             ViewTreeObserver observer = fleetMenu.getViewTreeObserver();
@@ -716,8 +720,15 @@ public class KcaFleetViewService extends BaseService {
                                     shipIndex = i;
                                 }
                                 if (shipIndex < data.size()) {
-                                    JsonObject udata = data.get(shipIndex).getAsJsonObject().getAsJsonObject("user");
-                                    JsonObject kcdata = data.get(shipIndex).getAsJsonObject().getAsJsonObject("kc");
+                                    JsonObject shipInfo = data.get(shipIndex).getAsJsonObject();
+                                    if (!isJsonObjectField(shipInfo, "user") || !isJsonObjectField(shipInfo, "kc")) {
+                                        // "kc" is null for ships missing from the loaded game data
+                                        itemView.setVisibility(GONE);
+                                        selected = -1;
+                                        return true;
+                                    }
+                                    JsonObject udata = shipInfo.getAsJsonObject("user");
+                                    JsonObject kcdata = shipInfo.getAsJsonObject("kc");
 
                                     String ship_id = udata.get("ship_id").getAsString();
                                     int ship_married = udata.get("lv").getAsInt() >= 100 ? 1 : 0;
@@ -865,6 +876,8 @@ public class KcaFleetViewService extends BaseService {
         }
 
         akashiAvailableCount = KcaAkashiRepairInfo.getAkashiAvailableCount(idx);
+        nosakiMoraleGain = KcaNosakiInfo.getNosakiMoraleGain(idx);
+        akashiRepairModifier = KcaAkashiRepairInfo.getAkashiRepairModifier(idx);
 
         infoList.add("LV ".concat(String.valueOf(sum_level)));
         fleetCalcInfoText = joinStr(infoList, " / ");
@@ -952,7 +965,9 @@ public class KcaFleetViewService extends BaseService {
             displayText = "";
         }
 
-        final String akashi_timer_text = KcaUtils.getTimeStr(KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond());
+        final String akashi_timer_text = KcaUtils.getElapsedTimeStr(KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond());
+        // counts up like the Akashi timer: the gain stacks every 15 minutes until the next port visit
+        final String nosaki_timer_text = KcaUtils.getElapsedTimeStr(KcaNosakiInfo.getNosakiElapsedTimeInSecond());
 
         mHandler.post(() -> {
             if (isReady && !displayText.isEmpty()) {
@@ -962,11 +977,12 @@ public class KcaFleetViewService extends BaseService {
 
                 long akashiTimerValue = KcaAkashiRepairInfo.getAkashiTimerValue();
                 boolean isAkashiActive = akashiTimerValue >= 0 && akashiAvailableCount > 0;
-                for (int i = 0; i < 6; i++) {
+                // up to 7 ships with two repair ships (the 7th of a striking force fleet is the first combined item)
+                for (int i = 0; i < 7; i++) {
                     if (i < akashiAvailableCount) {
-                        getFleetViewItem(i).setAkashiTimer(isAkashiActive);
+                        getFleetViewItem(i).setAkashiTimer(isAkashiActive, akashiRepairModifier);
                     } else {
-                        getFleetViewItem(i).setAkashiTimer(false);
+                        getFleetViewItem(i).setAkashiTimer(false, akashiRepairModifier);
                     }
                 }
 
@@ -983,11 +999,27 @@ public class KcaFleetViewService extends BaseService {
                     }
                     fleetAkashiTimerBtn.setVisibility(VISIBLE);
                 }
+
+                long nosakiTimerValue = KcaNosakiInfo.getNosakiTimerValue();
+                if (nosakiTimerValue < 0) {
+                    fleetNosakiTimerBtn.setVisibility(View.GONE);
+                } else {
+                    if (nosakiMoraleGain > 0) {
+                        fleetNosakiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetNosakiTimerBtnActive));
+                    } else {
+                        fleetNosakiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetNosakiTimerBtnDeactive));
+                    }
+                    if (!nosaki_timer_text.contentEquals(fleetNosakiTimerBtn.getText())) {
+                        fleetNosakiTimerBtn.setText(nosaki_timer_text);
+                    }
+                    fleetNosakiTimerBtn.setVisibility(VISIBLE);
+                }
             } else {
                 if (!getString(R.string.kca_init_content).contentEquals(fleetInfoLine.getText())) {
                     fleetInfoLine.setText(getString(R.string.kca_init_content));
                 }
                 fleetAkashiTimerBtn.setVisibility(View.GONE);
+                fleetNosakiTimerBtn.setVisibility(View.GONE);
             }
         });
     }
@@ -1245,6 +1277,10 @@ public class KcaFleetViewService extends BaseService {
         helper.recordErrorLog(ERROR_TYPE_FLEETVIEW, "fleetview", "FV_".concat(String.valueOf(type)), data_str, getStringFromException(e));
     }
 
+    private static boolean isJsonObjectField(JsonObject obj, String key) {
+        return obj.has(key) && obj.get(key).isJsonObject();
+    }
+
     private void startPopupService(Class<?> target, String action) {
         startPopupService(target, action, null);
     }
@@ -1264,7 +1300,12 @@ public class KcaFleetViewService extends BaseService {
         if (label != null) sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat(label), null);
         Intent popupIntent = new Intent(getBaseContext(), target);
         if (action != null) popupIntent.setAction(action);
-        startService(popupIntent);
+        try {
+            startService(popupIntent);
+        } catch (IllegalStateException e) {
+            // not allowed while the app is in background (e.g. config change while hidden)
+            Log.w("KCA", "startPopupService: " + e.getMessage());
+        }
     }
 
     @Override

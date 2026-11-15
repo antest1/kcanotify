@@ -22,6 +22,7 @@ import static com.antest1.kcanotify.R.id.droplog_item;
 
 public class KcaDroplogItemAdpater extends BaseAdapter {
     private List<JsonObject> listViewItemList = new ArrayList<>();
+    private JsonObject mapEdgeInfo = null;
     public static int color_normal, color_none, color_item, color_item_acc;
 
     @Override
@@ -69,7 +70,7 @@ public class KcaDroplogItemAdpater extends BaseAdapter {
         int map = item.get("map").getAsInt();
         int node = item.get("node").getAsInt();
         int maprank = item.get("maprank").getAsInt();
-        String node_alpha = KcaApiData.getCurrentNodeAlphabet(world, map, node);
+        String node_alpha = KcaApiData.getCurrentNodeAlphabet(mapEdgeInfo, world, map, node);
         if (maprank > 0) {
             holder.item_area.setText(KcaUtils.format("%d-%d[%s]-%s", world, map, KcaDropLogger.maprank_info[maprank], node_alpha));
         } else {
@@ -112,6 +113,7 @@ public class KcaDroplogItemAdpater extends BaseAdapter {
 
     public void setListViewItemList(List<JsonObject> data, int sort_key) {
         listViewItemList = data;
+        mapEdgeInfo = KcaApiData.getMapEdgeInfo();
     }
 
     private class StatComparator implements Comparator<JsonObject> {

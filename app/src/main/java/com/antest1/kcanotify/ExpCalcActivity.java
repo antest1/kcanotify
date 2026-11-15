@@ -7,9 +7,9 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,52 +23,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
+import com.antest1.kcanotify.viewmodel.ExpCalcViewModel;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
-import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
-import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
-import static com.antest1.kcanotify.KcaApiData.loadSortieExpInfoFromAssets;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPCALTRK;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPSHIP;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPSORTIE;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
-import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 
 
 public class ExpCalcActivity extends BaseActivity {
-    public static final int LEVEL_MAX = 188;
-    private static final int RANK_S = 0;
-    private static final int RANK_A = 1;
-    private static final int RANK_B = 2;
-    private static final int RANK_C = 3;
-    private static final int RANK_D = 4;
-
     Toolbar toolbar;
-    KcaDBHelper dbHelper;
 
-    public int count;
-    boolean is_flagship = false;
-    boolean is_mvp = false;
-    int rank_val = RANK_S;
-    int current_exp = 0;
-    int target_exp = 0;
-
-    private boolean userIsInteracting;
+    boolean userIsInteracting;
     boolean shipselect_current_flag = false;
     boolean cal_visible = true;
-    JsonObject current_ship_data;
-    public static SparseArray<String> track_values = new SparseArray<>();
 
     View cal_area;
     Spinner value_ship, value_current_lv, value_target_lv, value_map, value_rank;
@@ -80,18 +49,13 @@ public class ExpCalcActivity extends BaseActivity {
     FloatingActionButton add_button;
     LinearLayout listview;
 
-    boolean load_flag = false;
-    JsonObject current_state = new JsonObject();
+    ExpCalcViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-        KcaApiData.setDBHelper(dbHelper);
-        setDefaultGameData();
-        int exp_load_result = loadShipExpInfoFromAssets(getAssets());
-        int exp_sortie_result = loadSortieExpInfoFromAssets(getAssets());
-        if (exp_load_result != 1 || exp_sortie_result != 1) {
+        viewModel = new ViewModelProvider(this).get(ExpCalcViewModel.class);
+        if (!viewModel.init()) {
             Toast.makeText(getApplicationContext(), "Error loading data.", Toast.LENGTH_LONG).show();
             finish();
         }
@@ -105,8 +69,7 @@ public class ExpCalcActivity extends BaseActivity {
         getSupportActionBar().setTitle(getString(R.string.action_expcalc));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        current_ship_data = null;
-        track_values = new SparseArray<>();
+        viewModel.resetForUi();
 
         cal_area = findViewById(R.id.cal_area);
         cal_hide_bar = findViewById(R.id.cal_hide_bar);
@@ -135,8 +98,8 @@ public class ExpCalcActivity extends BaseActivity {
         listview = findViewById(R.id.ship_leveling_list);
         add_button = findViewById(R.id.add_exp_track);
         add_button.setOnClickListener(v -> {
-            if (current_ship_data != null) {
-                JsonObject data = KcaUtils.getJsonObjectCopy(current_ship_data);
+            if (viewModel.getCurrentShipData() != null) {
+                JsonObject data = KcaUtils.getJsonObjectCopy(viewModel.getCurrentShipData());
                 data.addProperty("current_lv", String.valueOf(value_current_lv.getSelectedItem()));
                 data.addProperty("target_lv", String.valueOf(value_target_lv.getSelectedItem()));
                 data.addProperty("map", String.valueOf(value_map.getSelectedItem()));
@@ -146,7 +109,7 @@ public class ExpCalcActivity extends BaseActivity {
                 data.addProperty("current_exp", value_current_exp.getText().toString());
                 data.addProperty("target_exp", value_target_exp.getText().toString());
                 data.addProperty("counter", value_counter.getText().toString());
-                data.addProperty("mapexp", getMapExp());
+                data.addProperty("mapexp", viewModel.getMapExp(value_base_exp.getText().toString()));
                 makeFilterItem(data);
             }
         });
@@ -167,15 +130,9 @@ public class ExpCalcActivity extends BaseActivity {
         chkbox_flagship = findViewById(R.id.chkbox_flagship);
         chkbox_mvp = findViewById(R.id.chkbox_mvp);
 
-        final JsonObject exp_ship_data = dbHelper.getJsonObjectValue(DB_KEY_EXPSHIP);
+        final JsonObject exp_ship_data = viewModel.getExpShipData();
 
-        final JsonObject exp_sortie_data = dbHelper.getJsonObjectValue(DB_KEY_EXPSORTIE);
-        final String[] sortie_map = new String[exp_sortie_data.size()];
-        int m = 0;
-        for (Map.Entry<String, JsonElement> data : exp_sortie_data.entrySet()) {
-            sortie_map[m] = data.getKey();
-            m++;
-        }
+        final String[] sortie_map = viewModel.getSortieMap();
 
         value_base_exp.setText("1");
 
@@ -185,7 +142,7 @@ public class ExpCalcActivity extends BaseActivity {
         value_map.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                current_state.addProperty("map", position);
+                viewModel.setMapState(position);
             }
 
             @Override
@@ -193,15 +150,14 @@ public class ExpCalcActivity extends BaseActivity {
             }
         });
 
-        String[] rank_list = {"S", "A", "B", "C", "D"};
+        String[] rank_list = ExpCalcViewModel.getRankList();
         rank_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, rank_list);
         rank_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         value_rank.setAdapter(rank_adapter);
         value_rank.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                rank_val = position;
-                current_state.addProperty("rank", position);
+                viewModel.setRank(position);
                 setScreen();
             }
 
@@ -210,10 +166,7 @@ public class ExpCalcActivity extends BaseActivity {
             }
         });
 
-        String[] level_list = new String[LEVEL_MAX];
-        for (int i = 0; i < LEVEL_MAX; i++) {
-            level_list[i] = String.valueOf(i + 1);
-        }
+        String[] level_list = viewModel.getLevelList();
         current_lv_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, level_list);
         current_lv_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         value_current_lv.setAdapter(current_lv_adapter);
@@ -223,8 +176,8 @@ public class ExpCalcActivity extends BaseActivity {
                 if (!shipselect_current_flag && userIsInteracting && exp_ship_data != null) {
                     String value = String.valueOf(position + 1);
                     JsonArray exp_data = exp_ship_data.getAsJsonArray(value);
-                    current_exp = exp_data.get(1).getAsInt();
-                    current_state.addProperty("current_lv", position);
+                    viewModel.setCurrentExp(exp_data.get(1).getAsInt());
+                    viewModel.setCurrentLvState(position);
                     setScreen();
                 }
                 shipselect_current_flag = false;
@@ -244,8 +197,8 @@ public class ExpCalcActivity extends BaseActivity {
                 if (exp_ship_data != null) {
                     String value = String.valueOf(position + 1);
                     JsonArray exp_data = exp_ship_data.getAsJsonArray(value);
-                    target_exp = exp_data.get(1).getAsInt();
-                    current_state.addProperty("target_lv", position);
+                    viewModel.setTargetExp(exp_data.get(1).getAsInt());
+                    viewModel.setTargetLvState(position);
                     setScreen();
                 }
             }
@@ -255,25 +208,9 @@ public class ExpCalcActivity extends BaseActivity {
             }
         });
 
-        JsonArray ship_data = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
-        if (ship_data == null) ship_data = new JsonArray();
-        Type listType = new TypeToken<List<JsonObject>>() {
-        }.getType();
-        final List<JsonObject> shipItemList = new Gson().fromJson(ship_data, listType);
-        StatComparator cmp = new StatComparator();
-        Collections.sort(shipItemList, cmp);
+        final List<JsonObject> shipItemList = viewModel.getShipItemList();
 
-        String[] ship_label_list = new String[shipItemList.size()];
-        for (int i = 0; i < ship_label_list.length; i++) {
-            int lv = shipItemList.get(i).get("api_lv").getAsInt();
-            int ship_id = shipItemList.get(i).get("api_ship_id").getAsInt();
-            String name = "???";
-            JsonObject kc_ship_data = KcaApiData.getKcShipDataById(ship_id, "name");
-            if (kc_ship_data != null) {
-                name = getShipTranslation(kc_ship_data.get("name").getAsString(), ship_id, false);
-            }
-            ship_label_list[i] = KcaUtils.format("[Lv.%d] %s", lv, name);
-        }
+        String[] ship_label_list = viewModel.getShipLabelList();
 
         ship_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, ship_label_list);
         ship_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
@@ -281,10 +218,11 @@ public class ExpCalcActivity extends BaseActivity {
         value_ship.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                current_ship_data = shipItemList.get(position);
+                viewModel.setCurrentShipData(shipItemList.get(position));
+                JsonObject current_ship_data = viewModel.getCurrentShipData();
                 int lv = current_ship_data.get("api_lv").getAsInt();
                 int ship_id = current_ship_data.get("api_ship_id").getAsInt();
-                JsonObject kc_ship_data = KcaApiData.getKcShipDataById(ship_id, "afterlv");
+                JsonObject kc_ship_data = getKcShipDataById(ship_id, "afterlv");
                 int ship_afterlv;
                 if (kc_ship_data != null) {
                     ship_afterlv = kc_ship_data.get("afterlv").getAsInt();
@@ -293,21 +231,21 @@ public class ExpCalcActivity extends BaseActivity {
                 }
 
                 shipselect_current_flag = true;
-                if (!load_flag) {
+                if (!viewModel.isLoadFlag()) {
                     if (current_lv_adapter != null) {
-                        value_current_lv.setSelection(Math.min(lv - 1, LEVEL_MAX - 1));
+                        value_current_lv.setSelection(Math.min(lv - 1, ExpCalcViewModel.LEVEL_MAX - 1));
                     }
                     if (target_lv_adapter != null) {
                         if (ship_afterlv <= 0 || lv >= ship_afterlv)
-                            value_target_lv.setSelection(Math.min(lv, LEVEL_MAX - 1));
-                        else value_target_lv.setSelection(Math.min(ship_afterlv - 1, LEVEL_MAX - 1));
+                            value_target_lv.setSelection(Math.min(lv, ExpCalcViewModel.LEVEL_MAX - 1));
+                        else value_target_lv.setSelection(Math.min(ship_afterlv - 1, ExpCalcViewModel.LEVEL_MAX - 1));
                     }
                 } else {
-                    load_flag = false;
+                    viewModel.setLoadFlag(false);
                 }
 
-                current_exp = current_ship_data.getAsJsonArray("api_exp").get(0).getAsInt();
-                current_state.addProperty("ship", position);
+                viewModel.setCurrentExp(current_ship_data.getAsJsonArray("api_exp").get(0).getAsInt());
+                viewModel.setShipState(position);
                 setScreen();
             }
 
@@ -317,14 +255,12 @@ public class ExpCalcActivity extends BaseActivity {
         });
 
         chkbox_flagship.setOnCheckedChangeListener((compoundButton, b) -> {
-            is_flagship = b;
-            current_state.addProperty("flagship", b);
+            viewModel.setFlagship(b);
             setScreen();
         });
 
         chkbox_mvp.setOnCheckedChangeListener((compoundButton, b) -> {
-            is_mvp = b;
-            current_state.addProperty("mvp", b);
+            viewModel.setMvp(b);
             setScreen();
         });
 
@@ -341,39 +277,16 @@ public class ExpCalcActivity extends BaseActivity {
             }
         });
 
-        JsonObject ship_index = new JsonObject();
-        for (int i = 0; i < ship_data.size(); i++) {
-            JsonObject item = ship_data.get(i).getAsJsonObject();
-            String key = item.get("api_id").getAsString();
-            ship_index.add(key, item);
-        }
-
-        JsonArray saved_data = dbHelper.getJsonArrayValue(DB_KEY_EXPCALTRK);
-        if (saved_data != null) {
-            for (int i = 0; i < saved_data.size(); i++) {
-                JsonObject item = saved_data.get(i).getAsJsonObject();
-                String key = item.get("api_id").getAsString();
-                if (ship_index.has(key)) {
-                    int mapexp = item.get("mapexp").getAsInt();
-                    int current_lv = ship_index.getAsJsonObject(key)
-                            .get("api_lv").getAsInt();
-                    int current_exp = ship_index.getAsJsonObject(key)
-                            .getAsJsonArray("api_exp").get(0).getAsInt();
-                    int target_exp = item.get("target_exp").getAsInt();
-                    int remainexp = Math.max(0, target_exp - current_exp);
-                    item.addProperty("current_lv", current_lv);
-                    item.addProperty("current_exp", current_exp);
-                    item.addProperty("counter", (int) Math.ceil((double) remainexp/ mapexp));
-                    makeFilterItem(item);
-                }
-            }
+        for (JsonObject item : viewModel.getRestoredTrackItems()) {
+            makeFilterItem(item);
         }
 
         loadCurrentState();
     }
 
     private void loadCurrentState() {
-        load_flag = current_state.has("current_lv") || current_state.has("target_lv");
+        JsonObject current_state = viewModel.getCurrentState();
+        viewModel.setLoadFlag(current_state.has("current_lv") || current_state.has("target_lv"));
         if (current_state.has("ship")) {
             safeSetSelection(value_ship, current_state.get("ship").getAsInt());
         }
@@ -398,51 +311,22 @@ public class ExpCalcActivity extends BaseActivity {
         }
     }
 
-    private int getMapExp() {
-        String base_text = value_base_exp.getText().toString();
-        if (base_text.length() > 9) base_text = base_text.substring(0, 9);
-        int mapexp = 1;
-        if (!base_text.isEmpty()) mapexp = Integer.parseInt(base_text);
-        if (mapexp == 0) mapexp = 1;
-
-        if (is_mvp) mapexp *= 2;
-        if (is_flagship) mapexp = (mapexp * 3) / 2;
-        switch (rank_val) {
-            case RANK_S:
-                mapexp = mapexp * 6 / 5;
-                break;
-            case RANK_C:
-                mapexp = mapexp * 8 / 10;
-                break;
-            case RANK_D:
-                mapexp = mapexp * 7 / 10;
-                break;
-            default:
-                break;
-        }
-        return mapexp;
-    }
-
     private void setScreen() {
-        int mapexp = getMapExp();
-        value_current_exp.setText(String.valueOf(current_exp));
-        value_target_exp.setText(String.valueOf(target_exp));
+        ExpCalcViewModel.ScreenResult result = viewModel.calcScreen(value_base_exp.getText().toString());
+        value_current_exp.setText(String.valueOf(viewModel.getCurrentExp()));
+        value_target_exp.setText(String.valueOf(viewModel.getTargetExp()));
 
-        value_mapexp.setText(String.valueOf(mapexp));
-        int remainexp = Math.max(0, target_exp - current_exp);
-        value_remainexp.setText(String.valueOf(remainexp));
-        int left_count = (int) Math.ceil((double) remainexp / mapexp);
-        value_counter.setText(String.valueOf(left_count));
+        value_mapexp.setText(String.valueOf(result.mapExp));
+        value_remainexp.setText(String.valueOf(result.remainExp));
+        value_counter.setText(String.valueOf(result.counter));
     }
 
     private void makeFilterItem(JsonObject data) {
-        count += 1;
-        track_values.append(count, data.toString());
+        int target = viewModel.addTrack(data);
 
         LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = vi.inflate(R.layout.listview_expcalc_item, null);
-        v.setTag(count);
-        final int target = count;
+        v.setTag(target);
 
         TextView ship_name = v.findViewById(R.id.ship_name);
         TextView level_before = v.findViewById(R.id.level_before);
@@ -460,7 +344,7 @@ public class ExpCalcActivity extends BaseActivity {
         JsonObject kc_ship_data = KcaApiData.getKcShipDataById(ship_id, "name");
         if (kc_ship_data != null) {
             ship_name_value = kc_ship_data.get("name").getAsString();
-            ship_name_value = getShipTranslation(ship_name_value, ship_id, false);
+            ship_name_value = KcaApiData.getShipTranslation(ship_name_value, ship_id, false);
         }
 
         ship_name.setText(ship_name_value);
@@ -496,7 +380,7 @@ public class ExpCalcActivity extends BaseActivity {
     private void removeViewByTag(int tag) {
         View target = listview.findViewWithTag(tag);
         listview.removeView(target);
-        track_values.remove(tag);
+        viewModel.removeTrack(tag);
     }
 
     private void safeSetSelection(Spinner spinner, int index) {
@@ -506,26 +390,9 @@ public class ExpCalcActivity extends BaseActivity {
         spinner.setSelection(Math.max(0, Math.min(index, count - 1)));
     }
 
-    private void setValueAndFinish() {
-        JsonArray data = new JsonArray();
-        for (int i = 0; i < track_values.size(); i++) {
-            int k = track_values.keyAt(i);
-            if (k <= count) {
-                JsonObject val = JsonParser.parseString(track_values.get(k)).getAsJsonObject();
-                data.add(val);
-            }
-        }
-        dbHelper.putValue(DB_KEY_EXPCALTRK, data.toString());
-    }
-
-
-    private int setDefaultGameData() {
-        return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
-    }
-
     @Override
     protected void onDestroy() {
-        setValueAndFinish();
+        viewModel.saveTracks();
         super.onDestroy();
     }
 
@@ -537,14 +404,6 @@ public class ExpCalcActivity extends BaseActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private class StatComparator implements Comparator<JsonObject> {
-        @Override
-        public int compare(JsonObject o1, JsonObject o2) {
-            String sort_key = "api_lv";
-            return o2.get(sort_key).getAsInt() - o1.get(sort_key).getAsInt();
         }
     }
 
