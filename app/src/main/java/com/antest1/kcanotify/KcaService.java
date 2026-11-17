@@ -93,6 +93,9 @@ public class KcaService extends BaseService {
     public static final String SERVICE_STATUS_CHANNEL_NAME = "Kcanotify Service Status";
     private static final String CRASHLYTICS_KEY_PACKET_API = "packet_api";
     private static final long SLOW_PACKET_MILLIS = 200;
+    // sent when the user clears the service notification
+    private static final String ACTION_SERVICE_NOTI_CLEARED = "com.antest1.kcanotify.SERVICE_NOTI_CLEARED";
+    private static final long SERVICE_NOTI_REPOST_DELAY_MILLIS = 500;
     // writes responses as received off the main thread, in the order they came
     private static final ExecutorService responseWriter = Executors.newSingleThreadExecutor();
     private boolean foregroundStartBlocked = false;
@@ -141,6 +144,8 @@ public class KcaService extends BaseService {
     private String postedNotifyContent = null;
     // notifyBuilder is only touched on the main thread; timer ticks are posted here
     private final Handler notificationUpdateHandler = new Handler(Looper.getMainLooper());
+    private final Runnable serviceNotificationReposter = this::repostServiceNotification;
+    private BroadcastReceiver serviceNotificationClearedReceiver;
 
     kcaServiceHandler handler;
     kcaNotificationHandler nHandler;
@@ -313,6 +318,7 @@ public class KcaService extends BaseService {
                 initViewNotificationBuilder(notifyTitle, notifyContent);
                 postedNotifyTitle = null;
                 postedNotifyContent = null;
+                registerServiceNotificationClearedReceiver();
 
                 KcaMoraleInfo.initMoraleValue(Integer.parseInt(
                         getStringPreferences(getApplicationContext(), PREF_KCA_MORALE_MIN)));
@@ -452,6 +458,8 @@ public class KcaService extends BaseService {
     public void onDestroy() {
         if (receiver != null) unregisterReceiver(receiver);
         receiver = null;
+        if (serviceNotificationClearedReceiver != null) unregisterReceiver(serviceNotificationClearedReceiver);
+        serviceNotificationClearedReceiver = null;
         if (foregroundCheck != null) foregroundCheck.exit();
         foregroundCheck = null;
         if (notifiManager != null) {
@@ -465,11 +473,37 @@ public class KcaService extends BaseService {
         super.onDestroy();
     }
 
+    // Android 14 lets the user swipe the service notification away, and One UI 7 also removes it
+    // with "Clear all". The service keeps running, so show it again; it only comes back by itself
+    // when its text changes.
+    private void registerServiceNotificationClearedReceiver() {
+        if (serviceNotificationClearedReceiver != null) return;
+        serviceNotificationClearedReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                notificationUpdateHandler.removeCallbacks(serviceNotificationReposter);
+                // posting it again during the clear animation can get it cleared along
+                notificationUpdateHandler.postDelayed(serviceNotificationReposter, SERVICE_NOTI_REPOST_DELAY_MILLIS);
+            }
+        };
+        ContextCompat.registerReceiver(this, serviceNotificationClearedReceiver,
+                new IntentFilter(ACTION_SERVICE_NOTI_CLEARED), ContextCompat.RECEIVER_NOT_EXPORTED);
+    }
+
+    private void repostServiceNotification() {
+        if (!isServiceOn || notifiManager == null || notifyBuilder == null) return;
+        updateNotification(false);
+    }
+
     private void initViewNotificationBuilder(String title, String content) {
         Intent aIntent = new Intent(KcaService.this, MainActivity.class);
         PendingIntent pendingIntent;
         pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        // only sent when the user clears it, not when the service removes it
+        PendingIntent clearedPendingIntent = PendingIntent.getBroadcast(KcaService.this, 0,
+                new Intent(ACTION_SERVICE_NOTI_CLEARED).setPackage(getPackageName()),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         int type = KcaAlarmService.getAlarmCount() > 0 ? 1 : 0;
         String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
@@ -481,6 +515,7 @@ public class KcaService extends BaseService {
                 .setLargeIcon(viewBitmap)
                 .setTicker(title)
                 .setContentIntent(pendingIntent)
+                .setDeleteIntent(clearedPendingIntent)
                 .setOnlyAlertOnce(true)
                 .setContentText(content)
                 .setStyle(new NotificationCompat.BigTextStyle()

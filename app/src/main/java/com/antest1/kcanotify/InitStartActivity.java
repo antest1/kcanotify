@@ -412,7 +412,8 @@ public class InitStartActivity extends BaseActivity {
     protected void onDestroy() {
         Log.e("KCA-DA", "destroy");
         is_destroyed = true;
-        dbHelper.close();
+        // not closed here: the loading threads above can still be running, and KcaApiData keeps
+        // using this helper after the activity is gone
         super.onDestroy();
     }
 
