@@ -2046,13 +2046,16 @@ public class KcaService extends BaseService {
                             KcaNosakiInfo.setNosakiData(nosaki_after);
 
                             // like the repair timer, a fleet change resets the timer when the changed fleet has an APF;
-                            // taking her out stops it when no fleet has one any more
-                            if (containsDeck(nosaki_after, deckIdx, originalDeckIdx)) {
-                                KcaNosakiInfo.setNosakiTimer();
-                                processNosakiTimerInfo();
-                            } else {
-                                stopNosakiTimerWithoutEffect(portdeckdata, nosaki_after,
-                                        containsDeck(nosaki_before, deckIdx, originalDeckIdx));
+                            // taking her out stops it when no fleet has one any more.
+                            // "Remove All but Flagship" does neither, like a preset
+                            if (shipId != -2) {
+                                if (containsDeck(nosaki_after, deckIdx, originalDeckIdx)) {
+                                    KcaNosakiInfo.setNosakiTimer();
+                                    processNosakiTimerInfo();
+                                } else {
+                                    stopNosakiTimerWithoutEffect(portdeckdata, nosaki_after,
+                                            containsDeck(nosaki_before, deckIdx, originalDeckIdx));
+                                }
                             }
 
                             for (int i = 0; i < portdeckdata.size(); i++) {
