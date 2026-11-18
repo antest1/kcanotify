@@ -9,6 +9,7 @@ import android.content.ContextWrapper;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,6 +26,14 @@ import java.util.concurrent.Executors;
 public class KcaFairyDownloader {
     private final static String FAIRY_INFO_FILENAME = "icon_info.json";
     private final static String FAIRY_DOWNLOAD_PATH = "fairy";
+    private final static long RUN_TIMEOUT = 10 * 60 * 1000L;
+
+    // one download at a time in the process (main thread only): a screen recreated during a download gets
+    // a new downloader, and two downloads of a file write the same temporary file and lose it.
+    // It expires with the wake lock in case a download never finishes
+    private static long runningSince = -1;
+    // when this run started; a run that outlived the timeout leaves the guard of a later one
+    private long startedAt = -1;
 
     boolean fairyWait;
     boolean finishWhenDoneFlag;
@@ -49,8 +58,15 @@ public class KcaFairyDownloader {
 
     public void run(boolean flag) {
         if (mWakeLock != null) return;
+        long now = SystemClock.elapsedRealtime();
+        if (runningSince >= 0 && now - runningSince < RUN_TIMEOUT) {
+            Toast.makeText(activity, R.string.download_progress, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        runningSince = now;
+        startedAt = now;
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, activity.getClass().getName());
-        mWakeLock.acquire(10*60*1000L /*10 minutes*/);
+        mWakeLock.acquire(RUN_TIMEOUT);
 
         finishWhenDoneFlag = flag;
         fairyWait = false;
@@ -60,12 +76,17 @@ public class KcaFairyDownloader {
         handler = new Handler(Looper.getMainLooper());
         downloadData = new JsonArray();
 
-        mProgressDialog = new ProgressDialog();
-        mProgressDialog.setMessage(activity.getString(R.string.download_progress));
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setProgressNumberFormat("%1d file(s)");
-        mProgressDialog.show(activity);
+        // the update screen can start this while it is in the background, where downloads keep going;
+        // a dialog cannot be shown once the screen state is saved, so the files are downloaded without it
+        mProgressDialog = null;
+        if (!activity.getSupportFragmentManager().isStateSaved()) {
+            mProgressDialog = new ProgressDialog();
+            mProgressDialog.setMessage(activity.getString(R.string.download_progress));
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setProgressNumberFormat("%1d file(s)");
+            mProgressDialog.show(activity);
+        }
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
@@ -82,10 +103,15 @@ public class KcaFairyDownloader {
 
     private void startDownloadProgress() {
         fairyWait = true;
-        publishProgress(0);
+        // set before the first progress, which finishes the work when there is no file to download
         totalFiles = downloadData.size();
-        if (handler != null) {
-            handler.post(() -> mProgressDialog.setMax(totalFiles));
+        publishProgress(0);
+        // read once: with no file, the progress above can finish the work and clear it on the main thread
+        Handler h = handler;
+        if (h != null) {
+            h.post(() -> {
+                if (mProgressDialog != null) mProgressDialog.setMax(totalFiles);
+            });
             for (int i = 0; i < downloadData.size(); i++) {
                 JsonObject item = downloadData.get(i).getAsJsonObject();
                 String name = item.get("name").getAsString();
@@ -96,6 +122,7 @@ public class KcaFairyDownloader {
     }
 
     private void workFinished()  {
+        if (runningSince == startedAt) runningSince = -1;
         if (mWakeLock.isHeld()) {
             mWakeLock.release();
             mWakeLock = null;
@@ -103,7 +130,8 @@ public class KcaFairyDownloader {
         handler = null;
         Log.e("KCA-FS", KcaUtils.format("%d %d %d", totalFiles, successedFiles, failedFiles));
         setPreferences(activity, PREF_FAIRY_DOWN_FLAG, true);
-        if (!activity.isFinishing() && mProgressDialog != null) {
+        // not added when the screen was recreated during the download: it went with the old screen
+        if (!activity.isFinishing() && mProgressDialog != null && mProgressDialog.isAdded()) {
             mProgressDialog.dismissAllowingStateLoss();
         }
         if (totalFiles == 0) {
@@ -139,11 +167,14 @@ public class KcaFairyDownloader {
     }
 
     private void publishProgress(Integer progress) {
-        if (handler != null) {
-            handler.post(() -> {
-                mProgressDialog.setIndeterminate(!fairyWait);
-                mProgressDialog.setMax(totalFiles);
-                mProgressDialog.setProgress(progress);
+        Handler h = handler; // cleared on the main thread when the work is finished
+        if (h != null) {
+            h.post(() -> {
+                if (mProgressDialog != null) {
+                    mProgressDialog.setIndeterminate(!fairyWait);
+                    mProgressDialog.setMax(totalFiles);
+                    mProgressDialog.setProgress(progress);
+                }
 
                 if (totalFiles == 0 || progress == totalFiles) {
                     workFinished();
