@@ -9,6 +9,7 @@ import android.content.ContextWrapper;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,6 +26,14 @@ import java.util.concurrent.Executors;
 public class KcaFairyDownloader {
     private final static String FAIRY_INFO_FILENAME = "icon_info.json";
     private final static String FAIRY_DOWNLOAD_PATH = "fairy";
+    private final static long RUN_TIMEOUT = 10 * 60 * 1000L;
+
+    // one download at a time in the process (main thread only): a screen recreated during a download gets
+    // a new downloader, and two downloads of a file write the same temporary file and lose it.
+    // It expires with the wake lock in case a download never finishes
+    private static long runningSince = -1;
+    // when this run started; a run that outlived the timeout leaves the guard of a later one
+    private long startedAt = -1;
 
     boolean fairyWait;
     boolean finishWhenDoneFlag;
@@ -49,8 +58,15 @@ public class KcaFairyDownloader {
 
     public void run(boolean flag) {
         if (mWakeLock != null) return;
+        long now = SystemClock.elapsedRealtime();
+        if (runningSince >= 0 && now - runningSince < RUN_TIMEOUT) {
+            Toast.makeText(activity, R.string.download_progress, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        runningSince = now;
+        startedAt = now;
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, activity.getClass().getName());
-        mWakeLock.acquire(10*60*1000L /*10 minutes*/);
+        mWakeLock.acquire(RUN_TIMEOUT);
 
         finishWhenDoneFlag = flag;
         fairyWait = false;
@@ -106,6 +122,7 @@ public class KcaFairyDownloader {
     }
 
     private void workFinished()  {
+        if (runningSince == startedAt) runningSince = -1;
         if (mWakeLock.isHeld()) {
             mWakeLock.release();
             mWakeLock = null;
