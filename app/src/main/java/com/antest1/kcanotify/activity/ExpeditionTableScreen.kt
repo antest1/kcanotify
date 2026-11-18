@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -35,6 +35,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,6 +61,7 @@ import com.antest1.kcanotify.ui.theme.KcaColors
 import com.antest1.kcanotify.ui.theme.asTextSize
 import com.antest1.kcanotify.viewmodel.ExpeditionTableViewModel
 import com.google.gson.JsonObject
+import kotlinx.coroutines.launch
 
 /** World filter chips, in the order the XML `ChipGroup` declares them. */
 private val WorldChips = listOf(
@@ -89,6 +91,9 @@ fun ExpeditionTableScreen(
     // Matches the adapter: expansion survives world changes, is lost when the activity is recreated.
     var expanded by remember { mutableStateOf(emptySet<Int>()) }
 
+    val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+
     val items = remember(worldIdx) { viewModel.expeditionItems }
 
     KcaScreen(
@@ -108,6 +113,7 @@ fun ExpeditionTableScreen(
                 onWorldClick = { world ->
                     viewModel.worldIdx = world
                     worldIdx = world
+                    scope.launch { listState.scrollToItem(0) }
                 },
                 onGreatSuccessClick = {
                     viewModel.toggleGreatSuccess()
@@ -119,7 +125,7 @@ fun ExpeditionTableScreen(
                 },
             )
             LazyColumn(
-                state = rememberLazyListState(),
+                state = listState,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
@@ -429,8 +435,13 @@ private fun ExpeditionRowFull(
                 onClick = onToggle,
             ),
     ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.wrapContentWidth().widthIn(min = 32.dp)) {
+        Row(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
+            Column(
+                modifier = Modifier
+                    .widthIn(min = 32.dp)
+                    .width(IntrinsicSize.Max)
+                    .fillMaxHeight(),
+            ) {
                 TableText(
                     text = stringResource(R.string.expdtable_label_no),
                     modifier = Modifier
@@ -443,7 +454,10 @@ private fun ExpeditionRowFull(
                 )
                 TableText(
                     text = KcaExpedition2.getExpeditionStr(no),
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .padding(vertical = 2.dp),
                     color = areaColor,
                     fontSize = 14.dp,
                     bold = true,
