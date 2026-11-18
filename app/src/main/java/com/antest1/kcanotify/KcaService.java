@@ -225,8 +225,9 @@ public class KcaService extends BaseService {
                 deckInfoCalc = new KcaDeckInfo(getBaseContext());
                 KcaApiData.setDBHelper(dbHelper);
 
-                JsonObject kcApiData = KcaGameDataStore.loadApiData(getApplicationContext());
-                if (kcApiData != null) KcaApiData.getKcGameData(kcApiData);
+                // game data (about 2MB, read on this thread) is read only when it is not in memory yet,
+                // since every update applies it there too; KcaDeckInfo above has done this already
+                KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
 
                 AssetManager assetManager = getResources().getAssets();
                 int loadMapEdgeInfoResult = loadMapEdgeInfoFromStorage(getApplicationContext());
