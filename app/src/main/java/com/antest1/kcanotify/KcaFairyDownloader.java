@@ -110,7 +110,8 @@ public class KcaFairyDownloader {
         handler = null;
         Log.e("KCA-FS", KcaUtils.format("%d %d %d", totalFiles, successedFiles, failedFiles));
         setPreferences(activity, PREF_FAIRY_DOWN_FLAG, true);
-        if (!activity.isFinishing() && mProgressDialog != null) {
+        // not added when the screen was recreated during the download: it went with the old screen
+        if (!activity.isFinishing() && mProgressDialog != null && mProgressDialog.isAdded()) {
             mProgressDialog.dismissAllowingStateLoss();
         }
         if (totalFiles == 0) {
