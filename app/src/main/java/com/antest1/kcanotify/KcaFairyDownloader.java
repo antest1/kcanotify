@@ -87,8 +87,9 @@ public class KcaFairyDownloader {
 
     private void startDownloadProgress() {
         fairyWait = true;
-        publishProgress(0);
+        // set before the first progress, which finishes the work when there is no file to download
         totalFiles = downloadData.size();
+        publishProgress(0);
         if (handler != null) {
             handler.post(() -> {
                 if (mProgressDialog != null) mProgressDialog.setMax(totalFiles);
