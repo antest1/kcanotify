@@ -90,8 +90,10 @@ public class KcaFairyDownloader {
         // set before the first progress, which finishes the work when there is no file to download
         totalFiles = downloadData.size();
         publishProgress(0);
-        if (handler != null) {
-            handler.post(() -> {
+        // read once: with no file, the progress above can finish the work and clear it on the main thread
+        Handler h = handler;
+        if (h != null) {
+            h.post(() -> {
                 if (mProgressDialog != null) mProgressDialog.setMax(totalFiles);
             });
             for (int i = 0; i < downloadData.size(); i++) {
@@ -148,8 +150,9 @@ public class KcaFairyDownloader {
     }
 
     private void publishProgress(Integer progress) {
-        if (handler != null) {
-            handler.post(() -> {
+        Handler h = handler; // cleared on the main thread when the work is finished
+        if (h != null) {
+            h.post(() -> {
                 if (mProgressDialog != null) {
                     mProgressDialog.setIndeterminate(!fairyWait);
                     mProgressDialog.setMax(totalFiles);
