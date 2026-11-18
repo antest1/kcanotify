@@ -60,12 +60,17 @@ public class KcaFairyDownloader {
         handler = new Handler(Looper.getMainLooper());
         downloadData = new JsonArray();
 
-        mProgressDialog = new ProgressDialog();
-        mProgressDialog.setMessage(activity.getString(R.string.download_progress));
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setProgressNumberFormat("%1d file(s)");
-        mProgressDialog.show(activity);
+        // the update screen can start this while it is in the background, where downloads keep going;
+        // a dialog cannot be shown once the screen state is saved, so the files are downloaded without it
+        mProgressDialog = null;
+        if (!activity.getSupportFragmentManager().isStateSaved()) {
+            mProgressDialog = new ProgressDialog();
+            mProgressDialog.setMessage(activity.getString(R.string.download_progress));
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setProgressNumberFormat("%1d file(s)");
+            mProgressDialog.show(activity);
+        }
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
@@ -85,7 +90,9 @@ public class KcaFairyDownloader {
         publishProgress(0);
         totalFiles = downloadData.size();
         if (handler != null) {
-            handler.post(() -> mProgressDialog.setMax(totalFiles));
+            handler.post(() -> {
+                if (mProgressDialog != null) mProgressDialog.setMax(totalFiles);
+            });
             for (int i = 0; i < downloadData.size(); i++) {
                 JsonObject item = downloadData.get(i).getAsJsonObject();
                 String name = item.get("name").getAsString();
@@ -141,9 +148,11 @@ public class KcaFairyDownloader {
     private void publishProgress(Integer progress) {
         if (handler != null) {
             handler.post(() -> {
-                mProgressDialog.setIndeterminate(!fairyWait);
-                mProgressDialog.setMax(totalFiles);
-                mProgressDialog.setProgress(progress);
+                if (mProgressDialog != null) {
+                    mProgressDialog.setIndeterminate(!fairyWait);
+                    mProgressDialog.setMax(totalFiles);
+                    mProgressDialog.setProgress(progress);
+                }
 
                 if (totalFiles == 0 || progress == totalFiles) {
                     workFinished();
