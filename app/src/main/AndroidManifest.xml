@@ -97,7 +97,7 @@
             android:name="com.antest1.kcanotify.ExpCalcActivity"
             android:configChanges="locale|layoutDirection|orientation|screenSize" />
         <activity
-            android:name="com.antest1.kcanotify.ExpeditionTableActivity"
+            android:name="com.antest1.kcanotify.activity.ExpeditionTableActivity"
             android:configChanges="locale|layoutDirection|orientation|screenSize" />
         <activity
             android:name="com.antest1.kcanotify.DropLogActivity"

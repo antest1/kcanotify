@@ -12,7 +12,15 @@ import com.antest1.kcanotify.KcaDBHelper;
 import com.antest1.kcanotify.KcaUtils;
 import com.antest1.kcanotify.LocaleUtils;
 import com.antest1.kcanotify.R;
+import com.google.common.collect.Collections2;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromStorage;
 
@@ -40,8 +48,25 @@ public class ExpeditionTableViewModel extends AndroidViewModel {
         expeditionData = KcaUtils.getJsonArrayFromStorage(getApplication(), "expedition.json", dbHelper);
     }
 
-    public JsonArray getExpeditionData() {
-        return expeditionData;
+    public List<JsonObject> getExpeditionItems() {
+        Type listType = new TypeToken<List<JsonObject>>() {}.getType();
+        List<JsonObject> items = new Gson().fromJson(expeditionData, listType);
+        if (items == null) return new ArrayList<>();
+        return new ArrayList<>(Collections2.filter(items,
+                item -> worldIdx == 0 || item.get("area").getAsInt() == worldIdx));
+    }
+
+    public int getAreaColorRes(int area) {
+        if (area < 1 || area > 7) area = 99;
+        return KcaUtils.getId(KcaUtils.format("colorExpeditionTable%d", area), R.color.class);
+    }
+
+    public int calcResourcesBonus(int val) {
+        if (greatSuccess) {
+            return (int) ((val * (1.0 + (0.05 * daihatsuCount)) * 3.0) / 2);
+        } else {
+            return (int) (val * (1.0 + (0.05 * daihatsuCount)));
+        }
     }
 
     public int getWorldIdx() {
