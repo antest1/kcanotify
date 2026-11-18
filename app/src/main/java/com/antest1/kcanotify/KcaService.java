@@ -99,10 +99,15 @@ public class KcaService extends BaseService {
     // writes responses as received off the main thread, in the order they came
     private static final ExecutorService responseWriter = Executors.newSingleThreadExecutor();
     private boolean foregroundStartBlocked = false;
+    // whether this instance handled START: a STOP sent while the service is off creates one that never ran
+    private boolean startHandled = false;
 
     public static boolean isInitState = false;
     public static boolean isFirstState;
     public static boolean restartFlag = false;
+    // when a started service was turned off in this process (elapsedRealtime), or -1 if none has been on
+    private static long stoppedAt = -1;
+    private static final long RESTART_GAP_MS = 3 * 60 * 1000L;
 
     public static boolean isServiceOn = false;
     public static boolean isPortAccessed = false;
@@ -211,9 +216,15 @@ public class KcaService extends BaseService {
                     StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                             .detectDiskReads().detectDiskWrites().penaltyLog().build());
                 }
+                // the first start in the process asks for a game restart to load the user data;
+                // turning the service off and on keeps the state of the earlier one instead,
+                // unless it was off long enough to miss changes in the game
+                if (stoppedAt < 0 || SystemClock.elapsedRealtime() - stoppedAt > RESTART_GAP_MS) {
+                    restartFlag = true;
+                }
+                startHandled = true;
                 isServiceOn = true;
                 isFirstState = true;
-                restartFlag = true;
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
                 prefs.edit().putBoolean(PREF_SVC_ENABLED, true).apply();
 
@@ -471,6 +482,7 @@ public class KcaService extends BaseService {
             if (foregroundStartBlocked) showServiceStoppedNotification();
         }
         notifiManager = null;
+        if (startHandled) stoppedAt = SystemClock.elapsedRealtime();
         super.onDestroy();
     }
 
