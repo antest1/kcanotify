@@ -1652,6 +1652,17 @@ public class KcaApiData {
         return sid;
     }
 
+    /**
+     * Returns whether every value in an improvement resource row is 0, meaning the data has no
+     * improvement for that star range.
+     */
+    public static boolean isEmptyImprovementResource(JsonArray resource) {
+        for (JsonElement e : resource) {
+            if (e.getAsInt() != 0) return false;
+        }
+        return true;
+    }
+
     public static int[] removeKai(JsonArray slist, boolean exception) {
         List<Integer> afterShipList = new ArrayList<>();
         List<Integer> filteredShipList = new ArrayList<>();
