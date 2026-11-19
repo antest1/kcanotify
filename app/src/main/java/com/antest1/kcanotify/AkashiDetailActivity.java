@@ -127,6 +127,11 @@ public class AkashiDetailActivity extends BaseActivity {
                     ((TextView) findViewById(getId("akashi_improv_consume_".concat(String.valueOf(i + 1)), R.id.class)))
                             .setText(viewModel.getConcatString(resources.get(0).getAsJsonArray()));
 
+                    boolean hasStar6to9 = data.has("require_item2")
+                            || !KcaApiData.isEmptyImprovementResource(resources.get(2).getAsJsonArray());
+                    findViewById(getId("akashi_improv_detail_row2_".concat(String.valueOf(i + 1)), R.id.class))
+                            .setVisibility(hasStar6to9 ? View.VISIBLE : View.GONE);
+
                     String upgradeText = viewModel.getUpgradeText(data);
                     if (upgradeText != null) {
                         ((TextView) findViewById(getId("akashi_improv_detail_upgrade_".concat(String.valueOf(i + 1)), R.id.class)))
