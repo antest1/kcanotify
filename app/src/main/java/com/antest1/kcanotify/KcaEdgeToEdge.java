@@ -29,6 +29,16 @@ import androidx.core.view.WindowInsetsCompat;
 public final class KcaEdgeToEdge {
     private KcaEdgeToEdge() {}
 
+    /**
+     * Window setup for activities whose content is entirely Compose: there is no AppCompat toolbar
+     * for {@link #apply(ComponentActivity)} to find, and the Compose screen draws the top app bar
+     * behind the status bar itself, so only the edge-to-edge flags and the light status-bar icons
+     * are needed.
+     */
+    public static void applyForCompose(ComponentActivity activity) {
+        EdgeToEdge.enable(activity, SystemBarStyle.dark(Color.TRANSPARENT));
+    }
+
     public static void apply(ComponentActivity activity) {
         ViewGroup content = activity.findViewById(android.R.id.content);
         if (content == null || content.getChildCount() == 0) return;

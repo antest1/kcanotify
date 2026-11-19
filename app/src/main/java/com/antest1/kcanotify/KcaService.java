@@ -93,13 +93,21 @@ public class KcaService extends BaseService {
     public static final String SERVICE_STATUS_CHANNEL_NAME = "Kcanotify Service Status";
     private static final String CRASHLYTICS_KEY_PACKET_API = "packet_api";
     private static final long SLOW_PACKET_MILLIS = 200;
+    // sent when the user clears the service notification
+    private static final String ACTION_SERVICE_NOTI_CLEARED = "com.antest1.kcanotify.SERVICE_NOTI_CLEARED";
+    private static final long SERVICE_NOTI_REPOST_DELAY_MILLIS = 500;
     // writes responses as received off the main thread, in the order they came
     private static final ExecutorService responseWriter = Executors.newSingleThreadExecutor();
     private boolean foregroundStartBlocked = false;
+    // whether this instance handled START: a STOP sent while the service is off creates one that never ran
+    private boolean startHandled = false;
 
     public static boolean isInitState = false;
     public static boolean isFirstState;
     public static boolean restartFlag = false;
+    // when a started service was turned off in this process (elapsedRealtime), or -1 if none has been on
+    private static long stoppedAt = -1;
+    private static final long RESTART_GAP_MS = 3 * 60 * 1000L;
 
     public static boolean isServiceOn = false;
     public static boolean isPortAccessed = false;
@@ -141,6 +149,8 @@ public class KcaService extends BaseService {
     private String postedNotifyContent = null;
     // notifyBuilder is only touched on the main thread; timer ticks are posted here
     private final Handler notificationUpdateHandler = new Handler(Looper.getMainLooper());
+    private final Runnable serviceNotificationReposter = this::repostServiceNotification;
+    private BroadcastReceiver serviceNotificationClearedReceiver;
 
     kcaServiceHandler handler;
     kcaNotificationHandler nHandler;
@@ -206,9 +216,15 @@ public class KcaService extends BaseService {
                     StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                             .detectDiskReads().detectDiskWrites().penaltyLog().build());
                 }
+                // the first start in the process asks for a game restart to load the user data;
+                // turning the service off and on keeps the state of the earlier one instead,
+                // unless it was off long enough to miss changes in the game
+                if (stoppedAt < 0 || SystemClock.elapsedRealtime() - stoppedAt > RESTART_GAP_MS) {
+                    restartFlag = true;
+                }
+                startHandled = true;
                 isServiceOn = true;
                 isFirstState = true;
-                restartFlag = true;
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
                 prefs.edit().putBoolean(PREF_SVC_ENABLED, true).apply();
 
@@ -220,8 +236,9 @@ public class KcaService extends BaseService {
                 deckInfoCalc = new KcaDeckInfo(getBaseContext());
                 KcaApiData.setDBHelper(dbHelper);
 
-                JsonObject kcApiData = KcaGameDataStore.loadApiData(getApplicationContext());
-                if (kcApiData != null) KcaApiData.getKcGameData(kcApiData);
+                // game data (about 2MB, read on this thread) is read only when it is not in memory yet,
+                // since every update applies it there too; KcaDeckInfo above has done this already
+                KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
 
                 AssetManager assetManager = getResources().getAssets();
                 int loadMapEdgeInfoResult = loadMapEdgeInfoFromStorage(getApplicationContext());
@@ -313,6 +330,7 @@ public class KcaService extends BaseService {
                 initViewNotificationBuilder(notifyTitle, notifyContent);
                 postedNotifyTitle = null;
                 postedNotifyContent = null;
+                registerServiceNotificationClearedReceiver();
 
                 KcaMoraleInfo.initMoraleValue(Integer.parseInt(
                         getStringPreferences(getApplicationContext(), PREF_KCA_MORALE_MIN)));
@@ -452,6 +470,8 @@ public class KcaService extends BaseService {
     public void onDestroy() {
         if (receiver != null) unregisterReceiver(receiver);
         receiver = null;
+        if (serviceNotificationClearedReceiver != null) unregisterReceiver(serviceNotificationClearedReceiver);
+        serviceNotificationClearedReceiver = null;
         if (foregroundCheck != null) foregroundCheck.exit();
         foregroundCheck = null;
         if (notifiManager != null) {
@@ -462,7 +482,30 @@ public class KcaService extends BaseService {
             if (foregroundStartBlocked) showServiceStoppedNotification();
         }
         notifiManager = null;
+        if (startHandled) stoppedAt = SystemClock.elapsedRealtime();
         super.onDestroy();
+    }
+
+    // Android 14 lets the user swipe the service notification away, and One UI 7 also removes it
+    // with "Clear all". The service keeps running, so show it again; it only comes back by itself
+    // when its text changes.
+    private void registerServiceNotificationClearedReceiver() {
+        if (serviceNotificationClearedReceiver != null) return;
+        serviceNotificationClearedReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                notificationUpdateHandler.removeCallbacks(serviceNotificationReposter);
+                // posting it again during the clear animation can get it cleared along
+                notificationUpdateHandler.postDelayed(serviceNotificationReposter, SERVICE_NOTI_REPOST_DELAY_MILLIS);
+            }
+        };
+        ContextCompat.registerReceiver(this, serviceNotificationClearedReceiver,
+                new IntentFilter(ACTION_SERVICE_NOTI_CLEARED), ContextCompat.RECEIVER_NOT_EXPORTED);
+    }
+
+    private void repostServiceNotification() {
+        if (!isServiceOn || notifiManager == null || notifyBuilder == null) return;
+        updateNotification(false);
     }
 
     private void initViewNotificationBuilder(String title, String content) {
@@ -470,6 +513,10 @@ public class KcaService extends BaseService {
         PendingIntent pendingIntent;
         pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        // only sent when the user clears it, not when the service removes it
+        PendingIntent clearedPendingIntent = PendingIntent.getBroadcast(KcaService.this, 0,
+                new Intent(ACTION_SERVICE_NOTI_CLEARED).setPackage(getPackageName()),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         int type = KcaAlarmService.getAlarmCount() > 0 ? 1 : 0;
         String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
@@ -481,6 +528,7 @@ public class KcaService extends BaseService {
                 .setLargeIcon(viewBitmap)
                 .setTicker(title)
                 .setContentIntent(pendingIntent)
+                .setDeleteIntent(clearedPendingIntent)
                 .setOnlyAlertOnce(true)
                 .setContentText(content)
                 .setStyle(new NotificationCompat.BigTextStyle()
@@ -2011,13 +2059,16 @@ public class KcaService extends BaseService {
                             KcaNosakiInfo.setNosakiData(nosaki_after);
 
                             // like the repair timer, a fleet change resets the timer when the changed fleet has an APF;
-                            // taking her out stops it when no fleet has one any more
-                            if (containsDeck(nosaki_after, deckIdx, originalDeckIdx)) {
-                                KcaNosakiInfo.setNosakiTimer();
-                                processNosakiTimerInfo();
-                            } else {
-                                stopNosakiTimerWithoutEffect(portdeckdata, nosaki_after,
-                                        containsDeck(nosaki_before, deckIdx, originalDeckIdx));
+                            // taking her out stops it when no fleet has one any more.
+                            // "Remove All but Flagship" does neither, like a preset
+                            if (shipId != -2) {
+                                if (containsDeck(nosaki_after, deckIdx, originalDeckIdx)) {
+                                    KcaNosakiInfo.setNosakiTimer();
+                                    processNosakiTimerInfo();
+                                } else {
+                                    stopNosakiTimerWithoutEffect(portdeckdata, nosaki_after,
+                                            containsDeck(nosaki_before, deckIdx, originalDeckIdx));
+                                }
                             }
 
                             for (int i = 0; i < portdeckdata.size(); i++) {
@@ -2065,28 +2116,23 @@ public class KcaService extends BaseService {
                                         break;
                                     }
                                 }
-                                boolean same_ships = KcaDeckInfo.isSameShipList(before_ship_list, after_ship_list);
                                 portdeckdata.set(deckIdx, api_data);
                                 dbHelper.putValue(DB_KEY_DECKPORT, portdeckdata.toString());
-                                // a preset with a repair ship or APF resets the timer unless it keeps the same ships;
-                                // one without leaves the timer as it is, even when it takes them out
+                                // a preset neither resets nor stops a running timer, whatever ships it brings in or takes out;
+                                // it only starts a stopped one when it puts an effective repair ship or APF in
                                 JsonArray nosaki_after = deckInfoCalc.checkNosakiFlagship(portdeckdata);
                                 KcaNosakiInfo.setNosakiData(nosaki_after);
-                                if (containsDeck(nosaki_after, deckIdx, -1)
-                                        && (!same_ships || KcaNosakiInfo.getNosakiTimerValue() < 0)) {
+                                if (KcaNosakiInfo.getNosakiTimerValue() < 0 && containsDeck(nosaki_after, deckIdx, -1)) {
                                     KcaNosakiInfo.setNosakiTimer();
                                     processNosakiTimerInfo();
                                 }
-                                stopNosakiTimerWithoutEffect(portdeckdata, nosaki_after, false);
                                 JsonArray akashi_after = deckInfoCalc.checkAkashiFlagship(portdeckdata);
                                 KcaAkashiRepairInfo.setAkashiData(akashi_after);
-                                if (containsDeck(akashi_after, deckIdx, -1)
-                                        && (!same_ships || KcaAkashiRepairInfo.getAkashiTimerValue() < 0)) {
+                                if (KcaAkashiRepairInfo.getAkashiTimerValue() < 0 && containsDeck(akashi_after, deckIdx, -1)) {
                                     KcaAkashiRepairInfo.setAkashiTimer();
                                     processAkashiTimerInfo();
                                     isAkashiTimerNotiWait = true;
                                 }
-                                stopAkashiTimerWithoutEffect(portdeckdata, akashi_after, false);
                                 boolean result = setMoraleValueForDeck(deckIdx, portdeckdata, false, is_same);
                                 processMoraleInfo(deckIdx, portdeckdata, result);
                             }
@@ -2854,7 +2900,7 @@ public class KcaService extends BaseService {
 
     // Stops the timer when no fleet has a repair ship that can repair, and either she was taken out
     // of the changed fleet by hand or one is left that cannot (anchorage repair is invalid then).
-    // With none left after a preset, the timer is left to the port visit.
+    // Presets do not stop it; the timer is left to the port visit.
     private void stopAkashiTimerWithoutEffect(JsonArray portdeckdata, JsonArray akashi_flagship_deck, boolean takenOut) {
         if (KcaAkashiRepairInfo.getAkashiTimerValue() < 0 || !akashi_flagship_deck.isEmpty()) return;
         if (takenOut || !deckInfoCalc.checkAkashiInFleet(portdeckdata).isEmpty()) {

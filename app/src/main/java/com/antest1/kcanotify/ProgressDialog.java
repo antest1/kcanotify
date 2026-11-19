@@ -24,6 +24,9 @@ public class ProgressDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // restored with a recreated screen: the task that showed it keeps the old one and never dismisses
+        // this one, which cannot be canceled either, so remove it before it shows
+        if (savedInstanceState != null) dismissAllowingStateLoss();
     }
 
     @Nullable

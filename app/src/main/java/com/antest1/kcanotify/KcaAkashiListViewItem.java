@@ -11,6 +11,7 @@ import static com.antest1.kcanotify.KcaApiData.getSlotItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
+import static com.antest1.kcanotify.KcaApiData.isEmptyImprovementResource;
 import static com.antest1.kcanotify.KcaApiData.removeKai;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
@@ -115,19 +116,21 @@ public class KcaAkashiListViewItem {
                 JsonArray improve1 = resource.get(1).getAsJsonArray();
                 JsonArray improve2 = resource.get(2).getAsJsonArray();
                 JsonArray improve3 = resource.get(3).getAsJsonArray();
+                // ★6-9 shows x like MAX when the data has no improvement for that range
+                boolean noImprove2 = isEmptyImprovementResource(improve2);
                 if (checked) {
                     material1[count] = setMaterialScrewString(improve1.get(1).getAsString(), false);
-                    material2[count] = setMaterialScrewString(improve2.get(1).getAsString(), false);
+                    material2[count] = setMaterialScrewString(improve2.get(1).getAsString(), noImprove2);
                     material3[count] = setMaterialScrewString(improve3.get(1).getAsString(), true);
                     screw1[count] = setMaterialScrewString(improve1.get(3).getAsString(), false);
-                    screw2[count] = setMaterialScrewString(improve2.get(3).getAsString(), false);
+                    screw2[count] = setMaterialScrewString(improve2.get(3).getAsString(), noImprove2);
                     screw3[count] = setMaterialScrewString(improve3.get(3).getAsString(), true);
                 } else {
                     material1[count] = setMaterialScrewString(improve1.get(0).getAsString(), false);
-                    material2[count] = setMaterialScrewString(improve2.get(0).getAsString(), false);
+                    material2[count] = setMaterialScrewString(improve2.get(0).getAsString(), noImprove2);
                     material3[count] = setMaterialScrewString(improve3.get(0).getAsString(), true);
                     screw1[count] = setMaterialScrewString(improve1.get(2).getAsString(), false);
-                    screw2[count] = setMaterialScrewString(improve2.get(2).getAsString(), false);
+                    screw2[count] = setMaterialScrewString(improve2.get(2).getAsString(), noImprove2);
                     screw3[count] = setMaterialScrewString(improve3.get(2).getAsString(), true);
                 }
                 count += 1;
