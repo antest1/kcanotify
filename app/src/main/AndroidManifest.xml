@@ -47,7 +47,7 @@
                 android:value="com.antest1.kcanotify.MainActivity" />
         </activity>
         <activity
-            android:name="com.antest1.kcanotify.FleetInfoActivity"
+            android:name="com.antest1.kcanotify.activity.FleetInfoActivity"
             android:configChanges="locale|layoutDirection|orientation|screenSize" />
         <activity
             android:name="com.antest1.kcanotify.ShipInfoActivity"
